@@ -1,0 +1,64 @@
+.mat-sidenav-container {
+    height: 100vh;
+}
+
+main {
+    // padding: 16px;
+    // min-height: calc(100vh - 96px);
+    /* Ajuste conforme suas medidas */
+}
+
+mat-sidenav {
+    // height: 100vh;
+    overflow: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #616161 #424242;
+}
+
+.mat-sidenav-slim {
+    width: 50px;
+    position: absolute;
+}
+
+.mat-sidenav-container-slim-manually {
+    padding-left: 50px !important;
+}
+
+.mat-sidenav-container-slim {
+    padding-left: 30px;
+}
+
+
+/* Para Firefox */
+
+::ng-deep .mat-drawer-inner-container {
+    /* Para Firefox - Hack de redução visual */
+    scrollbar-color: #616161 transparent !important;
+    scrollbar-width: thin !important;
+}
+
+
+/* Hack para Firefox - Criar barra mais fina usando gradiente */
+
+@supports (-moz-appearance: none) {
+     ::ng-deep .mat-drawer-inner-container {
+        background-image: linear-gradient(to right, #616161 1px, transparent 1px);
+        background-size: 2px 100%;
+        background-repeat: no-repeat;
+        background-position: right top;
+    }
+}
+
+
+/* Para WebKit (Chrome, Edge, Safari) */
+
+::ng-deep .mat-drawer-inner-container::-webkit-scrollbar {
+    width: 0.5px !important;
+    /* Barra ultra-fina */
+    height: 0 !important;
+}
+
+::ng-deep .mat-drawer-inner-container::-webkit-scrollbar-thumb {
+    background: #616161 !important;
+    border-radius: 0 !important;
+}

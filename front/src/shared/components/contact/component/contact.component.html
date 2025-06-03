@@ -1,0 +1,100 @@
+<div class="p-4">
+    <h3 class="title-categories-divide-comp">Contatos</h3>
+</div>
+<div class="p-4" [formGroup]="formMain">
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="w-full">
+            <mat-label> E-mail:</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput formControlName="email" aria-label="E-mail">
+                <mat-error>
+                    <span>{{validatorMessages.required(formMain,'email', 'E-mail')}}</span>
+                    <span>{{validatorMessages.mailField(formMain,'email')}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="w-full">
+            <mat-label>Site:</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput formControlName="site" aria-label="Site">
+                <mat-error>
+                    <span>{{validatorMessages.minMaxLength(formMain,'site', 'Site', 0, 100)}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+
+            <mat-label> Celular:</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput mask="(00) 0-0000-0000" formControlName="cel" placeholder="(00) 0-0000-0000">
+                <mat-error>
+                    <span>{{validatorMessages.minMaxLength(formMain,'cel', 'Celular', 11, 11)}}</span>
+                    <span>{{validatorMessages.atLeastOne(formMain,'cel', 'Celular')}}</span>
+                    <span>{{validatorMessages.required(formMain,'cel', 'Celular')}}</span>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+        <div>
+
+            <mat-label>WhatsApp</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput mask="(00) 0-0000-0000" formControlName="zap" placeholder="(00) 0-0000-0000">
+                <mat-error>
+                    <span>{{validatorMessages.minMaxLength(formMain,'zap', 'WhatsApp', 11, 11)}}</span>
+                    <span>{{validatorMessages.atLeastOne(formMain,'zap', 'WhatsApp')}}</span>
+                    <span>{{validatorMessages.required(formMain,'zap', 'WhatsApp')}}</span>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+        <div>
+
+            <mat-label>Tel. Fixo:</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput mask="(00) 0-000-0000" formControlName="landline" placeholder="(00) 0-000-0000">
+                <mat-error>
+                    <span>{{validatorMessages.minMaxLength(formMain,'landline', 'Telefone Fixo', 10, 10)}}</span>
+                    <span>{{validatorMessages.required(formMain,'landline', 'Telefone Fixo')}}</span>
+                    <span>{{validatorMessages.atLeastOne(formMain,'landline', 'Telefone Fixo')}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div formArrayName="socialMedias" *ngFor="let scnw of formSocialNets.controls; let i = index;">
+        <div [formGroupName]="i">
+            <div class="mb-4">
+                <btn-g [btnType]="'red'" [name]="'Remover'" [icon]="'delete'" (btn)="removeNets(i)"></btn-g>
+            </div>
+            <div>
+                <mat-label>Rede Social</mat-label>
+                <mat-form-field class="w-full" appearance="outline">
+                    <input matInput id="socialnetName" formControlName="name" aria-label="Rede Social">
+                    <mat-error>
+                        <span>{{validatorMessages.required(getSubForm,'name', 'Nome')}}</span>
+                        <span>{{validatorMessages.minMaxLength(getSubForm,'name', 'name', 3, 150)}}</span>
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+            <div>
+                <mat-label>Url (Link)</mat-label>
+                <mat-form-field class="w-full" appearance="outline">
+                    <input matInput id="socialnetUrl" formControlName="url" aria-label="Url (Link)">
+                    <mat-error>
+                        <span>{{validatorMessages.required(getSubForm,'url', 'URL')}}</span>
+                        <span>{{validatorMessages.minMaxLength(getSubForm,'url', 'URL', 0, 150)}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+        <btn-g [name]="'Rede Social'" [icon]="'add'" (btn)="addSocialNets()"></btn-g>
+    </div>
+</div>

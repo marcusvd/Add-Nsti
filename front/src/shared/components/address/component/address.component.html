@@ -1,0 +1,85 @@
+<div class="p-4">
+    <h3 class="title-categories-divide-comp">Endereço</h3>
+</div>
+<div class="p-4 w-full grid grid-col-1 gap-4" [formGroup]="formMain" *ngIf="formMain">
+    <div class="w-full">
+        <mat-label>CEP</mat-label>
+        <mat-form-field class="w-full" appearance="outline">
+            <input mask="00.000-000" #cep (blur)="query(cep.value)" matInput formControlName="zipcode" placeholder="00.000-000">
+            <mat-error>
+                <span *ngIf="formErrorAndTouched(formMain, 'zipcode','maxlength')">{{defaultMessages.maxLengthMsg}} {{'8' + defaultMessages.charactersMsg}}</span>
+                <span *ngIf="formErrorAndTouched(formMain, 'zipcode','minlength')">{{defaultMessages.minLengthMsg}} {{'8' + defaultMessages.charactersMsg}}</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="w-full grid grid-cols-1 sm:grid-cols-[84%_15%] gap-4">
+        <div class="w-full">
+            <mat-label>Logradouro</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput formControlName="street" aria-label="Logradouro">
+                <mat-error>
+                    <span *ngIf="formErrorAndTouched(formMain, 'street','required')">{{defaultMessages.requiredMsg}}</span>
+                    <span *ngIf="formErrorAndTouched(formMain, 'street','maxlength')">{{defaultMessages.maxLengthMsg}} {{'150' + defaultMessages.charactersMsg}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="w-full">
+            <mat-label>Número</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input type="number" min="1" matInput formControlName="number" aria-label="Número">
+                <mat-error>
+                    <span *ngIf="formErrorAndTouched(formMain, 'number','required')">{{defaultMessages.requiredMsg}}</span>
+                    <span *ngIf="formErrorAndTouched(formMain, 'number','maxlength')">{{defaultMessages.maxLengthMsg}} {{'15' + defaultMessages.charactersMsg}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+    </div>
+
+    <div class="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="w-full">
+            <mat-label>Bairro</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput formControlName="district" aria-label="Bairro">
+                <mat-error>
+                    <span>{{validatorMessages.required(formMain,'district', 'Bairro')}}</span>
+                    <span>{{validatorMessages.minMaxLength(formMain,'district', 'Bairro',0,150)}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="w-full">
+            <mat-label>Cidade</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput formControlName="city" aria-label="Cidade">
+                <mat-error>
+                    <span>{{validatorMessages.required(formMain,'city', 'Cidade')}}</span>
+                    <span>{{validatorMessages.minMaxLength(formMain,'city', 'Cidade',0,150)}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="w-full">
+            <mat-label>Estado</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input matInput formControlName="state" aria-label="Estado">
+                <mat-error>
+                    <span>{{validatorMessages.required(formMain,'state', 'Estado')}}</span>
+                    <span>{{validatorMessages.minMaxLength(formMain,'state', 'Estado',0,2)}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="w-full">
+        <mat-label>Complemento</mat-label>
+        <mat-form-field class="w-full">
+            <input matInput formControlName="complement" aria-label="Complemento">
+            <mat-error>
+                <span>{{validatorMessages.minMaxLength(formMain,'complement', 'Complemento',0,500)}}</span>
+            </mat-error>
+        </mat-form-field>
+    </div>
+
+</div>

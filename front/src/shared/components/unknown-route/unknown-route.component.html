@@ -1,0 +1,30 @@
+<div class="p-4">
+
+    <mat-card class="sub-title-mat-card bg-white border-card-categories-divide-comp">
+        <div class="sub-title">
+            <mat-icon class="mat-icon-left-subtitle">{{'error_outline'}}</mat-icon> <span>{{'Página Não Encontrada'}}</span>
+        </div>
+
+        <mat-card-content class="p-6 space-y-6 align-h-center flex flex-col items-center">
+            <div class="text-center">
+                <h1 class="title-comp text-5xl mb-4">404</h1>
+                <h2 class="title-categories-divide-comp text-3xl mb-6">Oops! Página não encontrada</h2>
+
+                <div class="divider-line-categories-comp my-6"></div>
+
+                <p class="text-gray-600 mb-6">
+                    A página que você está procurando pode ter sido removida, ter seu nome alterado ou estar temporariamente indisponível.
+                </p>
+            </div>
+
+            <img src="assets/unknown-route/404-error.svg" alt="Error 404" class="w-64 h-64 mb-6">
+        </mat-card-content>
+
+        <mat-card-actions class="space-around justify-center pb-6">
+            <button mat-raised-button color="primary" routerLink="/" class="back-ground-main-color-scss text-white font-bold py-2 px-6 rounded-none">
+        <mat-icon>home</mat-icon>
+        Voltar para a página inicial
+      </button>
+        </mat-card-actions>
+    </mat-card>
+</div>

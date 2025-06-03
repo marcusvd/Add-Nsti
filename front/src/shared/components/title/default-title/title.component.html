@@ -1,0 +1,19 @@
+<div class="grid grid-rows-2 mb-10">
+    <div class="mb-2">
+        <button class="!bg-main-color" mat-mini-fab (click)="back()">
+        <mat-icon>{{'arrow_back'}}</mat-icon>
+      </button>
+    </div>
+
+    <div class="flex grid-cols-[15px_550px] items-center mt-2">
+
+        <div class="text-[40px] peer text-color-main">
+            {{digit}}
+        </div>
+
+        <div class="title-comp">
+            <div class="!flex !flex-wrap !whitespace-break-spaces">{{textTitleComp | uppercase}}</div>
+        </div>
+    </div>
+
+</div>

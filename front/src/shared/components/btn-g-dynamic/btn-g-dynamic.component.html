@@ -1,0 +1,10 @@
+<button mat-raised-button [class]="btnClassList" type="button" (click)="filterMtd()" (click)="btnGMtd()" [disabled]="isDisabled">
+  <div class="grid grid-cols-[25px_1px_110px] items-center space-x-1">
+    <div class="flex items-center space-x-1">
+      <mat-icon *ngIf="action">{{actOpened}}</mat-icon>
+      <mat-icon *ngIf="!action">{{actClosed}}</mat-icon>
+    </div>
+    <div class="pipe-box"></div>
+    <div class="btn-name">{{name}}</div>
+  </div>
+</button>

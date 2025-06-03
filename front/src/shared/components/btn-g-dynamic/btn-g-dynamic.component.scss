@@ -1,0 +1,14 @@
+.pipe-box {
+    border-left: solid 1px #b5f4ff;
+    background-color: #558486;
+    border-right: solid 1px #2ba1a8;
+    height: 35px;
+    width: 3px;
+    box-shadow: 0 0 0.5px rgba(0, 0, 0, 0.5);
+}
+
+button:hover {
+    mat-icon {
+        color: #4ff6ff;
+    }
+}

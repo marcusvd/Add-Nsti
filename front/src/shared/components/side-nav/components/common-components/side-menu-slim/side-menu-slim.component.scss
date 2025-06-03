@@ -1,0 +1,100 @@
+// /* Classes de layout flex */
+// .flex-column {
+//     display: flex;
+//     flex-direction: column;
+// }
+// .flex-row {
+//     display: flex;
+//     flex-direction: row;
+// }
+// .fx-flex {
+//     flex: 1 1 0%;
+// }
+// .fx-flex-1 {
+//     flex: 1;
+// }
+// /* Estilos existentes */
+// .middle-space-horizontal-beteween-fields {
+//     padding-top: 20px;
+// }
+// .btn-container {
+//     background-color: rgb(223, 223, 223);
+//     padding: 8px;
+//     &:hover {
+//         margin-left: -5px;
+//         background-color: rgb(236, 236, 236);
+//         transition: background-color 400ms;
+//         transition-delay: 20ms;
+//     }
+// }
+// .align-comment-icon {
+//     margin-left: 8px;
+// }
+// .mat-icon-settings {
+//     font-size: 18px;
+// }
+// .dropdown {
+//     position: relative;
+//     display: inline-block;
+// }
+// .btn-container-dropdown-title {
+//     background-color: rgb(204, 204, 204);
+//     font-weight: bolder;
+//     font-size: 11px;
+//     font-family: Mynerve;
+//     padding: 15px;
+//     display: flex;
+//     justify-content: flex-start;
+//     align-items: flex-start;
+// }
+// .btn-container-with-children {
+//     font-family: Mynerve;
+//     margin-bottom: 1px;
+//     margin-top: 10px;
+//     &:hover {
+//         background-color: rgb(230, 230, 230);
+//     }
+// }
+// .bg-color-btn-menu:hover {
+//     background-color: rgb(230, 230, 230);
+// }
+// .dropdown-content {
+//     margin-top: -35px;
+//     display: none;
+//     position: fixed;
+//     background-color: #f1f1f1;
+//     min-width: 160px;
+//     z-index: 1;
+//     left: 41px;
+// }
+// .spacing-around-no-children {
+//     padding: 10px;
+// }
+// .style-spacing-item-sub-menu {
+//     padding-top: 5px;
+//     padding-bottom: 5px;
+//     padding-left: 15px;
+//     font-size: 11px;
+//     font-family: Mynerve;
+// }
+// .bg-color-padding-submenu {
+//     background-color: rgb(224, 224, 224);
+//     padding: 12px;
+//     &:hover {
+//         background-color: rgb(214, 214, 214);
+//     }
+// }
+// .bg-color-submenu {
+//     background-color: rgb(224, 224, 224);
+//     &:hover {
+//         background-color: rgb(214, 214, 214);
+//     }
+// }
+// .style-spacing-left-menu-item {
+//     padding-left: 15px;
+//     font-size: 11px;
+//     font-family: Mynerve;
+// }
+// .dropdown:hover .dropdown-content {
+//     display: block;
+// }

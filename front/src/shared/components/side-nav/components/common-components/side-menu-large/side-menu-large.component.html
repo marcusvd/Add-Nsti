@@ -1,0 +1,102 @@
+<div class="container">
+
+    <div class="container--menu-box" [class]="{'isOdd':isOdd, 'isEven':isEven }" *ngFor="let menu of dataTree; let i = index;  let isOdd = odd; let isEven = even">
+
+        <div (click)="rootMenuArrowOpenClosedOnAction(menu.name)">
+            <div class="container--menu-box-icon">
+                <mat-icon class="main-color-scss">{{menu.icon}}</mat-icon>
+            </div>
+            <div class="container--menu-box-name">
+                <div class="color">{{menu.name}}</div>
+            </div>
+
+
+            <div class="container--menu-box-arrow">
+                <mat-icon *ngIf="!menu.opened">keyboard_arrow_right</mat-icon>
+                <mat-icon *ngIf="menu.opened">keyboard_arrow_down</mat-icon>
+            </div>
+        </div>
+
+        <div class="container--box-children" *ngIf="menu.opened">
+
+            <div class="container-children--box-name-opened" *ngFor="let levelOne of menu.children; let i = index;">
+
+                <div class="menu-level-one" (click)="levelOneSubMenuArrowOpenClosedOnAction(menu.name, levelOne.name)">
+
+                    <div class="container-children--box-name-item-opened">
+
+                        <div *ngIf="levelOne.children">
+                            <menu>
+                                <li>{{levelOne.name}}</li>
+                            </menu>
+                        </div>
+                        <div *ngIf="!levelOne.children" (click)="navigateByUrl(levelOne.route ?? '/')">
+                            <menu>
+                                <li>{{levelOne.name}}</li>
+                            </menu>
+                        </div>
+
+                    </div>
+                    <div *ngIf="levelOne.children"></div>
+                    <div *ngIf="!levelOne.children"></div>
+
+                    <div *ngIf="levelOne.children">
+                        <mat-icon *ngIf="!levelOne.opened">keyboard_arrow_right</mat-icon>
+                        <mat-icon *ngIf="levelOne.opened">keyboard_arrow_down</mat-icon>
+                    </div>
+
+                    <div *ngIf="!levelOne.children"></div>
+
+                </div>
+                <div>
+                    <div *ngIf="levelOne.opened">
+                        <div *ngFor="let levelTwo of levelOne.children; let i = index; let isOdd = odd; let isEven = even">
+                            <div *ngIf="!levelTwo.children" (click)="navigateByUrl(levelTwo.route ?? '/')">
+                                <menu [class]="{'isOdd':isOdd, 'isEven':isEven }" class="menu-level-two">
+                                    <li class="li-level-two">{{levelTwo.name}}</li>
+                                </menu>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <mat-divider></mat-divider>
+    </div>
+    <!-- Bottom -->
+    <div class="contact-us-main-box">
+
+
+        <div class="contact-us-box">
+
+            <div class="contact-us-box-border grid grid-cols-[25px_100px] items-center gap-x-5 space-x-1 p-3 bg-main-color">
+
+                <div>
+
+                    <mat-icon fontSet="material-icons-outlined">mode_comment</mat-icon>
+                </div>
+
+                <div class="text-white">
+                    <mat-label>Fale conosco.</mat-label>
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <!-- <div>
+                    <div>
+                        <ng-content select="[arrow_left]"></ng-content>
+                    </div>
+                </div> -->
+                <div>
+                    <mat-divider></mat-divider>
+                </div>
+            </div>
+
+
+        </div>
+    </div>

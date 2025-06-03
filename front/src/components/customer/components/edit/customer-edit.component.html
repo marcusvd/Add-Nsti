@@ -1,0 +1,47 @@
+<div class="p-4" *ngIf="formMain" [formGroup]="formMain">
+    <title-component [digit]="'|'" [textTitleComp]="'Edição de cliente'" [icon]="'record_voice_over'">
+
+    </title-component>
+    <mat-card class="sub-title-mat-card">
+        <div class="sub-title">
+            <mat-icon class="mat-icon-left-subtitle">{{'edit'}}</mat-icon> <span>{{'Modificar cadastro de cliente'}}</span>
+        </div>
+        <mat-card class="border-card-categories-divide-comp">
+
+            <div class="p-4">
+                <h3 class="title-categories-divide-comp">Identificação</h3>
+            </div>
+            <div>
+                <name-cpf-cnpj (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)" [formMain]="formMain"> </name-cpf-cnpj>
+            </div>
+        </mat-card>
+
+
+        <div class="align-h-center">
+            <mat-divider class="divider-line-categories-comp"></mat-divider>
+        </div>
+
+        <div class="align-h-center">
+            <mat-divider class="divider-line-categories-comp"></mat-divider>
+        </div>
+
+        <mat-card class="border-card-categories-divide-comp">
+            <address [formMain]="this.address"></address>
+        </mat-card>
+
+        <div class="align-h-center">
+            <mat-divider class="divider-line-categories-comp"></mat-divider>
+        </div>
+
+        <mat-card class="border-card-categories-divide-comp">
+            <contact [formMain]="this.contact"></contact>
+        </mat-card>
+
+
+        <div class="mb-14 align-h-center">
+            <btn-g [name]="'Salvar'" [icon]="'save'" (btn)="save()"></btn-g>
+        </div>
+    </mat-card>
+</div>
+<!-- <div class="border-around">
+    <div>{{formMain.value|json}}</div> -->

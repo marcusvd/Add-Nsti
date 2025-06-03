@@ -1,0 +1,91 @@
+/* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+// @import url(https://cdn.flnf.hu/styles/ccs.css);
+// @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+@import "../src/shared/styles/default-component.scss";
+@import "../src/shared/styles/default-warnings-alerts.scss";
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+mat-form-field {
+    //INPUT
+    --mdc-outlined-text-field-container-color: #f0f0f0;
+    /* Cor do fundo */
+    --mdc-outlined-text-field-outline-color: rgb(0, 156, 222);
+    /* Cor da borda padrão */
+    --mdc-outlined-text-field-focus-outline-color: rgb(0, 156, 222);
+    /* Cor da borda quando focado */
+    --mdc-outlined-text-field-focus-label-text-color: rgb(0, 156, 222);
+    /* Cor do label quando focado */
+    --mdc-outlined-text-field-input-text-color: #333;
+    /* Cor do texto */
+    --mdc-outlined-text-field-focus-input-text-color: #333;
+    /* Cor do texto quando focado */
+    //MAT-SELECT
+    // Configurações específicas do mat-select
+    --mdc-filled-text-field-container-color: #f0f0f0;
+    /* Fundo (se for filled) */
+    --mdc-filled-text-field-focus-active-indicator-color: rgb(0, 156, 222);
+    /* Cor da borda inferior quando focado (filled) */
+    --mat-select-panel-background-color: #f0f0f0;
+    /* Cor do fundo do dropdown */
+    --mat-option-label-text-color: #333;
+    /* Cor do texto das opções */
+    --mat-option-selected-label-text-color: rgb(0, 156, 222);
+    /* Cor do texto da opção selecionada */
+}
+
+
+/* Cor da seta do select */
+
+.mat-mdc-select-arrow {
+    color: #2ba1a8 !important;
+}
+
+
+/* Cor do texto selecionado no dropdown */
+
+.mat-mdc-select-value {
+    color: #333 !important;
+}
+
+
+/* Cor do dropdown (panel) */
+
+.mat-mdc-select-panel {
+    background: #f0f0f0 !important;
+}
+
+//MAT-RADIO
+.mat-mdc-radio-button {
+    // Cor do círculo quando não selecionado
+    --mdc-radio-unselected-icon-color: #2ba1a8 !important;
+    // Cor do círculo quando selecionado
+    --mdc-radio-selected-icon-color: #2ba1a8 !important;
+    // Cor do círculo interno (ponto) quando selecionado
+    --mdc-radio-selected-focus-icon-color: #2ba1a8 !important;
+    --mdc-radio-selected-hover-icon-color: #2ba1a8 !important;
+    --mdc-radio-selected-pressed-icon-color: #2ba1a8 !important;
+    // Cor da borda quando focado (ripple effect)
+    --mat-radio-ripple-color: #2ba1a8 !important;
+    // Cor do texto do label
+    --mat-radio-label-text-color: #333 !important;
+}
+
+
+/* Opcional: Mudar cor do hover */
+
+.mat-mdc-radio-button:hover .mdc-radio__outer-circle {
+    border-color: #2ba1a8 !important;
+}

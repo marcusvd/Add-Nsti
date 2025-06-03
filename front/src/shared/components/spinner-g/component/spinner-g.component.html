@@ -1,0 +1,13 @@
+<div *ngIf="spinner" class="w-full">
+    <div class="w-full grid grid-rows-2 justify-center items-center text-center">
+        <div class="w-full ml-14">
+            <mat-spinner style="stroke: #2ba1a8;" diameter="30"></mat-spinner>
+        </div>
+        <div class="w-full">
+            {{'Carregando...'}} {{optionalTitle}}
+        </div>
+    </div>
+</div>
+<div *ngIf="empty">
+    <div>{{'Nenhum registro encontrado!'}}</div>
+</div>

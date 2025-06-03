@@ -1,0 +1,29 @@
+<div class="grid justify-center items-center gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-[60px_auto]">
+        <div class="bg-color-main">
+            <mat-icon style="color:white; font-size: 50px; width:50px; height: 50px; margin-top:10px; margin-left:10px;">{{'delete_outline'}}</mat-icon>
+        </div>
+        <div class="bg-color-main">
+            <h3 mat-dialog-title><span class="font-bold text-white">{{'Confirmação de exclusão'}}</span></h3>
+        </div>
+    </div>
+
+    <mat-dialog-content>
+        <span class="text-black">{{messageBody}}</span><span class="font-bold text-red-600">{{itemToBeDelete}}</span><span class="font-bold text-red-600">?</span>
+    </mat-dialog-content>
+
+    <div class="w-full flex sm:justify-center justify-start pb-6">
+        <mat-dialog-actions>
+
+            <div class="grid sm:grid-cols-2 grid-cols-1 sm:gap-16 gap-4">
+                <div class="w-full">
+                    <btn-g mat-dialog-close [name]="'Apagar'" [icon]="'delete_outline'" [btnType]="'red'" (click)="clickedYes(this.id, 'yes') "></btn-g>
+                </div>
+                <div class="w-full">
+                    <btn-g mat-dialog-close [name]="'Cancelar'" [icon]="'cancel'" (click)="clickedNo( 'cancel') "></btn-g>
+                </div>
+            </div>
+
+        </mat-dialog-actions>
+    </div>
+</div>

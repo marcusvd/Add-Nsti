@@ -1,0 +1,22 @@
+<div class="space-around bg-backgroud-color" *ngIf="this.entitiesFiltered$">
+    <title-component [digit]="'|'" [textTitleComp]="'Equipamentos'" [icon]="'record_voice_over'">
+    </title-component>
+    <mat-card class="sub-title-mat-card border-card">
+        <div class="sub-title">
+            <mat-icon class="mat-icon-left-subtitle">{{'add'}}</mat-icon> <span>{{'Cadastro de Equipamentos'}}</span>
+        </div>
+        <div class="bg-color p-4 grid grid-cols-1 sm:grid-cols-[150px_auto_auto] gap-4">
+            <div class="!bg-backgroud-color">
+                <btn-g btn-1 [name]="'Adicionar'" [icon]="'add'" (btn)="callRouter('/customers/add')"></btn-g>
+            </div>
+
+        </div>
+        <div class="align-h-center">
+            <mat-divider class="divider-line-categories-comp"></mat-divider>
+        </div>
+        <list-g [headersLabel]="labelHeadersMiddle()" [headersFields]="fieldsHeadersMiddle()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)">
+
+        </list-g>
+    </mat-card>
+
+</div>

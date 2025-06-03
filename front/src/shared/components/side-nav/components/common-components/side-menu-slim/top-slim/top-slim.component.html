@@ -1,0 +1,65 @@
+<div>
+    <div>
+        <mat-icon fontSet="material-icons-outlined">language</mat-icon>
+    </div>
+    <div *ngIf="true">
+        <div>
+            <mat-label>{{"userName[0]" | uppercase}}</mat-label>
+        </div>
+    </div>
+    <div *ngIf="false">
+        <img src="../../../../../../assets/nsti-menor.jpg" alt="logo nsti aqui">
+    </div>
+    <div>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>settings</mat-icon>
+      </button>
+    </div>
+</div>
+<mat-menu #menu="matMenu">
+    <div>
+        <div>
+            <div>
+                <img src="../../../../../../assets/nsti-menor.jpg" alt="logo nsti aqui">
+            </div>
+        </div>
+        <div>
+            <span>
+              {{'Login' | titlecase}}
+          </span>
+        </div>
+        <mat-divider></mat-divider>
+        <div [routerLink]="['/side-nav/user-profile']" (click)="'logOut()'">
+            <div></div>
+            <div>
+                <mat-icon fontSet="material-icons-two-tone">account_circle</mat-icon>
+            </div>
+            <div></div>
+            <div>
+                <span>Perfil</span>
+                <small>Informações</small>
+            </div>
+            <div></div>
+            <div>
+                <mat-icon>keyboard_arrow_right</mat-icon>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div>
+            <div></div>
+            <div>
+                <mat-icon fontSet="material-icons-two-tone">exit_to_app</mat-icon>
+            </div>
+            <div></div>
+            <div>
+                <span>Sair</span>
+                <small>Desconectar</small>
+            </div>
+            <div></div>
+            <div>
+                <mat-icon>keyboard_arrow_right</mat-icon>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+</mat-menu>

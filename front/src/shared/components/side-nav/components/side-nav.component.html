@@ -1,0 +1,55 @@
+<mat-toolbar *ngIf="menuSlim">
+    <button mat-icon-button aria-label="Example icon-button with menu icon">
+          <mat-icon (click)="toggleMenuSlimToolBar()">menu</mat-icon>
+      </button>
+</mat-toolbar>
+<mat-sidenav-container (window:resize)="responsive($event)">
+    <mat-sidenav opened mode="side" #sidenav role="navigation">
+        <!-- <mat-sidenav [ngClass]="menuSlimManually ? 'mat-sidenav-slim':'' " opened mode="side" #sidenav role="navigation"> -->
+
+        <div *ngIf="!menuSlim" style="width: 220px; max-width: 220px;" class="container--menu-large">
+            <top-large top-large></top-large>
+            <side-menu-large (closeMenu)="toggleMobile()">
+                <mat-icon arrow_left (click)="toggleMenu()">keyboard_arrow_left</mat-icon>
+            </side-menu-large>
+        </div>
+        <!-- <div style="width: 220px; max-width: 220px;" class="container--menu-large" *ngIf="menuLarge">
+            <top-large top-large></top-large>
+            <side-menu-large>
+                <mat-icon arrow_left (click)="toggleMenu()">keyboard_arrow_left</mat-icon>
+            </side-menu-large>
+        </div> -->
+
+
+
+        <!-- <div *ngIf="menuSlimManually">
+            <side-menu-slim [ngClass]="{'mat-sidenav-slim':menuSlimManually}">
+                <top-slim top-slim></top-slim>
+                <div *ngIf="menuSlimArrowRightHideShow">
+                    <div>
+                        <mat-icon arrow_right (click)="toggleMenu()">keyboard_arrow_right</mat-icon>
+                    </div>
+                </div>
+            </side-menu-slim>
+        </div> -->
+        <!-- <div *ngIf="menuSlimManually">
+            <side-menu-slim [ngClass]="{'mat-sidenav-slim':menuSlimManually}">
+                <top-slim top-slim></top-slim>
+                <div *ngIf="menuSlimArrowRightHideShow">
+                    <div>
+                        <mat-icon arrow_right (click)="toggleMenu()">keyboard_arrow_right</mat-icon>
+                    </div>
+                </div>
+            </side-menu-slim>
+        </div> -->
+
+    </mat-sidenav>
+    <mat-sidenav-content class="!bg-background-color mat-sidenav-container-slim" [ngClass]="{'mat-sidenav-container-slim-manually':menuSlimManually}">
+        <!-- <mat-sidenav-content class="!bg-background-color" [ngClass]="{'mat-sidenav-container-slim':menuSlimManually}"> -->
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- [ngClass]=" { 'border-around-menu-large': menuLarge, 'border-around-menu-slim':menuSlim } " fxLayoutAlign="start start " -->

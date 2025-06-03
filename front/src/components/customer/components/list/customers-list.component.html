@@ -1,0 +1,108 @@
+<div class="space-around bg-backgroud-color" *ngIf="this.entitiesFiltered$">
+    <title-component [digit]="'|'" [textTitleComp]="'Clientes'" [icon]="'record_voice_over'">
+    </title-component>
+    <mat-card class="sub-title-mat-card border-card">
+        <div class="sub-title">
+            <mat-icon class="mat-icon-left-subtitle">{{'add'}}</mat-icon> <span>{{'Cadastro de clientes'}}</span>
+        </div>
+        <div class="bg-color p-4 grid grid-cols-1 sm:grid-cols-[150px_auto_auto] gap-4">
+            <div class="!bg-backgroud-color">
+                <btn-g btn-1 [name]="'Adicionar'" [icon]="'add'" (btn)="callRouter('/customers/add')"></btn-g>
+            </div>
+            <div class="!bg-background-color flex justify-start">
+                <btn-g-dynamic [name]="'Filtrar'" (outAction)="showHideFilterMtd($event)">
+                </btn-g-dynamic>
+            </div>
+            <!-- <div class="flex justify-end" pg-above>
+                <mat-paginator class="!bg-backgroud-color" #paginatorAbove [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+            </div> -->
+        </div>
+        <div class="p-4 !bg-background-color">
+            <customer-filter-list class="!bg-background-color" [showHideFilter]="showHideFilter" (filterFormOut)="filter($event)" (outFieldSearch)="search($event)">
+            </customer-filter-list>
+        </div>
+        <div class="align-h-center">
+            <mat-divider class="divider-line-categories-comp"></mat-divider>
+        </div>
+        <list-g [headersLabel]="labelHeadersMiddle()" [headersFields]="fieldsHeadersMiddle()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)"
+            (outonPageChange)="onPageChange($event)">
+
+        </list-g>
+
+    </mat-card>
+    <!-- <div>
+        <mat-card>
+
+            <div class="p-4 bg-backgroud-color">
+
+
+
+            </div>
+
+
+            <sub-title title [title]="'Clientes cadastrados'" [icon]="'list'"></sub-title>
+
+            <list-g [headersLabel]="labelHeadersMiddle()" [headersFields]="fieldsHeadersMiddle()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)">
+                <div class="flex justify-end" pg-above-mobile>
+                    <mat-paginator class="w-[270px] mb-4 !bg-backgroud-color" #paginatorAbove [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+                </div>
+                <div class="flex justify-end" pg-below-mobile>
+                    <mat-paginator class="w-[270px] mb-4 !bg-backgroud-color" #paginatorBelow [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+                </div>
+
+
+                <div pg-below>
+                    <mat-paginator class="!bg-backgroud-color" #paginatorBelow [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+                </div>
+            </list-g>
+
+        </mat-card>
+
+    </div> -->
+</div>
+
+
+
+<!-- <div *ngIf="this.entitiesFiltered$">
+    <div>
+        <mat-card>
+
+            <div class="p-4 bg-backgroud-color">
+                <title-component [digit]="'|'" [textTitleComp]="'Clientes'" [icon]="'record_voice_over'">
+                </title-component>
+
+
+            </div>
+
+            <customer-filter-list [showHideFilter]="showHideFilter" (filterFormOut)="filter($event)">
+            </customer-filter-list>
+            <sub-title title [title]="'Clientes cadastrados'" [icon]="'list'"></sub-title>
+            <div class="grid grid-cols-1 sm:grid-cols-[150px_auto] gap-4">
+                <div>
+                    <btn-g btn-1 [name]="'Adicionar'" [icon]="'add'" (btn)="add()"></btn-g>
+                </div>
+                <div class="flex justify-start">
+                    <btn-g-dynamic [name]="'Filtrar'" (outAction)="showHideFilterMtd($event)">
+                    </btn-g-dynamic>
+                </div>
+            </div>
+            <list-g [headersLabel]="labelHeadersMiddle()" [headersFields]="fieldsHeadersMiddle()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)">
+                <div class="flex justify-end" pg-above-mobile>
+                    <mat-paginator class="w-[270px] mb-4 !bg-backgroud-color" #paginatorAbove [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+                </div>
+                <div class="flex justify-end" pg-below-mobile>
+                    <mat-paginator class="w-[270px] mb-4 !bg-backgroud-color" #paginatorBelow [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+                </div>
+
+                <div pg-above>
+                    <mat-paginator class="!bg-backgroud-color" #paginatorAbove [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+                </div>
+                <div pg-below>
+                    <mat-paginator class="!bg-backgroud-color" #paginatorBelow [length]="this.entities.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+                </div>
+            </list-g>
+
+        </mat-card>
+
+    </div>
+</div> -->

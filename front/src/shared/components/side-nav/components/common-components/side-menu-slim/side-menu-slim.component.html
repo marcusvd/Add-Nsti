@@ -1,0 +1,49 @@
+<div class="container">
+    <ng-content select="[top-slim]"></ng-content>
+    <div *ngFor="let levelZero of dataTree; let i = index;">
+
+        <div>
+            <mat-icon>{{levelZero.icon}}</mat-icon>
+            <div>
+                <mat-label>{{levelZero.name}}</mat-label>
+                <div *ngIf="levelZero.children">
+                    <div *ngFor="let levelOne of levelZero.children">
+                        <div (click)="(levelZero.name)" (click)="rootMenuArrowOpenClosedOnAction(levelZero.children,levelOne.name)">
+                            <div>{{levelOne.name}}</div>
+
+                            <div>
+                                <mat-icon *ngIf="!levelOne.opened">keyboard_arrow_right</mat-icon>
+                                <mat-icon *ngIf="levelOne.opened">keyboard_arrow_down</mat-icon>
+                            </div>
+                        </div>
+                        <div (click)="navigateByUrl(levelOne.route ?? '')">
+                            <div *ngIf="!levelOne.children">{{levelOne.name}}
+
+                            </div>
+
+
+                        </div>
+                        <div *ngFor="let itemSubMenu of levelOne.children" (click)="navigateByUrl(itemSubMenu.route ?? '')">
+                            <div *ngIf="levelOne.opened">{{itemSubMenu.name}}</div>
+                        </div>
+                        <div>
+                            <mat-divider></mat-divider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div>
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+    <div></div>
+    <div>
+        <div>
+            <mat-icon fontSet="material-icons-outlined">mode_comment</mat-icon>
+        </div>
+        <ng-content select="[arrow_right]"></ng-content>
+    </div>
+</div>

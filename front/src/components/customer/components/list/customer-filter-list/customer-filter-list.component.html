@@ -1,0 +1,35 @@
+<div class="bg-backgroud-color" [formGroup]="formMain" *ngIf="showHideFilter">
+    <mat-card class="m-4 p-4 !border !border-color-main !shadow-md">
+        <div class="grid grid-cols-1 sm:grid-cols-3 items-center gap-4">
+            <div class="w-full">
+                <mat-label>Entidade:</mat-label>
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-select formControlName="entity" (selectionChange)="entitySelect($event.value)">
+                        <mat-option [value]="entity.value" *ngFor="let entity of entities">
+                            {{entity.key}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <!-- <div class="w-full">
+                <mat-label>Assegurado:</mat-label>
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-select formControlName="assured" (selectionChange)="assuredSelect($event.value)">
+                        <mat-option [value]="assured.value" *ngFor="let assured of assureds">
+                            {{assured.key}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div> -->
+            <div class="-mt-6 mb-4 sm:-mt-0 sm:mb-0 w-full">
+                <btn-g [name]="'Aplicar'" [icon]="'refresh'" (click)="filterMtd()"></btn-g>
+            </div>
+        </div>
+
+        <div class="w-full">
+            <mat-label>{{'Pesquisar'}}</mat-label>
+            <mat-form-field class="w-full" appearance="outline">
+                <input #field (input)="search(field.value,outFieldSearch,this.removeAccentsSpecialCharacters)" type="text" matInput placeholder="Pesquisar" [attr.for]="'Pesquisar'" [formControl]="formControlSearch">
+            </mat-form-field>
+            <mat-hint>{{'Digite sua pesquisa.'}}</mat-hint>
+        </div>
+    </mat-card>
+</div>
