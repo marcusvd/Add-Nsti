@@ -1,7 +1,7 @@
 using FluentValidation;
 using Application.Services.Operations.Main.Customers.Dtos;
 using Application.Services.Shared.DtoValidation;
-using Application.Services.Operations.Main.Inheritances.DtoValidation;
+
 
 namespace Application.Services.Operations.Main.Customers.DtoValidation
 {
@@ -12,7 +12,6 @@ namespace Application.Services.Operations.Main.Customers.DtoValidation
             //Commons
             RuleFor(xx => xx.Name).NotEmpty().NotNull().MaximumLength(100);
             RuleFor(xx => xx.CNPJ).NotEmpty().NotNull().MinimumLength(8).MaximumLength(100);
-            RuleFor(xx => xx.Responsible).NotEmpty().NotNull();
             RuleFor(xx => xx.Description).MaximumLength(500);
             RuleFor(xx => xx.Registered).NotEmpty().NotNull();
             //Childrens
@@ -31,7 +30,6 @@ namespace Application.Services.Operations.Main.Customers.DtoValidation
             //  .When(xx => xx.Assured, ApplyConditionTo.AllValidators)
             //  .Equal(0).When(xx => !xx.Assured, ApplyConditionTo.AllValidators);
             //PhysicallyMovingCosts
-            RuleFor(x => x.PhysicallyMovingCosts).SetValidator(new PhysicallyMovingCostsDtoValidator());
         }
     }
 }

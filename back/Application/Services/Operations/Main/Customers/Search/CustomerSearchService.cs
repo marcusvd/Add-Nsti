@@ -36,8 +36,8 @@ namespace Application.Services.Operations.Main.Customers.Search
                                                                                  predicate => predicate.CompanyId == parameters.predicate && predicate.Deleted == DateTime.MinValue,
                                                                                  toInclude => toInclude.Include(x => x.Contact),
                                                                                  selector => selector,
-                                                                                 orderBy => orderBy.OrderBy(x => x.Name),
-                                                                                  term => term.Assured == assured
+                                                                                 orderBy => orderBy.OrderBy(x => x.Name)
+                                                                                //   term => term.Assured == assured
                                                                                  );
                 }
                 return fromDb;

@@ -48,18 +48,10 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
             CompanyId = entity.CompanyId,
             Deleted = entity.Deleted,
             Registered = entity.Registered,
-
             Name = entity.Name,
-            Responsible = entity.Responsible,
             CNPJ = entity.CNPJ,
             EntityType = (EntityTypeEnumDto)entity.EntityType,
             Description = entity.Description,
-            BusinessLine = entity.BusinessLine,
-
-            Assured = entity.Assured,
-            Payment = entity.Payment,
-            Expires = entity.Expires,
-            Discount = entity.Discount,
             Address = AddressMapper(entity.Address),
             Contact = ContactMapper(entity.Contact),
 
@@ -80,16 +72,9 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
             Registered = entity.Registered,
 
             Name = entity.Name,
-            Responsible = entity.Responsible,
             CNPJ = entity.CNPJ,
             EntityType = (EntityTypeEnum)entity.EntityType,
             Description = entity.Description,
-            BusinessLine = entity.BusinessLine,
-
-            Assured = entity.Assured,
-            Payment = entity.Payment,
-            Expires = entity.Expires,
-            Discount = entity.Discount,
             Address = AddressMapper(entity.Address),
             Contact = ContactMapper(entity.Contact),
 
@@ -105,20 +90,10 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
         db.Id = dto.Id;
         db.UserId = dto.UserId;
         db.CompanyId = dto.CompanyId;
-
-
         db.Name = dto.Name;
-        db.Responsible = dto.Responsible;
         db.CNPJ = dto.CNPJ;
         db.EntityType = (EntityTypeEnum)dto.EntityType;
         db.Description = dto.Description;
-        db.BusinessLine = dto.BusinessLine;
-
-
-        db.Assured = dto.Assured;
-        db.Payment = dto.Payment;
-        db.Expires = dto.Expires;
-        db.Discount = dto.Discount;
         db.Address = AddressMapper(dto.Address);
         db.Contact = ContactMapper(dto.Contact);
 

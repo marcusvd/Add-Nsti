@@ -8,9 +8,5 @@ using Repository.Data.Operations.Repository;
 namespace Repository.Data.Operations.Main.Companies
 {
     public interface ICompanyRepository: IRepository<Company>
-    {
-        // Task<Company> GetByIdStockIncludedAsync(int id);
-    }
-
-    
+    { }
 }

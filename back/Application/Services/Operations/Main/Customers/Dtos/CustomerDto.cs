@@ -1,17 +1,19 @@
 using System;
 using Application.Services.Operations.Main.Inheritances;
-
+using Application.Services.Operations.Main.Inheritances.Enums;
+using Application.Services.Shared.Dtos;
 using Domain.Entities.Main.Customers;
 
 namespace Application.Services.Operations.Main.Customers.Dtos
 {
-    public class CustomerDto : MainEntitiesBaseDto
+    public class CustomerDto : RootBaseDto
     {
-        public DateTime Assured { get; set; }
-        public decimal Payment { get; set; }
-        public DateTime Expires { get; set; }
-        public decimal Discount { get; set; }
-        public AdditionalCostsDto AdditionalCosts { get; set; }
-        
+        public string Name { get; set; }
+        public string TradeName { get; set; }
+        public string CNPJ { get; set; }
+        public EntityTypeEnumDto EntityType { get; set; }
+        public string Description { get; set; }
+        public AddressDto Address { get; set; }
+        public ContactDto Contact { get; set; }
     }
 }

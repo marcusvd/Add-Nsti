@@ -23,7 +23,7 @@ public class SeedSonnyDbServices
 
         await auth.AddUser();
 
-        _GENERIC_REPO.Customers.AddRangeAsync(customers.CustomerAdd());
+        // _GENERIC_REPO.Customers.AddRangeAsync(customers.CustomerAdd());
 
         return await _GENERIC_REPO.save();
     }

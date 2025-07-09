@@ -15,12 +15,5 @@ namespace Repository.Data.Operations.Main.Companies
         {
             _CONTEXT = CONTEXT;
         }
-
-        // public async Task<Company> GetByIdStockIncludedAsync(int id)
-        // {
-        //    var query = await _CONTEXT.MN_Companies.AsNoTracking()
-        //    .Include(x=> x.Stock).SingleOrDefaultAsync(x => x.Id == id);
-        //    return query;
-        // }
     }
 }

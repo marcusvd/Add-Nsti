@@ -113,8 +113,6 @@ namespace Application.Services.Operations.Main.Customers
                                ||
                                term.CNPJ.ToLower().Contains(parameters.Term.ToLower())
                                ||
-                               term.Responsible.ToLower().Contains(parameters.Term.ToLower())
-                               ||
                                term.Contact.Email.ToLower().Contains(parameters.Term.ToLower())
 
                   //    .Replace("\\D", "")
