@@ -1,7 +1,7 @@
 
 
 using System.Linq;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Repository.Data.Context;
 using System.Threading.Tasks;
 using System.Collections.Generic;

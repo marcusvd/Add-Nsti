@@ -11,6 +11,5 @@ namespace Domain.Entities.Authentication
         public string UserName {get; set;}
         public int CompanyId {get; set;}
         public string Action {get; set;}
-        
     }
 }

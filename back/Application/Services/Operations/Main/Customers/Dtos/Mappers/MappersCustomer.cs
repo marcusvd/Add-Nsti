@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 using Application.Services.Operations.Main.Inheritances.Enums;
 using Application.Services.Shared.Dtos.Mappers;
-using Domain.Entities.Main.Inheritances.Enums;
-using Domain.Entities.Main.Customers;
+using Domain.Entities.Customers;
 
 namespace Application.Services.Operations.Main.Customers.Dtos.Mappers;
 
@@ -44,7 +43,6 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
         var obj = new CustomerDto()
         {
             Id = entity.Id,
-            UserId = entity.UserId,
             CompanyId = entity.CompanyId,
             Deleted = entity.Deleted,
             Registered = entity.Registered,
@@ -66,7 +64,6 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
         var obj = new Customer()
         {
             Id = entity.Id,
-            UserId = entity.UserId,
             CompanyId = entity.CompanyId,
             Deleted = entity.Deleted,
             Registered = entity.Registered,
@@ -88,7 +85,6 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
         if (db == null) return null;
 
         db.Id = dto.Id;
-        db.UserId = dto.UserId;
         db.CompanyId = dto.CompanyId;
         db.Name = dto.Name;
         db.CNPJ = dto.CNPJ;

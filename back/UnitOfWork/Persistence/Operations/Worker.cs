@@ -4,7 +4,7 @@ using Repository.Data.Context;
 
 using Repository.Data.PersonalData.Contracts;
 using Repository.Data.PersonalData.Operations;
-using Repository.Data.Operations.Main.Companies;
+using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.Main.Customers;
 
 namespace UnitOfWork.Persistence.Operations

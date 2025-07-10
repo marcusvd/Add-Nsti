@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using UnitOfWork.Persistence.Operations;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Application.Services.Operations.Main.Companies.Dtos;
 using Application.Services.Shared.Dtos.Mappers;
 

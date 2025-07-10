@@ -1,12 +1,10 @@
 using System.Threading.Tasks;
 using Domain.Entities;
-using Domain.Entities.Main;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Repository.Data.Context;
 using Repository.Data.Operations.Repository;
-using Microsoft.EntityFrameworkCore;
 
-namespace Repository.Data.Operations.Main.Companies
+namespace Repository.Data.Operations.Companies
 {
     public class CompanyRepository : Repository<Company>,ICompanyRepository
     {

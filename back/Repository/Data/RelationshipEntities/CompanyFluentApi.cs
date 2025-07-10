@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
 using Domain.Entities.Authentication;
-using Domain.Entities.Main.Customers;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Customers;
+using Domain.Entities.Companies;
 
 
 namespace Repository.Data.RelationshipEntities
@@ -20,8 +20,8 @@ namespace Repository.Data.RelationshipEntities
             builder.HasMany<Customer>(x => x.Customers).WithOne(x => x.Company)
             .HasForeignKey(x => x.CompanyId).IsRequired(true);
 
-            builder.HasMany<MyUser>(x => x.MyUsers).WithOne(x => x.Company)
-            .HasForeignKey(x => x.CompanyId).IsRequired(true);
+            // builder.HasMany<MyUser>(x => x.MyUsers).WithOne(x => x.Company)
+            // .HasForeignKey(x => x.CompanyId).IsRequired(true);
 
         }
     }

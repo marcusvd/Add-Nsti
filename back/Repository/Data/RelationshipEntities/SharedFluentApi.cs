@@ -12,8 +12,7 @@ namespace Repository.Data.RelationshipEntities
         {
             builder.Ignore(x=> x.CompanyId);
             builder.Ignore(x=> x.Company);
-            builder.Ignore(x=> x.UserId);
-            builder.Ignore(x=> x.User);
+           
          }
     }
 
@@ -23,18 +22,17 @@ namespace Repository.Data.RelationshipEntities
         {
             builder.Ignore(x=> x.CompanyId);
             builder.Ignore(x=> x.Company);
-            builder.Ignore(x=> x.UserId);
-            builder.Ignore(x=> x.User);
+          
          }
     }
-    public class SocialNetworkFluentApi : IEntityTypeConfiguration<SocialNetwork>
-    {
-        public void Configure(EntityTypeBuilder<SocialNetwork> builder)
-        {
-            builder.Ignore(x=> x.UserId);
-            builder.Ignore(x=> x.User);
-         }
-    }
+    // public class SocialNetworkFluentApi : IEntityTypeConfiguration<SocialNetwork>
+    // {
+    //     public void Configure(EntityTypeBuilder<SocialNetwork> builder)
+    //     {
+    //         builder.Ignore(x=> x.UserId);
+    //         builder.Ignore(x=> x.User);
+    //      }
+    // }
 
     #endregion
 

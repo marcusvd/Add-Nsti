@@ -1,5 +1,5 @@
 using Domain.Entities.Shared;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;

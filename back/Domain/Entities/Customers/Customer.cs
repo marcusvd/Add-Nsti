@@ -1,9 +1,6 @@
-using Domain.Entities.Main.Inheritances;
-using Domain.Entities.Main.Inheritances.Enums;
-using System;
+
 using Domain.Entities.Shared;
-using System.Collections.Generic;
-namespace Domain.Entities.Main.Customers;
+namespace Domain.Entities.Customers;
 
 public class Customer : RootBase
 {

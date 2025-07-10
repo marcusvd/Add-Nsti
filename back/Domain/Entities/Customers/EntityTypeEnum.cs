@@ -1,4 +1,4 @@
-namespace Domain.Entities.Main.Inheritances.Enums
+namespace Domain.Entities.Customers
 {
     public enum EntityTypeEnum
     {

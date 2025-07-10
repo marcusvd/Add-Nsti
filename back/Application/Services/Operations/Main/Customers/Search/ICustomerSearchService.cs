@@ -1,7 +1,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Application.Services.Operations.Main.Customers.Dtos;
-using Domain.Entities.Main.Customers;
+using Domain.Entities.Customers;
 using Pagination.Models;
 
 namespace Application.Services.Operations.Main.Customers.Search

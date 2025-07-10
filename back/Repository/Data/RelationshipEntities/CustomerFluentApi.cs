@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.Entities.Main.Customers;
+using Domain.Entities.Customers;
 
 namespace Repository.Data.RelationshipEntities
 {

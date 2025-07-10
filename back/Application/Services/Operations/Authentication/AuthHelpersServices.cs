@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Application.Services.Operations.Authentication.Dtos;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Application.Services.Shared.Dtos.Mappers;
 
 namespace Application.Services.Operations.Authentication
@@ -153,7 +153,7 @@ namespace Application.Services.Operations.Authentication
             {
                 if (name == null) throw new AuthServicesException(AuthErrorsMessagesException.ObjectIsNull);
 
-                var myUser = await _userManager.Users.Include(x => x.Company).SingleAsync(x => x.UserName == name);
+                var myUser = await _userManager.Users.SingleAsync(x => x.UserName == name);
 
                 return myUser;
             }
@@ -171,11 +171,7 @@ namespace Application.Services.Operations.Authentication
                 if (name == null) throw new AuthServicesException(AuthErrorsMessagesException.ObjectIsNull);
 
                 var myUser = await _userManager.Users
-                .Include(x => x.Company)
-                .Include(x => x.Address)
-                .Include(x => x.Contact)
-                .ThenInclude(x => x.SocialMedias)
-                .SingleAsync(x => x.UserName == name);
+                 .SingleAsync(x => x.UserName == name);
 
                 return myUser;
             }
@@ -226,7 +222,7 @@ namespace Application.Services.Operations.Authentication
             {
                 UserName = email,
                 Email = email,
-                Company = company
+                // Company = company
             };
 
             return myUser;

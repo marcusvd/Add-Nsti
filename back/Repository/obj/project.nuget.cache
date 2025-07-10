@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LVjN0yGhilg=",
+  "dgSpecHash": "zVAD3mLY3aQ=",
   "success": true,
-  "projectFilePath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj",
+  "projectFilePath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adm02\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\adm02\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.4\\microsoft.aspnetcore.cryptography.internal.8.0.4.nupkg.sha512",

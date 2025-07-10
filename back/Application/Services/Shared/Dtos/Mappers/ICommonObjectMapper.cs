@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Application.Services.Operations.Authentication.Dtos;
 using Application.Services.Operations.Main.Companies.Dtos;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Domain.Entities.Authentication;
 using Domain.Entities.Shared;
 

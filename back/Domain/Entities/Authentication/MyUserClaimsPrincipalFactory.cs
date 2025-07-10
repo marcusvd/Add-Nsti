@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -17,8 +16,5 @@ namespace Domain.Entities.Authentication
             identity.AddClaim(new Claim("User", user.Group));
             return identity;
         }
-
-
-
     }
 }

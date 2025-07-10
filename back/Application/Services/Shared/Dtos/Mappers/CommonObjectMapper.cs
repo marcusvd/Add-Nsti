@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Application.Services.Operations.Authentication.Dtos;
 using Application.Services.Operations.Main.Companies.Dtos;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Domain.Entities.Authentication;
 using Domain.Entities.Shared;
 
@@ -62,7 +62,6 @@ namespace Application.Services.Shared.Dtos.Mappers;
             var user = new MyUserDto()
             {
                 Id = entity.Id,
-                CompanyId = entity.CompanyId,
                 UserName = entity.UserName,
                 Email = entity.Email,
             };
@@ -73,7 +72,6 @@ namespace Application.Services.Shared.Dtos.Mappers;
             var user = new MyUser()
             {
                 Id = entity.Id,
-                CompanyId = entity.CompanyId,
                 UserName = entity.UserName,
                 Email = entity.Email,
             };

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities.Main.Customers;
+using Domain.Entities.Customers;
 using Pagination.Models;
 using Repository.Data.Context;
 using Repository.Data.Operations.Repository;

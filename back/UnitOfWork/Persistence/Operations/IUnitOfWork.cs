@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 using Repository.Data.PersonalData.Contracts;
 using Repository.Data.Operations.Main.Customers;
-using Repository.Data.Operations.Main.Companies;
+using Repository.Data.Operations.Companies;
 
 namespace UnitOfWork.Persistence.Operations
 {

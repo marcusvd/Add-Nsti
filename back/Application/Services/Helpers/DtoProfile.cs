@@ -6,8 +6,8 @@
 // using Domain.Entities.ServicesBench;
 // using Application.Services.Operations.BenchBudgetService.Dtos;
 // using Domain.Entities.Main;
-// using Domain.Entities.Main.Companies;
-// using Domain.Entities.Main.Customers;
+// using Domain.Entities.Companies;
+// using Domain.Entities.Customers;
 // using Application.Services.Operations.Main.Customers.Dtos;
 // using Domain.Entities.Main.Inheritances;
 // using Application.Services.Operations.Main.Partners.Dtos;

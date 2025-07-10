@@ -21,7 +21,7 @@ using Application.Services.Shared.DtoValidation;
 using Application.Services.Operations.Authentication;
 using Application.Services.Operations.Main.Customers.Search;
 
-using Repository.Data.Operations.Main.Companies;
+using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.Main.Customers;
 
 using UnitOfWork.Persistence.Operations;

@@ -15,7 +15,7 @@ namespace Application.Services.Helpers.Extensions
               db.UseMySql(cxStr, ServerVersion.AutoDetect(cxStr), migration =>
               migration.MigrationsAssembly("Repository")));
         }
-        public static void AddContextProd(this IServiceCollection services, IConfiguration Configuration)
+        public static void AddContextImSystemDb(this IServiceCollection services, IConfiguration Configuration)
         {
             string cxStr = Configuration.GetConnectionString("ImSystemDb");
             services.AddDbContext<ImSystemDbContext>(db =>

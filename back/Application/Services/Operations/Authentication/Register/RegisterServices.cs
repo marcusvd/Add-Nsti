@@ -6,7 +6,7 @@ using Application.Exceptions;
 using Application.Services.Operations.Authentication;
 using Application.Services.Operations.Authentication.Dtos;
 using Domain.Entities.Authentication;
-using Domain.Entities.Main.Companies;
+using Domain.Entities.Companies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -84,7 +84,7 @@ namespace Application.Services.Operations.Authentication.Register
             {
                 UserName = email,
                 Email = email,
-                Company = company
+                // Company = company
             };
             return myUser;
         }

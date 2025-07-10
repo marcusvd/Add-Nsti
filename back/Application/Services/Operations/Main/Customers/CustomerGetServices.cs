@@ -9,7 +9,7 @@ using System;
 using UnitOfWork.Persistence.Operations;
 using Pagination.Models;
 using Application.Exceptions;
-using Domain.Entities.Main.Customers;
+using Domain.Entities.Customers;
 using Application.Services.Operations.Main.Customers.Dtos;
 using Application.Services.Operations.Main.Customers.Search;
 using Application.Services.Helpers;

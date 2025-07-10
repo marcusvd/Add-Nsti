@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using UnitOfWork.Persistence.Operations;
 using Application.Exceptions;
-using Domain.Entities.Main.Customers;
+using Domain.Entities.Customers;
 using Application.Services.Operations.Main.Customers.Dtos;
 
 using System.Net;

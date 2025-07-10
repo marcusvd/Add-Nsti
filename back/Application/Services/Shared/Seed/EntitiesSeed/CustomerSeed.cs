@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Domain.Entities.Main.Customers;
-using Domain.Entities.Main.Inheritances.Enums;
-using Domain.Entities.Shared;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed;
 

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Domain.Entities.Authentication;
-using Domain.Entities.Main.Customers;
+using Domain.Entities.Customers;
 using Domain.Entities.Shared;
 
-namespace Domain.Entities.Main.Companies
+namespace Domain.Entities.Companies
 {
     public class Company
     {
@@ -23,7 +23,6 @@ namespace Domain.Entities.Main.Companies
         public Address Address { get; set; }
         public Contact Contact { get; set; }
         public bool Deleted { get; set; }
-        public List<MyUser> MyUsers { get; set; }
         public List<Customer> Customers { get; set; }
     
     }
