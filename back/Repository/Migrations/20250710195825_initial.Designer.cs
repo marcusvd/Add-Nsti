@@ -9,10 +9,10 @@ using Repository.Data.Context;
 
 #nullable disable
 
-namespace Repository.Migrations.IdImDb
+namespace Repository.Migrations
 {
-    [DbContext(typeof(IdImDbContext))]
-    [Migration("20250710104406_initial")]
+    [DbContext(typeof(ImSystemDbContext))]
+    [Migration("20250710195825_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -25,122 +25,6 @@ namespace Repository.Migrations.IdImDb
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Authentication.MyUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("Registered")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.Authentication.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.Authentication.UserRole", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRoles", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.Companies.Company", b =>
                 {
                     b.Property<int>("Id")
@@ -149,15 +33,28 @@ namespace Repository.Migrations.IdImDb
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContactId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("MyUseId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Company");
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("MN_Companies");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customers.Customer", b =>
@@ -206,7 +103,7 @@ namespace Repository.Migrations.IdImDb
 
                     b.HasIndex("ContactId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("MN_Customers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shared.Address", b =>
@@ -219,9 +116,6 @@ namespace Repository.Migrations.IdImDb
 
                     b.Property<string>("City")
                         .HasColumnType("longtext");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Complement")
                         .HasColumnType("longtext");
@@ -249,10 +143,7 @@ namespace Repository.Migrations.IdImDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
-
-                    b.ToTable("Address");
+                    b.ToTable("SD_Addresses");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shared.Contact", b =>
@@ -265,9 +156,6 @@ namespace Repository.Migrations.IdImDb
 
                     b.Property<string>("Cel")
                         .HasColumnType("longtext");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("Deleted")
                         .HasColumnType("datetime(6)");
@@ -289,10 +177,7 @@ namespace Repository.Migrations.IdImDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
-
-                    b.ToTable("Contact");
+                    b.ToTable("SD_Contacts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shared.SocialNetwork", b =>
@@ -327,20 +212,14 @@ namespace Repository.Migrations.IdImDb
 
                     b.HasIndex("ContactId");
 
-                    b.ToTable("SocialNetwork");
+                    b.ToTable("SD_socialnetworks");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Authentication.MyUser", b =>
+            modelBuilder.Entity("Domain.Entities.Companies.Company", b =>
                 {
                     b.HasOne("Domain.Entities.Shared.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId");
-
-                    b.HasOne("Domain.Entities.Companies.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Shared.Contact", "Contact")
                         .WithMany()
@@ -348,28 +227,7 @@ namespace Repository.Migrations.IdImDb
 
                     b.Navigation("Address");
 
-                    b.Navigation("Company");
-
                     b.Navigation("Contact");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Authentication.UserRole", b =>
-                {
-                    b.HasOne("Domain.Entities.Authentication.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Authentication.MyUser", "MyUser")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MyUser");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customers.Customer", b =>
@@ -395,28 +253,6 @@ namespace Repository.Migrations.IdImDb
                     b.Navigation("Contact");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Shared.Address", b =>
-                {
-                    b.HasOne("Domain.Entities.Companies.Company", "Company")
-                        .WithOne("Address")
-                        .HasForeignKey("Domain.Entities.Shared.Address", "CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Shared.Contact", b =>
-                {
-                    b.HasOne("Domain.Entities.Companies.Company", "Company")
-                        .WithOne("Contact")
-                        .HasForeignKey("Domain.Entities.Shared.Contact", "CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-                });
-
             modelBuilder.Entity("Domain.Entities.Shared.SocialNetwork", b =>
                 {
                     b.HasOne("Domain.Entities.Companies.Company", "Company")
@@ -436,22 +272,8 @@ namespace Repository.Migrations.IdImDb
                     b.Navigation("Contact");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Authentication.MyUser", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Authentication.Role", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
             modelBuilder.Entity("Domain.Entities.Companies.Company", b =>
                 {
-                    b.Navigation("Address");
-
-                    b.Navigation("Contact");
-
                     b.Navigation("Customers");
                 });
 

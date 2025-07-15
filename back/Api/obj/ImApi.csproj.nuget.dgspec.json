@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj": {}
+    "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Api\\ImApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj": {
+    "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Api\\ImApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
+        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Api\\ImApi.csproj",
         "projectName": "ImApi",
-        "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
+        "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Api\\ImApi.csproj",
         "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\obj\\",
+        "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -32,8 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\Application.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\Application.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\Application.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\Application.csproj"
               }
             }
           }
@@ -82,14 +82,14 @@
         }
       }
     },
-    "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\Application.csproj": {
+    "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\Application.csproj",
+        "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\obj\\",
+        "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -110,17 +110,17 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj"
               },
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj"
               },
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj"
               },
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\UnitOfWork\\UnitOfWork.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\UnitOfWork\\UnitOfWork.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\UnitOfWork.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\UnitOfWork.csproj"
               }
             }
           }
@@ -178,14 +178,14 @@
         }
       }
     },
-    "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj": {
+    "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj",
+        "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\obj\\",
+        "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -253,14 +253,14 @@
         }
       }
     },
-    "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj": {
+    "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj",
+        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj",
         "projectName": "Pagination",
-        "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj",
+        "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj",
         "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\obj\\",
+        "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -328,14 +328,14 @@
         }
       }
     },
-    "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj": {
+    "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj",
+        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj",
         "projectName": "Repository",
-        "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj",
+        "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj",
         "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\obj\\",
+        "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -356,11 +356,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj"
               },
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj"
               }
             }
           }
@@ -418,14 +418,14 @@
         }
       }
     },
-    "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\UnitOfWork\\UnitOfWork.csproj": {
+    "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\UnitOfWork.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\UnitOfWork\\UnitOfWork.csproj",
+        "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\UnitOfWork.csproj",
         "projectName": "UnitOfWork",
-        "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\UnitOfWork\\UnitOfWork.csproj",
+        "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\UnitOfWork.csproj",
         "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\UnitOfWork\\obj\\",
+        "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -446,8 +446,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj": {
-                "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj"
+              "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj": {
+                "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj"
               }
             }
           }

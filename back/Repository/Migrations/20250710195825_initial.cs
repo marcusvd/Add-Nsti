@@ -77,6 +77,7 @@ namespace Repository.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    MyUseId = table.Column<int>(type: "int", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     ContactId = table.Column<int>(type: "int", nullable: true),
                     Deleted = table.Column<bool>(type: "tinyint(1)", nullable: false)

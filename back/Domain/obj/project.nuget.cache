@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3Qd4RlArqz4=",
+  "dgSpecHash": "/ZrS5n5JD7c=",
   "success": true,
-  "projectFilePath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adm02\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\adm02\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",

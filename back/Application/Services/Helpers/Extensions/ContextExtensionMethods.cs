@@ -8,7 +8,7 @@ namespace Application.Services.Helpers.Extensions
 {
     public static class ContextExtensionMethods
     {
-        public static void AddContext(this IServiceCollection services, IConfiguration Configuration)
+        public static void AddContextIdImDb(this IServiceCollection services, IConfiguration Configuration)
         {
             string cxStr = Configuration.GetConnectionString("IdImDb");
             services.AddDbContext<IdImDbContext>(db =>

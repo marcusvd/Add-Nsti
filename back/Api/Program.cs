@@ -11,13 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-builder.Services.AddContext(builder.Configuration);
+builder.Services.AddContextIdImDb(builder.Configuration);
 
 builder.Services.AddContextImSystemDb(builder.Configuration);
-
-
-
-
 
 // Configurar o Identity
 builder.Services.AddIdentity<MyUser, Role>(options =>
@@ -28,10 +24,10 @@ builder.Services.AddIdentity<MyUser, Role>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = true;
-    
+
     // Configurações de usuário
     options.User.RequireUniqueEmail = true;
-    
+
     // Configurações de lockout
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
@@ -41,22 +37,12 @@ builder.Services.AddIdentity<MyUser, Role>(options =>
 .AddUserManager<UserManager<MyUser>>()
 .AddRoleManager<RoleManager<Role>>()
 .AddSignInManager<SignInManager<MyUser>>()
-.AddUserStore<UserStore<MyUser, Role, IdImDbContext, int, IdentityUserClaim<int>, 
+.AddUserStore<UserStore<MyUser, Role, IdImDbContext, int, IdentityUserClaim<int>,
     UserRole, IdentityUserLogin<int>, IdentityUserToken<int>, IdentityRoleClaim<int>>>()
 .AddRoleStore<RoleStore<Role, IdImDbContext, int, UserRole, IdentityRoleClaim<int>>>();
 
 // Registrar o factory de claims
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, MyUserClaimsPrincipalFactory>();
-
-
-
-
-
-
-
-
-
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,17 +1,25 @@
 using Domain.Entities.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 
 namespace Repository.Data.Context;
 
-public class IdImDbContext : DbContext
+public class IdImDbContext : IdentityDbContext<MyUser, Role, int, IdentityUserClaim<int>,
+UserRole,
+IdentityUserLogin<int>,
+IdentityRoleClaim<int>,
+IdentityUserToken<int>>
 {
-    private IConfiguration _configuration;
-    public IdImDbContext(DbContextOptions<IdImDbContext> opt, IConfiguration Configuration) : base(opt)
-    {
-        _configuration = Configuration;
-    }
+    public IdImDbContext(DbContextOptions<IdImDbContext> opt) : base(opt)
+    { }
+    // private IConfiguration _configuration;
+    // public IdImDbContext(DbContextOptions<IdImDbContext> opt, IConfiguration Configuration) : base(opt)
+    // {
+    //     _configuration = Configuration;
+    // }
 
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     // {
@@ -22,6 +30,8 @@ public class IdImDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+
+        base.OnModelCreating(builder);
 
         builder.Entity<MyUser>(b =>
         {
@@ -47,11 +57,13 @@ public class IdImDbContext : DbContext
                   b.HasKey(ur => new { ur.UserId, ur.RoleId });
               });
 
-        builder.Entity<MyUser>().
-        HasOne(u => u.Company)
-        .WithMany()
-        .HasForeignKey(u => u.CompanyId)
-        .OnDelete(DeleteBehavior.Restrict);
+        // builder.Entity<MyUser>().
+        // HasOne(u => u.Company)
+        // .WithMany()
+        // .HasForeignKey(u => u.CompanyId)
+        // .OnDelete(DeleteBehavior.Restrict);
+
+
 
 
     }
