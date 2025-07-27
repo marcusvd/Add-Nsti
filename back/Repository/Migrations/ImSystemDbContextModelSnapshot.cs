@@ -39,9 +39,6 @@ namespace Repository.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("MyUseId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -101,6 +98,61 @@ namespace Repository.Migrations
                     b.HasIndex("ContactId");
 
                     b.ToTable("MN_Customers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Profiles.MyUser", b =>
+                {
+                    b.Property<int>("UserAccoutnId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("UserAccoutnId");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ContactId");
+
+                    b.HasIndex("ProfileId");
+
+                    b.ToTable("AU_MyUsers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Profiles.Profile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AU_ProfileUsers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shared.Address", b =>
@@ -248,6 +300,33 @@ namespace Repository.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Profiles.MyUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Shared.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.HasOne("Domain.Entities.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("Domain.Entities.Shared.Contact", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId");
+
+                    b.HasOne("Domain.Entities.Profiles.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId");
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Contact");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shared.SocialNetwork", b =>

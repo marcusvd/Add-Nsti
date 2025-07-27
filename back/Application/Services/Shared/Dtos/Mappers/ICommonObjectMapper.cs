@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-
-
+using Authentication;
 using Application.Services.Operations.Authentication.Dtos;
-using Application.Services.Operations.Main.Companies.Dtos;
+using Application.Services.Operations.Companies.Dtos;
 using Domain.Entities.Companies;
-using Domain.Entities.Authentication;
+
 using Domain.Entities.Shared;
 
 
@@ -17,10 +16,10 @@ namespace Application.Services.Shared.Dtos.Mappers
         List<CompanyDto> CompanyListMake(List<Company> list);
         List<Company> CompanyListMake(List<CompanyDto> list);
 
-        MyUserDto MyUserMapper(MyUser entity);
-        MyUser MyUserMapper(MyUserDto entity);
-        List<MyUserDto> MyUserListMake(List<MyUser> list);
-        List<MyUser> MyUserListMake(List<MyUserDto> list);
+        // UserAccountDto UserAccountMapper(UserAccount entity);
+        // UserAccount UserAccountMapper(UserAccountDto entity);
+        // List<UserAccountDto> UserAccountListMake(List<UserAccount> list);
+        // List<UserAccount> UserAccountListMake(List<UserAccountDto> list);
 
         List<AddressDto> AddressListMake(List<Address> list);
         List<Address> AddressListMake(List<AddressDto> list);

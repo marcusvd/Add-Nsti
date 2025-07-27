@@ -1,5 +1,5 @@
 using System;
-using Domain.Entities.Authentication;
+using Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +38,7 @@ namespace Application.Services.Helpers.Extensions
         public static void AddIdentity(this IServiceCollection services)
         {
 
-            services.AddIdentity<MyUser, Role>(opt =>
+            services.AddIdentity<UserAccount, Role>(opt =>
              {
                  opt.SignIn.RequireConfirmedEmail = true;
                  //
@@ -55,10 +55,10 @@ namespace Application.Services.Helpers.Extensions
              })
                 .AddRoles<Role>()
                 .AddEntityFrameworkStores<ImSystemDbContext>()
-                .AddPasswordValidator<PasswordValidatorPolicies<MyUser>>()
+                .AddPasswordValidator<PasswordValidatorPolicies<UserAccount>>()
                .AddRoleValidator<RoleValidator<Role>>()
                .AddRoleManager<RoleManager<Role>>()
-               .AddSignInManager<SignInManager<MyUser>>()
+               .AddSignInManager<SignInManager<UserAccount>>()
                .AddDefaultTokenProviders();
         }
         public static void AddDependencyInjectionIdentity(this IServiceCollection services)

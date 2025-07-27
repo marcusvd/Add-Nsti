@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using Application.Services.Operations.Authentication.Dtos;
-using Domain.Entities.Authentication;
+using Authentication;
 
 namespace Application.Services.Operations.Authentication.Register
 {
     public interface IRegisterServices
     {
-         Task<UserToken> Register(MyUserDto user);
+        Task<UserToken> RegisterAsync(RegisterDto user);
     }
 }

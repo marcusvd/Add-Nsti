@@ -1,5 +1,5 @@
 using Application.Services.Helpers.Extensions;
-using Domain.Entities.Authentication;
+using Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Repository.Data.Context;
@@ -16,7 +16,7 @@ builder.Services.AddContextIdImDb(builder.Configuration);
 builder.Services.AddContextImSystemDb(builder.Configuration);
 
 // Configurar o Identity
-builder.Services.AddIdentity<MyUser, Role>(options =>
+builder.Services.AddIdentity<UserAccount, Role>(options =>
 {
     // Configurações de senha
     options.Password.RequireDigit = true;
@@ -34,15 +34,15 @@ builder.Services.AddIdentity<MyUser, Role>(options =>
 })
 .AddEntityFrameworkStores<IdImDbContext>()
 .AddDefaultTokenProviders()
-.AddUserManager<UserManager<MyUser>>()
+.AddUserManager<UserManager<UserAccount>>()
 .AddRoleManager<RoleManager<Role>>()
-.AddSignInManager<SignInManager<MyUser>>()
-.AddUserStore<UserStore<MyUser, Role, IdImDbContext, int, IdentityUserClaim<int>,
+.AddSignInManager<SignInManager<UserAccount>>()
+.AddUserStore<UserStore<UserAccount, Role, IdImDbContext, int, IdentityUserClaim<int>,
     UserRole, IdentityUserLogin<int>, IdentityUserToken<int>, IdentityRoleClaim<int>>>()
 .AddRoleStore<RoleStore<Role, IdImDbContext, int, UserRole, IdentityRoleClaim<int>>>();
 
 // Registrar o factory de claims
-builder.Services.AddScoped<IUserClaimsPrincipalFactory<MyUser>, MyUserClaimsPrincipalFactory>();
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<UserAccount>, UserAccountClaimsPrincipalFactory>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

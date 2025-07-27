@@ -9,7 +9,7 @@ namespace Application.Services.Operations.Authentication
 
     public class EmailServer
     {
-        public void Send(string To = "register@nostopti.com.br", string From = "register@nostopti.com.br", string DisplayName = "Sonny System",
+        public async Task SendAsync(string To = "register@nostopti.com.br", string From = "register@nostopti.com.br", string DisplayName = "Sonny System",
         string Subject = "Test Subject", string Body = "Test", string MailServer = "smtp.nostopti.com.br",
          int Port = 587, bool IsUseSsl = false, string UserName = "register@nostopti.com.br", string Password = "Nsti$2024")
         {
@@ -27,6 +27,8 @@ namespace Application.Services.Operations.Authentication
             try
             {
                 SmtpClient.SendAsync(message, null);
+
+                await Task.CompletedTask;
 
             }
             catch (SmtpFailedRecipientException ex)

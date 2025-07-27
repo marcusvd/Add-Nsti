@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj"/>
+    <ProjectReference Include="..\Authentication\Authentication.csproj"/>
     <ProjectReference Include="..\Repository\Repository.csproj"/>
     <ProjectReference Include="..\UnitOfWork\UnitOfWork.csproj"/>
     <ProjectReference Include="..\Pagination\Pagination.csproj"/>

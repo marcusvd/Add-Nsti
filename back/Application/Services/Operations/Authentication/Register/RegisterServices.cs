@@ -3,125 +3,145 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Application.Exceptions;
-using Application.Services.Operations.Authentication;
+using Authentication;
 using Application.Services.Operations.Authentication.Dtos;
-using Domain.Entities.Authentication;
-using Domain.Entities.Companies;
+
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Application.Services.Operations.Authentication.Dtos.Mappers;
+using Application.Services.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services.Operations.Authentication.Register
 {
-    public class RegisterServices : IRegisterServices
+    public class RegisterServices : AuthenticationBase, IRegisterServices
     {
-
-        private UserManager<MyUser> _userManager;
-        private readonly EmailServer _email;
+        private readonly ILogger<GenericValidatorServices> _logger;
+        private readonly UserManager<UserAccount> _userManager;
+        private readonly GenericValidatorServices _genericValidatorServices;
+        private readonly IAuthenticationObjectMapperServices _mapper;
+        private readonly EmailServer _emailService;
         private readonly JwtHandler _jwtHandler;
         private readonly IUrlHelper _url;
         public RegisterServices(
-              UserManager<MyUser> userManager,
-              EmailServer email,
+              UserManager<UserAccount> userManager,
+              EmailServer emailService,
               JwtHandler jwtHandler,
-              IUrlHelper url
-
-          )
+              IUrlHelper url,
+              IAuthenticationObjectMapperServices mapper,
+              GenericValidatorServices genericValidatorServices,
+              ILogger<GenericValidatorServices> logger
+          ) : base(userManager)
         {
             _userManager = userManager;
-            _email = email;
+            _emailService = emailService;
             _jwtHandler = jwtHandler;
             _url = url;
+            _mapper = mapper;
+            _genericValidatorServices = genericValidatorServices;
+            _logger = logger;
         }
 
-        public async Task<UserToken> Register(MyUserDto user)
+        public async Task<UserToken> RegisterAsync(RegisterDto user)
         {
-            if (user == null) throw new Exception(GlobalErrorsMessagesException.ObjIsNull);
+            _genericValidatorServices.IsObjNull(user);
 
-            if (await NameIsDuplicate(user.UserName)) throw new AuthServicesException(AuthErrorsMessagesException.UserNameAlreadyRegisterd);
+            await ValidateUniqueUserCredentials(user);
 
-            if (await EmailIsDuplicate(user.Email)) throw new AuthServicesException(AuthErrorsMessagesException.EmailAlreadyRegisterd);
+            var userAccount = CreateUserAccount(user.Email);
+            //TODO: Remove this in production - only for testing
+            // userAccount.EmailConfirmed = true;
 
-            var myUser = User(user.Email, user.UserName, user.Company.Name);
-            //remove this.
-            myUser.EmailConfirmed = true;
+            var creationResult = await _userManager.CreateAsync(userAccount, user.Password);
 
-            if ((await _userManager.CreateAsync(myUser, user.Password)).Succeeded)
+            if (!creationResult.Succeeded)
             {
-                string urlToken = await UrlEmailConfirm(myUser, "auth", "ConfirmEmailAddress");
+                _logger.LogError("User creation failed for {Email}. Errors: {Errors}",
+                userAccount.Email, string.Join(", ", creationResult.Errors));
 
-                if (urlToken == null) throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenGenerateEmailLink);
-
-                // _email.Send(To: myUser.Email, Subject: "Sonny - Link para confirmação de e-mail", Body: "http://localhost:4200/confirm-email" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
-                _email.Send(To: myUser.Email, Subject: "Sonny - Link para confirmação de e-mail", Body: "http://sonnyapp.intra/confirm-email" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
-            }
-            else
                 throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenRegisterUserAccount);
+            }
 
-            return await _jwtHandler.GenerateUserToken(GetClaims(user, _userManager.GetRolesAsync(myUser)), user);
+            await SendEmailConfirmationAsync(userAccount);
+
+            var claims = BuildUserClaims(userAccount);
+
+            var usrAccount = _mapper.UserAccountMapper(userAccount);
+
+            return await _jwtHandler.GenerateUserToken(claims, usrAccount);
         }
-        private async Task<bool> NameIsDuplicate(string userName)
+        private async Task ValidateUniqueUserCredentials(RegisterDto register)
         {
-            var myUser = await _userManager.FindByNameAsync(userName);
+            if (await IsUserNameDuplicate(register.UserName))
+            {
+                _logger.LogWarning("Duplicate username attempt: {UserName}", register.UserName);
+                throw new AuthServicesException(AuthErrorsMessagesException.UserNameAlreadyRegisterd);
+            }
 
-            if (myUser != null)
-                return true;
-
-            return false;
+            if (await IsEmailDuplicate(register.Email))
+            {
+                _logger.LogWarning("Duplicate email attempt: {Email}", register.Email);
+                throw new AuthServicesException(AuthErrorsMessagesException.EmailAlreadyRegisterd);
+            }
         }
-        private async Task<bool> EmailIsDuplicate(string email)
+        private async Task<bool> IsUserNameDuplicate(string userName)
         {
-            var myUser = await _userManager.FindByEmailAsync(email);
+            var userAccount = await _userManager.FindByNameAsync(userName);
 
-            if (myUser != null)
-                return true;
-
-            return false;
+            return userAccount != null;
         }
-        private MyUser User(string email, string userName = "Incompleto", string companyName = "Incompleto")
+        private async Task<bool> IsEmailDuplicate(string email)
         {
-            var company = new Company(companyName);
-            var myUser = new MyUser()
+            var userAccount = await _userManager.FindByEmailAsync(email);
+
+            return userAccount != null;
+        }
+        private async Task SendEmailConfirmationAsync(UserAccount userAccount)
+        {
+            try
+            {
+                var confirmationUrl = await GenerateEmailUrl(userAccount, "auth", "ConfirmEmailAddress");
+
+                if (string.IsNullOrEmpty(confirmationUrl))
+                {
+                    _logger.LogError("Failed to generate email confirmation URL for {Email}", userAccount.Email);
+                    throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenGenerateEmailLink);
+                }
+
+                var formattedUrl = FormatEmailUrl("http://sonnyapp.intra/confirm-email", confirmationUrl, "api/auth/ConfirmEmailAddress");
+
+                await _emailService.SendAsync(To: userAccount.Email, Subject: "Sonny - Link para confirmação de e-mail", Body: formattedUrl);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending confirmation email to {Email}", userAccount.Email);
+                throw;
+            }
+        }
+        private UserAccount CreateUserAccount(string email)
+        {
+
+            var userAccount = new UserAccount()
             {
                 UserName = email,
-                Email = email,
-                // Company = company
+                Email = email
             };
-            return myUser;
+            return userAccount;
         }
-        private async Task<bool> RegisterUserAsync(MyUser user, string password)
+
+        private async Task<string> GenerateEmailUrl(UserAccount userAccount, string controller, string action)
         {
-            var register = await _userManager.CreateAsync(user, password);
-
-            return register.Succeeded;
-        }
-        private async Task<List<Claim>> GetClaims(MyUserDto user, Task<IList<string>> roles)
-        {
-            // var userToUserDto = _iMapper.Map<MyUser>(user);
-
-            var getRoles = await roles;
-
-            var claims = new List<Claim>
+            return _url.Action(action, controller, new
             {
-              new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-              new Claim(ClaimTypes.Name, user.UserName),
-            };
-
-            foreach (var role in getRoles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            return claims;
-        }
-        private async Task<string> UrlEmailConfirm(MyUser myUser, string controller, string action)
-        {
-            var urlConfirmMail = _url.Action(action, controller, new
-            {
-                token = await _userManager.GenerateEmailConfirmationTokenAsync(myUser),
-                email = myUser.Email
+                token = await _userManager.GenerateEmailConfirmationTokenAsync(userAccount),
+                email = userAccount.Email
             });
-
-            return urlConfirmMail;
         }
+        private string FormatEmailUrl(string baseUrl, string urlWithToken, string replace)
+        {
+            return $"{baseUrl}{urlWithToken.Replace(replace, "")}";
+        }
+
     }
 }

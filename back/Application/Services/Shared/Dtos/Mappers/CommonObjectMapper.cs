@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-
-
+using Authentication;
 using Application.Services.Operations.Authentication.Dtos;
-using Application.Services.Operations.Main.Companies.Dtos;
+using Application.Services.Operations.Companies.Dtos;
 using Domain.Entities.Companies;
-using Domain.Entities.Authentication;
+
 using Domain.Entities.Shared;
 
 namespace Application.Services.Shared.Dtos.Mappers;
@@ -57,53 +56,7 @@ namespace Application.Services.Shared.Dtos.Mappers;
             return toReturn;
         }
 
-        public MyUserDto MyUserMapper(MyUser entity)
-        {
-            var user = new MyUserDto()
-            {
-                Id = entity.Id,
-                UserName = entity.UserName,
-                Email = entity.Email,
-            };
-            return user;
-        }
-        public MyUser MyUserMapper(MyUserDto entity)
-        {
-            var user = new MyUser()
-            {
-                Id = entity.Id,
-                UserName = entity.UserName,
-                Email = entity.Email,
-            };
-            return user;
-        }
-        public List<MyUserDto> MyUserListMake(List<MyUser> list)
-        {
-            if (list == null) return null;
-
-            var toReturn = new List<MyUserDto>();
-
-            list.ForEach(x =>
-            {
-                toReturn.Add(MyUserMapper(x));
-            });
-
-            return toReturn;
-        }
-        public List<MyUser> MyUserListMake(List<MyUserDto> list)
-        {
-            if (list == null) return null;
-
-            var toReturn = new List<MyUser>();
-
-            list.ForEach(x =>
-            {
-                toReturn.Add(MyUserMapper(x));
-            });
-
-            return toReturn;
-        }
-
+  
         public List<AddressDto> AddressListMake(List<Address> list)
         {
             if (list == null) return null;

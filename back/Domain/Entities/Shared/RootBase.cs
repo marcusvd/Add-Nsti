@@ -1,6 +1,6 @@
 
 using System;
-using Domain.Entities.Authentication;
+
 using Domain.Entities.Companies;
 
 namespace Domain.Entities.Shared

@@ -15,32 +15,32 @@ namespace Application.Services.Operations.Authentication
         {
              _authHelpersServices = authHelpersServices;;
         }
-        public async Task<MyUserDto> GetUserByName(string userName)
+        public async Task<UserAccountDto> GetUserByName(string userName)
         {
-            var myUser = await _authHelpersServices.FindUserByNameAsync(userName);
+            var userAccount = await _authHelpersServices.FindUserByNameAsync(userName);
 
-            var myUserDto = new MyUserDto()
+            var userAccountDto = new UserAccountDto()
             {
-                Id = myUser.Id,
-                UserName = myUser.UserName,
-                Email = myUser.Email,
-                TwoFactorEnabled = await _authHelpersServices.GetTwoFactorEnabledAsync(myUser)
+                Id = userAccount.Id,
+                UserName = userAccount.UserName,
+                Email = userAccount.Email,
+                TwoFactorEnabled = await _authHelpersServices.GetTwoFactorEnabledAsync(userAccount)
             };
 
-            return myUserDto;
+            return userAccountDto;
         }
-        public async Task<MyUserDto> EditUserByName(string userName)
+        public async Task<UserAccountDto> EditUserByName(string userName)
         {
-            var myUser = await _authHelpersServices.FindUserByNameAsync(userName);
+            var userAccount = await _authHelpersServices.FindUserByNameAsync(userName);
 
-            var myUserDto = new MyUserDto()
+            var userAccountDto = new UserAccountDto()
             {
-                UserName = myUser.UserName,
-                Email = myUser.Email,
-                TwoFactorEnabled = await _authHelpersServices.GetTwoFactorEnabledAsync(myUser)
+                UserName = userAccount.UserName,
+                Email = userAccount.Email,
+                TwoFactorEnabled = await _authHelpersServices.GetTwoFactorEnabledAsync(userAccount)
             };
 
-            return myUserDto;
+            return userAccountDto;
         }
 
     }

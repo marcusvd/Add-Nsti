@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Exceptions;
-using Domain.Entities.Authentication;
+using Authentication;
+
 using Application.Services.Operations.Authentication.Dtos;
 
 namespace Application.Services.Operations.Authentication
@@ -31,14 +32,14 @@ namespace Application.Services.Operations.Authentication
 
             _iAuthHelpersServices.ObjIsNull(retryConfirmPassword);
 
-            var myUser = await _iAuthHelpersServices.FindUserByEmailAsync(retryConfirmPassword.Email);
+            var userAccount = await _iAuthHelpersServices.FindUserByEmailAsync(retryConfirmPassword.Email);
 
-            _iAuthHelpersServices.EmailAlreadyConfirmed(myUser);
+            _iAuthHelpersServices.EmailAlreadyConfirmed(userAccount);
 
-            string urlToken = await _iAuthHelpersServices.UrlEmailConfirm(myUser, "auth", "ConfirmEmailAddress");
+            string urlToken = await _iAuthHelpersServices.UrlEmailConfirm(userAccount, "auth", "ConfirmEmailAddress");
 
-            _email.Send(To: myUser.Email, Subject: "Sonny - Link para confirmação de e-mail", Body: "http://sonnyapp.intra/confirm-email" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
-            // _email.Send(To: myUser.Email, Subject: "Sonny - Link para confirmação de e-mail", Body: "http://localhost:4200/confirm-email" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
+            _email.Send(To: userAccount.Email, Subject: "Sonny - Link para confirmação de e-mail", Body: "http://sonnyapp.intra/confirm-email" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
+            // _email.Send(To: userAccount.Email, Subject: "Sonny - Link para confirmação de e-mail", Body: "http://localhost:4200/confirm-email" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
 
             return true;
         }
@@ -48,11 +49,11 @@ namespace Application.Services.Operations.Authentication
         {
             _iAuthHelpersServices.ObjIsNull(forgotPassword);
 
-            var myUser = await _iAuthHelpersServices.FindUserByEmailAsync(forgotPassword.Email);
+            var userAccount = await _iAuthHelpersServices.FindUserByEmailAsync(forgotPassword.Email);
 
-            string urlToken = await _iAuthHelpersServices.UrlPasswordReset(myUser, "auth", "Reset");
+            string urlToken = await _iAuthHelpersServices.UrlPasswordReset(userAccount, "auth", "Reset");
 
-            _email.Send(To: myUser.Email, Subject: "Sonny - Link para reset de senha.", Body: "http://sonnyapp.intra/reset-password" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
+            _email.Send(To: userAccount.Email, Subject: "Sonny - Link para reset de senha.", Body: "http://sonnyapp.intra/reset-password" + urlToken.Replace("api/auth/ConfirmEmailAddress", ""));
 
             return true;
         }
@@ -66,23 +67,23 @@ namespace Application.Services.Operations.Authentication
         }
         public async Task<bool> ConfirmEmailAddress(ConfirmEmailDto confirmEmail)
         {
-            var myUser = await _iAuthHelpersServices.FindUserByEmailAsync(confirmEmail.Email);
+            var userAccount = await _iAuthHelpersServices.FindUserByEmailAsync(confirmEmail.Email);
 
-            if (myUser.EmailConfirmed)
+            if (userAccount.EmailConfirmed)
                 throw new AuthServicesException("Email já foi confirmado.");
 
-            return await _iAuthHelpersServices.ConfirmingEmail(myUser, confirmEmail);
+            return await _iAuthHelpersServices.ConfirmingEmail(userAccount, confirmEmail);
         }
         public async Task<UserToken> TwoFactor(T2FactorDto t2Factor)
         {
-            var myUser = await _iAuthHelpersServices.FindUserByNameAsync(t2Factor.UserName);
+            var userAccount = await _iAuthHelpersServices.FindUserByNameAsync(t2Factor.UserName);
 
-            await _iAuthHelpersServices.VerifyTwoFactorTokenAsync(myUser, "Email", t2Factor);
+            await _iAuthHelpersServices.VerifyTwoFactorTokenAsync(userAccount, "Email", t2Factor);
 
             return await _jwtHandler.GenerateUserToken(
-                                     _iAuthHelpersServices.GetClaims(_iAuthHelpersServices.MyUserToMyUserDto(myUser),
-                                     _iAuthHelpersServices.GetRoles(myUser)),
-                                     _iAuthHelpersServices.MyUserToMyUserDto(myUser));
+                                     _iAuthHelpersServices.GetClaims(_iAuthHelpersServices.UserAccountToUserAccountDto(userAccount),
+                                     _iAuthHelpersServices.GetRoles(userAccount)),
+                                     _iAuthHelpersServices.UserAccountToUserAccountDto(userAccount));
         }
         // public async Task<IdentityResult> CreateRole(RoleDto role)
         // {
@@ -98,7 +99,7 @@ namespace Application.Services.Operations.Authentication
             return await _iAuthHelpersServices.UpdateUserRoles(role);
 
         }
-        public async Task<IList<string>> GetRoles(MyUser user)
+        public async Task<IList<string>> GetRoles(UserAccount user)
         {
             _iAuthHelpersServices.ObjIsNull(user);
 

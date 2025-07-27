@@ -7,19 +7,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 
-using Application.Services.Operations.Main.Customers.DtoValidation;
-using Application.Services.Operations.Main.Customers.Dtos;
-using Application.Services.Operations.Main.Customers.Dtos.Mappers;
-using Application.Services.Operations.Main.Customers;
+using Application.Services.Operations.Customers.DtoValidation;
+using Application.Services.Operations.Customers.Dtos;
+using Application.Services.Operations.Customers.Dtos.Mappers;
+using Application.Services.Operations.Customers;
 using Application.Services.Shared.Seed.EntitiesSeed;
-using Application.Services.Operations.Main.Companies;
+using Application.Services.Operations.Companies;
 using Application.Services.Operations.Authentication.Dtos;
 using Application.Services.Operations.Authentication.DtoValidation;
 using Application.Services.Shared.Dtos;
 using Application.Services.Shared.Dtos.Mappers;
 using Application.Services.Shared.DtoValidation;
 using Application.Services.Operations.Authentication;
-using Application.Services.Operations.Main.Customers.Search;
+using Application.Services.Operations.Customers.Search;
 
 using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.Main.Customers;
@@ -27,6 +27,7 @@ using Repository.Data.Operations.Main.Customers;
 using UnitOfWork.Persistence.Operations;
 
 using Domain.Entities.GlobalSystem;
+using Application.Services.Operations.Authentication.Dtos.Mappers;
 
 
 namespace Application.Services.Helpers.Extensions;
@@ -61,8 +62,10 @@ public static class ExtensionMethods
         #region seed
         services.AddScoped<SeedSonnyDbServices>();
         #endregion
+        
         #region ObjectMapper
         services.AddScoped<ICommonObjectMapper, CommonObjectMapper>();
+        services.AddScoped<IAuthenticationObjectMapperServices, AuthenticationObjectMapperServices>();
         #endregion
 
         #region Customer
@@ -101,7 +104,7 @@ public static class ExtensionMethods
         services.AddFluentValidationAutoValidation()
         .AddFluentValidationClientsideAdapters();
         #region Authentication
-        services.AddScoped<IValidator<MyUserDto>, MyUserValidator>();
+        services.AddScoped<IValidator<UserAccountDto>, UserAccountValidator>();
         #endregion
 
         #region Customer

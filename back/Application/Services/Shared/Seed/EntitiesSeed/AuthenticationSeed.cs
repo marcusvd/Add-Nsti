@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Application.Services.Operations.Authentication.Dtos;
 using Application.Services.Operations.Authentication.Register;
-using Application.Services.Operations.Main.Companies.Dtos;
+using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Shared.Dtos;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed
@@ -56,7 +56,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
         public async Task<HttpStatusCode> AddUser()
         {
 
-            var user = new MyUserDto()
+            var user = new UserAccountDto()
             {
                 Id = 1,
                 Company = NoStopTi(),

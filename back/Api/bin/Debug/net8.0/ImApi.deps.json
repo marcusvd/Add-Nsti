@@ -9,6 +9,7 @@
       "ImApi/1.0.0": {
         "dependencies": {
           "Application": "1.0.0",
+          "Authentication": "1.0.0",
           "Swashbuckle.AspNetCore": "6.6.2"
         },
         "runtime": {
@@ -875,6 +876,7 @@
       "System.Threading.Channels/6.0.0": {},
       "Application/1.0.0": {
         "dependencies": {
+          "Authentication": "1.0.0",
           "Domain": "1.0.0",
           "FluentValidation.AspNetCore": "11.2.2",
           "MailKit": "4.3.0",
@@ -886,6 +888,20 @@
         },
         "runtime": {
           "Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Authentication/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.4",
+          "Microsoft.EntityFrameworkCore": "8.0.13",
+          "Microsoft.EntityFrameworkCore.Design": "8.0.4",
+          "Pomelo.EntityFrameworkCore.MySql": "8.0.3"
+        },
+        "runtime": {
+          "Authentication.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1518,6 +1534,11 @@
       "hashPath": "system.threading.channels.6.0.0.nupkg.sha512"
     },
     "Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Authentication/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

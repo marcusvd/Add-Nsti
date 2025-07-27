@@ -4,8 +4,9 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Authentication;
 using System;
-using Domain.Entities.Authentication;
+
 using System.Threading.Tasks;
 using Application.Services.Operations.Authentication.Dtos;
 
@@ -35,7 +36,7 @@ namespace Application.Services.Operations.Authentication
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        public async Task<UserToken> GenerateUserToken(Task<List<Claim>> claims, MyUserDto user)
+        public async Task<UserToken> GenerateUserToken(Task<List<Claim>> claims, UserAccountDto user)
         {
             
             DateTime expiresDateTime = DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]));

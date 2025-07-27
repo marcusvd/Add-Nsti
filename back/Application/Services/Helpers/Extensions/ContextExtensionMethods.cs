@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Repository.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Authentication;
 
 namespace Application.Services.Helpers.Extensions
 {
@@ -13,7 +14,7 @@ namespace Application.Services.Helpers.Extensions
             string cxStr = Configuration.GetConnectionString("IdImDb");
             services.AddDbContext<IdImDbContext>(db =>
               db.UseMySql(cxStr, ServerVersion.AutoDetect(cxStr), migration =>
-              migration.MigrationsAssembly("Repository")));
+              migration.MigrationsAssembly("Authentication")));
         }
         public static void AddContextImSystemDb(this IServiceCollection services, IConfiguration Configuration)
         {

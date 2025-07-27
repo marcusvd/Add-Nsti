@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
-using Domain.Entities.Authentication;
+using Authentication;
+
 
 namespace Services.Services.Operations.Authentication
 {
     public interface ITokenServices
     {
-        Task<UserToken> GenerateToken(MyUser user);
+        Task<UserToken> GenerateToken(UserAccount user);
     }
 }

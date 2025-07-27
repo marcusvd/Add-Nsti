@@ -6,7 +6,7 @@ namespace Application.Services.Operations.Authentication
 {
     public interface IAccountManagerEditServices
     {
-        Task<MyUserDto> GetUserByName(string userName);
+        Task<UserAccountDto> GetUserByName(string userName);
         
     }
 }

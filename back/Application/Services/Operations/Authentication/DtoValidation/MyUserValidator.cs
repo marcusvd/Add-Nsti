@@ -4,9 +4,9 @@ using Application.Services.Shared.DtoValidation;
 
 namespace Application.Services.Operations.Authentication.DtoValidation
 {
-    public class MyUserValidator : AbstractValidator<MyUserDto>
+    public class UserAccountValidator : AbstractValidator<UserAccountDto>
     {
-        public MyUserValidator()
+        public UserAccountValidator()
         {
             //Commons
 //             RuleFor(xx => xx.UserName).NotEmpty().NotNull().MaximumLength(150);
