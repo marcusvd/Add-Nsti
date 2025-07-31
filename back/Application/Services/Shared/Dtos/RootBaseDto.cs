@@ -1,7 +1,7 @@
 
 using System;
-using Application.Services.Operations.Authentication.Dtos;
 using Application.Services.Operations.Companies.Dtos;
+using Authentication.Dtos;
 
 namespace Application.Services.Shared.Dtos
 {

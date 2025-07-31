@@ -34,7 +34,7 @@ public class CustomerUpdateServices : ICustomerUpdateServices
 
     public async Task<HttpStatusCode> UpdateAsync(int customerId, CustomerDto entity)
     {
-        if (entity == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+        if (entity == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
         if (customerId != entity.Id) throw new GlobalServicesException(GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
 
         var fromDb = await _iCustomerRepository.GetById(

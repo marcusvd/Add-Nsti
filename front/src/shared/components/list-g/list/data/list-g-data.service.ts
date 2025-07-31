@@ -21,13 +21,18 @@ export class ListGDataService extends BackEndService<any> {
   // entitiesFromDbToMemory = new BehaviorSubject<any[]>([]);
   // entitiesFromDbToMemory$ = this.entitiesFromDbToMemory.asObservable();
 
-  constructor(
-    override _http: HttpClient
-  ) {
-    super(_http, 'environment._BACK_END_ROOT_URL')
+  constructor( ) {
+    super()
     // super(_http, null)
 
   }
+  // constructor(
+  //   override _http: HttpClient
+  // ) {
+  //   super(_http, 'environment._BACK_END_ROOT_URL')
+  //   // super(_http, null)
+
+  // }
 
   paramsTo(pageIndex: number, pgSize: number, predicate?: number, $event?: FormControl, terms?: any, orderBy?: any) {
     let params = new HttpParams();

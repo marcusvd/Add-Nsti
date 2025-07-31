@@ -39,7 +39,7 @@ namespace Application.Services.Operations.Customers
         {
             List<Customer> entityFromDb = await _GENERIC_REPO.Customers.Get(x => x.Deleted == DateTime.MinValue, null, x => x, Order => Order.OrderBy(x => x.Id)).ToListAsync();
 
-            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             List<CustomerDto> entityDto = _ICustomerObjectMapperServices.CustomerListMake(entityFromDb);
 
@@ -52,7 +52,7 @@ namespace Application.Services.Operations.Customers
 
             var toReturn = _ICustomerObjectMapperServices.CustomerListMake(fromDb);
 
-            if (fromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (fromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             return toReturn;
         }
@@ -119,7 +119,7 @@ namespace Application.Services.Operations.Customers
                   );
             }
 
-            if (fromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (fromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             List<CustomerDto> ViewDto = _ICustomerObjectMapperServices.CustomerListMake(fromDb);
 
@@ -155,7 +155,7 @@ namespace Application.Services.Operations.Customers
 
             if (filtered != null) fromDb = filtered;
 
-            if (fromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (fromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             List<CustomerDto> ViewDto = _ICustomerObjectMapperServices.CustomerListMake(fromDb);
 
@@ -180,7 +180,7 @@ namespace Application.Services.Operations.Customers
                null,
                 selector => selector);
 
-            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             var toReturnViewDto = _ICustomerObjectMapperServices.CustomerMapper(entityFromDb);
 
@@ -193,7 +193,7 @@ namespace Application.Services.Operations.Customers
                 null,
                 selector => selector).ToListAsync();
 
-            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             var toReturnViewDto = _ICustomerObjectMapperServices.CustomerListMake(entityFromDb);
 
@@ -212,7 +212,7 @@ namespace Application.Services.Operations.Customers
                 .ThenInclude(x => x.SocialMedias),
                 selector => selector);
 
-            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (entityFromDb == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             var toReturnViewDto = _ICustomerObjectMapperServices.CustomerMapper(entityFromDb);
 

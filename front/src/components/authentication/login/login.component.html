@@ -1,4 +1,5 @@
-<div class="p-4">
+<div class="sm:grid justify-center">
+  <div class="p-4 sm:w-[800px]">
     <mat-card class="title border-card-categories-divide-comp">
         <div class="title-conf back-ground-main-color-scss">
             <div>
@@ -13,17 +14,16 @@
         </div>
         <div class="p-4 flex justify-center">
             <div>
-                <h3 class="cursor-pointer main-color-scss" [routerLink]="['register']"> Cadastrar</h3>
+                <h3 class="cursor-pointer main-color-scss" [routerLink]="['/register']"> Cadastrar</h3>
             </div>
         </div>
 
         <div [formGroup]="formMain">
             <mat-card class="m-4 border-card-categories-divide-comp">
-                <div class="w-full grid sm:grid-cols-2 grid-cols-1 gap-4 p-10 ">
+                <div class="w-full grid grid-cols-1 gap-4 p-10 ">
 
                     <div class="w-full">
-                        <mat-label class="text-color-main">
-                            <b>Email</b></mat-label>
+                        <mat-label class="text-color-main"> <b>Email</b></mat-label>
                         <mat-form-field class="w-full" appearance="outline">
                             <input #email (input)="inputEmail(email.value)" matInput type="text" formControlName="userName" aria-label="userName">
                             <mat-error>
@@ -35,8 +35,7 @@
                     </div>
 
                     <div class="w-full">
-                        <mat-label class="text-color-main">
-                            <b> Senha</b></mat-label>
+                        <mat-label class="text-color-main"> <b> Senha</b></mat-label>
                         <mat-form-field class="w-full" appearance="outline">
                             <input matInput [type]="pwdType" formControlName="password" aria-label="Senha">
                             <mat-error>
@@ -65,4 +64,5 @@
             <btn-g mat-dialog-close [name]="'Acessar'" [icon]="'lock_open'" (btn)="login()"></btn-g>
         </div>
     </mat-card>
+</div>
 </div>

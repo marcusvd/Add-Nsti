@@ -1442,9 +1442,12 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "FluentValidation.AspNetCore": "11.2.2",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.4",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.4",
           "Microsoft.EntityFrameworkCore": "8.0.13",
           "Microsoft.EntityFrameworkCore.Design": "8.0.4",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0",
           "Pomelo.EntityFrameworkCore.MySql": "8.0.3"
         },
         "compile": {
@@ -3759,23 +3762,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\adm02\\.nuget\\packages\\": {},
+    "C:\\Users\\user\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\Application.csproj",
+      "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Application\\Application.csproj",
       "projectName": "Application",
-      "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\Application.csproj",
-      "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Application\\obj\\",
+      "projectPath": "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Application\\Application.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\adm02\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3790,20 +3793,20 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Authentication\\Authentication.csproj": {
-              "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Authentication\\Authentication.csproj"
+            "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj": {
+              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj"
             },
-            "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Domain\\Domain.csproj"
+            "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Domain\\Domain.csproj": {
+              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Domain\\Domain.csproj"
             },
-            "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj": {
-              "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Pagination\\Pagination.csproj"
+            "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Pagination\\Pagination.csproj": {
+              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Pagination\\Pagination.csproj"
             },
-            "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj": {
-              "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj"
+            "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj": {
+              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj"
             },
-            "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\UnitOfWork.csproj": {
-              "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\UnitOfWork\\UnitOfWork.csproj"
+            "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\UnitOfWork\\UnitOfWork.csproj": {
+              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\UnitOfWork\\UnitOfWork.csproj"
             }
           }
         }
@@ -3818,7 +3821,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -3857,7 +3860,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Authentication;
-using Application.Services.Operations.Authentication.Dtos;
+
 using Application.Services.Operations.Companies.Dtos;
 using Domain.Entities.Companies;
 

@@ -3,14 +3,20 @@ import { SideNavComponent } from '../shared/components/side-nav/components/side-
 import { LoginComponent } from 'components/authentication/login/login.component';
 import { authGuard } from 'components/authentication/guards/auth-guard';
 import { UnknownRouteComponent } from 'shared/components/unknown-route/unknown-route.component';
+import { RegisterComponent } from 'components/authentication/register/register.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'unknown-route', component: UnknownRouteComponent },
   {
     path: '', component: SideNavComponent,
     canActivate: [authGuard],
     children: [
+      // {
+      //   path: 'auth',
+      //   loadChildren: () => import('../components/authentication/modules/auth.routing.module').then(x => x.RegisterRoutingModule),
+      // },
       {
         path: 'employees',
         loadChildren: () => import('../components/employees/modules/employees.routing.module').then(x => x.EmployeesRoutingModule),

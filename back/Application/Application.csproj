@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+
+
   <ItemGroup>
     <!-- <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1"/> -->
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2"/>
@@ -9,6 +11,8 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
     <PackageReference Include="MailKit" Version="4.3.0"/>
   </ItemGroup>
+
+
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj"/>
     <ProjectReference Include="..\Authentication\Authentication.csproj"/>
@@ -16,4 +20,6 @@
     <ProjectReference Include="..\UnitOfWork\UnitOfWork.csproj"/>
     <ProjectReference Include="..\Pagination\Pagination.csproj"/>
   </ItemGroup>
+
+  
 </Project>

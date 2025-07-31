@@ -15,13 +15,16 @@ export class CustomerEditService extends BackEndService<CustomerDto> {
 
   // private _valueDate: boolean;
 
-  constructor(
-    override _http: HttpClient,
-    private _router: Router,
-    private _communicationsAlerts: CommunicationAlerts,
-  ) {
-    super(_http, 'environment._BACK_END_ROOT_URL');
+  constructor() {
+    super();
   }
+  // constructor(
+  //   override _http: HttpClient,
+  //   private _router: Router,
+  //   private _communicationsAlerts: CommunicationAlerts,
+  // ) {
+  //   super(_http, 'environment._BACK_END_ROOT_URL');
+  // }
 
   update(form: FormGroup) {
     if (form.get('entityType')?.value)
@@ -33,12 +36,12 @@ export class CustomerEditService extends BackEndService<CustomerDto> {
 
     this.update$<CustomerDto>('customers/update', toSave)?.subscribe({
       next: (_cli: CustomerDto) => {
-        this._communicationsAlerts.defaultSnackMsg('2', 0);
+        // this._communicationsAlerts.defaultSnackMsg('2', 0);
       },
       error: (err:any) => {
 
         const erroCode: string = err.error.Message
-        this._communicationsAlerts.defaultSnackMsg(erroCode, 1);
+        // this._communicationsAlerts.defaultSnackMsg(erroCode, 1);
       }
     })
 

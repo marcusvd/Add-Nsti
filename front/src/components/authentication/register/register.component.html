@@ -1,0 +1,204 @@
+<!-- <div class="p-4" [formGroup]="formMain">
+    <section id="container-above">
+        <button id="btn-back" mat-raised-button (click)="back()">{{'Voltar'}}</button>
+    </section>
+    <div class="space-title-logo"></div>
+    <mat-card class="w-[200px]">
+
+        <div class="space-title-logo"></div>
+        <div>
+            <div>
+                <div>
+                    <h1 class="title">Cadastrar-se ao sistema</h1>
+                </div>
+
+            </div>
+
+            <div class="space-form-title-logo"></div>
+            <div [formGroup]="formMain">
+
+                <div>
+                    <mat-label>Email</mat-label>
+                    <mat-form-field class="w-full" appearance="outline">
+                        <input matInput type="text" formControlName="email" aria-label="Email">
+                        <mat-icon matSuffix>email</mat-icon>
+                        <mat-error>
+                            <span> {{validatorMessages.required(formMain,'email', '')}}</span>
+                            <span> {{validatorMessages.mailField(formMain,'email')}}</span>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-label>Senha</mat-label>
+                    <mat-form-field class="w-full" appearance="outline">
+                        <input matInput type="password" formControlName="password" aria-label="Senha">
+                        <mat-icon matSuffix>https</mat-icon>
+
+                        <mat-error>
+                            <span>{{validatorMessages.required(formMain,'password', '')}} {{validatorMessages.compareFields(formMain,
+                'confirmPassword')}}</span>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-label>Confirmar Senha</mat-label>
+                    <mat-form-field class="w-full" appearance="outline">
+                        <input matInput type="password" formControlName="confirmPassword" aria-label="Confirmar Senha">
+                        <mat-icon matSuffix>https</mat-icon>
+
+                        <mat-error>
+                            <div>{{validatorMessages.required(formMain,'confirmPassword', '')}}{{validatorMessages.compareFields(formMain,'confirmPassword')}}
+                            </div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div>
+                    <div>
+                        <h3 class="mouse-pointer" [routerLink]="['/login']">Já sou cadastrado!</h3>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div>
+                <captcha #token [hidden]="!formMain.valid"></captcha>
+                <div class="error-message-style" *ngIf="loginErrorMessage">
+                    {{loginErrorMessage}}
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </mat-card>
+
+</div>
+
+ -->
+
+
+
+
+<div class="sm:grid justify-center">
+  <div class="p-4 sm:w-[800px]">
+    <mat-card class="title border-card-categories-divide-comp">
+      <div class="title-conf back-ground-main-color-scss">
+        <div>
+          <img class="icon-title hidden sm:block" src="../../../../../../../assets/side_nav/chat.png"
+            alt="logo nsti aqui">
+          <img class="icon-title-mobile block sm:hidden " src="../../../../../../../assets/side_nav/mobile-logo.png"
+            alt="logo nsti aqui">
+        </div>
+        <div class="title-box">
+          <div class="title-text">
+            <span>{{'Integrations' | uppercase}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 flex justify-center">
+        <div>
+          <h3 class="cursor-pointer main-color-scss" [routerLink]="['/login']"> Já sou cadastrado!</h3>
+        </div>
+      </div>
+
+      <div [formGroup]="formMain">
+        <mat-card class="m-4 border-card-categories-divide-comp">
+          <div class="w-full grid-cols-1 gap-4 p-10 ">
+
+            <div class="w-full">
+              <mat-label class="text-slate-900"> <b>Email</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input #email (input)="inputEmail(email.value)" matInput type="text" formControlName="email"
+                  aria-label="email">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'userName','required')">{{defaultMessages.requiredMsg}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'userName','email')">{{defaultMessages.emailMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="w-full">
+              <mat-label class="text-slate-900"> <b>Nome de usuário</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input  matInput type="text" formControlName="userName"
+                  aria-label="userName">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'userName','required')">{{defaultMessages.requiredMsg}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'userName','email')">{{defaultMessages.emailMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="w-full">
+              <mat-label class="text-slate-900"> <b> Senha</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input matInput [type]="pwdType" formControlName="password" aria-label="Senha">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'password','required')">{{defaultMessages.requiredMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>https</mat-icon>
+                <mat-icon class="main-color-scss cursor-pointer" matSuffix
+                  (click)="pwdHideShow()">{{pwdIcon}}</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="w-full">
+              <mat-label> <b> Confirmar Senha</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input matInput [type]="pwdType" formControlName="confirmPassword" aria-label="Confirmar Senha">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'confirmPassword','required')">{{defaultMessages.requiredMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>https</mat-icon>
+                <mat-icon class="main-color-scss cursor-pointer" matSuffix
+                  (click)="pwdHideShow()">{{pwdIcon}}</mat-icon>
+              </mat-form-field>
+
+            </div>
+
+          </div>
+          <!-- <div>
+            {{loginErrorMessage}}
+          </div> -->
+
+          <div class="grid justify-center">
+            <captcha #token [hidden]="!formMain.valid"></captcha>
+            <div class="w-full grid grid-rows-1 p-4 text-red-600 text-center" *ngIf="loginErrorMessage">
+              {{loginErrorMessage}}
+            </div>
+
+          </div>
+          <div class="p-4 w-full">
+            <div>
+              <h3 class="cursor-pointer main-color-scss" [routerLink]="['forgot']">Esqueceu?</h3>
+            </div>
+
+          </div>
+        </mat-card>
+      </div>
+      <div>
+      </div>
+
+      <!-- <div>
+            <captcha #token [hidden]="!formMain.valid"></captcha>
+            <div class="error-message-style" *ngIf="loginErrorMessage">
+                {{loginErrorMessage}}
+            </div>
+
+        </div> -->
+      <div class="p-4 flex justify-center">
+        <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Cadastrar'" [icon]="'lock_open'"
+          (btn)="register(token.sendForm())"></btn-g>
+      </div>
+    </mat-card>
+  </div>
+
+</div>

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Application.Services.Operations.Authentication.Dtos;
-using Application.Services.Operations.Authentication.Register;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Shared.Dtos;
+using Authentication.Dtos;
+using Authentication.Register;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed
 {
@@ -56,18 +56,16 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
         public async Task<HttpStatusCode> AddUser()
         {
 
-            var user = new UserAccountDto()
+            var user = new RegisterDto()
             {
-                Id = 1,
-                Company = NoStopTi(),
                 UserName = "Marcus Dias",
                 Email = "marcusmvd@hotmail.com",
                 Password = "123",
                 ConfirmPassword = "123"
             };
 
+            var result = await _iRegisterServices.RegisterAsync(user);
 
-            var result = await _iRegisterServices.Register(user);
             if (result.Authenticated)
                 return HttpStatusCode.Created;
             else

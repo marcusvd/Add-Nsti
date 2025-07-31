@@ -18,29 +18,23 @@ export class CustomerAddService extends BackEndService<CustomerDto> {
   // private _valueDate: boolean;
 
   constructor(
-    override _http: HttpClient,
     private _route: Router,
     private _customerServices: CustomerListService,
-    private _communicationsAlerts: CommunicationAlerts,
-    private snackBar: MatSnackBar
   ) {
-    super(
-      _http, 'environment._CUSTOMERS'
-
-    );
+    super( );
   }
 
 
 
   //companyId: number = JSON.parse(localStorage.getItem('companyId'));
-  openSnackBar(message: string, style: string, action: string = 'Fechar') {
-    this.snackBar.open(message, action, {
-      duration: 5000, // Tempo em milissegundos (5 segundos)
-      panelClass: [style], // Aplica a classe personalizada
-      horizontalPosition: 'center', // Centraliza horizontalmente
-      verticalPosition: 'top', // Posição vertical (pode ser 'top' ou 'bottom')
-    });
-  }
+  // openSnackBar(message: string, style: string, action: string = 'Fechar') {
+  //   this.snackBar.open(message, action, {
+  //     duration: 5000, // Tempo em milissegundos (5 segundos)
+  //     panelClass: [style], // Aplica a classe personalizada
+  //     horizontalPosition: 'center', // Centraliza horizontalmente
+  //     verticalPosition: 'top', // Posição vertical (pode ser 'top' ou 'bottom')
+  //   });
+  // }
 
 
   save(form: FormGroup) {

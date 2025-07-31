@@ -27,7 +27,7 @@ namespace Application.Services.Operations.Customers
 
         public async Task<HttpStatusCode> AddAsync(CustomerDto dtoView)
         {
-            if (dtoView == null) throw new GlobalServicesException(GlobalErrorsMessagesException.ObjIsNull);
+            if (dtoView == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
 
             Customer entityToDb = _ICustomerObjectMapperServices.CustomerMapper(dtoView);
 

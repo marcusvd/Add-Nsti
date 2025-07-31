@@ -1,8 +1,8 @@
 
+using Authentication.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 
 
@@ -30,7 +30,6 @@ IdentityUserToken<int>>
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-
         base.OnModelCreating(builder);
 
         builder.Entity<UserAccount>(b =>

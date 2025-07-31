@@ -9,6 +9,7 @@ import { DefaultCompImports } from 'components/imports/default-comp-imports';
 import { MyUser } from '../dtos/my-user';
 import { AuthLoginImports } from '../imports/auth.imports';
 import { AuthService } from '../services/auth.service';
+import { LoginDto } from '../dtos/login-dto';
 
 
 @Component({
@@ -49,7 +50,7 @@ export class LoginComponent extends BaseForm implements OnInit {
 
     // this._router.navigateByUrl('/default-route/customers/add');
 
-    const login: MyUser = this.formMain.value;
+    const login: LoginDto = this.formMain.value;
 
     this.loginErrorMessage = this._auth.login(login);
     if (this.alertSave(this.formMain)) {

@@ -32,11 +32,23 @@ export class ListControlEmployees extends BaseList {
     protected _employeesListServices: EmployeesListService,
   ) {
     super(
-      new ListGDataService(_http),
+      new ListGDataService(),
       _router,
 
     )
   }
+  // constructor(
+  //   override _router: Router,
+  //   public _http: HttpClient,
+  //   protected _phoneNumberPipe: PhoneNumberPipe,
+  //   protected _employeesListServices: EmployeesListService,
+  // ) {
+  //   super(
+  //     new ListGDataService(),
+  //     _router,
+
+  //   )
+  // }
 
   labelHeadersMiddle = () => {
     return [

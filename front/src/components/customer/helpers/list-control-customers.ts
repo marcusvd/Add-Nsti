@@ -35,10 +35,23 @@ export class ListControlCustomers extends BaseList {
     protected _deleteServices: DeleteServices,
   ) {
     super(
-      new ListGDataService(_http),
+      new ListGDataService(),
       _router,
     )
   }
+  // constructor(
+  //   override _router: Router,
+  //   public _http: HttpClient,
+  //   protected _entityTypePipe: EntityTypePipe,
+  //   protected _phoneNumberPipe: PhoneNumberPipe,
+  //   protected _customerServices: CustomerListService,
+  //   protected _deleteServices: DeleteServices,
+  // ) {
+  //   super(
+  //     new ListGDataService(),
+  //     _router,
+  //   )
+  // }
 
   labelHeadersMiddle = () => {
     return [

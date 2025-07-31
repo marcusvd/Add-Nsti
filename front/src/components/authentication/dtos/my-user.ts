@@ -1,4 +1,4 @@
 export class MyUser {
   userName!: string;
-  password!: string;
+  email!:string;
 }

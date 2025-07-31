@@ -325,3 +325,5 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\ImApi.genruntimeco
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\ref\ImApi.dll
 C:\Users\adm02\Desktop\Add-Nsti\back\Api\bin\Debug\net8.0\Authentication.dll
 C:\Users\adm02\Desktop\Add-Nsti\back\Api\bin\Debug\net8.0\Authentication.pdb
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\Authentication.dll
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\Authentication.pdb

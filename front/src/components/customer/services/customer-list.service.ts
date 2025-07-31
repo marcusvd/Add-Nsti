@@ -12,15 +12,19 @@ import { CustomerDto } from "../components/commons-components/dtos/customer-dto"
 @Injectable()
 export class CustomerListService extends BackEndService<CustomerDto> {
 
-  constructor(
-    override _http: HttpClient,
-    private _communicationsAlerts: CommunicationAlerts,
-  ) {
-    super(_http,
-      'environment._BACK_END_ROOT_URL',
-    );
+  constructor() {
+    super();
 
   }
+  // constructor(
+  //   override _http: HttpClient,
+  //   private _communicationsAlerts: CommunicationAlerts,
+  // ) {
+  //   super(_http,
+  //     'environment._BACK_END_ROOT_URL',
+  //   );
+
+  // }
 
 
   deleteFakeDisable(id: number) {
@@ -32,10 +36,10 @@ export class CustomerListService extends BackEndService<CustomerDto> {
     this.deleteFake$<CustomerDto>('customers/DeleteFakeCustomer', customer).subscribe(
       {
         next: () => {
-          this._communicationsAlerts.defaultSnackMsg('1', 0, '-1', 4);
+          // this._communicationsAlerts.defaultSnackMsg('1', 0, '-1', 4);
         },
         error: (error) => {
-          this._communicationsAlerts.defaultSnackMsg(error, 1);
+          // this._communicationsAlerts.defaultSnackMsg(error, 1);
           return false;
         }
 
