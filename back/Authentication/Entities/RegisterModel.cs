@@ -1,6 +1,6 @@
-namespace Authentication.Dtos;
+namespace Authentication.Entities;
 
-public class RegisterDto
+public class RegisterModel
 {
     public string? UserName { get; set; }
     public string? Email { get; set; }

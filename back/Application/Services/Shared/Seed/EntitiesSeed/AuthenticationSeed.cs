@@ -3,8 +3,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Shared.Dtos;
-using Authentication.Dtos;
-using Authentication.Register;
+
+using Authentication.Entities;
+using Authentication.Operations.Register;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed
 {
@@ -56,7 +57,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
         public async Task<HttpStatusCode> AddUser()
         {
 
-            var user = new RegisterDto()
+            var user = new RegisterModel()
             {
                 UserName = "Marcus Dias",
                 Email = "marcusmvd@hotmail.com",

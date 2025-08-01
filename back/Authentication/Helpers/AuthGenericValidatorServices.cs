@@ -4,11 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Authentication.Helpers;
 
-public class GenericValidatorServices
+public class AuthGenericValidatorServices
 {
-    private readonly ILogger<GenericValidatorServices> _logger;
+    private readonly ILogger<AuthGenericValidatorServices> _logger;
 
-    public GenericValidatorServices(ILogger<GenericValidatorServices> logger)
+    public AuthGenericValidatorServices(ILogger<AuthGenericValidatorServices> logger)
     {
         _logger = logger;
     }

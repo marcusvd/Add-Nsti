@@ -33,8 +33,8 @@ namespace Application.Services.Shared.Dtos.Mappers
 
         List<SocialNetworkDto> SocialNetworkListMake(List<SocialNetwork> list);
         List<SocialNetwork> SocialNetworkListMake(List<SocialNetworkDto> list);
-        SocialNetworkDto SocialNetworkMapper(SocialNetwork entity);
-        SocialNetwork SocialNetworkMapper(SocialNetworkDto entity);
+        SocialNetworkDto? SocialNetworkMapper(SocialNetwork entity);
+        SocialNetwork? SocialNetworkMapper(SocialNetworkDto entity);
      
     }
 }

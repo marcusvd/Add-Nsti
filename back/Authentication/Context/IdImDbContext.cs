@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 
-namespace Authentication;
+namespace Authentication.Context;
 
 public class IdImDbContext : IdentityDbContext<UserAccount, Role, int, IdentityUserClaim<int>, UserRole,
 IdentityUserLogin<int>,

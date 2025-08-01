@@ -11,7 +11,7 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
 {
     public List<CustomerDto> CustomerListMake(List<Customer> list)
     {
-        if (list == null) return null;
+        if (list == null) return new();
 
         var toReturn = new List<CustomerDto>();
 
@@ -24,7 +24,7 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
     }
     public List<Customer> CustomerListMake(List<CustomerDto> list)
     {
-        if (list == null) return null;
+        if (list == null) return new();
 
         var toReturn = new List<Customer>();
 
@@ -38,7 +38,7 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
     }
     public CustomerDto CustomerMapper(Customer entity)
     {
-        if (entity == null) return null;
+        if (entity == null) return new();
 
         var obj = new CustomerDto()
         {
@@ -59,7 +59,7 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
     }
     public Customer CustomerMapper(CustomerDto entity)
     {
-        if (entity == null) return null;
+        if (entity == null) return new();
 
         var obj = new Customer()
         {
@@ -81,8 +81,7 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
     }
     public Customer CustomerUpdateMapper(CustomerDto dto, Customer db)
     {
-        if (dto == null) return null;
-        if (db == null) return null;
+        if (dto == null) return new();
 
         db.Id = dto.Id;
         db.CompanyId = dto.CompanyId;

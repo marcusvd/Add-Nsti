@@ -1,12 +1,8 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Authentication;
-using System;
-using System.Threading.Tasks;
 using Authentication.Entities;
 
 namespace Authentication;

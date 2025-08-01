@@ -1,4 +1,4 @@
-namespace Authentication.Dtos;
+namespace Application.Services.Operations.Auth.Dtos;
 
 public class UserAccountDto
 {

@@ -1,10 +1,8 @@
+using Api.Configuration;
 using Application.Services.Helpers.Extensions;
-using Authentication;
-using Authentication.Entities;
 using Authentication.Jwt;
 using Authentication.Settings;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 // using Authentication.Settings;
 using Repository.Data.Context;
 
@@ -13,18 +11,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddNewtonsoftJsonControllers();
+builder.Services.AddIdentitySettings();
+builder.Services.AddDiIdentity();
+
+builder.Services.AddDiServicesRepositories();
+
+builder.Services.DataProtectionTokenProviderOptions();
 
 
 builder.Services.AddContextImSystemDb(builder.Configuration);
-builder.Services.AddDiServicesRepositories();
 builder.Services.AddDiFluentValidationAutoValidation();
 
 
 builder.Services.AddContextIdImDb(builder.Configuration);
-builder.Services.AddIdentitySettings();
-builder.Services.AddDependencyInjectionIdentity();
-builder.Services.DataProtectionTokenProviderOptions();
 builder.Services.AddAuthorizationSettings();
 
 // builder.Services.AddAuthorization(options =>

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Authentication.Register;
+using Authentication.Operations.Register;
 using UnitOfWork.Persistence.Operations;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed;

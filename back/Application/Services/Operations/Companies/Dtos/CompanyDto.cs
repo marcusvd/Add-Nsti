@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using Application.Services.Operations.Customers.Dtos;
 using Application.Services.Shared.Dtos;
-using Authentication.Dtos;
+using Application.Services.Operations.Auth.Dtos;
 
 namespace Application.Services.Operations.Companies.Dtos
 {

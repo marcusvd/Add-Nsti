@@ -4217,23 +4217,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Users\\adm02\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
+      "projectUniqueName": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
       "projectName": "ImApi",
-      "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\obj\\",
+      "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
+      "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\adm02\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -4248,11 +4248,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Application\\Application.csproj": {
-              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\add-nsti\\back\\Application\\Application.csproj"
+            "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Application\\Application.csproj"
             },
-            "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj": {
-              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj"
+            "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj": {
+              "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj"
             }
           }
         }
@@ -4267,7 +4267,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -4297,7 +4297,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

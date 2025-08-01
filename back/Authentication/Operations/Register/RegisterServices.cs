@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Authentication;
-using Authentication.Dtos;
-
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Authentication.Helpers;
@@ -14,12 +6,12 @@ using Authentication.Exceptions;
 using Microsoft.Extensions.Logging;
 
 
-namespace Authentication.Register;
+namespace Authentication.Operations.Register;
     public class RegisterServices : AuthenticationBase, IRegisterServices
     {
-        private readonly ILogger<GenericValidatorServices> _logger;
+        private readonly ILogger<AuthGenericValidatorServices> _logger;
         private readonly UserManager<UserAccount> _userManager;
-        private readonly GenericValidatorServices _genericValidatorServices;
+        private readonly AuthGenericValidatorServices _genericValidatorServices;
 
         // private readonly EmailServer _emailService;
         private readonly JwtHandler _jwtHandler;
@@ -30,8 +22,8 @@ namespace Authentication.Register;
               JwtHandler jwtHandler,
               IUrlHelper url,
 
-              GenericValidatorServices genericValidatorServices,
-              ILogger<GenericValidatorServices> logger
+              AuthGenericValidatorServices genericValidatorServices,
+              ILogger<AuthGenericValidatorServices> logger
           ) : base(userManager, jwtHandler)
         {
             _userManager = userManager;
@@ -42,7 +34,7 @@ namespace Authentication.Register;
             _logger = logger;
         }
 
-        public async Task<UserToken> RegisterAsync(RegisterDto user)
+        public async Task<UserToken> RegisterAsync(RegisterModel user)
         {
             _genericValidatorServices.IsObjNull(user);
 
@@ -68,7 +60,7 @@ namespace Authentication.Register;
 
             return await _jwtHandler.GenerateUserToken(claimsList, userAccount);
         }
-        private async Task ValidateUniqueUserCredentials(RegisterDto register)
+        private async Task ValidateUniqueUserCredentials(RegisterModel register)
         {
             if (await IsUserNameDuplicate(register.UserName))
             {

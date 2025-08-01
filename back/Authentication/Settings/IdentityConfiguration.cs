@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Authentication.Entities;
 using Authentication.Helpers;
-using Authentication.Login;
-using Authentication.Register;
+using Authentication.Operations.Login;
+using Authentication.Operations.Register;
+using Authentication.Context;
 
 
 namespace Authentication.Settings;
@@ -69,10 +69,12 @@ public static class IdentityConfiguration
 
         // services.AddScoped<IUserClaimsPrincipalFactory<UserAccount>, UserAccountClaimsPrincipalFactory>();
     }
-    public static void AddDependencyInjectionIdentity(this IServiceCollection services)
+    public static void AddDiIdentity(this IServiceCollection services)
     {
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         //
+        services.AddScoped<JwtHandler>();
+        services.AddScoped<AuthGenericValidatorServices>();
         services.AddScoped<ILoginServices, LoginServices>();
         services.AddScoped<IRegisterServices, RegisterServices>();
         //

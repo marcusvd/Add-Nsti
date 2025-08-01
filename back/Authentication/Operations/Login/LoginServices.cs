@@ -1,33 +1,28 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-using Authentication;
-
 using Authentication.Entities;
-using Authentication.Dtos;
 using Authentication.Exceptions;
 using Authentication.Helpers;
-using Authentication.Login;
 using Microsoft.Extensions.Logging;
 
 
-namespace Authentication.Login;
+namespace Authentication.Operations.Login;
 
 public class LoginServices : AuthenticationBase, ILoginServices
 {
     private UserManager<UserAccount> _userManager;
-    private readonly ILogger<GenericValidatorServices> _logger;
-    private readonly GenericValidatorServices _genericValidatorServices;
+    private readonly ILogger<AuthGenericValidatorServices> _logger;
+    private readonly AuthGenericValidatorServices _genericValidatorServices;
     // private readonly EmailServer _emailService;
     private readonly JwtHandler _jwtHandler;
     // private readonly IAuthenticationObjectMapperServices _mapper;
     public LoginServices(
           UserManager<UserAccount> userManager,
-          ILogger<GenericValidatorServices> logger,
+          ILogger<AuthGenericValidatorServices> logger,
         //   EmailServer emailService,
           JwtHandler jwtHandler,
         //   IAuthenticationObjectMapperServices mapper,
-          GenericValidatorServices genericValidatorServices
+          AuthGenericValidatorServices genericValidatorServices
       ) : base(userManager, jwtHandler)
     {
         _userManager = userManager;
@@ -35,10 +30,10 @@ public class LoginServices : AuthenticationBase, ILoginServices
         // _emailService = emailService;
         _jwtHandler = jwtHandler;
         // _mapper = mapper;
-        _genericValidatorServices = genericValidatorServices;
+       _genericValidatorServices = genericValidatorServices;
     }
 
-    public async Task<UserToken> Login(LoginDto user)
+    public async Task<UserToken> Login(LoginModel user)
     {
         _genericValidatorServices.IsObjNull(user);
 
