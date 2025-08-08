@@ -3,6 +3,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { RouterModule } from "@angular/router";
+import { CaptchaComponent } from "shared/components/captcha/captcha.component";
 
 export const AuthLoginImports: any[] = [
   ReactiveFormsModule,
@@ -10,4 +11,5 @@ export const AuthLoginImports: any[] = [
   MatInputModule,
   MatFormFieldModule,
   RouterModule,
+  CaptchaComponent
 ]

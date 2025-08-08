@@ -5,7 +5,8 @@ namespace Authentication.Operations.Account;
 
 public interface IAccountManagerServices
 {
-    Task<bool> IsUserExistCheckByEmail(string email);
-    Task<bool> ConfirmEmailAddress(ConfirmEmail confirmEmail);
-    Task<bool> ForgotPassword(ForgotPassword forgotPassword);
+    Task<bool> IsUserExistCheckByEmailAsync(string email);
+    Task<bool> ConfirmEmailAddressAsync(ConfirmEmail confirmEmail);
+    Task<bool> ForgotPasswordAsync(ForgotPassword forgotPassword);
+    Task<bool> ResetPasswordAsync(ResetPassword resetPassword);
 }

@@ -18,8 +18,7 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
     public AccountManagerServices(
           UserManager<UserAccount> userManager,
           JwtHandler jwtHandler,
-
-IUrlHelper url,
+          IUrlHelper url,
           AuthGenericValidatorServices genericValidatorServices,
           ILogger<AuthGenericValidatorServices> logger
       ) : base(userManager, jwtHandler)
@@ -31,10 +30,9 @@ IUrlHelper url,
         _url = url;
     }
 
-    public async Task<bool> IsUserExistCheckByEmail(string email) => await IsUserExist(email);
+    public async Task<bool> IsUserExistCheckByEmailAsync(string email) => await IsUserExist(email);
 
-
-    public async Task<bool> ConfirmEmailAddress(ConfirmEmail confirmEmail)
+    public async Task<bool> ConfirmEmailAddressAsync(ConfirmEmail confirmEmail)
     {
         var userAccout = await FindUserAsync(confirmEmail.Email);
 
@@ -44,7 +42,7 @@ IUrlHelper url,
 
     }
 
-    public async Task<bool> ForgotPassword(ForgotPassword forgotPassword)
+    public async Task<bool> ForgotPasswordAsync(ForgotPassword forgotPassword)
     {
         var userAccout = await FindUserAsync(forgotPassword.Email);
 
@@ -52,7 +50,6 @@ IUrlHelper url,
 
         return true;
     }
-
 
     private async Task SendEmailConfirmationAsync(UserAccount userAccount)
     {
@@ -77,11 +74,11 @@ IUrlHelper url,
         }
     }
 
-      public async Task<string> UrlPasswordReset(UserAccount userAccount)
+    public async Task<string> UrlPasswordReset(UserAccount userAccount)
     {
         var token = await _userManager.GeneratePasswordResetTokenAsync(userAccount);
 
-        var urlReset = _url.Action("ForgotPassword", "auth", new { token, userAccount.Email }) ?? throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenGenerateEmailLink); ;
+        var urlReset = _url.Action("ForgotPassword", "auth", new { token, email = userAccount.Email, userName = userAccount.UserName }) ?? throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenGenerateEmailLink); ;
 
         return urlReset;
     }
@@ -108,5 +105,16 @@ IUrlHelper url,
         return mensagemBoasVindas;
     }
 
+    public async Task<bool> ResetPasswordAsync(ResetPassword resetPassword)
+    {
+        var userAccount = await _userManager.FindByEmailAsync(resetPassword.Email) ?? throw new AuthServicesException(AuthErrorsMessagesException.ObjectIsNull);
+
+        IdentityResult identityResult = await _userManager.ResetPasswordAsync(userAccount, resetPassword.Token, resetPassword.Password);
+
+        if (!identityResult.Succeeded) throw new AuthServicesException($"{AuthErrorsMessagesException.ResetPassword} - {identityResult}");
+
+        return identityResult.Succeeded;
+    }
+
 }
-   
+

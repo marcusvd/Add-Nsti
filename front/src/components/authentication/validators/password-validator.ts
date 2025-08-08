@@ -16,7 +16,7 @@ export function PasswordValidator(): ValidatorFn {
       return { 'wordPwd': true }
     }
 
-    if ((password.value as string).toLocaleLowerCase() == (userName.value as string)) {
+    if ((password.value as string).toLocaleLowerCase() == (userName.value.toLocaleLowerCase() as string)) {
       password?.setErrors({ 'usrPwdIsEqual': true })
       return { 'usrPwdIsEqual': true }
     }

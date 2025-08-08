@@ -20,7 +20,7 @@ export class IsUserRegisteredValidator extends  BackEndService<MyUser> implement
 
     if (control.value.includes('@') && control.value.includes('.')) {
 
-      return this.loadByName$<boolean>(`${environment._BACK_END_ROOT_URL}/auth/IsUserExistCheckByEmail`, control.value)
+      return this.loadByName$<boolean>(`${environment._BACK_END_ROOT_URL}/auth/IsUserExistCheckByEmailAsync`, control.value)
         .pipe(map(x => {
           return x ? { inUse: true } : null;
         }))

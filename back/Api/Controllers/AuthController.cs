@@ -17,20 +17,17 @@ namespace Api.Controllers
 
         private readonly ILoginServices _iLoginServices;
         private readonly IRegisterServices _iRegisterServices;
-        // private readonly IUrlGenerator _iUrlGenerator;
         private readonly IAccountManagerServices _iAccountManagerServices;
 
         public AuthController(
 
             ILoginServices iLoginServices,
             IRegisterServices iRegisterServices,
-            // // IUrlGenerator iUrlGenerator,
             IAccountManagerServices iAccountManagerServices
             )
         {
             _iLoginServices = iLoginServices;
             _iRegisterServices = iRegisterServices;
-            // // _iUrlGenerator = iUrlGenerator;
             _iAccountManagerServices = iAccountManagerServices;
         }
 
@@ -51,22 +48,28 @@ namespace Api.Controllers
         }
 
         [HttpPost("ConfirmEmailAddress")]
-        public async Task<IActionResult> ConfirmEmailAddress([FromBody] ConfirmEmail confirmEmail)
+        public async Task<IActionResult> ConfirmEmailAddressAsync([FromBody] ConfirmEmail confirmEmail)
         {
-            var result = await _iAccountManagerServices.ConfirmEmailAddress(confirmEmail);
+            var result = await _iAccountManagerServices.ConfirmEmailAddressAsync(confirmEmail);
 
             return Ok(result);
         }
-         [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPassword forgotPassword)
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPassword forgotPassword)
         {
-            return Ok(await _iAccountManagerServices.ForgotPassword(forgotPassword));
+            return Ok(await _iAccountManagerServices.ForgotPasswordAsync(forgotPassword));
         }
 
-        [HttpGet("IsUserExistCheckByEmail/{email}")]
-        public async Task<IActionResult> IsUserExistCheckByEmail(string email)
+        [HttpPost("ResetPasswordAsync")]
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPassword resetPassword)
         {
-            var result = await _iAccountManagerServices.IsUserExistCheckByEmail(email);
+            return Ok(await _iAccountManagerServices.ResetPasswordAsync(resetPassword));
+        }
+
+        [HttpGet("IsUserExistCheckByEmailAsync/{email}")]
+        public async Task<IActionResult> IsUserExistCheckByEmailAsync(string email)
+        {
+            var result = await _iAccountManagerServices.IsUserExistCheckByEmailAsync(email);
 
             return Ok(result);
         }

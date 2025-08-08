@@ -1,21 +1,16 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 
-import { environment } from 'environments/environment';
 import { BaseForm } from 'shared/inheritance/forms/base-form';
 import { RegisterService } from '../services/register.service';
-
-import { ImportsPasswordReset } from './imports/imports-password-reset';
-import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
-import { PasswordValidator } from '../validators/password-validator';
-import { IsUserRegisteredValidator } from '../validators/is-user-registered-validator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { WarningsService } from 'components/warnings/services/warnings.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ResetPassword } from '../dtos/reset-password';
 import { AccountService } from '../services/account.service';
+import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
+import { PasswordValidator } from '../validators/password-validator';
+import { ImportsPasswordReset } from './imports/imports-password-reset';
 
 
 @Component({
@@ -42,42 +37,30 @@ export class PasswordResetComponent extends BaseForm implements OnInit {
   ) { super() }
 
 
-
-  register(tokenCaptcha: string | undefined) {
+  passwordChange(tokenCaptcha: string | undefined) {
 
     const resetPassword: ResetPassword = this.formMain.value;
 
     if (this.formMain.valid && tokenCaptcha) {
       this._accountService.reset(resetPassword);
-
-      // this._activatedRoute.queryParams.subscribe(param => {
-      //   resetPassword.token = param['token'],
-      //     resetPassword.email = param['email'],
-      //     resetPassword.password = user.password,
-      //     resetPassword.confirmPassword = user.confirmPassword
-      //   this._accountService.reset(resetPassword);
-      // }
-      // );
     }
-    console.log(resetPassword)
+
   }
 
   formLoad(param: any) {
     this.formMain = this._fb.group({
       token: [param['token'], [Validators.required]],
       email: [param['email'], [Validators.required]],
+      userName: [param['userName'], [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(3)]],
       confirmPassword: ['', [Validators.required]],
     }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
-
-
 
     return this.formMain;
   }
 
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
-
 
   pwdHideShow() {
     if (this.pwdType === 'password') {
@@ -95,187 +78,5 @@ export class PasswordResetComponent extends BaseForm implements OnInit {
     }
     );
   }
-
-
-
-
-
-
-
-
-
-  // constructor(
-  //   private _registerService: RegisterService,
-  //   private _fb: FormBuilder,
-  //   private _isUserRegisteredValidator: IsUserRegisteredValidator,
-  //   private _router: Router,
-  //   private _warningsService: WarningsService,
-  //   private _snackBar: MatSnackBar
-  // ) { super() }
-
-
-  // public loginErrorMessage: string = '';
-
-  // backend = `${environment._BACK_END_ROOT_URL}/auth/RegisterAsync`
-
-  // // registerTest() {
-
-  // //   this.openSnackBar('CADASTRADO!' +'   '+ 'MARCUSMVD@HOTMAIL.COM.BR' + '.', 'warnings-success');
-
-  // //   setTimeout(() => {
-
-  // //     this.openAuthWarnings({
-  // //       btn1: 'Fechar', btn2: '', title: 'AVISO:',
-  // //       messageBody: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-  // //       next: true, action: 'openLogin'
-  // //     })
-
-  // //   }, 5000);
-
-
-
-  // // }
-
-  // register(tokenCaptcha: string | undefined) {
-
-  //   const user: any = this.formMain.value;
-
-  //   if (this.alertSave(this.formMain)) {
-  //     if (this.formMain.valid && tokenCaptcha) {
-  //       this._registerService.AddUser(user, this.formMain, this.backend)
-  //         .subscribe({
-  //           next: (user) => {
-  //             console.log(user)
-  //             this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
-
-  //             setTimeout(() => {
-  //               this._warningsService.openAuthWarnings({
-  //                 btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-  //                 body: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-  //               }).subscribe(result => {
-  //                 this._router.navigateByUrl('login');
-  //               })
-
-  //             }, 5000);
-
-  //           }, error: (err: any) => {
-  //             const erroCode: string = err.error.Message.split('|');
-  //             console.log(err)
-  //             console.log(erroCode)
-  //             // switch (erroCode[0]) {
-  //             //   case '1.1': {
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'delay': '3',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-  //             //     this._errorMessage.next(erroCode[1])
-  //             //     form.controls['email'].setErrors({ errorEmailDuplicated: true })
-  //             //     break;
-  //             //   }
-  //             //   case '1.2': {
-  //             //     console.log(err);
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'delay': '3',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-  //             //     this._errorMessage.next(erroCode[1])
-  //             //     form.controls['userName'].setErrors({ errorUserNameDuplicated: true })
-  //             //     break;
-  //             //   }
-  //             //   case '200.0': {
-  //             //     console.log(err);
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'delay': '3',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-  //             //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-  //             //     break;
-  //             //   }
-  //             //   case '1.7': {
-  //             //     console.log(err);
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'delay': '3',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-
-  //             //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-  //             //     break;
-  //             //   }
-  //             // }
-  //           }
-  //         })
-
-
-  //       // .subscribe((x: string) => {
-  //       //   this.loginErrorMessage = x;
-  //       //   // this._communicationsAlerts.defaultSnackMsg('7', 0);
-  //       //   console.log(x)
-  //       // })
-  //     }
-
-  //   }
-  // }
-
-  // formLoad() {
-  //   // return this.formMain = this._fb.group({
-  //   //   userName: ['', []],
-  //   //   email: new FormControl(''),
-  //   //   password: ['', []],
-  //   //   confirmPassword: ['', []],
-  //   // })
-
-
-  //   return this.formMain = this._fb.group({
-  //     // userName: ['', [Validators.required, Validators.minLength(3)]],
-  //     // email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
-  //     password: ['', [Validators.required, Validators.minLength(3)]],
-  //     confirmPassword: ['', [Validators.required]],
-  //   }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
-  // }
-
-
-
-  // // inputEmail(arg0: string) {
-  // //   if (arg0.length == 0)
-  // //     this.loginErrorMessage = '';
-  // // }
-
-
-
-  // // openSnackBar(message: string, style: string, action: string = 'Fechar', duration: number = 5000, horizontalPosition: any = 'center', verticalPosition: any = 'top') {
-  // //   this._snackBar?.open(message, action, {
-  // //     duration: duration, // Tempo em milissegundos (5 segundos)
-  // //     panelClass: [style], // Aplica a classe personalizada
-  // //     horizontalPosition: horizontalPosition, // Centraliza horizontalmente
-  // //     verticalPosition: verticalPosition, // Posição vertical (pode ser 'top' ou 'bottom')
-  // //   });
-  // // }
-  // back() {
-  //   window.history.back();
-  // }
-
-  // ngOnInit(): void {
-  //   this.formLoad();
-  // }
 
 }

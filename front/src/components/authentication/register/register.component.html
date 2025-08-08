@@ -31,8 +31,9 @@
                   aria-label="email">
                 <mat-error>
                   <span
-                    *ngIf="formErrorAndTouched(formMain, 'userName','required')">{{defaultMessages.requiredMsg}}</span>
-                  <span *ngIf="formErrorAndTouched(formMain, 'userName','email')">{{defaultMessages.emailMsg}}</span>
+                    *ngIf="formErrorAndTouched(formMain, 'email','required')">{{defaultMessages.requiredMsg}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'email','email')">{{defaultMessages.emailMsg}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'email','inUse')">{{'Este e-mail já esta registrador no sistema!'}}</span>
                 </mat-error>
                 <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
               </mat-form-field>
@@ -45,7 +46,7 @@
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'userName','required')">{{defaultMessages.requiredMsg}}</span>
-                  <span *ngIf="formErrorAndTouched(formMain, 'userName','email')">{{defaultMessages.emailMsg}}</span>
+                  <!-- <span *ngIf="formErrorAndTouched(formMain, 'userName','email')">{{defaultMessages.emailMsg}}</span> -->
                 </mat-error>
                 <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
               </mat-form-field>
@@ -58,6 +59,10 @@
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'password','required')">{{defaultMessages.requiredMsg}}</span>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'password','wordPwd')">{{'Senha não pode ser as palavras SENHA ou PASSWORD.'}}</span>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'password','usrPwdIsEqual')">{{'A senha não pode ser o nome de usuário'}}</span>
                 </mat-error>
                 <mat-icon class="main-color-scss" matPrefix>https</mat-icon>
                 <mat-icon class="main-color-scss cursor-pointer" matSuffix
@@ -71,6 +76,8 @@
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'confirmPassword','required')">{{defaultMessages.requiredMsg}}</span>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'confirmPassword','invalidPasswordConfirmation')">{{'As senhas não coincidem.'}}</span>
                 </mat-error>
                 <mat-icon class="main-color-scss" matPrefix>https</mat-icon>
                 <mat-icon class="main-color-scss cursor-pointer" matSuffix
@@ -80,9 +87,6 @@
             </div>
 
           </div>
-          <!-- <div>
-            {{loginErrorMessage}}
-          </div> -->
 
           <div class="grid justify-center">
             <captcha #token [hidden]="!formMain.valid"></captcha>
@@ -93,7 +97,7 @@
           </div>
           <div class="p-4 w-full">
             <div>
-              <h3 class="cursor-pointer main-color-scss" [routerLink]="['forgot']">Esqueceu?</h3>
+              <h3 class="cursor-pointer main-color-scss" [routerLink]="['/forgot']">Esqueceu?</h3>
             </div>
 
           </div>
@@ -102,13 +106,6 @@
       <div>
       </div>
 
-      <!-- <div>
-            <captcha #token [hidden]="!formMain.valid"></captcha>
-            <div class="error-message-style" *ngIf="loginErrorMessage">
-                {{loginErrorMessage}}
-            </div>
-
-        </div> -->
       <div class="p-4 flex justify-center">
         <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Cadastrar'" [icon]="'lock_open'"
           (btn)="register(token.sendForm())"></btn-g>

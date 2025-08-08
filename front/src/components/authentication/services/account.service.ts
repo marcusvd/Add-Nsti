@@ -81,64 +81,112 @@ export class AccountService extends BackEndService<MyUser> {
 
       }, error: (err: any) => {
 
-        this.openSnackBar('Falha ao tentar redefinir a senha.', 'warnings-error');
+        const erroCode: string = err.error.Message.split('|');
 
-        setTimeout(() => {
 
-          this._warningsService.openAuthWarnings({
-            btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-            body: 'Falha ao tentar redefinir a senha.',
-          }).subscribe(result => {
-            console.log(result)
-          })
+        switch (erroCode[0]) {
 
-        }, 5000);
+          case 'User not found.': {
+            this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');
+
+            setTimeout(() => {
+
+              this._warningsService.openAuthWarnings({
+                btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
+                body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
+
+              }).subscribe(result => {
+                this._router.navigateByUrl('login');
+              })
+
+            }, 5000);
+
+            break;
+
+          }
+        }
+
+        if (erroCode[0] != 'User not found.') {
+          this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');
+
+          setTimeout(() => {
+
+            this._warningsService.openAuthWarnings({
+              btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
+              body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
+
+            }).subscribe(result => {
+              this._router.navigateByUrl('login');
+            })
+
+          }, 5000);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       }
     })
   }
 
   reset(resetPassword: ResetPassword) {
-    return this.add$(resetPassword, 'reset').pipe(take(1)).subscribe({
+    return this.add$(resetPassword, `${environment._BACK_END_ROOT_URL}/auth/ResetPasswordAsync`).pipe(take(1)).subscribe({
       next: () => {
 
 
-          this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');
+        this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');
 
         setTimeout(() => {
 
           this._warningsService.openAuthWarnings({
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-            body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
+            body: 'A senha foi trocada com sucesso!',
           }).subscribe(result => {
             this._router.navigateByUrl('login');
           })
 
         }, 5000);
 
-          this._router.navigate((['/']));
-          this._router.navigateByUrl('/login');
-        }, error: (err: any) => {
-          const erroCode: string = err.error.Message.split('|');
-          switch (erroCode[0]) {
-            case '1.12': {
-              // this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              // this._communicationsAlerts.communicationCustomized({
-              //   'message': erroCode[1],
-              //   'action': '',
-              //   'style': 'red-snackBar-error',
-              //   'delay': '',
-              //   'positionVertical': 'center',
-              //   'positionHorizontal': 'top',
-              // });
-              // this.openAuthWarnings({ btn1: 'Fechar', btn2: '', messageBody: erroCode[1] })
-              break;
-            }
-
+        this._router.navigate((['/']));
+        this._router.navigateByUrl('/login');
+      }, error: (err: any) => {
+        const erroCode: string = err.error.Message.split('|');
+        switch (erroCode[0]) {
+          case '1.12': {
+            // this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
+            // this._communicationsAlerts.communicationCustomized({
+            //   'message': erroCode[1],
+            //   'action': '',
+            //   'style': 'red-snackBar-error',
+            //   'delay': '',
+            //   'positionVertical': 'center',
+            //   'positionHorizontal': 'top',
+            // });
+            // this.openAuthWarnings({ btn1: 'Fechar', btn2: '', messageBody: erroCode[1] })
+            break;
           }
+
         }
+      }
     })
   }
+
 }
 
 
