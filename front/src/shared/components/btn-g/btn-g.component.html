@@ -1,9 +1,11 @@
 <button class="btnMouseOverGreen !bg-main-color !text-white !w-[150px]" mat-raised-button *ngIf="btnType == 'green'" type="button" (click)="btnGMtd()" [disabled]="isDisabled">
-  <div  class="grid grid-cols-[25px_1px_110px] items-center space-x-1">
+  <div  class="grid grid-cols-[25px_1px_110px] items-center space-x-1" *ngIf="haveIcon">
     <div class="flex items-center space-x-1"> <mat-icon *ngIf="haveIcon">{{icon}}</mat-icon></div>
     <div class="btn-pipe-green" *ngIf="haveIcon"></div>
-    <div>{{name}}</div>
+    <!-- <div *ngIf="!haveIcon"></div> -->
+    <div *ngIf="haveIcon">{{name}}</div>
   </div>
+  <div *ngIf="!haveIcon">{{name}}</div>
 </button>
 
 <button class="btnMouseOverRed !bg-remove-color !text-white !w-[150px]" mat-raised-button *ngIf="btnType == 'red'" type="button" (click)="btnGMtd()" [disabled]="isDisabled">

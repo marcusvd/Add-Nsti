@@ -33,15 +33,15 @@ public class LoginServices : AuthenticationBase, ILoginServices
        _genericValidatorServices = genericValidatorServices;
     }
 
-    public async Task<UserToken> Login(LoginModel user)
+    public async Task<UserToken> LoginAsync(LoginModel user)
     {
         _genericValidatorServices.IsObjNull(user);
 
-        var userAccount = await FindUserAsync(user.UserName);
+        var userAccount = await FindUserAsync(user.Email);
 
         if (userAccount == null)
         {
-            _logger.LogWarning("Login attempt for non-existent user: {Username}", user.UserName);
+            _logger.LogWarning("Login attempt for non-existent user: {Username}", user.Email);
             throw new AuthServicesException(AuthErrorsMessagesException.UserAccountNotFound);
         }
 

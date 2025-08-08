@@ -1,0 +1,24 @@
+<div class="break p-4">
+  <div class="grid justify-center">
+    <h2 class="text-red-600">{{title}}</h2>
+  </div>
+  <div class="grid  justify-center">
+    <div class="break pb-4 font-bold">
+      {{messageBody}}
+    </div>
+  </div>
+  <div class="grid  justify-center">
+    <mat-dialog-actions>
+      <div class="grid grid-rows-1 gap-4 justify-center">
+        <div>
+          <btn-g [name]="btn1" [btnType]="'green'" [haveIcon]="false" (btn)="clickedYes()" *ngIf="btn1"></btn-g>
+          <!-- <btn-g mat-dialog-close [name]="btn1" [btnType]="'green'" [icon]="'lock_open'"  (btn)="clickedYes(btn1)" *ngIf="btn1"></btn-g> -->
+        </div>
+        <div>
+          <btn-g [name]="btn2" [btnType]="'green'" [haveIcon]="false" (btn)="clickedNo()" *ngIf="btn2"></btn-g>
+          <!-- <btn-g mat-dialog-close [name]="btn2" [btnType]="'green'" [icon]="'lock_open'"  (btn)="clickedNo(btn2)" *ngIf="btn2"></btn-g> -->
+        </div>
+      </div>
+    </mat-dialog-actions>
+  </div>
+</div>

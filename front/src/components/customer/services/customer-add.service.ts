@@ -45,9 +45,9 @@ export class CustomerAddService extends BackEndService<CustomerDto> {
 
     const toSave: CustomerDto = { ...form.value }
     this._customerServices.getCustomersMoc().push(toSave);
-    this.openSnackBar('Cadastrado, com sucesso., ' + toSave.name + '!', 'login-success');
+    this.openSnackBar('Cadastrado, com sucesso., ' + toSave.name + '!', 'warnings-success');
     this._route.navigateByUrl(`/customers/list`);
-    //  this.openSnackBar('Nome de usuário ou senha inválidos', 'login-error');
+    //  this.openSnackBar('Nome de usuário ou senha inválidos', 'warnings-error');
 
 
   }

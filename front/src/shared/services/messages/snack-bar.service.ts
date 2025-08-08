@@ -28,7 +28,7 @@ export class CommunicationAlerts {
       'ENVIADO'
     ]
     const kindAlert: string[] = [
-      'login-error',
+      'warnings-error',
       'error-snackBar-red'
     ]
 

@@ -8,7 +8,7 @@ import { provideHttpClient, withJsonpSupport } from '@angular/common/http';
 import { IConfig, NgxMaskModule } from "ngx-mask";
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomMatPaginatorIntl } from 'shared/components/list-g/list/custom-mat-aginator-intl.service';
-import { RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
+
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
   return {

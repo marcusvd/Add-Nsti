@@ -26,15 +26,19 @@ public class PasswordValidatorPolicies<TUser> : IPasswordValidator<TUser> where 
                 new IdentityError { Description = "Username cannot be the same as the password." }
             );
         }
+
         if (password.ToUpper().Contains("PASSWORD"))
         {
             return IdentityResult.Failed(
-                new IdentityError { Description = "Username cannot be the same as the password." }
+                new IdentityError { Description = "password cannot be the the word PASSWORD." }
             );
         }
-
-
-
+        if (password.ToUpper().Contains("SENHA"))
+        {
+            return IdentityResult.Failed(
+                new IdentityError { Description = "password cannot be the the word PASSWORD." }
+            );
+        }
 
         return IdentityResult.Success;
     }

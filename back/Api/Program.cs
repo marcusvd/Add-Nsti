@@ -36,37 +36,9 @@ builder.Services.AddJwt(builder.Configuration);
 
 builder.Services.AddAuthorizeAllControllers();
 
+builder.Services.AddCorsApiSettings();
 
 
-
-
-
-// Configurar o Identity
-// builder.Services.AddIdentity<UserAccount, Role>(options =>
-// {
-//     // Configurações de senha
-//     options.Password.RequireDigit = true;
-//     options.Password.RequiredLength = 8;
-//     options.Password.RequireNonAlphanumeric = false;
-//     options.Password.RequireUppercase = true;
-//     options.Password.RequireLowercase = true;
-
-//     // Configurações de usuário
-//     options.User.RequireUniqueEmail = true;
-
-//     // Configurações de lockout
-//     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-//     options.Lockout.MaxFailedAccessAttempts = 5;
-// })
-
-// .AddEntityFrameworkStores<IdImDbContext>()
-// .AddDefaultTokenProviders()
-// .AddUserManager<UserManager<UserAccount>>()
-// .AddRoleManager<RoleManager<Role>>()
-// .AddSignInManager<SignInManager<UserAccount>>()
-// .AddUserStore<UserStore<UserAccount, Role, IdImDbContext, int, IdentityUserClaim<int>,
-//     UserRole, IdentityUserLogin<int>, IdentityUserToken<int>, IdentityRoleClaim<int>>>()
-// .AddRoleStore<RoleStore<Role, IdImDbContext, int, UserRole, IdentityRoleClaim<int>>>();
 
 // // Registrar o factory de claims
 // builder.Services.AddScoped<IUserClaimsPrincipalFactory<UserAccount>, UserAccountClaimsPrincipalFactory>();
@@ -83,7 +55,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.AddGlobalExceptionHandler();
+
+app.UseStaticFilesExtension();
+
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 

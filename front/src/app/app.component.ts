@@ -14,8 +14,8 @@ export class AppComponent implements OnInit {
   constructor(private _router: Router) { }
 
   ngOnInit(): void {
-    // this._router.navigateByUrl('/');
-    this._router.navigateByUrl('/customers/list');
+    //  this._router.navigateByUrl('/');
+    // this._router.navigateByUrl('/customers/list');
   }
 
   title = 'im';

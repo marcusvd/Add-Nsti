@@ -25,10 +25,10 @@
                     <div class="w-full">
                         <mat-label class="text-color-main"> <b>Email</b></mat-label>
                         <mat-form-field class="w-full" appearance="outline">
-                            <input #email (input)="inputEmail(email.value)" matInput type="text" formControlName="userName" aria-label="userName">
+                            <input #email (input)="inputEmail(email.value)" matInput type="text" formControlName="email" aria-label="email">
                             <mat-error>
-                                <span *ngIf="formErrorAndTouched(formMain, 'userName','required')">{{defaultMessages.requiredMsg}}</span>
-                                <span *ngIf="formErrorAndTouched(formMain, 'userName','email')">{{defaultMessages.emailMsg}}</span>
+                                <span *ngIf="formErrorAndTouched(formMain, 'email','required')">{{defaultMessages.requiredMsg}}</span>
+                                <span *ngIf="formErrorAndTouched(formMain, 'email','email')">{{defaultMessages.emailMsg}}</span>
                             </mat-error>
                             <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
                         </mat-form-field>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="p-4 w-full">
                     <div>
-                        <h3 class="cursor-pointer main-color-scss" [routerLink]="['forgot']">Esqueceu?</h3>
+                        <h3 class="cursor-pointer main-color-scss" [routerLink]="['/forgot']">Esqueceu?</h3>
                     </div>
 
                 </div>

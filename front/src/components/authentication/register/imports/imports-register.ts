@@ -22,5 +22,4 @@ export const ImportsRegister: any[] = [
   RouterModule,
   CaptchaComponent,
   BtnGComponent
-  // TitleDescriptionAuthComponent
 ]

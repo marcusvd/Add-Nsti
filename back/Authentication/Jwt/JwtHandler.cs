@@ -36,8 +36,8 @@ namespace Authentication;
             DateTime expiresDateTime = DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]!));
 
             var tokenOptions = new JwtSecurityToken(
-                issuer: _jwtSettings["sonny_Issuer"],
-                audience: _jwtSettings["sonny_Audience"],
+                issuer: _jwtSettings["im_Issuer"],
+                audience: _jwtSettings["im_Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]!)),
                 signingCredentials: GetSigningCredentials()
@@ -49,6 +49,7 @@ namespace Authentication;
                 Expiration = expiresDateTime,
                 Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions),
                 UserName = user.UserName!,
+                Email = user.Email,
                 Id = user.Id,
                 CompanyId = user.CompanyId,
                 Action = ""

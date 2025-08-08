@@ -15,19 +15,6 @@ IdentityUserToken<int>>
 {
     public IdImDbContext(DbContextOptions<IdImDbContext> opt) : base(opt)
     { }
-    // private IConfiguration _configuration;
-    // public IdImDbContext(DbContextOptions<IdImDbContext> opt, IConfiguration Configuration) : base(opt)
-    // {
-    //     _configuration = Configuration;
-    // }
-
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     string cxStr = _configuration.GetConnectionString("IdImDb");
-    //     optionsBuilder.UseMySql(ServerVersion.AutoDetect(cxStr));
-    //     // optionsBuilder.UseMySql(ServerVersion.AutoDetect(cxStr), opt => opt.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
-    // }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -55,13 +42,6 @@ IdentityUserToken<int>>
                   b.ToTable("UserRoles");
                   b.HasKey(ur => new { ur.UserId, ur.RoleId });
               });
-
-        // builder.Entity<UserAccount>().
-        // HasOne(u => u.Company)
-        // .WithMany()
-        // .HasForeignKey(u => u.CompanyId)
-        // .OnDelete(DeleteBehavior.Restrict);
-
     }
 }
 

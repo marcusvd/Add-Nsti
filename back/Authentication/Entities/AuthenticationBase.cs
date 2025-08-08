@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Authentication;
@@ -23,6 +25,12 @@ public class AuthenticationBase
         var userFound = await _userManager.FindByEmailAsync(userNameOrEmail) ?? await _userManager.FindByNameAsync(userNameOrEmail);
 
         return userFound ?? throw new InvalidOperationException("User not found.");
+    }
+    private protected async Task<bool> IsUserExist(string email)
+    {
+        var userFound = await _userManager.FindByEmailAsync(email);
+
+        return userFound != null;
     }
 
     private protected async Task<bool> IsAccountLockedOutAsync(UserAccount userAccount)
@@ -58,7 +66,8 @@ public class AuthenticationBase
         var claims = new List<Claim>
             {
               new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
-              new Claim(ClaimTypes.Name, userAccount.UserName!),
+            //   new Claim(ClaimTypes.Name, userAccount.UserName!),
+              new Claim(ClaimTypes.Name, userAccount.Email!),
             };
 
         foreach (var role in getRoles)
@@ -83,4 +92,36 @@ public class AuthenticationBase
         token.Action = "TwoFactor";
         return token;
     }
+
+
+
+    public static async Task SendAsync(string To = "register@nostopti.com.br", string From = "register@nostopti.com.br", string DisplayName = "Sonny System",
+    string Subject = "Test Subject", string Body = "Test", string MailServer = "smtp.nostopti.com.br",
+     int Port = 587, bool IsUseSsl = false, string UserName = "register@nostopti.com.br", string Password = "Nsti$2024")
+    {
+        var message = new MailMessage("register@nostopti.com.br", To, Subject, Body);
+        SmtpClient SmtpClient = new SmtpClient(MailServer)
+        {
+            Port = 587,
+            Credentials = new NetworkCredential(UserName, Password),
+        };
+        SmtpClient.SendCompleted += (s, e) =>
+       {
+           SmtpClient.Dispose();
+           message.Dispose();
+       };
+        try
+        {
+            SmtpClient.SendAsync(message, null);
+
+            await Task.CompletedTask;
+
+        }
+        catch (SmtpFailedRecipientException ex)
+        {
+            throw new Exception($"{ex}");
+            // throw new EmailException($"{EmailErrosMessagesException.InvalidDomain} - {ex}");
+        }
+    }
+
 }

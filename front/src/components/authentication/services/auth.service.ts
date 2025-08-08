@@ -17,11 +17,11 @@ export class AuthService  {
     if (user.password.length > 1) {
       localStorage.setItem('auth', 'true');
       localStorage.setItem('userName', user.userName);
-      // this.openSnackBar('Seja bem-vindo, ' + user.userName + '!', 'login-success');
+      // this.openSnackBar('Seja bem-vindo, ' + user.userName + '!', 'warnings-success');
     }
     else {
       localStorage.setItem('auth', 'false');
-      // this.openSnackBar('Nome de usuário ou senha inválidos', 'login-error');
+      // this.openSnackBar('Nome de usuário ou senha inválidos', 'warnings-error');
       return 'Nome de usuário ou senha inválidos';
     }
     return 'Nome de usuário ou senha inválidos';

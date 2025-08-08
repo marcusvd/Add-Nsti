@@ -11,6 +11,8 @@ using Authentication.Helpers;
 using Authentication.Operations.Login;
 using Authentication.Operations.Register;
 using Authentication.Context;
+using Authentication.Operations.Account;
+
 
 
 namespace Authentication.Settings;
@@ -51,7 +53,7 @@ public static class IdentityConfiguration
              opt.Password.RequiredLength = 3;
              //
              opt.Lockout.MaxFailedAccessAttempts = 3;
-             //  opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+             opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
              opt.Lockout.AllowedForNewUsers = true;
          })
             .AddEntityFrameworkStores<IdImDbContext>()
@@ -77,6 +79,8 @@ public static class IdentityConfiguration
         services.AddScoped<AuthGenericValidatorServices>();
         services.AddScoped<ILoginServices, LoginServices>();
         services.AddScoped<IRegisterServices, RegisterServices>();
+        services.AddScoped<IAccountManagerServices, AccountManagerServices>();
+
         //
         services.AddScoped<IUrlHelper>(x =>
       {

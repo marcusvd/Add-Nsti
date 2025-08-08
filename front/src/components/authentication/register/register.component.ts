@@ -1,14 +1,19 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 
+import { environment } from 'environments/environment';
 import { BaseForm } from 'shared/inheritance/forms/base-form';
 import { RegisterService } from '../services/register.service';
-import { ImportsRegister } from './imports/imports-register';
-import { RegisterDto } from '../dtos/register-dto';
-import { RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
 
+import { ImportsRegister } from './imports/imports-register';
+import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
+import { PasswordValidator } from '../validators/password-validator';
+import { IsUserRegisteredValidator } from '../validators/is-user-registered-validator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { WarningsService } from 'components/warnings/services/warnings.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -19,7 +24,7 @@ import { RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
   imports: [
     ImportsRegister
   ],
-  providers:[
+  providers: [
     RegisterService
   ]
 })
@@ -28,24 +33,57 @@ export class RegisterComponent extends BaseForm implements OnInit {
   constructor(
     private _registerService: RegisterService,
     private _fb: FormBuilder,
+    private _isUserRegisteredValidator: IsUserRegisteredValidator,
+    private _router: Router,
+    private _warningsService: WarningsService,
+    private _snackBar: MatSnackBar
   ) { super() }
 
 
-  public loginErrorMessage: string = '';
+  loginErrorMessage: string = '';
+
+  backend = `${environment._BACK_END_ROOT_URL}/auth/RegisterAsync`
+
+  // registerTest() {
+
+  //   this.openSnackBar('CADASTRADO!' +'   '+ 'MARCUSMVD@HOTMAIL.COM.BR' + '.', 'warnings-success');
+
+  //   setTimeout(() => {
+
+  //     this.openAuthWarnings({
+  //       btn1: 'Fechar', btn2: '', title: 'AVISO:',
+  //       messageBody: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
+  //       next: true, action: 'openLogin'
+  //     })
+
+  //   }, 5000);
+
+
+
+  // }
 
   register(tokenCaptcha: string | undefined) {
+
     const user: any = this.formMain.value;
+
     if (this.alertSave(this.formMain)) {
       if (this.formMain.valid && tokenCaptcha) {
-        this._registerService.AddUser(user, this.formMain)
+        this._registerService.AddUser(user, this.formMain, this.backend)
           .subscribe({
-            next: (user: RegisterDto) => {
-              // this._communicationsAlerts.defaultSnackMsg('7', 0, null, 4);
-              // this.openAuthWarnings({
-              //   btn1: 'Fechar', btn2: '', title: 'AVISO:',
-              //   messageBody: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-              //   next: true, action: 'openLogin'
-              // })
+            next: (user) => {
+              console.log(user)
+              this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
+
+              setTimeout(() => {
+                this._warningsService.openAuthWarnings({
+                  btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
+                  body: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
+                }).subscribe(result => {
+                  this._router.navigateByUrl('login');
+                })
+
+              }, 5000);
+
             }, error: (err: any) => {
               const erroCode: string = err.error.Message.split('|');
               console.log(err)
@@ -125,13 +163,20 @@ export class RegisterComponent extends BaseForm implements OnInit {
   }
 
   formLoad() {
+    // return this.formMain = this._fb.group({
+    //   userName: ['', []],
+    //   email: new FormControl(''),
+    //   password: ['', []],
+    //   confirmPassword: ['', []],
+    // })
+
+
     return this.formMain = this._fb.group({
-      // company: this.formCompany(),
-      userName: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+      userName: ['', [Validators.required, Validators.minLength(3)]],
+      email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
+      password: ['', [Validators.required, Validators.minLength(3)]],
       confirmPassword: ['', [Validators.required]],
-    })
+    }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
   }
 
   pwdType: string = 'password';
@@ -148,17 +193,21 @@ export class RegisterComponent extends BaseForm implements OnInit {
     }
   }
 
-    inputEmail(arg0: string) {
+  inputEmail(arg0: string) {
     if (arg0.length == 0)
       this.loginErrorMessage = '';
   }
 
-  // formCompany() {
-  //   return this.subForm = this._fb.group({
-  //     name: ['', [Validators.required]]
-  //   })
-  // }
 
+
+  // openSnackBar(message: string, style: string, action: string = 'Fechar', duration: number = 5000, horizontalPosition: any = 'center', verticalPosition: any = 'top') {
+  //   this._snackBar?.open(message, action, {
+  //     duration: duration, // Tempo em milissegundos (5 segundos)
+  //     panelClass: [style], // Aplica a classe personalizada
+  //     horizontalPosition: horizontalPosition, // Centraliza horizontalmente
+  //     verticalPosition: verticalPosition, // Posição vertical (pode ser 'top' ou 'bottom')
+  //   });
+  // }
   back() {
     window.history.back();
   }

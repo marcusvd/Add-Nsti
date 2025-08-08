@@ -12,8 +12,9 @@ export class RegisterService extends BackEndService<RegisterDto> {
 
   constructor() { super() }
 
-  AddUser(user: RegisterDto, form: FormGroup) {
-    return this.add$<RegisterDto>(user, 'register').pipe(take(1));
+  AddUser(user: RegisterDto, form: FormGroup, url:string) {
+
+    return this.add$<RegisterDto>(user, url).pipe(take(1));
   }
 
 }

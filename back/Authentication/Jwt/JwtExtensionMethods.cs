@@ -27,8 +27,8 @@ public static class JwtExtensionMethods
                      ValidateAudience = true,
                      ValidateLifetime = true,
                      ValidateIssuerSigningKey = true,
-                     ValidIssuer = jwtSettings["sonny_Issuer"],
-                     ValidAudience = jwtSettings["sonny_Audience"],
+                     ValidIssuer = jwtSettings["im_Issuer"],
+                     ValidAudience = jwtSettings["im_Audience"],
                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"])),
                      //ClockSkew = TimeSpan.Zero
                  };

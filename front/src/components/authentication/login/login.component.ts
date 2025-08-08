@@ -10,6 +10,9 @@ import { MyUser } from '../dtos/my-user';
 import { AuthLoginImports } from '../imports/auth.imports';
 import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dtos/login-dto';
+import { LoginService } from '../services/login.service';
+import { WarningsService } from 'components/warnings/services/warnings.service';
+import { UserTokenDto } from '../dtos/user-token-dto';
 
 
 @Component({
@@ -35,43 +38,79 @@ export class LoginComponent extends BaseForm implements OnInit {
   }
 
   constructor(
-    public _auth: AuthService,
+    public _loginService: LoginService,
     private _router: Router,
     private _fb: FormBuilder,
-
+    private _warningsService: WarningsService,
 
   ) { super() }
+
   override formMain!: FormGroup;
 
-
-
   loginErrorMessage: string = '';
+
   login() {
 
-    // this._router.navigateByUrl('/default-route/customers/add');
+    this._loginService.login$(this.formMain.value).subscribe({
+      next: (user: any) => {
 
-    const login: LoginDto = this.formMain.value;
 
-    this.loginErrorMessage = this._auth.login(login);
-    if (this.alertSave(this.formMain)) {
-      if (this._auth.isAuthenticated())
-        this._router.navigateByUrl('/');
+        if (user.authenticated) {
 
-    }
-    // // this.loginErrorMessage = null;
-    // // this.loginErrorMessage = '';
-    // if (this.alertSave(this.formMain)) {
-    //   this._auth.login(login).subscribe((x: string) => {
+          this.loginErrorMessage = '';
+          if (user.action == "TwoFactor") {
 
-    //     // this.loginErrorMessage = x;
-    //   })
-    // }
+            this._router.navigateByUrl('two-factor');
+
+          }
+
+          localStorage.setItem("myUser", JSON.stringify(user));
+
+          this._warningsService.openSnackBar('SEJA BEM-VINDO!', 'warnings-success');
+
+
+          this._router.navigateByUrl('/');
+
+
+        }
+        else {
+        }
+
+      }, error: (err: any) => {
+        const erroCode: string = err.error.Message.split('|');
+        switch (erroCode[0]) {
+          case '1.0': {
+            // this.resendEmailConfim(user);
+            this.loginErrorMessage = erroCode[1]
+            break;
+          }
+          case '1.4': {
+            this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+            this.loginErrorMessage = erroCode[1]
+            break;
+          }
+          case '1.11': {
+            this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+            this._warningsService.openAuthWarnings({
+               btnLeft: 'Fechar', btnRight: '', title: 'ERRO DE AUTENTICAÇÃO:',
+              body: erroCode[1]
+            })
+            break;
+          }
+          case '1.6': {
+            this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+            this.loginErrorMessage = erroCode[1]
+            break;
+          }
+        }
+
+      }
+
+    })
   }
-
 
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
-
 
   pwdHideShow() {
     if (this.pwdType === 'password') {
@@ -83,11 +122,9 @@ export class LoginComponent extends BaseForm implements OnInit {
     }
   }
 
-
-
   formLoad() {
     return this.formMain = this._fb.group({
-      userName: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     })
   }
