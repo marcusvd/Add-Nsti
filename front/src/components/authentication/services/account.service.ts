@@ -150,13 +150,13 @@ export class AccountService extends BackEndService<MyUser> {
       next: () => {
 
 
-        this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');
+        this.openSnackBar('A senha foi modificada com sucesso!', 'warnings-success');
 
         setTimeout(() => {
 
           this._warningsService.openAuthWarnings({
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-            body: 'A senha foi trocada com sucesso!',
+            body: 'A senha foi modificada com sucesso!',
           }).subscribe(result => {
             this._router.navigateByUrl('login');
           })

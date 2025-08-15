@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using Domain.Entities.Customers;
 using Domain.Entities.Shared;
 
@@ -20,7 +18,6 @@ namespace Domain.Entities.Companies
         }
         public int Id { get; set; }
         public string Name { get; set; }
-        // public List<UserAccount> UserAccounts { get; set; }
         public Address Address { get; set; }
         public Contact Contact { get; set; }
         public bool Deleted { get; set; }

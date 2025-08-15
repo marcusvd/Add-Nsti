@@ -22,6 +22,41 @@ namespace Authentication.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanyAuth");
+                });
+
+            modelBuilder.Entity("Authentication.Entities.CompanyUserAccount", b =>
+                {
+                    b.Property<int>("CompanyAuthId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LinkedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("CompanyAuthId", "UserAccountId");
+
+                    b.HasIndex("UserAccountId");
+
+                    b.ToTable("CompanyUserAccount");
+                });
+
             modelBuilder.Entity("Authentication.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -65,9 +100,6 @@ namespace Authentication.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
@@ -84,10 +116,6 @@ namespace Authentication.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Group")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime(6)");
@@ -249,6 +277,25 @@ namespace Authentication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Authentication.Entities.CompanyUserAccount", b =>
+                {
+                    b.HasOne("Authentication.Entities.CompanyAuth", "CompanyAuth")
+                        .WithMany("CompanyUserAccounts")
+                        .HasForeignKey("CompanyAuthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Authentication.Entities.UserAccount", "UserAccount")
+                        .WithMany("CompanyUserAccounts")
+                        .HasForeignKey("UserAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyAuth");
+
+                    b.Navigation("UserAccount");
+                });
+
             modelBuilder.Entity("Authentication.Entities.UserRole", b =>
                 {
                     b.HasOne("Authentication.Entities.Role", "Role")
@@ -304,6 +351,11 @@ namespace Authentication.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+                {
+                    b.Navigation("CompanyUserAccounts");
+                });
+
             modelBuilder.Entity("Authentication.Entities.Role", b =>
                 {
                     b.Navigation("UserRoles");
@@ -311,6 +363,8 @@ namespace Authentication.Migrations
 
             modelBuilder.Entity("Authentication.Entities.UserAccount", b =>
                 {
+                    b.Navigation("CompanyUserAccounts");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

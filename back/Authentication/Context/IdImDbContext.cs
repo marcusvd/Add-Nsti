@@ -13,11 +13,15 @@ IdentityUserLogin<int>,
 IdentityRoleClaim<int>,
 IdentityUserToken<int>>
 {
+
+    public DbSet<CompanyUserAccount> CompaniesUsersAccounts { get; set; }
     public IdImDbContext(DbContextOptions<IdImDbContext> opt) : base(opt)
     { }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+
 
         builder.Entity<UserAccount>(b =>
         {
@@ -27,6 +31,19 @@ IdentityUserToken<int>>
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
         });
+
+        //Many to maany
+        builder.Entity<CompanyUserAccount>().HasKey(uc => new { uc.CompanyAuthId, uc.UserAccountId });
+       
+        builder.Entity<CompanyUserAccount>()
+        .HasOne(uc => uc.CompanyAuth)
+        .WithMany(uc => uc.CompanyUserAccounts)
+        .HasForeignKey(uc => uc.CompanyAuthId);
+       
+        builder.Entity<CompanyUserAccount>()
+        .HasOne(uc => uc.UserAccount)
+        .WithMany(uc => uc.CompanyUserAccounts)
+        .HasForeignKey(uc => uc.UserAccountId);
 
         builder.Entity<Role>(b =>
         {

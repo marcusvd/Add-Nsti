@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Pagination.Models;
 //using Pagination;
 
-namespace Repository.Data.Operations.Repository
-{
+namespace Repository.Data.Operations.Repository;
 
     public interface IRepository<T> where T : class
     {
@@ -34,4 +33,3 @@ namespace Repository.Data.Operations.Repository
             bool noTraking = true
         );
     }
-}

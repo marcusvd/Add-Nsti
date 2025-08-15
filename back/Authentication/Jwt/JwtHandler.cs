@@ -51,7 +51,7 @@ namespace Authentication;
                 UserName = user.UserName!,
                 Email = user.Email,
                 Id = user.Id,
-                CompanyId = user.CompanyId,
+                CompanyUserAccounts = user.CompanyUserAccounts,
                 Action = ""
             };
 
