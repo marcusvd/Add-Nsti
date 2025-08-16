@@ -64,6 +64,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
             {
                 UserName = "Marcus Dias",
                 Email = "marcusmvd@hotmail.com",
+                CompanyName = "ADD-NSTI",
                 Password = "123",
                 ConfirmPassword = "123"
             };

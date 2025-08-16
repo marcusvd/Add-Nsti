@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Pagination.Models;
 using System.Collections.Generic;
 
-namespace Repository.Data.Operations.Repository
-{
+namespace Repository.Data.Operations.Repository;
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ImSystemDbContext _CONTEXT;
@@ -101,5 +100,3 @@ namespace Repository.Data.Operations.Repository
         }
 
     }
-
-}

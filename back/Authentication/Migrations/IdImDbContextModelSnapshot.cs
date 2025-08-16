@@ -54,7 +54,7 @@ namespace Authentication.Migrations
 
                     b.HasIndex("UserAccountId");
 
-                    b.ToTable("CompanyUserAccount");
+                    b.ToTable("CompaniesUsersAccounts");
                 });
 
             modelBuilder.Entity("Authentication.Entities.Role", b =>
@@ -107,10 +107,15 @@ namespace Authentication.Migrations
                     b.Property<int>("ContactId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DisplayUserName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 

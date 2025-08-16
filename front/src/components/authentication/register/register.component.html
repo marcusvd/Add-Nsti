@@ -48,7 +48,19 @@
                     *ngIf="formErrorAndTouched(formMain, 'userName','required')">{{defaultMessages.requiredMsg}}</span>
                   <!-- <span *ngIf="formErrorAndTouched(formMain, 'userName','email')">{{defaultMessages.emailMsg}}</span> -->
                 </mat-error>
-                <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
+                <mat-icon class="main-color-scss" matPrefix>person</mat-icon>
+              </mat-form-field>
+            </div>
+            <div class="w-full">
+              <mat-label class="text-slate-900"> <b>Empresa</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input  matInput type="text" formControlName="companyName"
+                  aria-label="companyName">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'companyName','required')">{{defaultMessages.requiredMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>business</mat-icon>
               </mat-form-field>
             </div>
 

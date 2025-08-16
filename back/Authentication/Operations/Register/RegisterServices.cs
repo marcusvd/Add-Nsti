@@ -5,6 +5,8 @@ using Authentication.Entities;
 using Authentication.Exceptions;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using Authentication.Operations.CompanyUsrAcct;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 
 namespace Authentication.Operations.Register;
@@ -16,20 +18,20 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
     private readonly AuthGenericValidatorServices _genericValidatorServices;
 
     // private readonly EmailServer _emailService;
+    private readonly IIdentityEntitiesManagerRepository _identityEntitiesManagerRepository;
     private readonly JwtHandler _jwtHandler;
     private readonly IUrlHelper _url;
     public RegisterServices(
           UserManager<UserAccount> userManager,
-          //   EmailServer emailService,
           JwtHandler jwtHandler,
           IUrlHelper url,
-
+          IIdentityEntitiesManagerRepository identityEntitiesManagerRepository,
           AuthGenericValidatorServices genericValidatorServices,
           ILogger<AuthGenericValidatorServices> logger
       ) : base(userManager, jwtHandler)
     {
         _userManager = userManager;
-        // _emailService = emailService;
+        _identityEntitiesManagerRepository = identityEntitiesManagerRepository;
         _jwtHandler = jwtHandler;
         _url = url;
         _genericValidatorServices = genericValidatorServices;
@@ -38,6 +40,8 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
 
     public async Task<UserToken> RegisterAsync(RegisterModel user)
     {
+
+        user.CompanyName = "TEST NAME";
         _genericValidatorServices.IsObjNull(user);
 
         await ValidateUniqueUserCredentials(user);
@@ -58,7 +62,16 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
 
         await SendEmailConfirmationAsync(userAccount);
 
+
+        // var companyToAdd = CreateCompany(user.CompanyName);
+
+        // var resultCompany = await _identityEntitiesManagerRepository.AddCompany(companyToAdd);
+
+
+
         var claimsList = await BuildUserClaims(userAccount);
+
+
 
         return await _jwtHandler.GenerateUserToken(claimsList, userAccount);
     }
@@ -82,10 +95,38 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
 
         var userAccount = new UserAccount()
         {
-            UserName = user.UserName,
+            DisplayUserName = user.UserName,
+            UserName = user.Email,
             Email = user.Email
         };
+        var company = CreateCompany(user.CompanyName);
+
+        userAccount.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = company, UserAccount = userAccount });
+
+
+
         return userAccount;
+    }
+    private CompanyAuth CreateCompany(string name)
+    {
+
+        var companyAuth = new CompanyAuth()
+        {
+            Id = 0,
+            Name = name
+        };
+        return companyAuth;
+    }
+    private CompanyUserAccount CreateCompanyUserAccount(int userId, int companyId)
+    {
+
+        var companyUserAccount = new CompanyUserAccount()
+        {
+            UserAccountId = userId,
+            CompanyAuthId = companyId
+        };
+
+        return companyUserAccount;
     }
 
     private async Task<bool> IsUserNameDuplicate(string userName)
@@ -100,7 +141,7 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
 
         return userAccount != null;
     }
-  
+
     private async Task SendEmailConfirmationAsync(UserAccount userAccount)
     {
         try

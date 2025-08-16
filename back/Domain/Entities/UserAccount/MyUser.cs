@@ -13,6 +13,6 @@ public class MyUser
     public virtual Address Address { get; set; }
     public virtual Contact Contact { get; set; }
     public Profile Profile { get; set; }
-    public bool Deleted { get; set; }
+    public DateTime Deleted { get; set; }
     public DateTime Registered { get; set; } = DateTime.UtcNow;
 }

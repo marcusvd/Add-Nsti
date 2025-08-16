@@ -30,7 +30,7 @@ namespace Authentication;
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        public async Task<UserToken> GenerateUserToken(List<Claim> claims, UserAccount user)
+        public Task<UserToken> GenerateUserToken(List<Claim> claims, UserAccount user)
         {
            
             DateTime expiresDateTime = DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]!));
@@ -55,6 +55,8 @@ namespace Authentication;
                 Action = ""
             };
 
-            return userToken;
+        var result = Task.FromResult(userToken);
+
+        return result;
         }
 }

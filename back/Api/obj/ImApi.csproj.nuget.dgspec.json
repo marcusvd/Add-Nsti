@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj": {}
+    "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj": {}
   },
   "projects": {
-    "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj": {
+    "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj",
+        "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
         "projectName": "ImApi",
-        "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj",
+        "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\obj\\",
+        "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

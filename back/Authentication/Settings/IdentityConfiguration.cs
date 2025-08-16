@@ -12,6 +12,7 @@ using Authentication.Operations.Login;
 using Authentication.Operations.Register;
 using Authentication.Context;
 using Authentication.Operations.Account;
+using Authentication.Operations.CompanyUsrAcct;
 
 
 
@@ -79,6 +80,7 @@ public static class IdentityConfiguration
         services.AddScoped<AuthGenericValidatorServices>();
         services.AddScoped<ILoginServices, LoginServices>();
         services.AddScoped<IRegisterServices, RegisterServices>();
+        services.AddScoped<IIdentityEntitiesManagerRepository, IdentityEntitiesManagerRepository>();
         services.AddScoped<IAccountManagerServices, AccountManagerServices>();
 
         //

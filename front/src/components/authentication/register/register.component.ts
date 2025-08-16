@@ -85,8 +85,8 @@ export class RegisterComponent extends BaseForm implements OnInit {
               }, 5000);
 
             }, error: (err: any) => {
-              const erroCode: string = err.error.Message.split('|');
               console.log(err)
+              const erroCode: string = err?.error?.Message?.split('|');
               console.log(erroCode)
               // switch (erroCode[0]) {
               //   case '1.1': {
@@ -163,16 +163,9 @@ export class RegisterComponent extends BaseForm implements OnInit {
   }
 
   formLoad() {
-    // return this.formMain = this._fb.group({
-    //   userName: ['', []],
-    //   email: new FormControl(''),
-    //   password: ['', []],
-    //   confirmPassword: ['', []],
-    // })
-
-
     return this.formMain = this._fb.group({
       userName: ['', [Validators.required, Validators.minLength(3)]],
+      companyName: ['', [Validators.required, Validators.minLength(3)]],
       email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
       password: ['', [Validators.required, Validators.minLength(3)]],
       confirmPassword: ['', [Validators.required]],

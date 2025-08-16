@@ -17,6 +17,7 @@ namespace Authentication.Exceptions;
         public static readonly string UserIsLocked = "1.11|Usuário está bloqueado.";
         public static readonly string ResetPassword = "1.12|Erro durante redefinição de senha.";
         public static readonly string TwoFactorTokenSendFailed = "1.13|Erro durante envio do 2FA token para o {Email}";
+        public static readonly string ErrorWhenAddCompany = "1.14|Não foi possível cadastrar a empresa.";
 
         //GENERAL MESSAGES
         public static readonly string ObjectIsNull = "2.0|Objeto era nulo.";

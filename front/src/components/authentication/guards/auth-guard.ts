@@ -6,12 +6,17 @@ import { UserTokenDto } from '../dtos/user-token-dto';
 
 export const authGuard: CanActivateFn = (route, state) => {
 
-  // const authService = inject(AuthService);
-
   const router = inject(Router);
-  
-  const isAuthenticated: UserTokenDto = JSON.parse(localStorage.getItem("myUser") ?? '{}');
 
-  return isAuthenticated.authenticated ? true : router.createUrlTree(['/login']);
+  const userToken: UserTokenDto = JSON.parse(localStorage.getItem("myUser") ?? '{}');
+
+return userToken.authenticated ? true : router.createUrlTree(['/login']);
+
+  // if (userToken.companyUserAccounts.length > 0)
+
+  // else
+  //   return router.createUrlTree(['/first-company-register']);
+
+
 
 }

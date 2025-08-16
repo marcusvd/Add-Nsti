@@ -4,7 +4,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserTokenDto } from 'components/authentication/dtos/user-token-dto';
 import { AuthService } from 'components/authentication/services/auth.service';
 
@@ -21,8 +21,9 @@ import { AuthService } from 'components/authentication/services/auth.service';
     MatMenuModule,
     MatDividerModule,
     MatFormFieldModule,
-    UpperCasePipe
-  ]
+    UpperCasePipe,
+    RouterModule
+]
 })
 export class SideMenuTopLargeComponent implements OnInit {
 

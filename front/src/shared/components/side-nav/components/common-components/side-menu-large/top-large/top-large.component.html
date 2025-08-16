@@ -38,13 +38,24 @@
             </a>
         </div>
     </div>
-    <mat-menu class="!flex !items-center justify-center !w-[200px] !h-[60px] !bg-color-main !border !border-white" #menu="matMenu">
+    <mat-menu class="!flex !items-center justify-center !w-[200px] !h-[100px] !bg-color-main !border !border-white" #menu="matMenu">
+        <div class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" [routerLink]="['/users/profile']">
+            <div>
+                <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white" >group_add</mat-icon>
+            </div>
+            <div>
+                <p class="text-white text-[15px] pt-1">
+                    Perfil
+                </p>
+            </div>
+
+        </div>
         <div class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" (click)="logOut()">
             <div>
                 <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white" fontSet="material-icons-two-tone">exit_to_app</mat-icon>
             </div>
             <div>
-                <p class="text-white text-[20px] pt-1">
+                <p class="text-white text-[15px] pt-1">
                     SAIR
                 </p>
             </div>

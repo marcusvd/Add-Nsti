@@ -19,10 +19,10 @@ export const routes: Routes = [
     path: '', component: SideNavComponent,
     canActivate: [authGuard],
     children: [
-      // {
-      //   path: 'auth',
-      //   loadChildren: () => import('../components/authentication/modules/auth.routing.module').then(x => x.RegisterRoutingModule),
-      // },
+      {
+        path: 'users',
+        loadChildren: () => import('../components/authentication/modules/users.routing.module').then(x => x.UsersRoutingModule),
+      },
       {
         path: 'employees',
         loadChildren: () => import('../components/employees/modules/employees.routing.module').then(x => x.EmployeesRoutingModule),

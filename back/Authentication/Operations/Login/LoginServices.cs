@@ -4,6 +4,8 @@ using Authentication.Entities;
 using Authentication.Exceptions;
 using Authentication.Helpers;
 using Microsoft.Extensions.Logging;
+using Authentication.Operations.CompanyUsrAcct;
+using System.Linq;
 
 
 namespace Authentication.Operations.Login;
@@ -11,6 +13,7 @@ namespace Authentication.Operations.Login;
 public class LoginServices : AuthenticationBase, ILoginServices
 {
     private UserManager<UserAccount> _userManager;
+    private readonly IIdentityEntitiesManagerRepository _identityEntitiesManagerRepository;
     private readonly ILogger<AuthGenericValidatorServices> _logger;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     // private readonly EmailServer _emailService;
@@ -19,9 +22,10 @@ public class LoginServices : AuthenticationBase, ILoginServices
     public LoginServices(
           UserManager<UserAccount> userManager,
           ILogger<AuthGenericValidatorServices> logger,
-        //   EmailServer emailService,
+          IIdentityEntitiesManagerRepository identityEntitiesManagerRepository,
+          //   EmailServer emailService,
           JwtHandler jwtHandler,
-        //   IAuthenticationObjectMapperServices mapper,
+          //   IAuthenticationObjectMapperServices mapper,
           AuthGenericValidatorServices genericValidatorServices
       ) : base(userManager, jwtHandler)
     {
@@ -29,15 +33,20 @@ public class LoginServices : AuthenticationBase, ILoginServices
         _logger = logger;
         // _emailService = emailService;
         _jwtHandler = jwtHandler;
+        _identityEntitiesManagerRepository = identityEntitiesManagerRepository;
         // _mapper = mapper;
-       _genericValidatorServices = genericValidatorServices;
+        _genericValidatorServices = genericValidatorServices;
     }
 
     public async Task<UserToken> LoginAsync(LoginModel user)
     {
         _genericValidatorServices.IsObjNull(user);
 
-        var userAccount = await FindUserAsync(user.Email);
+        // var userAccount = await FindUserAsync(user.Email);
+
+        var userAccount = await _identityEntitiesManagerRepository.GetUserAccountFull(user.Email);
+
+        // var companies = userAccount.CompanyUserAccounts.Any() ? userAccount.CompanyUserAccounts : [];
 
         if (userAccount == null)
         {
