@@ -1,71 +1,84 @@
 <div class="container bg-main-color border-b border-[rgb(61,211,248)]">
-    <div class="container--company-box">
-        <div class="container--logo-box">
-            <!-- <mat-icon class="container--logo-box-icon" fontSet="material-icons-outlined">language</mat-icon> -->
-            <img class="container--logo-box-icon" src="../../../../../../../assets/side_nav/chat.png" alt="logo nsti aqui">
-        </div>
-        <div class="container--company-name-box -mt-2">
-            <mat-label class="tracking-wide text-[#ececec] font-default">{{'INTEGRAÇÕES'}}</mat-label>
-        </div>
+  <div class="container--company-box">
+    <div class="container--logo-box">
+      <!-- <mat-icon class="container--logo-box-icon" fontSet="material-icons-outlined">language</mat-icon> -->
+      <img class="container--logo-box-icon" src="../../../../../../../assets/side_nav/chat.png" alt="logo nsti aqui">
+    </div>
+    <div class="container--company-name-box -mt-2">
+      <mat-label class="tracking-wide text-[#ececec] font-default">{{'INTEGRAÇÕES'}}</mat-label>
+    </div>
+  </div>
+
+
+
+  <div class="container--profile-box">
+    <div class="container--profile-box-img">
+      <div class="flex items-center justify-center text-[25px] pt-3.5 text-white font-bold" *ngIf="true">
+        <mat-label>{{firstLetter | uppercase}}</mat-label>
+      </div>
+      <div class="container--profile-box-img-img" *ngIf="false">
+        <img src="../../../../../../assets/nsti-menor.jpg" alt="logo nsti aqui">
+      </div>
     </div>
 
-
-
-    <div class="container--profile-box">
-        <div class="container--profile-box-img">
-            <div class="flex items-center justify-center text-[25px] pt-3.5 text-white font-bold" *ngIf="true">
-                <mat-label>{{firstLetter | uppercase}}</mat-label>
-            </div>
-            <div class="container--profile-box-img-img" *ngIf="false">
-                <img src="../../../../../../assets/nsti-menor.jpg" alt="logo nsti aqui">
-            </div>
-        </div>
-
-        <div class="container--profile-box-hello-user">
-            <div class="container--profile-box-hello">
-                <span>{{'Ola,'}}</span>
-            </div>
-            <div class="container--profile-box-user">
-                <span>{{userName | uppercase}}</span>
-                <!-- <span>{{'Marcus' | uppercase}}</span> -->
-                <!-- <span>{{userName.split('@')[0] ?? 'Login' | uppercase}}</span> -->
-            </div>
-        </div>
-
-        <div class="container--profile-box-settings">
-            <a mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon class="container--profile-box-settings-icon">settings</mat-icon>
-            </a>
-        </div>
+    <div class="container--profile-box-hello-user">
+      <div class="container--profile-box-hello">
+        <span>{{'Ola,'}}</span>
+      </div>
+      <div class="container--profile-box-user">
+        <span>{{userName | uppercase}}</span>
+        <!-- <span>{{'Marcus' | uppercase}}</span> -->
+        <!-- <span>{{userName.split('@')[0] ?? 'Login' | uppercase}}</span> -->
+      </div>
     </div>
-    <mat-menu class="!flex !items-center justify-center !w-[200px] !h-[100px] !bg-color-main !border !border-white" #menu="matMenu">
-        <div class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" [routerLink]="['/users/profile']">
-            <div>
-                <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white" >group_add</mat-icon>
-            </div>
-            <div>
-                <p class="text-white text-[15px] pt-1">
-                    Perfil
-                </p>
-            </div>
 
-        </div>
-        <div class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" (click)="logOut()">
-            <div>
-                <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white" fontSet="material-icons-two-tone">exit_to_app</mat-icon>
-            </div>
-            <div>
-                <p class="text-white text-[15px] pt-1">
-                    SAIR
-                </p>
-            </div>
+    <div class="container--profile-box-settings">
+      <a mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon class="container--profile-box-settings-icon">settings</mat-icon>
+      </a>
+    </div>
+  </div>
+  <mat-menu class="!flex !items-center justify-center !w-[200px] !h-[150px] !bg-color-main !border !border-white"
+    #menu="matMenu">
+    <div class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" [routerLink]="['/users/adm']">
+      <div>
+        <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white">group_add</mat-icon>
+      </div>
+      <div>
+        <p class="text-white text-[15px] pt-1">
+          Administração
+        </p>
+      </div>
 
-        </div>
+    </div>
+    <div class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" [routerLink]="['/users/profile']">
+      <div>
+        <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white">how_to_reg</mat-icon>
+      </div>
+      <div>
+        <p class="text-white text-[15px] pt-1">
+          Perfil
+        </p>
+      </div>
 
-        <!-- <mat-icon (click)="'logOut()'">keyboard_arrow_right</mat-icon> -->
+    </div>
+    <div class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" (click)="logOut()">
+      <div>
+        <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white"
+          fontSet="material-icons-two-tone">power_settings_new</mat-icon>
+      </div>
+      <div>
+        <p class="text-white text-[15px] pt-1">
+          SAIR
+        </p>
+      </div>
+
+    </div>
+
+    <!-- <mat-icon (click)="'logOut()'">keyboard_arrow_right</mat-icon> -->
 
 
-        <!-- <div>
+    <!-- <div>
                 <img src="../../../../../../assets/nsti-menor.jpg" alt="logo nsti aqui">
             </div>
 
@@ -92,5 +105,5 @@
 
             <mat-divider></mat-divider> -->
 
-    </mat-menu>
+  </mat-menu>
 </div>

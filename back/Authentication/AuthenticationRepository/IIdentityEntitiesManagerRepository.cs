@@ -8,5 +8,7 @@ public interface IIdentityEntitiesManagerRepository
     Task<UserAccount> GetUserAccountFull(string email);
     Task<CompanyAuth> AddCompany(CompanyAuth companyAuth);
 
+    Task<bool> SaveAsync();
+
      
 }

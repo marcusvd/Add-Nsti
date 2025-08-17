@@ -1,0 +1,53 @@
+<div>
+    <!-- Mobile -->
+    <div class="mb-24 bg-background-color">
+        <div>
+            <mat-paginator pg-above class="!bg-background-color !flex !justify-end" #paginatorAbove [length]="this.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+        </div>
+        <div *ngFor="let entity of paginatedEntities$ | async">
+
+            <mat-card class="!w-full mb-4 !rounded-t-xl" *ngIf="entities$">
+                <div class="p-4 rounded-t-xl space-y-4 border border-default-line shadow-md bg-white">
+                    <div *ngFor="let field of headersFields; let i = index" class="group">
+                        <ng-container [ngSwitch]="entity[field.key]?.display">
+
+                            <ng-container *ngSwitchCase="'icons'">
+                                <div class="flex justify-start space-x-4 py-3">
+                                    <div class="btn-icon" [style]="entity[field.key]?.styleInsideCell" (click)="onClickIcon(icon, entity.id.key)" *ngFor="let icon of entity[field.key]?.icons;">
+                                        <mat-icon [style]="icon.split('|')[1]">
+                                            <span>{{icon.split('|')[0]}}</span>
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                                <mat-divider class="border-2 bg-color-main mb-3"></mat-divider>
+                            </ng-container>
+
+                            <ng-container *ngSwitchDefault>
+                                <div class="flex flex-col justify-between items-start py-1 border-color-main last:border-0">
+                                    <div class="w-full mb-1">
+                                        <span class="text-sm font-bold text-gray-500 uppercase tracking-wide">
+                {{headersLabel[i].key}}
+              </span>
+                                    </div>
+                                    <div class="w-full">
+                                        <p class="text-base text-black font-bold break-words">
+                                            {{entity[field.key]?.key}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                        </ng-container>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+        <div class="flex justify-center">
+            <spinner-g [entities$]="paginatedEntities$" [optionalTitle]="'(Lista)'" [_empty]="spinerNoRegisterClean">
+            </spinner-g>
+        </div>
+        <div>
+            <mat-paginator pg-above class="!bg-background-color !flex !justify-end" #paginatorAbove [length]="this.length" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+        </div>
+    </div>
+</div>

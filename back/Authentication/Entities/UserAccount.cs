@@ -7,6 +7,8 @@ public class UserAccount : IdentityUser<int>
 
     public virtual int AddressId { get; set; }
     public virtual int ContactId { get; set; }
+    public int BusinessId { get; set; }
+    public Business? Business { get; set; }
     public DateTime Deleted { get; set; } = DateTime.MinValue;
     public DateTime Registered { get; set; } = DateTime.UtcNow;
     public DateTime? LastLogin { get; set; }

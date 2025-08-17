@@ -1,0 +1,112 @@
+mat-paginator {
+    .mat-mdc-paginator-page-size-value {
+        display: none !important;
+    }
+}
+
+.table {
+    // position: relative;
+    width: 100%;
+    /* Subtrai 5% da largura total da viewport */
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 0.5px solid rgb(224, 224, 224);
+    &.header {
+        font-weight: bold;
+        font-size: 10px;
+        color: rgb(11, 112, 155);
+        background-color: rgb(242, 242, 242);
+        border-bottom: 0.5px solid rgb(11, 112, 155);
+        .cell {
+            min-width: 100px; // Ensures cells in header have consistent width
+            &:hover {
+                font-weight: bold;
+                font-size: 15px;
+                color: rgb(11, 112, 155);
+            }
+            &:active {
+                font-weight: bold;
+                font-size: 15px;
+                color: rgb(11, 112, 155);
+            }
+        }
+    }
+    .cell-header {
+        display: flex;
+        align-items: last baseline;
+        flex: 1;
+        width: 100%;
+        padding: 8px;
+        text-align: left;
+        box-sizing: border-box;
+        min-width: 100px;
+        height: 30px;
+        mat-icon {
+            margin-left: 15px;
+            /* Adiciona espaçamento entre os ícones */
+        }
+    }
+    .cell {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        width: 100%;
+        padding: 8px;
+        text-align: left;
+        box-sizing: border-box;
+        min-width: 100px;
+        height: 60px;
+        mat-icon {
+            margin-left: 15px;
+            /* Adiciona espaçamento entre os ícones */
+        }
+    }
+    max-width: calc(100vw - 10%);
+    // mat-card {
+    //     margin: 5px;
+    // }
+    // .cell:last-child {
+    //   flex: 3; // Makes the last cell 3 times larger
+    // }
+}
+
+// mat-card {
+//     margin: 5px;
+// }
+.btn-icon {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+.btn-icon:active {
+    transform: translateY(3px);
+    color: rgb(25, 44, 97);
+}
+
+.isOdd {
+    background-color: rgb(249, 249, 249);
+}
+
+.isEven {
+    background-color: rgb(235, 235, 235);
+}
+
+.isOdd:hover {
+    background-color: rgb(219, 219, 219);
+    /* more white */
+}
+
+.isEven:hover {
+    background-color: rgb(219, 219, 219);
+}
+
+.container-filter-search {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    width: 100%;
+}

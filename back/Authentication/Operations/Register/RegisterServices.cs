@@ -41,7 +41,6 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
     public async Task<UserToken> RegisterAsync(RegisterModel user)
     {
 
-        user.CompanyName = "TEST NAME";
         _genericValidatorServices.IsObjNull(user);
 
         await ValidateUniqueUserCredentials(user);
@@ -51,6 +50,8 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         // userAccount.EmailConfirmed = true;
 
         var creationResult = await _userManager.CreateAsync(userAccount, user.Password);
+
+        //  var business = CreateBusiness(company.Name, company, userAccount);
 
         if (!creationResult.Succeeded)
         {
@@ -63,14 +64,7 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         await SendEmailConfirmationAsync(userAccount);
 
 
-        // var companyToAdd = CreateCompany(user.CompanyName);
-
-        // var resultCompany = await _identityEntitiesManagerRepository.AddCompany(companyToAdd);
-
-
-
         var claimsList = await BuildUserClaims(userAccount);
-
 
 
         return await _jwtHandler.GenerateUserToken(claimsList, userAccount);
@@ -92,18 +86,22 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
 
     private UserAccount CreateUserAccount(RegisterModel user)
     {
+        var company = CreateCompany(user.CompanyName);
 
         var userAccount = new UserAccount()
         {
             DisplayUserName = user.UserName,
             UserName = user.Email,
-            Email = user.Email
+            Email = user.Email,
+            Business = CreateBusiness(company.Name, company)
         };
-        var company = CreateCompany(user.CompanyName);
 
+    
         userAccount.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = company, UserAccount = userAccount });
 
+        // var business = CreateBusiness(company.Name, company, userAccount);
 
+        // business.UsersAccounts.Add(userAccount);
 
         return userAccount;
     }
@@ -117,16 +115,19 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         };
         return companyAuth;
     }
-    private CompanyUserAccount CreateCompanyUserAccount(int userId, int companyId)
+    
+    private Business CreateBusiness(string companyName, CompanyAuth company)
     {
 
-        var companyUserAccount = new CompanyUserAccount()
+        var business = new Business()
         {
-            UserAccountId = userId,
-            CompanyAuthId = companyId
+            Id = 0,
+            Name = $"Group Business {companyName}",
+            Companies = new List<CompanyAuth>() { company },
+            // UsersAccounts = new List<UserAccount>() { userAccount }
         };
 
-        return companyUserAccount;
+        return business;
     }
 
     private async Task<bool> IsUserNameDuplicate(string userName)

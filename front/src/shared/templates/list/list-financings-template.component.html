@@ -1,0 +1,24 @@
+<div class="space-around">
+
+
+    <title-component [digit]="'|'" [textTitleComp]="'Financiamento / Empréstimo'" [icon]="'attach_money'">
+
+    </title-component>
+    <mat-card class="sub-title-mat-card !bg-background-color mr-6 border-card">
+
+        <div class="sub-title">
+            <mat-icon class="mat-icon-left-subtitle">{{'list'}}</mat-icon> <span>{{'Contas a pagar'}}</span>
+        </div>
+        <div class="p-4">
+            <btn-g btn-1 [name]="'Adicionar'" [icon]="'add'" (btn)="callRouter(addUrlRoute)"></btn-g>
+        </div>
+        <div class="align-h-center">
+            <mat-divider class="divider-line-categories-comp"></mat-divider>
+        </div>
+        <list-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)">
+        </list-g>
+
+    </mat-card>
+
+
+</div>

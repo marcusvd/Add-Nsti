@@ -1,0 +1,20 @@
+<div class="space-around mb-14">
+    <title-component [digit]="digitTitleComp" [textTitleComp]="textTitleComp" [icon]="'attach_money'">
+    </title-component>
+
+    <mat-card class="w-full sub-title-mat-card border-card">
+        <!-- <mat-card class="sub-title-mat-card border-card-categories-divide-comp"> -->
+
+        <div class="sub-title">
+            <mat-icon class="mat-icon-left-subtitle">{{iconSubTitleComp}}</mat-icon> <span>{{textSubTitleComp}}</span>
+        </div>
+
+        <ng-content select="[btns]"></ng-content>
+        <div class="align-h-center" *ngIf="!hideDivider">
+            <mat-divider class="divider-line-categories-comp"></mat-divider>
+        </div>
+        <ng-content select="[body]"></ng-content>
+
+    </mat-card>
+
+</div>

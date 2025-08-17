@@ -1,0 +1,82 @@
+    /* Customizing the MatPaginator appearance */
+    
+    .mat-paginator {
+        background-color: rgb(249, 249, 249);
+        border-radius: 5px;
+        padding: 10px;
+        width: 300px;
+        height: 5px;
+    }
+    
+    grid-list-common-table {
+        margin: -15px;
+    }
+    
+    .mat-card-sub-title {
+        height: 100%;
+        background-color: rgb(249, 249, 249);
+        border-top-right-radius: 20px;
+        border-top-left-radius: 20px;
+        padding: -330px;
+    }
+    
+    #btn-1 {
+        background-color: rgb(44, 161, 168);
+        color: white;
+        font-family: Mynerve;
+    }
+    
+    .mat-paginator-above-margin {
+        margin-top: 20px;
+    }
+    
+    .mat-paginator-below-margin {
+        margin-top: 50px;
+    }
+    
+    #space-components {
+        height: 20px;
+    }
+    
+    .dimensions-subtitle {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .space-subtitle {
+        margin-top: -4px;
+        padding-left: 3px;
+    }
+    
+    .bg-color-expired {
+        background-color: red;
+    }
+    
+    .bg-color-will-expire {
+        background-color: orange;
+    }
+    
+    .bg-color-paid {
+        background-color: green;
+    }
+    
+    .align-radio-button {
+        /* margin-right: 5px; */
+        margin-top: -6px;
+    }
+    
+    .space-radios-status {
+        padding-left: 50px;
+    }
+    
+    .space-radios-cycle {
+        padding-left: 70px;
+    }
+    
+    mat-radio-button {
+        font-family: Mynerve;
+    }
+    
+    .around {
+        padding-top: 30px;
+    }

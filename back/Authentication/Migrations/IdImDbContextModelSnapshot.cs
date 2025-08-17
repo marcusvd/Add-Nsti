@@ -22,7 +22,7 @@ namespace Authentication.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+            modelBuilder.Entity("Authentication.Entities.Business", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,6 +35,28 @@ namespace Authentication.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.ToTable("Business");
+                });
+
+            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessId");
 
                     b.ToTable("CompanyAuth");
                 });
@@ -98,6 +120,9 @@ namespace Authentication.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -168,6 +193,8 @@ namespace Authentication.Migrations
                         .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -282,6 +309,17 @@ namespace Authentication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+                {
+                    b.HasOne("Authentication.Entities.Business", "Business")
+                        .WithMany("Companies")
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Business");
+                });
+
             modelBuilder.Entity("Authentication.Entities.CompanyUserAccount", b =>
                 {
                     b.HasOne("Authentication.Entities.CompanyAuth", "CompanyAuth")
@@ -299,6 +337,17 @@ namespace Authentication.Migrations
                     b.Navigation("CompanyAuth");
 
                     b.Navigation("UserAccount");
+                });
+
+            modelBuilder.Entity("Authentication.Entities.UserAccount", b =>
+                {
+                    b.HasOne("Authentication.Entities.Business", "Business")
+                        .WithMany("UsersAccounts")
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Business");
                 });
 
             modelBuilder.Entity("Authentication.Entities.UserRole", b =>
@@ -354,6 +403,13 @@ namespace Authentication.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Authentication.Entities.Business", b =>
+                {
+                    b.Navigation("Companies");
+
+                    b.Navigation("UsersAccounts");
                 });
 
             modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>

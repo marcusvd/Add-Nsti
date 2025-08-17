@@ -68,4 +68,6 @@ public class IdentityEntitiesManagerRepository : IIdentityEntitiesManagerReposit
             throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenAddCompany);
 
     }
+
+    public async Task<bool> SaveAsync() => await _dbContext.SaveChangesAsync() > 0 ? true : false;
 }
