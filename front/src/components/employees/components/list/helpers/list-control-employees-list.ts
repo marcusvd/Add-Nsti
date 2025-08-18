@@ -11,6 +11,7 @@ import { PhoneNumberPipe } from '../../../../../shared/pipes/phone-number.pipe';
 import { ListEmployeeDto } from '../dtos/list-employees-dto';
 import { EmployeeDto } from '../../commons-components/dtos/employees-dto';
 import { EmployeesListService } from 'components/employees/services/employees-list.service';
+import { inject } from '@angular/core';
 
 
 export class ListControlEmployees extends BaseList {
@@ -26,17 +27,15 @@ export class ListControlEmployees extends BaseList {
   backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
 
   constructor(
-    override _router: Router,
-    public _http: HttpClient,
-    protected _phoneNumberPipe: PhoneNumberPipe,
-    protected _employeesListServices: EmployeesListService,
-  ) {
-    super(
-      new ListGDataService(),
-      _router,
+    // override _router: Router,
+    // public _http: HttpClient,
 
-    )
+  ) {
+    super()
   }
+
+  private _phoneNumberPipe = inject(PhoneNumberPipe);
+  private _employeesListServices = inject(EmployeesListService);
   // constructor(
   //   override _router: Router,
   //   public _http: HttpClient,
@@ -44,8 +43,8 @@ export class ListControlEmployees extends BaseList {
   //   protected _employeesListServices: EmployeesListService,
   // ) {
   //   super(
-  //     new ListGDataService(),
-  //     _router,
+  //
+  //
 
   //   )
   // }

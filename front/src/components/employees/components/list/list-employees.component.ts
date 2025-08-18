@@ -20,16 +20,16 @@ import { ListControlEmployees } from './helpers/list-control-employees-list';
 export class ListEmployeesComponent extends ListControlEmployees implements OnInit, OnDestroy {
 
   constructor(
-    override _router: Router,
-    override _http: HttpClient,
-    override _phoneNumberPipe: PhoneNumberPipe,
-    override _employeesListServices: EmployeesListService,
+    // override _router: Router,
+    // override _http: HttpClient,
+    // override _phoneNumberPipe: PhoneNumberPipe,
+    // override _employeesListServices: EmployeesListService,
   ) {
     super(
-      _router,
-      _http,
-      _phoneNumberPipe,
-      _employeesListServices
+
+      // _http,
+      // _phoneNumberPipe,
+      // _employeesListServices
     )
   }
 

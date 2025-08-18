@@ -1,16 +1,11 @@
 
-import { HttpClient } from '@angular/common/http';
 import { PageEvent } from '@angular/material/paginator';
-import { Router } from '@angular/router';
-import { map, Observable, of } from 'rxjs';
-import { DeleteServices } from 'shared/components/delete-dialog/services/delete.services';
+import { Observable, of } from 'rxjs';
 import { BaseList } from '../../../../shared/components/list-g/extends/base-list';
-import { ListGDataService } from '../../../../shared/components/list-g/list/data/list-g-data.service';
 import { OnClickInterface } from '../../../../shared/components/list-g/list/interfaces/on-click-interface';
-import { PhoneNumberPipe } from '../../../../shared/pipes/phone-number.pipe';
 
-import { ListAdmDto } from '../list/dtos/list-adm.dto';
 import { Business } from 'components/authentication/dtos/business';
+import { ListAdmDto } from '../list/dtos/list-adm.dto';
 
 
 export class ListControlAdm extends BaseList {
@@ -26,14 +21,14 @@ export class ListControlAdm extends BaseList {
   backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
 
   constructor(
-    override _router: Router,
+    // override _router: Router,
     // public _http: HttpClient,
     // protected _phoneNumberPipe: PhoneNumberPipe,
     // protected _deleteServices: DeleteServices,
   ) {
     super(
-      new ListGDataService(),
-      _router,
+      // 
+      // 
     )
   }
   // constructor(
@@ -45,8 +40,8 @@ export class ListControlAdm extends BaseList {
   //   protected _deleteServices: DeleteServices,
   // ) {
   //   super(
-  //     new ListGDataService(),
-  //     _router,
+  //     
+  //     
   //   )
   // }
 

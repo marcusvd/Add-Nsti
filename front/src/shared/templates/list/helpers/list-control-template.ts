@@ -42,7 +42,7 @@ export class ListControlFinancingsLoansExpenses extends BaseList {
   ) {
     super(
       new ListGDataService(_http),
-      _router,
+      
     )
   }
   labelHeaders = () => {

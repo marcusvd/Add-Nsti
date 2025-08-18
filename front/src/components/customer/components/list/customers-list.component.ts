@@ -38,22 +38,22 @@ import { ListCustomerDto } from './dtos/list-customer.dto';
 export class CustomersListComponent extends ListControlCustomers implements OnInit {
 
   constructor(
-    override _router: Router,
-    override _http: HttpClient,
-    override _entityTypePipe: EntityTypePipe,
-    override _phoneNumberPipe: PhoneNumberPipe,
-    override _customerServices: CustomerListService,
-    override _deleteServices: DeleteServices,
+    // override _router: Router,
+    // override _http: HttpClient,
+    // override _entityTypePipe: EntityTypePipe,
+    // override _phoneNumberPipe: PhoneNumberPipe,
+    // override _customerServices: CustomerListService,
+    // override _deleteServices: DeleteServices,
     private _dialog: MatDialog,
     private _communicationsAlerts: CommunicationAlerts,
   ) {
     super(
-      _router,
-      _http,
-      _entityTypePipe,
-      _phoneNumberPipe,
-      _customerServices,
-      _deleteServices
+
+      // _http,
+      // _entityTypePipe,
+      // _phoneNumberPipe,
+      // _customerServices,
+      // _deleteServices
     )
   }
 

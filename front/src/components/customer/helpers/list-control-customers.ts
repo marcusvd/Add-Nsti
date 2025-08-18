@@ -12,6 +12,7 @@ import { CustomerDto } from '../components/commons-components/dtos/customer-dto'
 import { EntityTypePipe } from '../components/commons-components/pipes/entity-type.pipe';
 import { ListCustomerDto } from '../components/list/dtos/list-customer.dto';
 import { CustomerListService } from '../services/customer-list.service';
+import { inject } from '@angular/core';
 
 
 export class ListControlCustomers extends BaseList {
@@ -27,29 +28,33 @@ export class ListControlCustomers extends BaseList {
   backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
 
   constructor(
-    override _router: Router,
-    public _http: HttpClient,
-    protected _entityTypePipe: EntityTypePipe,
-    protected _phoneNumberPipe: PhoneNumberPipe,
-    protected _customerServices: CustomerListService,
-    protected _deleteServices: DeleteServices,
+    // override _router: Router,
+    // public _http: HttpClient,
+
   ) {
     super(
-      new ListGDataService(),
-      _router,
+
+
     )
   }
+
+  private _entityTypePipe = inject(EntityTypePipe);
+  private _phoneNumberPipe = inject(PhoneNumberPipe);
+  private _customerServices = inject(CustomerListService);
+  private _deleteServices = inject(DeleteServices);
+
+
   // constructor(
   //   override _router: Router,
-  //   public _http: HttpClient,
+  // public _http: HttpClient,
   //   protected _entityTypePipe: EntityTypePipe,
   //   protected _phoneNumberPipe: PhoneNumberPipe,
   //   protected _customerServices: CustomerListService,
   //   protected _deleteServices: DeleteServices,
   // ) {
   //   super(
-  //     new ListGDataService(),
-  //     _router,
+  //
+  //
   //   )
   // }
 

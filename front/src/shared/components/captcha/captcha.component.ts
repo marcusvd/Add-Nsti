@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { Form, FormsModule, NgForm, NgModel } from '@angular/forms';
-import { CaptchaService } from './services/captcha.service';
-import { CommonModule, NgIf } from '@angular/common';
-import { RECAPTCHA_SETTINGS, RecaptchaComponent, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings } from 'ng-recaptcha';
+import { CommonModule } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { RECAPTCHA_SETTINGS, RecaptchaFormsModule, RecaptchaModule, RecaptchaSettings } from 'ng-recaptcha';
 
 @Component({
   selector: 'captcha', template: `

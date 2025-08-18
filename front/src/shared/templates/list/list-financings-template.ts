@@ -76,7 +76,7 @@ export class ListFinancingsLoansExpensesComponent extends ListControlFinancingsL
     private _fb: FormBuilder,
   ) {
     super(
-      _router,
+      
       _http,
       _dialog,
       _deleteServices,
@@ -101,7 +101,7 @@ export class ListFinancingsLoansExpensesComponent extends ListControlFinancingsL
   // workingBackEnd = new BackEndListFilterFinancingsLoansExpenses();
 
   pay = new TriggerPaymentFinancingsLoans(
-    this._router,
+    this.
     this._ptBrDatePipe,
     this._ptBrCurrencyPipe,
   );

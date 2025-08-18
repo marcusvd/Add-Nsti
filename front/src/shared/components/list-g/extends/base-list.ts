@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatPaginator as MatPaginator, PageEvent as PageEvent } from '@angular/material/paginator';
 import { NavigationExtras, Router } from "@angular/router";
 import * as diacritics from 'diacritics';
@@ -9,7 +9,7 @@ import { FieldsInterface } from '../list/interfaces/fields-interface';
 import { OrderbyInterface } from '../list/interfaces/orderby-interface';
 
 @Component({
-  selector: 'list-g',
+  selector: 'base-list',
   template: `
   `
 })
@@ -36,10 +36,9 @@ export class BaseList {
   @ViewChild('paginatorBelow') paginatorBelow!: MatPaginator
 
 
-  constructor(
-    protected _listGDataService?: ListGDataService,
-    protected _router?: Router,
-  ) { }
+  constructor() { }
+  private _listGDataService = inject(ListGDataService);
+  _router = inject(Router);
 
   pageChange(entities: any[], $event: PageEvent) {
 
