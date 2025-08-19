@@ -8,7 +8,6 @@ import { BaseForm } from '../../../shared/inheritance/forms/base-form';
 import { DefaultCompImports } from 'components/imports/default-comp-imports';
 import { MyUser } from '../dtos/my-user';
 import { AuthLoginImports } from '../imports/auth.imports';
-import { AuthService } from '../services/auth.service';
 import { LoginDto } from '../dtos/login-dto';
 import { LoginService } from '../services/login.service';
 import { WarningsService } from 'components/warnings/services/warnings.service';
@@ -73,6 +72,8 @@ export class LoginComponent extends BaseForm implements OnInit {
                 this._router.navigateByUrl('two-factor');
 
               }
+
+              console.log(user as UserTokenDto)
 
               localStorage.setItem("myUser", JSON.stringify(user));
 

@@ -6,7 +6,7 @@ import { ListAdmComponent } from "../adm/list/list-adm.component";
 
 const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
-  { path: 'adm', component: ListAdmComponent },
+  { path: 'adm-list/:id', component: ListAdmComponent },
 ]
 
 @NgModule({

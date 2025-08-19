@@ -4,9 +4,9 @@ using Authentication.Helpers;
 using Authentication.Entities;
 using Authentication.Exceptions;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using Authentication.Operations.CompanyUsrAcct;
-using Microsoft.Extensions.Configuration.UserSecrets;
+using Authentication.AuthenticationRepository.UserAccountRepository;
+using Authentication.Operations.Account;
+using Authentication.Operations.Dtos;
 
 
 namespace Authentication.Operations.Register;
@@ -16,22 +16,21 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
     private readonly ILogger<AuthGenericValidatorServices> _logger;
     private readonly UserManager<UserAccount> _userManager;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
+    private readonly IAccountManagerServices _accountManagerServices;
 
-    // private readonly EmailServer _emailService;
-    private readonly IIdentityEntitiesManagerRepository _identityEntitiesManagerRepository;
     private readonly JwtHandler _jwtHandler;
     private readonly IUrlHelper _url;
     public RegisterServices(
           UserManager<UserAccount> userManager,
           JwtHandler jwtHandler,
           IUrlHelper url,
-          IIdentityEntitiesManagerRepository identityEntitiesManagerRepository,
+        IAccountManagerServices accountManagerServices,
           AuthGenericValidatorServices genericValidatorServices,
           ILogger<AuthGenericValidatorServices> logger
       ) : base(userManager, jwtHandler)
     {
         _userManager = userManager;
-        _identityEntitiesManagerRepository = identityEntitiesManagerRepository;
+        _accountManagerServices = accountManagerServices;
         _jwtHandler = jwtHandler;
         _url = url;
         _genericValidatorServices = genericValidatorServices;
@@ -64,11 +63,40 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         await SendEmailConfirmationAsync(userAccount);
 
 
-        var claimsList = await BuildUserClaims(userAccount);
+        // var claimsList = await BuildUserClaims(userAccount);
+
+        var admRole = new UpdateUserRole
+        {
+            UserName = userAccount.Email,
+            Role = "SYSADMIN",
+            Delete = false
+        };
 
 
-        return await _jwtHandler.GenerateUserToken(claimsList, userAccount);
+        var getRoles = await _accountManagerServices.GetRoles(userAccount);
+
+
+        if (getRoles.Contains(admRole.Role))
+            await _accountManagerServices.UpdateUserRoles(admRole);
+        else
+        {
+            await _accountManagerServices.CreateRole(new RoleDto { Name = admRole.Role });
+            await _accountManagerServices.UpdateUserRoles(admRole);
+        }
+
+        return await CreateAuthenticationResponseAsync(userAccount);
     }
+
+    // private protected async Task<UserToken> CreateAuthenticationResponseAsync(UserAccount userAccount)
+    // {
+    //     var claimsList = await BuildUserClaims(userAccount);
+    //     var roles = await _userManager.GetRolesAsync(userAccount);
+    //     var token = await _jwtHandler.GenerateUserToken(claimsList, userAccount, roles);
+
+    //     return token;
+    // }
+
+
     private async Task ValidateUniqueUserCredentials(RegisterModel register)
     {
         if (await IsUserNameDuplicate(register.UserName))
@@ -96,7 +124,7 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
             Business = CreateBusiness(company.Name, company)
         };
 
-    
+
         userAccount.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = company, UserAccount = userAccount });
 
         // var business = CreateBusiness(company.Name, company, userAccount);
@@ -115,7 +143,7 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         };
         return companyAuth;
     }
-    
+
     private Business CreateBusiness(string companyName, CompanyAuth company)
     {
 

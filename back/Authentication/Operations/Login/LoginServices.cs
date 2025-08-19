@@ -4,8 +4,9 @@ using Authentication.Entities;
 using Authentication.Exceptions;
 using Authentication.Helpers;
 using Microsoft.Extensions.Logging;
-using Authentication.Operations.CompanyUsrAcct;
+
 using System.Linq;
+using Authentication.AuthenticationRepository.UserAccountRepository;
 
 
 namespace Authentication.Operations.Login;
@@ -13,7 +14,7 @@ namespace Authentication.Operations.Login;
 public class LoginServices : AuthenticationBase, ILoginServices
 {
     private UserManager<UserAccount> _userManager;
-    private readonly IIdentityEntitiesManagerRepository _identityEntitiesManagerRepository;
+    private readonly IUserAccountRepository _userAccountRepository;
     private readonly ILogger<AuthGenericValidatorServices> _logger;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     // private readonly EmailServer _emailService;
@@ -22,7 +23,7 @@ public class LoginServices : AuthenticationBase, ILoginServices
     public LoginServices(
           UserManager<UserAccount> userManager,
           ILogger<AuthGenericValidatorServices> logger,
-          IIdentityEntitiesManagerRepository identityEntitiesManagerRepository,
+           IUserAccountRepository userAccountRepository,
           //   EmailServer emailService,
           JwtHandler jwtHandler,
           //   IAuthenticationObjectMapperServices mapper,
@@ -33,20 +34,35 @@ public class LoginServices : AuthenticationBase, ILoginServices
         _logger = logger;
         // _emailService = emailService;
         _jwtHandler = jwtHandler;
-        _identityEntitiesManagerRepository = identityEntitiesManagerRepository;
+        _userAccountRepository = userAccountRepository;
         // _mapper = mapper;
         _genericValidatorServices = genericValidatorServices;
     }
+    //     public async Task<UserAccount> GetUserAccountFull(string email)
+    //     {
+    //         var userAny = _dbContext.Users.AsNoTracking().Any();
 
+    //         var invalidUser = new UserAccount
+    //         {
+    //             Id = -1,
+    //             UserName = "Invalid",
+    //             DisplayUserName = "Invalid@Invalid.com.br",
+    //             Email = "Invalid@Invalid.com.br"
+    //         };
+
+    //         if (userAny)
+    //             return await _dbContext.Users.AsNoTracking().Include(x => x.CompanyUserAccounts).FirstOrDefaultAsync(x => x.Email.Equals(email)) ?? invalidUser;
+
+    //         return invalidUser;
+    //     }
     public async Task<UserToken> LoginAsync(LoginModel user)
     {
         _genericValidatorServices.IsObjNull(user);
 
         // var userAccount = await FindUserAsync(user.Email);
 
-        var userAccount = await _identityEntitiesManagerRepository.GetUserAccountFull(user.Email);
+         var userAccount = await _userAccountRepository.GetUserAccountFull(user.Email);
 
-        // var companies = userAccount.CompanyUserAccounts.Any() ? userAccount.CompanyUserAccounts : [];
 
         if (userAccount == null)
         {

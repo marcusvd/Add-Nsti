@@ -6,6 +6,7 @@ import { OnClickInterface } from '../../../../shared/components/list-g/list/inte
 
 import { Business } from 'components/authentication/dtos/business';
 import { ListAdmDto } from '../list/dtos/list-adm.dto';
+import { inject } from '@angular/core';
 
 
 export class ListControlAdm extends BaseList {
@@ -20,6 +21,12 @@ export class ListControlAdm extends BaseList {
   controllerUrl: string = "environment._CUSTOMERS.split('/')[4]";
   backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
 
+
+  // private _admService = inject(AdmService);
+  // private _fb = inject(FormBuilder);
+  // private _warningsService = inject(WarningsService);
+  // private _snackBar = inject(MatSnackBar)
+
   constructor(
     // override _router: Router,
     // public _http: HttpClient,
@@ -27,8 +34,8 @@ export class ListControlAdm extends BaseList {
     // protected _deleteServices: DeleteServices,
   ) {
     super(
-      // 
-      // 
+      //
+      //
     )
   }
   // constructor(
@@ -40,8 +47,8 @@ export class ListControlAdm extends BaseList {
   //   protected _deleteServices: DeleteServices,
   // ) {
   //   super(
-  //     
-  //     
+  //
+  //
   //   )
   // }
 
@@ -199,13 +206,14 @@ export class ListControlAdm extends BaseList {
   // }
 
 
-  startSupply() {
+  startSupply(url:string, id: number) {
 
-    // let entities: ListAdmDto[] = [];
+    let entities: ListAdmDto[] = [];
 
-    // const customers: Observable<Business[]> = of(this._customerServices.getCustomersMoc());
+    const business: Observable<Business> = this._listGDataService.loadById$(url, id.toString());
+    business.subscribe(x => console.log(x))
 
-    // return customers.pipe(map(x => {
+    // return business.pipe(map(x => {
 
     //   x.forEach(y => {
     //     this.entities = this.supplyItemsGrid(entities, y);
@@ -218,8 +226,6 @@ export class ListControlAdm extends BaseList {
   }
 
 
-  getCurrent = () => {
-    this.entitiesFiltered$ = of(this.entities.slice(0, this.pageSize));
-  }
+
 }
 

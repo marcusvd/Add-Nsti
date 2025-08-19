@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Authentication;
 using Microsoft.AspNetCore.Identity;
 
 namespace Authentication.Entities;
@@ -81,18 +78,19 @@ public class AuthenticationBase
     private protected async Task<UserToken> CreateAuthenticationResponseAsync(UserAccount userAccount)
     {
         var claimsList = await BuildUserClaims(userAccount);
-        var token = await _jwtHandler.GenerateUserToken(claimsList, userAccount);
+        var roles = await _userManager.GetRolesAsync(userAccount);
+        var token = await _jwtHandler.GenerateUserToken(claimsList, userAccount, roles);
+
         return token;
     }
 
     private protected async Task<UserToken> CreateTwoFactorResponse(UserAccount userAccount)
     {
         var claimsList = await BuildUserClaims(userAccount);
-        var token = await _jwtHandler.GenerateUserToken(claimsList, userAccount);
+        var token = await _jwtHandler.GenerateUserToken(claimsList, userAccount, []);
         token.Action = "TwoFactor";
         return token;
     }
-
 
 
     public static async Task SendAsync(string To = "register@nostopti.com.br", string From = "register@nostopti.com.br", string DisplayName = "Sonny System",

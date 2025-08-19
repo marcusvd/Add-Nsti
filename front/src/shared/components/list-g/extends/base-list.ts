@@ -37,7 +37,9 @@ export class BaseList {
 
 
   constructor() { }
-  private _listGDataService = inject(ListGDataService);
+
+
+  _listGDataService = inject(ListGDataService);
   _router = inject(Router);
 
   pageChange(entities: any[], $event: PageEvent) {

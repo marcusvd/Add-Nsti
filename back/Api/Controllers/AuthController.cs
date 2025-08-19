@@ -2,7 +2,6 @@
 using Authentication.Operations.Account;
 using Authentication.Operations.Login;
 using Authentication.Operations.Register;
-// using Authentication.Operations.UrlGenerator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

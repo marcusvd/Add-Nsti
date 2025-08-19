@@ -1,9 +1,11 @@
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Authentication.Helpers;
 using Authentication.Entities;
 using Authentication.Exceptions;
 using Microsoft.Extensions.Logging;
+using Authentication.Operations.Dtos;
 
 
 namespace Authentication.Operations.Account;
@@ -12,11 +14,13 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
 {
     private readonly ILogger<AuthGenericValidatorServices> _logger;
     private readonly UserManager<UserAccount> _userManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly JwtHandler _jwtHandler;
     private readonly IUrlHelper _url;
     public AccountManagerServices(
           UserManager<UserAccount> userManager,
+          RoleManager<Role> roleManager,
           JwtHandler jwtHandler,
           IUrlHelper url,
           AuthGenericValidatorServices genericValidatorServices,
@@ -24,6 +28,7 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
       ) : base(userManager, jwtHandler)
     {
         _userManager = userManager;
+        _roleManager = roleManager;
         _jwtHandler = jwtHandler;
         _genericValidatorServices = genericValidatorServices;
         _logger = logger;
@@ -116,5 +121,25 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
         return identityResult.Succeeded;
     }
 
+    public async Task<string> UpdateUserRoles(UpdateUserRole role)
+    {
+        var myUser = await FindUserAsync(role.UserName);
+
+        if (role.Delete)
+        {
+            await _userManager.RemoveFromRoleAsync(myUser, role.Role);
+
+            return "Role removed";
+        }
+        else
+        {
+            await _userManager.AddToRoleAsync(myUser, role.Role);
+            return "Role Added";
+        }
+    }
+
+    public async Task<IList<string>> GetRoles(UserAccount userAccount) => await _userManager.GetRolesAsync(userAccount);
+
+    public async Task<IdentityResult> CreateRole(RoleDto roleDto) => await _roleManager.CreateAsync(new Role { Name = roleDto.Name });
 }
 

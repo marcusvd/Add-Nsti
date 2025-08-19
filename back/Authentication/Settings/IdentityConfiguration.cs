@@ -12,7 +12,9 @@ using Authentication.Operations.Login;
 using Authentication.Operations.Register;
 using Authentication.Context;
 using Authentication.Operations.Account;
-using Authentication.Operations.CompanyUsrAcct;
+using Authentication.AuthenticationRepository.UserAccountRepository;
+using Authentication.AuthenticationRepository.BusinessRepository;
+using Authentication.Operations.AuthAdm;
 
 
 
@@ -80,8 +82,12 @@ public static class IdentityConfiguration
         services.AddScoped<AuthGenericValidatorServices>();
         services.AddScoped<ILoginServices, LoginServices>();
         services.AddScoped<IRegisterServices, RegisterServices>();
-        services.AddScoped<IIdentityEntitiesManagerRepository, IdentityEntitiesManagerRepository>();
         services.AddScoped<IAccountManagerServices, AccountManagerServices>();
+
+        services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+
+        services.AddScoped<IAuthAdmServices, AuthAdmServices>();
+        services.AddScoped<IBusinessRepository, BusinessRepository>();
 
         //
         services.AddScoped<IUrlHelper>(x =>

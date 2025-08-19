@@ -30,7 +30,7 @@ namespace Authentication;
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        public Task<UserToken> GenerateUserToken(List<Claim> claims, UserAccount user)
+        public Task<UserToken> GenerateUserToken(List<Claim> claims, UserAccount user, IList<string> roles)
         {
            
             DateTime expiresDateTime = DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]!));
@@ -51,7 +51,9 @@ namespace Authentication;
                 UserName = user.UserName!,
                 Email = user.Email,
                 Id = user.Id,
-                CompanyUserAccounts = user.CompanyUserAccounts,
+                BusinessId = user.BusinessId,
+                Roles = roles,
+                // CompanyUserAccounts = user.CompanyUserAccounts,
                 Action = ""
             };
 
