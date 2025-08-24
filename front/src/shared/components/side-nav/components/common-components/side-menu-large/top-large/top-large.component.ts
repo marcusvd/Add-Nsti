@@ -36,7 +36,8 @@ export class SideMenuTopLargeComponent implements OnInit {
   userName!: string;
   businessId!: number;
   route!:string;
-  roles!:string[];
+  sysadm = false;
+  // roles!:string[];
 
 
   logOut() {
@@ -48,7 +49,7 @@ export class SideMenuTopLargeComponent implements OnInit {
 
     const isAuthenticated: UserTokenDto = JSON.parse(localStorage.getItem("myUser") ?? '{}');
 
-    this.roles = isAuthenticated.Roles;
+    this.sysadm = isAuthenticated.roles.includes("SYSADMIN");
 
     this.route = `/users/adm-list/${isAuthenticated.businessId}`
 

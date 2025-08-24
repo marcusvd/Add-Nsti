@@ -1,21 +1,17 @@
 
-import { Component, inject, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
 
 
 import { environment } from 'environments/environment';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
 // import { AdmService } from '../services/adm.service';
 
-import { PasswordConfirmationValidator } from '../../validators/password-confirmation-validator';
-import { PasswordValidator } from '../../validators/password-validator';
 // import { IsUserRegistereValidator } from '../../authentication/is-user-registered-validator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { WarningsService } from 'components/warnings/services/warnings.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ActivatedRoute, RouterModule, RouterOutlet } from '@angular/router';
+import { CompanyAddComponent } from 'components/company/components/add/add-company.component';
 import { AdmService } from '../../services/adm.service';
-import { ImportsListAdm } from '../imports/imports-list-adm';
 import { ListControlAdm } from '../helpers/list-control-adm';
+import { ImportsListAdm } from '../imports/imports-list-adm';
 
 
 @Component({
@@ -24,7 +20,11 @@ import { ListControlAdm } from '../helpers/list-control-adm';
   styleUrls: ['./list-adm.component.scss'],
   standalone: true,
   imports: [
-    ImportsListAdm
+    ImportsListAdm,
+    RouterOutlet,
+    RouterModule,
+    MatTabsModule,
+    CompanyAddComponent
   ],
   providers: [
     AdmService
@@ -64,7 +64,7 @@ export class ListAdmComponent extends ListControlAdm implements OnInit {
   backend = `${environment._BACK_END_ROOT_URL}/authadm/GetBusinessFullAsync`
 
   ngOnInit(): void {
-    
+
     const id = this._actRouter.snapshot.params['id'] as number;
 
     this.startSupply(this.backend, id)

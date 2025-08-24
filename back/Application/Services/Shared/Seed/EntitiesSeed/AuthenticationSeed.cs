@@ -1,11 +1,10 @@
-using System.Collections.Generic;
+
 using System.Net;
-using System.Threading.Tasks;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Shared.Dtos;
 
-using Authentication.Entities;
-using Authentication.Operations.Register;
+using Application.Services.Operations.Auth.Register;
+using Domain.Entities.Authentication;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed
 {
@@ -16,7 +15,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
         {
             _iRegisterServices = iRegisterServices;
         }
-        private CompanyDto NoStopTi()
+        private CompanyProfileDto NoStopTi()
         {
 
             List<SocialNetworkDto> socialMedias = new(){
@@ -24,10 +23,11 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                 new SocialNetworkDto(){Name = "Facebook", Url ="https://www.facebook.com/marquinho.brasileiro.9"},
             };
 
-            var company = new CompanyDto()
+            var company = new CompanyProfileDto()
             {
                 Id = 1,
-                Name = "No Stop Ti",
+                // Name = "No Stop Ti",
+                CompanyAuthId = "!",
                 Address = new()
                 {
                     ZipCode = "30285100",
@@ -40,8 +40,6 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                 },
                 Contact = ContactDto.Create(
                     0,
-                    null,
-                    1,
                     DateTime.MinValue,
                     DateTime.UtcNow,
                     "contato@nostopti.com.br",

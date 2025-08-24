@@ -3,9 +3,9 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Authentication.Entities;
+using Domain.Entities.Authentication;
 
-namespace Authentication;
+namespace Authentication.Jwt;
 
     public class JwtHandler
     {
@@ -36,9 +36,11 @@ namespace Authentication;
             DateTime expiresDateTime = DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]!));
 
             var tokenOptions = new JwtSecurityToken(
-                issuer: _jwtSettings["im_Issuer"],
-                audience: _jwtSettings["im_Audience"],
                 claims: claims,
+                issuer: _jwtSettings["validIssuer"],
+                audience: _jwtSettings["validAudience"],
+                // issuer: _jwtSettings["im_Issuer"],
+                // audience: _jwtSettings["im_Audience"],
                 expires: DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]!)),
                 signingCredentials: GetSigningCredentials()
             );
@@ -51,7 +53,7 @@ namespace Authentication;
                 UserName = user.UserName!,
                 Email = user.Email,
                 Id = user.Id,
-                BusinessId = user.BusinessId,
+                BusinessId = user.BusinessAuthId,
                 Roles = roles,
                 // CompanyUserAccounts = user.CompanyUserAccounts,
                 Action = ""

@@ -1,11 +1,50 @@
-<default-component [digitTitleComp]="'|'" [textTitleComp]="'Despesas Anuais'" [textSubTitleComp]="'Cadastro'" [iconSubTitleComp]="'add'">
-<!-- <default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'Despesas Anuais'" [textSubTitleComp]="'Cadastro'" [iconSubTitleComp]="'add'"> -->
-    <div btns>
+<default-component [digitTitleComp]="'|'" [textTitleComp]="'Administração'" [textSubTitleComp]="'Cadastro'"
+  [iconSubTitleComp]="'add'" [hideDivider]="true">
 
-    </div>
-    <div body>
-        <!-- <list-card-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$">
-        <list-card-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)">
-        </list-card-g> -->
-    </div>
+
+
+
+
+
+
+  <!-- <default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'Despesas Anuais'" [textSubTitleComp]="'Cadastro'" [iconSubTitleComp]="'add'"> -->
+  <div btns>
+   <div class="p-4">
+    <h3>{{this.business.name}}</h3>
+   </div>
+    <!-- <div class="p-4">
+      <div class="grid grid-cols-[60px_60px_60px] gap-10">
+        <div>
+          <mat-label>Usuários</mat-label>
+        </div>
+        <div>
+        </div>
+        <div>
+          <mat-label>Empresas</mat-label>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div body>
+    <!-- <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab label="Usuários">
+
+      </mat-tab>
+
+
+      <mat-tab label="Empresas" *ngIf="this.entityBusiness$">
+        <add-company [entity]="this.entityBusiness$"></add-company>
+      </mat-tab>
+    </mat-tab-group> -->
+
+
+
+    <list-card-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$">
+    </list-card-g>
+
+
+
+    <!-- <list-card-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)"> -->
+  </div>
+
 </default-component>

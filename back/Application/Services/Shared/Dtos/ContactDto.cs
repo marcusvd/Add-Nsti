@@ -1,4 +1,4 @@
-using Domain.Entities.Companies;
+using Domain.Entities.System.BusinessesCompanies;
 using Domain.Entities.Shared;
 
 namespace Application.Services.Shared.Dtos
@@ -7,8 +7,6 @@ namespace Application.Services.Shared.Dtos
     {
         public ContactDto(
             int id,
-            Company? company,
-            int companyId,
             DateTime deleted,
             DateTime registered,
             string email,
@@ -20,8 +18,6 @@ namespace Application.Services.Shared.Dtos
         )
         {
             Id = id;
-            Company = company;
-            CompanyId = companyId;
             Deleted = deleted;
             Registered = registered;
             Email = email;
@@ -40,8 +36,6 @@ namespace Application.Services.Shared.Dtos
         public List<SocialNetworkDto> SocialMedias { get; set; }
         public static ContactDto Create(
             int id,
-            Company? company,
-            int companyId,
             DateTime deleted,
             DateTime registered,
             string email,
@@ -52,7 +46,7 @@ namespace Application.Services.Shared.Dtos
             List<SocialNetworkDto> socialMedias)
         {
             // Aqui você pode adicionar validações, normalizações, etc.
-            return new ContactDto(id, company, companyId, deleted, registered, email, site, cel, zap, landline, socialMedias);
+            return new ContactDto(id, deleted, registered, email, site, cel, zap, landline, socialMedias);
         }
 
 

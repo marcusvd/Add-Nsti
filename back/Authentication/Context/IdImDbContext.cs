@@ -1,5 +1,4 @@
-
-using Authentication.Entities;
+using Domain.Entities.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,7 @@ IdentityUserToken<int>>
 {
 
     public DbSet<CompanyUserAccount> CompaniesUsersAccounts { get; set; }
-    public DbSet<CompanyAuth> CompanyAuth { get; set; }
+    public DbSet<CompanyAuth> CompaniesAuth { get; set; }
 
     
     public IdImDbContext(DbContextOptions<IdImDbContext> opt) : base(opt)

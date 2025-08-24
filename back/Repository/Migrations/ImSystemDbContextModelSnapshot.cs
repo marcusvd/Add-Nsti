@@ -22,146 +22,6 @@ namespace Repository.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Companies.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("MN_Companies");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Customers.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CNPJ")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Deleted")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("EntityType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("Registered")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("TradeName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("MN_Customers");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Profiles.MyUser", b =>
-                {
-                    b.Property<int>("UserAccoutnId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Registered")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("UserAccoutnId");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ContactId");
-
-                    b.HasIndex("ProfileId");
-
-                    b.ToTable("AU_MyUsers");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Profiles.Profile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AU_ProfileUsers");
-                });
-
             modelBuilder.Entity("Domain.Entities.Shared.Address", b =>
                 {
                     b.Property<int>("Id")
@@ -171,37 +31,30 @@ namespace Repository.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Complement")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Deleted")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("District")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Number")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Registered")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("State")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Street")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ZipCode")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -218,29 +71,24 @@ namespace Repository.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Cel")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Deleted")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Landline")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Registered")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Site")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Zap")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -255,9 +103,6 @@ namespace Repository.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
 
                     b.Property<int>("ContactId")
                         .HasColumnType("int");
@@ -278,121 +123,259 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
                     b.HasIndex("ContactId");
 
                     b.ToTable("SD_socialnetworks");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Companies.Company", b =>
+            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.BusinessProfile", b =>
                 {
-                    b.HasOne("Domain.Entities.Shared.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("Domain.Entities.Shared.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Navigation("Address");
+                    b.Property<string>("BusinessAuthId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Navigation("Contact");
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MN_businesses_profiles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Customers.Customer", b =>
+            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.CompanyProfile", b =>
                 {
-                    b.HasOne("Domain.Entities.Shared.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("Domain.Entities.Companies.Company", "Company")
-                        .WithMany("Customers")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.HasOne("Domain.Entities.Shared.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
 
-                    b.Navigation("Address");
+                    b.Property<string>("CompanyAuthId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Navigation("Company");
+                    b.Property<int?>("ContactId")
+                        .HasColumnType("int");
 
-                    b.Navigation("Contact");
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("MN_Companies_profiles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Profiles.MyUser", b =>
+            modelBuilder.Entity("Domain.Entities.System.CustomerCompany", b =>
                 {
-                    b.HasOne("Domain.Entities.Shared.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
-                    b.HasOne("Domain.Entities.Companies.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
 
-                    b.HasOne("Domain.Entities.Shared.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
 
-                    b.HasOne("Domain.Entities.Profiles.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<DateTime>("LinkedOn")
+                        .HasColumnType("datetime(6)");
 
-                    b.Navigation("Address");
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
 
-                    b.Navigation("Company");
+                    b.HasKey("CustomerId", "CompanyId");
 
-                    b.Navigation("Contact");
+                    b.HasIndex("CompanyId");
 
-                    b.Navigation("Profile");
+                    b.ToTable("CustomerCompany");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.Customers.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CNPJ")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("EntityType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TradeName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("MN_Customers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.Profiles.UserProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("UserAccountId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("PF_UserProfiles");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shared.SocialNetwork", b =>
                 {
-                    b.HasOne("Domain.Entities.Companies.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Shared.Contact", "Contact")
                         .WithMany("SocialMedias")
                         .HasForeignKey("ContactId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Company");
+                    b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.CompanyProfile", b =>
+                {
+                    b.HasOne("Domain.Entities.Shared.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.HasOne("Domain.Entities.Shared.Contact", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId");
+
+                    b.Navigation("Address");
 
                     b.Navigation("Contact");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Companies.Company", b =>
+            modelBuilder.Entity("Domain.Entities.System.CustomerCompany", b =>
                 {
-                    b.Navigation("Customers");
+                    b.HasOne("Domain.Entities.System.BusinessesCompanies.CompanyProfile", "Company")
+                        .WithMany("CustomersCompanies")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.System.Customers.Customer", "CUstomer")
+                        .WithMany("CustomersCompanies")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CUstomer");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.Customers.Customer", b =>
+                {
+                    b.HasOne("Domain.Entities.Shared.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.HasOne("Domain.Entities.Shared.Contact", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId");
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.Profiles.UserProfile", b =>
+                {
+                    b.HasOne("Domain.Entities.Shared.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.HasOne("Domain.Entities.Shared.Contact", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId");
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Contact");
                 });
 
             modelBuilder.Entity("Domain.Entities.Shared.Contact", b =>
                 {
                     b.Navigation("SocialMedias");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.CompanyProfile", b =>
+                {
+                    b.Navigation("CustomersCompanies");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.Customers.Customer", b =>
+                {
+                    b.Navigation("CustomersCompanies");
                 });
 #pragma warning restore 612, 618
         }

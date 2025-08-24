@@ -6,6 +6,7 @@ using Repository.Data.PersonalData.Contracts;
 using Repository.Data.PersonalData.Operations;
 using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.Main.Customers;
+using Repository.Data.Operations.BusinessesProfiles;
 
 namespace UnitOfWork.Persistence.Operations
 {
@@ -17,6 +18,26 @@ namespace UnitOfWork.Persistence.Operations
             _CONTEXT = CONTEXT;
         }
 
+        #region USER_PROFILE
+        private BusinessesProfilesRepository _BUSINESS_PROFILE_REPO;
+        public IBusinessesProfilesRepository BusinessesProfiles
+        {
+            get
+            {
+                return _BUSINESS_PROFILE_REPO = _BUSINESS_PROFILE_REPO ?? new BusinessesProfilesRepository(_CONTEXT);
+            }
+        }
+        #endregion      
+        #region USER_PROFILE
+        private UserProfileRepository _USER_PROFILE_REPO;
+        public IUserProfileRepository UsersProfiles
+        {
+            get
+            {
+                return _USER_PROFILE_REPO = _USER_PROFILE_REPO ?? new UserProfileRepository(_CONTEXT);
+            }
+        }
+        #endregion      
         #region CUSTOMER
         private CustomerRepository _CUSTOMER_REPO;
         public ICustomerRepository Customers
@@ -28,12 +49,12 @@ namespace UnitOfWork.Persistence.Operations
         }
         #endregion      
         #region COMPANIES
-        private CompanyRepository _COMPANIES_REPO;
-        public ICompanyRepository Companies
+        private CompanyProfileRepository _COMPANIES_REPO;
+        public ICompanyProfileRepository CompaniesProfile
         {
             get
             {
-                return _COMPANIES_REPO = _COMPANIES_REPO ?? new CompanyRepository(_CONTEXT);
+                return _COMPANIES_REPO = _COMPANIES_REPO ?? new CompanyProfileRepository(_CONTEXT);
             }
         }
         #endregion

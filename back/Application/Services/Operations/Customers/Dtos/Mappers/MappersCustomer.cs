@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Application.Services.Operations.Inheritances.Enums;
 using Application.Services.Shared.Dtos.Mappers;
-using Domain.Entities.Customers;
+using Domain.Entities.System.Customers;
 
 namespace Application.Services.Operations.Customers.Dtos.Mappers;
 
@@ -43,7 +43,6 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
         var obj = new CustomerDto()
         {
             Id = entity.Id,
-            CompanyId = entity.CompanyId,
             Deleted = entity.Deleted,
             Registered = entity.Registered,
             Name = entity.Name,
@@ -59,15 +58,19 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
     }
     public Customer CustomerMapper(CustomerDto entity)
     {
-        if (entity == null) return new();
+        if (entity == null) return new Customer
+        {
+            Name = "invalid",
+            TradeName = "invalid",
+            CNPJ = "000.000.000-00",
+        };
 
         var obj = new Customer()
         {
             Id = entity.Id,
-            CompanyId = entity.CompanyId,
             Deleted = entity.Deleted,
             Registered = entity.Registered,
-
+            TradeName = entity.TradeName,
             Name = entity.Name,
             CNPJ = entity.CNPJ,
             EntityType = (EntityTypeEnum)entity.EntityType,
@@ -81,11 +84,16 @@ public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustome
     }
     public Customer CustomerUpdateMapper(CustomerDto dto, Customer db)
     {
-        if (dto == null) return new();
+        if (dto == null) return new Customer
+        {
+            Name = "invalid",
+            TradeName = "invalid",
+            CNPJ = "000.000.000-00",
+        };
 
         db.Id = dto.Id;
-        db.CompanyId = dto.CompanyId;
         db.Name = dto.Name;
+        db.TradeName = dto.TradeName;
         db.CNPJ = dto.CNPJ;
         db.EntityType = (EntityTypeEnum)dto.EntityType;
         db.Description = dto.Description;

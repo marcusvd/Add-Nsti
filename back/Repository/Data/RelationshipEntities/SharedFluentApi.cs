@@ -10,8 +10,7 @@ namespace Repository.Data.RelationshipEntities
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.Ignore(x=> x.CompanyId);
-            builder.Ignore(x=> x.Company);
+           
            
          }
     }
@@ -20,8 +19,7 @@ namespace Repository.Data.RelationshipEntities
     {
         public void Configure(EntityTypeBuilder<Contact> builder)
         {
-            builder.Ignore(x=> x.CompanyId);
-            builder.Ignore(x=> x.Company);
+         
           
          }
     }

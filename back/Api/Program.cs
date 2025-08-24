@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddNewtonsoftJsonControllers();
 builder.Services.AddIdentitySettings();
 builder.Services.AddDiIdentity();
+builder.Services.AddDiAuthentication();
 
 builder.Services.AddDiServicesRepositories();
 

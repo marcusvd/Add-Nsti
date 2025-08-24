@@ -211,7 +211,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

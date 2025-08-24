@@ -3,7 +3,7 @@
 // using Application.Services.Operations.Inheritances.Enums;
 // using Application.Services.Shared.Dtos.Mappers;
 // using Authentication;
-// using Domain.Entities.Customers;
+// using Domain.Entities.System.Customers;
 
 // namespace Application.Services.Operations.Authentication.Dtos.Mappers;
 

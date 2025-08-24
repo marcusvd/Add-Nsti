@@ -1,4 +1,4 @@
-using Authentication.Entities;
+using Domain.Entities.Authentication;
 using Authentication.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +29,7 @@ public class UserAccountRepository : AuthRepository<UserAccount>, IUserAccountRe
             return new UserAccount
             {
                 Id = -1,
+                UserProfileId = "-1",
                 UserName = "Invalid",
                 DisplayUserName = "Invalid@Invalid.com.br",
                 Email = "Invalid@Invalid.com.br"

@@ -13,13 +13,15 @@ using Repository.Data.Operations.Main.Customers;
 using UnitOfWork.Persistence.Operations;
 using Application.Services.Shared.Email;
 using FluentValidation.AspNetCore;
+using Authentication.Operations.AuthAdm;
+using Authentication.AuthenticationRepository.BusinessAuthRepository;
 
 
 namespace Application.Services.Helpers.Extensions;
 
 public static class DiApplication
 {
-   
+
 
     public static void AddDiServicesRepositories(this IServiceCollection services)
     {
@@ -36,16 +38,19 @@ public static class DiApplication
         #region Customer
         services.AddScoped<ICustomerObjectMapperServices, CustomerObjectMapperServices>();
         services.AddScoped<ICustomerAddServices, CustomerAddServices>();
-        services.AddScoped<ICustomerSearchService, CustomerSearchService>();
-        services.AddScoped<ICustomerGetServices, CustomerGetServices>();
+        // services.AddScoped<ICustomerSearchService, CustomerSearchService>();
+        // services.AddScoped<ICustomerGetServices, CustomerGetServices>();
         services.AddScoped<ICustomerUpdateServices, CustomerUpdateServices>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         #endregion
 
         #region Company
-        services.AddScoped<ICompanyAddService, CompanyAddService>();
+        services.AddScoped<IProfilesCrudService, ProfilesCrudService>();
+        #endregion
+        #region Company
+        services.AddScoped<ICompanyProfileAddService, CompanyProfileAddService>();
         services.AddScoped<ICompanyGetService, CompanyGetService>();
-        services.AddScoped<ICompanyRepository, CompanyRepository>();
+        services.AddScoped<ICompanyProfileRepository, CompanyProfileRepository>();
         #endregion
         #region Addresses
         // services.AddScoped<IAddressesRepository, AddressesRepository>();
@@ -62,6 +67,9 @@ public static class DiApplication
         services.AddScoped<EmailServer>();
         // services.AddScoped<Email>();
         #endregion
+        
+          services.AddScoped<IAuthAdmServices,AuthAdmServices>();
+          services.AddScoped<IBusinessAuthRepository,BusinessAuthRepository>();
 
     }
     public static void AddDiFluentValidationAutoValidation(this IServiceCollection services)

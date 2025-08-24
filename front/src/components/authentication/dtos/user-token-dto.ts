@@ -7,5 +7,5 @@ export class UserTokenDto {
   userName!: string;
   email!: string;
   action!: string;
-  Roles!: string[];
+  roles!: string[];
 }

@@ -1,12 +1,12 @@
-import { MyUser } from "../../components/authentication/dtos/my-user";
-import { CompanyDto } from "./company-dto";
+import { CompanyAuth } from "components/authentication/dtos/company-auth";
+import { UserAccount } from "../../components/authentication/dtos/user-account";
 
 export abstract class RootBase {
   id!: number;
   userId!: number;
-  user?: MyUser;
+  user?: UserAccount;
   companyId!: number;
-  company?: CompanyDto;
+  company?: CompanyAuth;
   deleted!: Date;
   registered!: Date;
 }

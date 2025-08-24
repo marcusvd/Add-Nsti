@@ -2,7 +2,7 @@ using System;
 using Application.Services.Operations.Inheritances;
 using Application.Services.Operations.Inheritances.Enums;
 using Application.Services.Shared.Dtos;
-using Domain.Entities.Customers;
+using Domain.Entities.System.Customers;
 
 namespace Application.Services.Operations.Customers.Dtos
 {

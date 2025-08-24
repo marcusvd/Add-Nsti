@@ -38,6 +38,8 @@ export class NameCpfCnpjComponent extends BaseForm implements OnChanges {
   @Input() override  formMain!: FormGroup;
   @Input() name: boolean = true;
   @Input() btnGetData: boolean = true;
+  @Input() formCtrlName = 'entityType';
+
 
   checkPjPf: boolean = false;
   cnpjNumbers: string = '';

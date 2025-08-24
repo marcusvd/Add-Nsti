@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Domain.Entities.Main;
-using Domain.Entities.Customers;
+using Domain.Entities.System.Customers;
 
 
 namespace Application.Services.Operations.Customers.Dtos.Mappers

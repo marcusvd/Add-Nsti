@@ -835,6 +835,7 @@
       "System.Threading.Channels/6.0.0": {},
       "Authentication/1.0.0": {
         "dependencies": {
+          "Domain": "1.0.0",
           "FluentValidation.AspNetCore": "11.2.2",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.4",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.4",

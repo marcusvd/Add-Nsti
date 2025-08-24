@@ -5,12 +5,12 @@ namespace Domain.Entities.Shared
 {
     public class Contact: RootBase
     {
-        public string Email { get; set; }
-        public string Site { get; set; }
-        public string Cel { get; set; }
-        public string Zap { get; set; }
-        public string Landline { get; set; }
-        public List<SocialNetwork> SocialMedias { get; set; } = new List<SocialNetwork>();
+        public string? Email { get; set; } = string.Empty;
+        public string? Site { get; set; } = string.Empty;
+        public string? Cel { get; set; } = string.Empty;
+        public string? Zap { get; set; } = string.Empty;
+        public string? Landline { get; set; } = string.Empty;
+        public List<SocialNetwork>? SocialMedias { get; set; } = new List<SocialNetwork>();
 
     }
 }

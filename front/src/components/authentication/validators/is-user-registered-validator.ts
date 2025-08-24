@@ -5,11 +5,11 @@ import { environment } from "environments/environment";
 import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BackEndService } from "shared/services/back-end/backend.service";
-import { MyUser } from "../dtos/my-user";
+import { UserAccount } from "../dtos/user-account";
 
 
 @Injectable({ providedIn: 'root' })
-export class IsUserRegisteredValidator extends  BackEndService<MyUser> implements AsyncValidator {
+export class IsUserRegisteredValidator extends  BackEndService<UserAccount> implements AsyncValidator {
 
   constructor() {super()}
 

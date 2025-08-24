@@ -2,15 +2,16 @@ namespace Application.Services.Operations.Auth.Dtos;
 
 public class UserAccountDto
 {
-    public int Id { get; set; }
-    public int CompanyId { get; set; }
-    // public CompanyDto Company { get; set; }
-    // public AddressDto Address { get; set; }
-    // public ContactDto Contact { get; set; }
-    public string? UserName { get; set; }
-    public string? Email { get; set; }
-    public string? Password { get; set; }
-    public string? ConfirmPassword { get; set; }
-    public bool PasswordChanged { get; set; }
-    public bool TwoFactorEnabled { get; set; }
+    public int BusinessAuthId { get; set; }
+    public required string UserProfileId { get; set; }
+    public BusinessAuthDto? BusinessAuth { get; set; }
+    public DateTime Deleted { get; set; } = DateTime.MinValue;
+    public DateTime Registered { get; set; } = DateTime.UtcNow;
+    public DateTime? LastLogin { get; set; }
+    public string? RefreshToken { get; set; }
+    public required string DisplayUserName { get; set; }
+    public required string Email { get; set; }
+    public DateTime RefreshTokenExpiryTime { get; set; }
+    // public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    // public ICollection<CompanyUserAccount> CompanyUserAccounts { get; set; } = new List<CompanyUserAccount>();
 }

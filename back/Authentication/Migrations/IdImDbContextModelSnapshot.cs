@@ -22,7 +22,7 @@ namespace Authentication.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Authentication.Entities.Business", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.BusinessAuth", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,16 +30,26 @@ namespace Authentication.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BusinessProfileId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Business");
+                    b.ToTable("BusinessAuth");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.CompanyAuth", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,18 +60,28 @@ namespace Authentication.Migrations
                     b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CompanyProfileId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessId");
 
-                    b.ToTable("CompanyAuth");
+                    b.ToTable("CompaniesAuth");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.CompanyUserAccount", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.CompanyUserAccount", b =>
                 {
                     b.Property<int>("CompanyAuthId")
                         .HasColumnType("int");
@@ -69,7 +89,13 @@ namespace Authentication.Migrations
                     b.Property<int>("UserAccountId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("LinkedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Registered")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("CompanyAuthId", "UserAccountId");
@@ -79,7 +105,7 @@ namespace Authentication.Migrations
                     b.ToTable("CompaniesUsersAccounts");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.Role", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,6 +115,11 @@ namespace Authentication.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DisplayRole")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
@@ -108,7 +139,7 @@ namespace Authentication.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("Authentication.Entities.UserAccount", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.UserAccount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -119,18 +150,12 @@ namespace Authentication.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BusinessId")
+                    b.Property<int>("BusinessAuthId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("Deleted")
                         .HasColumnType("datetime(6)");
@@ -192,9 +217,13 @@ namespace Authentication.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
+                    b.Property<string>("UserProfileId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessId");
+                    b.HasIndex("BusinessAuthId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -206,7 +235,7 @@ namespace Authentication.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Authentication.Entities.UserRole", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.UserRole", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -309,9 +338,9 @@ namespace Authentication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.CompanyAuth", b =>
                 {
-                    b.HasOne("Authentication.Entities.Business", "Business")
+                    b.HasOne("Domain.Entities.Authentication.BusinessAuth", "Business")
                         .WithMany("Companies")
                         .HasForeignKey("BusinessId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -320,15 +349,15 @@ namespace Authentication.Migrations
                     b.Navigation("Business");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.CompanyUserAccount", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.CompanyUserAccount", b =>
                 {
-                    b.HasOne("Authentication.Entities.CompanyAuth", "CompanyAuth")
+                    b.HasOne("Domain.Entities.Authentication.CompanyAuth", "CompanyAuth")
                         .WithMany("CompanyUserAccounts")
                         .HasForeignKey("CompanyAuthId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Authentication.Entities.UserAccount", "UserAccount")
+                    b.HasOne("Domain.Entities.Authentication.UserAccount", "UserAccount")
                         .WithMany("CompanyUserAccounts")
                         .HasForeignKey("UserAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -339,26 +368,26 @@ namespace Authentication.Migrations
                     b.Navigation("UserAccount");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.UserAccount", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.UserAccount", b =>
                 {
-                    b.HasOne("Authentication.Entities.Business", "Business")
+                    b.HasOne("Domain.Entities.Authentication.BusinessAuth", "BusinessAuth")
                         .WithMany("UsersAccounts")
-                        .HasForeignKey("BusinessId")
+                        .HasForeignKey("BusinessAuthId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Business");
+                    b.Navigation("BusinessAuth");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.UserRole", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.UserRole", b =>
                 {
-                    b.HasOne("Authentication.Entities.Role", "Role")
+                    b.HasOne("Domain.Entities.Authentication.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Authentication.Entities.UserAccount", "UserAccount")
+                    b.HasOne("Domain.Entities.Authentication.UserAccount", "UserAccount")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -371,7 +400,7 @@ namespace Authentication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("Authentication.Entities.Role", null)
+                    b.HasOne("Domain.Entities.Authentication.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -380,7 +409,7 @@ namespace Authentication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("Authentication.Entities.UserAccount", null)
+                    b.HasOne("Domain.Entities.Authentication.UserAccount", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -389,7 +418,7 @@ namespace Authentication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("Authentication.Entities.UserAccount", null)
+                    b.HasOne("Domain.Entities.Authentication.UserAccount", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -398,31 +427,31 @@ namespace Authentication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("Authentication.Entities.UserAccount", null)
+                    b.HasOne("Domain.Entities.Authentication.UserAccount", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Authentication.Entities.Business", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.BusinessAuth", b =>
                 {
                     b.Navigation("Companies");
 
                     b.Navigation("UsersAccounts");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.CompanyAuth", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.CompanyAuth", b =>
                 {
                     b.Navigation("CompanyUserAccounts");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.Role", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Authentication.Entities.UserAccount", b =>
+            modelBuilder.Entity("Domain.Entities.Authentication.UserAccount", b =>
                 {
                     b.Navigation("CompanyUserAccounts");
 

@@ -1,25 +1,31 @@
 
 import { PageEvent } from '@angular/material/paginator';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { BaseList } from '../../../../shared/components/list-g/extends/base-list';
 import { OnClickInterface } from '../../../../shared/components/list-g/list/interfaces/on-click-interface';
 
-import { Business } from 'components/authentication/dtos/business';
+import { BusinessAuth } from 'components/authentication/dtos/business-auth';
 import { ListAdmDto } from '../list/dtos/list-adm.dto';
 import { inject } from '@angular/core';
+import { CompanyAuth } from 'components/authentication/dtos/company-auth';
 
 
 export class ListControlAdm extends BaseList {
 
+
+  business!: BusinessAuth;
+
+  entityBusiness$!: Observable<BusinessAuth>;
+
   entities$!: Observable<ListAdmDto[]>;
   entities: ListAdmDto[] = [];
   entitiesFiltered$!: Observable<ListAdmDto[] | undefined>;
-  entitiesFiltered: ListAdmDto[] = [];
-  length = 0;
-  showHideFilter = false;
-  term!: string;
-  controllerUrl: string = "environment._CUSTOMERS.split('/')[4]";
-  backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
+  // entitiesFiltered: ListAdmDto[] = [];
+  // length = 0;
+  // showHideFilter = false;
+  // term!: string;
+  // controllerUrl: string = "environment._CUSTOMERS.split('/')[4]";
+  // backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
 
 
   // private _admService = inject(AdmService);
@@ -52,57 +58,57 @@ export class ListControlAdm extends BaseList {
   //   )
   // }
 
-  labelHeadersMiddle = () => {
+  labelHeaders = () => {
     return [
       { key: '', style: 'cursor: pointer;' },
       { key: 'Nome', style: 'cursor: pointer;' },
-      { key: 'Entidade', style: 'cursor: pointer;' },
-      { key: 'Cel', style: 'cursor: pointer;' }
+      // { key: 'Entidade', style: 'cursor: pointer;' },
+      // { key: 'Cel', style: 'cursor: pointer;' }
     ]
   }
 
-  fieldsHeadersMiddle = () => {
+  fieldsHeaders = () => {
     return [
       { key: 'id', style: '' },
       { key: 'name', style: '' },
-      { key: 'entityTypeToView', style: '' },
-      { key: 'contact', style: '' }
+      // { key: 'entityTypeToView', style: '' },
+      // { key: 'contact', style: '' }
     ]
   }
 
-  onPageChange($event: PageEvent) {
+  // onPageChange($event: PageEvent) {
 
-    if ($event.previousPageIndex ?? 0 < $event.pageIndex)
-      this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
+  //   if ($event.previousPageIndex ?? 0 < $event.pageIndex)
+  //     this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
 
-    else if ($event.previousPageIndex ?? 0 > $event.pageIndex)
-      this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
+  //   else if ($event.previousPageIndex ?? 0 > $event.pageIndex)
+  //     this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
 
-    if (this.term) {
-      this.entitiesFiltered$ = of(this.pageChange(this.searchListEntities(this.entitiesFiltered, this.term), $event)?.filter(x => x != null))
-      this.length = this.searchListEntities(this.entitiesFiltered, this.term).length
-    }
+  //   if (this.term) {
+  //     this.entitiesFiltered$ = of(this.pageChange(this.searchListEntities(this.entitiesFiltered, this.term), $event)?.filter(x => x != null))
+  //     this.length = this.searchListEntities(this.entitiesFiltered, this.term).length
+  //   }
 
-  }
+  // }
 
-  onClickOrderByFields(field: string, entities$: Observable<ListAdmDto[] | undefined>) {
+  // onClickOrderByFields(field: string, entities$: Observable<ListAdmDto[] | undefined>) {
 
-    switch (field) {
-      case 'name':
+  //   switch (field) {
+  //     case 'name':
 
-        this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
-        break;
+  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
+  //       break;
 
-      case 'assured':
-        this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
-        break;
+  //     case 'assured':
+  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
+  //       break;
 
-      case 'responsible':
-        this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: 0 }) as Observable<ListAdmDto[]>;
-        break;
-    }
+  //     case 'responsible':
+  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: 0 }) as Observable<ListAdmDto[]>;
+  //       break;
+  //   }
 
-  }
+  // }
 
   onClickButton(field: string) {
   }
@@ -139,7 +145,7 @@ export class ListControlAdm extends BaseList {
   }
 
 
-  supplyItemsGrid = (customerList: ListAdmDto[], customer: Business) => {
+  supplyItemsGrid = (companyList: ListAdmDto[], company: CompanyAuth) => {
 
     const items: ListAdmDto = new ListAdmDto();
 
@@ -156,29 +162,15 @@ export class ListControlAdm extends BaseList {
       },
 
       name: {
-        key: customer.name,
+        key: company.name,
         styleCell: 'width:100%;',
 
-      },
-
-      // entityType: {
-      //   key: customer.entityType,
-      //   styleCell: 'width:100%;',
-      // },
-      // entityTypeToView: {
-      //   key: this._entityTypePipe.transform(customer.entityType),
-      //   styleCell: 'width:100%;',
-      // },
-
-      // contact: {
-      //   key: this._phoneNumberPipe.transform(customer.contact.cel),
-      //   styleCell: 'width:100%;',
-      // }
+      }
     })
 
-    customerList.push(items);
+    companyList.push(items);
 
-    return customerList;
+    return companyList;
   }
 
 
@@ -206,22 +198,25 @@ export class ListControlAdm extends BaseList {
   // }
 
 
-  startSupply(url:string, id: number) {
+  startSupply(url: string, id: number) {
 
     let entities: ListAdmDto[] = [];
 
-    const business: Observable<Business> = this._listGDataService.loadById$(url, id.toString());
-    business.subscribe(x => console.log(x))
+    const business: Observable<BusinessAuth> = this._listGDataService.loadById$(url, id.toString());
 
-    // return business.pipe(map(x => {
+    this.entityBusiness$ = business;
 
-    //   x.forEach(y => {
-    //     this.entities = this.supplyItemsGrid(entities, y);
-    //     this.entities$ = of(this.entities);
-    //     this.entitiesFiltered$ = this.entities$;
-    //   })
+    business.pipe(map(x => {
+      this.business = x;
+      x?.companies.forEach(y => {
+        console.log(y)
+        this.entities = this.supplyItemsGrid(entities, y)
+        this.entities$ = of(this.entities);
 
-    // })).subscribe();
+        this.entitiesFiltered$ = this.entities$;
+      })
+
+    })).subscribe();
 
   }
 

@@ -1,10 +1,7 @@
-using System;
-using System.Threading.Tasks;
 using UnitOfWork.Persistence.Operations;
 using Application.Services.Operations.Companies.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Application.Services.Shared.Dtos.Mappers;
-using System.Collections.Generic;
 
 namespace Application.Services.Operations.Companies
 {
@@ -29,9 +26,9 @@ namespace Application.Services.Operations.Companies
         //     return _MAP.Map<CompanyDto>(entityFromDb);
         // }
 
-        public async Task<List<CompanyDto>> GetAllAsync()
+        public async Task<List<CompanyProfileDto>> GetAllAsync()
         {
-            var entityFromDb = await _GENERIC_REPO.Companies.Get().ToListAsync();
+            var entityFromDb = await _GENERIC_REPO.CompaniesProfile.Get().ToListAsync();
 
             if (entityFromDb == null) throw new Exception("Objeto era nulo.");
 

@@ -55,7 +55,7 @@ public class AuthRepository<T> : IAuthRepository<T> where T : class
             query = query.Where(predicate);
 
         if (include != null)
-            query = include(query);
+            query = include(query).AsSplitQuery();
 
 
         return ordeBy != null ? await ordeBy(query).Select(selector).SingleOrDefaultAsync() : await query.Select(selector).SingleOrDefaultAsync();

@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 import { BaseForm } from '../../../shared/inheritance/forms/base-form';
 import { DefaultCompImports } from 'components/imports/default-comp-imports';
-import { MyUser } from '../dtos/my-user';
+import { UserAccount } from '../dtos/user-account';
 import { AuthLoginImports } from '../imports/auth.imports';
 import { LoginDto } from '../dtos/login-dto';
 import { LoginService } from '../services/login.service';

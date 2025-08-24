@@ -1,7 +1,8 @@
-﻿using Authentication.Entities;
-using Authentication.Operations.Account;
-using Authentication.Operations.Login;
-using Authentication.Operations.Register;
+﻿using Application.Services.Operations.Account;
+using Application.Services.Operations.Auth.Login;
+using Application.Services.Operations.Auth.Register;
+using Domain.Entities.Authentication;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

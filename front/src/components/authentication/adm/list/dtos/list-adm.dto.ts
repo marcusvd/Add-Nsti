@@ -3,7 +3,7 @@ import { ItemsInterface } from "../../../../../shared/components/list-g/list/int
 export class ListAdmDto {
   id!: ItemsInterface;
   name!: ItemsInterface;
-  entityType!: ItemsInterface;
-  entityTypeToView!: ItemsInterface;
-  contact!: ItemsInterface;
+  // entityType!: ItemsInterface;
+  // entityTypeToView!: ItemsInterface;
+  // contact!: ItemsInterface;
 }

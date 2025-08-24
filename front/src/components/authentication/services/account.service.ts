@@ -6,7 +6,7 @@ import { WarningsService } from 'components/warnings/services/warnings.service';
 import { take } from 'rxjs';
 import { BackEndService } from '../../../shared/services/back-end/backend.service';
 import { ConfirmEmail } from '../dtos/confirm-email';
-import { MyUser } from '../dtos/my-user';
+import { UserAccount } from '../dtos/user-account';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { ForgotPassword } from '../dtos/forgot-password';
@@ -17,7 +17,7 @@ import { ResetPassword } from '../dtos/reset-password';
   providedIn: 'root'
 })
 
-export class AccountService extends BackEndService<MyUser> {
+export class AccountService extends BackEndService<UserAccount> {
 
   constructor(
     private _warningsService: WarningsService,

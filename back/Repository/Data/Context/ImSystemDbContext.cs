@@ -2,12 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Entities.Shared;
 using Repository.Data.RelationshipEntities;
 
-
-using Domain.Entities.Customers;
-using Domain.Entities.Companies;
 using Microsoft.Extensions.Configuration;
-using Domain.Entities.Profiles;
-
+using Domain.Entities.System.Customers;
+using Domain.Entities.System.BusinessesCompanies;
+using Domain.Entities.System.Profiles;
+using Domain.Entities.Authentication;
 
 namespace Repository.Data.Context;
 
@@ -22,13 +21,12 @@ public class ImSystemDbContext : DbContext
 
     #region Customers/Companies
     public DbSet<Customer> MN_Customers { get; set; }
-    public DbSet<Company> MN_Companies { get; set; }
+    public DbSet<BusinessProfile> MN_businesses_profiles { get; set; }
+    public DbSet<CompanyProfile> MN_Companies_profiles { get; set; }
     #endregion
 
     #region AccountUser
-    public DbSet<MyUser> AU_MyUsers { get; set; }
-    public DbSet<Profile> AU_ProfileUsers { get; set; }
-
+    public DbSet<UserProfile> PF_UserProfiles { get; set; }
     #endregion
 
     private IConfiguration _configuration;
@@ -43,18 +41,19 @@ public class ImSystemDbContext : DbContext
         //Shared
         builder.ApplyConfiguration(new AddressFluentApi());
         builder.ApplyConfiguration(new ContactFluentApi());
-        // builder.ApplyConfiguration(new SocialNetworkFluentApi());
+        //builder.ApplyConfiguration(new SocialNetworkFluentApi());
 
 
         //Customer - Companiy
         builder.ApplyConfiguration(new CustomerFluentApi());
         builder.ApplyConfiguration(new CompanyFluentApi());
+        builder.ApplyConfiguration(new CustomerCompanyFluentApi());
 
-        builder.Entity<MyUser>(x => 
-        {
-            x.HasKey(u => u.UserAccoutnId);
-            x.Property(u => u.UserAccoutnId).ValueGeneratedNever();
-        });
+        //builder.Entity<UserProfile>(x => 
+        // {
+        //     x.HasKey(u => u.UserAccoutnId);
+        //     x.Property(u => u.UserAccoutnId).ValueGeneratedNever();
+        // });
 
     }
 }

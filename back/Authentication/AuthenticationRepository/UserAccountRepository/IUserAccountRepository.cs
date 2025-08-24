@@ -1,5 +1,5 @@
 
-using Authentication.Entities;
+using Domain.Entities.Authentication;
 
 namespace Authentication.AuthenticationRepository.UserAccountRepository;
 

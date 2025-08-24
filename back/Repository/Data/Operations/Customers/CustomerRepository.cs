@@ -2,12 +2,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities.Customers;
 using Pagination.Models;
 using Repository.Data.Context;
 using Repository.Data.Operations.Repository;
 using Repository.Helpers;
 using System.Collections.Generic;
+using Domain.Entities.System.Customers;
 
 namespace Repository.Data.Operations.Main.Customers
 {

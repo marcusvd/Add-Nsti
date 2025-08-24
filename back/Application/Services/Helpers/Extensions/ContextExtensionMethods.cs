@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Repository.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using Authentication;
 
 namespace Application.Services.Helpers.Extensions
 {

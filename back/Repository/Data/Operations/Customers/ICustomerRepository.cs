@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Domain.Entities.Customers;
+using Domain.Entities.System.Customers;
 using Repository.Data.Operations.Repository;
 
 namespace Repository.Data.Operations.Main.Customers

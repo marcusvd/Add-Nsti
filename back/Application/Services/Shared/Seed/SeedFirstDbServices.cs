@@ -1,5 +1,4 @@
-using System.Threading.Tasks;
-using Authentication.Operations.Register;
+using Application.Services.Operations.Auth.Register;
 using UnitOfWork.Persistence.Operations;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed;

@@ -3,30 +3,36 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
 
-using Domain.Entities.Customers;
-using Domain.Entities.Companies;
+using Domain.Entities.System.Customers;
+using Domain.Entities.System.BusinessesCompanies;
+using Domain.Entities.System;
 
 
-namespace Repository.Data.RelationshipEntities
+namespace Repository.Data.RelationshipEntities;
+
+#region CompanyProfile
+public class CompanyFluentApi : IEntityTypeConfiguration<CompanyProfile>
 {
-
-    #region Company
-    public class CompanyFluentApi : IEntityTypeConfiguration<Company>
+    public void Configure(EntityTypeBuilder<CompanyProfile> builder)
     {
-        public void Configure(EntityTypeBuilder<Company> builder)
-        {
-            builder.HasKey(x => x.Id);
+        builder.HasKey(x => x.Id);
 
-            builder.HasMany<Customer>(x => x.Customers).WithOne(x => x.Company)
-            .HasForeignKey(x => x.CompanyId).IsRequired(true);
 
-            // builder.HasMany<UserAccount>(x => x.UserAccounts).WithOne(x => x.Company)
-            // .HasForeignKey(x => x.CompanyId).IsRequired(true);
+        // builder.HasMany<UserAccount>(x => x.UserAccounts).WithOne(x => x.Company)
+        // .HasForeignKey(x => x.CompanyId).IsRequired(true);
 
-        }
     }
-
-    #endregion
-
-
 }
+#endregion
+#region CustomerCompany
+public class CustomerCompanyFluentApi : IEntityTypeConfiguration<CustomerCompany>
+{
+    public void Configure(EntityTypeBuilder<CustomerCompany> builder)
+    {
+        //Many to maany
+        builder.HasKey(uc => new { uc.CustomerId, uc.CompanyId });
+        // builder.Ignore(x => x.Id);
+    }
+}
+
+#endregion

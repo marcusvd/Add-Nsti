@@ -6,15 +6,12 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Authentication.Entities;
 using Authentication.Helpers;
-using Authentication.Operations.Login;
-using Authentication.Operations.Register;
 using Authentication.Context;
-using Authentication.Operations.Account;
 using Authentication.AuthenticationRepository.UserAccountRepository;
 using Authentication.AuthenticationRepository.BusinessRepository;
-using Authentication.Operations.AuthAdm;
+using Domain.Entities.Authentication;
+using Authentication.Jwt;
 
 
 
@@ -80,15 +77,9 @@ public static class IdentityConfiguration
         //
         services.AddScoped<JwtHandler>();
         services.AddScoped<AuthGenericValidatorServices>();
-        services.AddScoped<ILoginServices, LoginServices>();
-        services.AddScoped<IRegisterServices, RegisterServices>();
-        services.AddScoped<IAccountManagerServices, AccountManagerServices>();
-
-        services.AddScoped<IUserAccountRepository, UserAccountRepository>();
-
-        services.AddScoped<IAuthAdmServices, AuthAdmServices>();
-        services.AddScoped<IBusinessRepository, BusinessRepository>();
-
+      
+        // services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+        // services.AddScoped<IBusinessRepository, BusinessRepository>();
         //
         services.AddScoped<IUrlHelper>(x =>
       {
