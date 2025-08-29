@@ -28,7 +28,7 @@ form.get('address')
       next: (_cli: AddCompanyUpdateBusinessAuth) => {
         this.openSnackBar('Cadastrado, com sucesso., ' + toSave.company.name + '!', 'warnings-success');
 
-        // this._route.navigateByUrl(`/users/adm-list/${toSave.id}`);
+        this.callRouter(`/users/adm-list/${toSave.id}`);
 
 
       },

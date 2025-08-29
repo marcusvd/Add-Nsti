@@ -16,20 +16,20 @@ public class BaseManagementController : ControllerBase
 {
 
     private readonly ILoginServices _iLoginServices;
-    private readonly IRegisterServices _iRegisterServices;
+    private readonly IFirstRegisterBusinessServices _iFirstRegisterBusinessServices;
     private readonly IAccountManagerServices _iAccountManagerServices;
     private readonly IAuthAdmServices _authAdmServices;
 
     public BaseManagementController(
 
         ILoginServices iLoginServices,
-        IRegisterServices iRegisterServices,
+        IFirstRegisterBusinessServices iFirstRegisterBusinessServices,
         IAccountManagerServices iAccountManagerServices,
         IAuthAdmServices authAdmServices
         )
     {
         _iLoginServices = iLoginServices;
-        _iRegisterServices = iRegisterServices;
+        _iFirstRegisterBusinessServices = iFirstRegisterBusinessServices;
         _iAccountManagerServices = iAccountManagerServices;
         _authAdmServices = authAdmServices;
     }

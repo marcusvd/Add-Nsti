@@ -1,5 +1,6 @@
 using Api.Configuration;
 using Application.Services.Helpers.Extensions;
+using Application.Services.Shared.Mappers.BaseMappers;
 using Authentication.Jwt;
 using Authentication.Settings;
 
@@ -16,7 +17,7 @@ builder.Services.AddNewtonsoftJsonControllers();
 builder.Services.AddIdentitySettings();
 builder.Services.AddDiIdentity();
 builder.Services.AddDiAuthentication();
-
+builder.Services.DiMappers();
 builder.Services.AddDiServicesRepositories();
 
 builder.Services.DataProtectionTokenProviderOptions();

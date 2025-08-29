@@ -1,10 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 
-using Application.Services.Operations.Customers.Dtos.Mappers;
+// using Application.Services.Operations.Customers.Dtos.Mappers;
 using Application.Services.Operations.Customers;
 using Application.Services.Shared.Seed.EntitiesSeed;
 using Application.Services.Operations.Companies;
-using Application.Services.Shared.Dtos.Mappers;
+using Application.Services.Shared.Mappers.BaseMappers;
 using Application.Services.Operations.Customers.Search;
 
 using Repository.Data.Operations.Companies;
@@ -15,13 +15,17 @@ using Application.Services.Shared.Email;
 using FluentValidation.AspNetCore;
 using Authentication.Operations.AuthAdm;
 using Authentication.AuthenticationRepository.BusinessAuthRepository;
+using Application.Services.Operations.Auth.Register;
+using Domain.Entities.Shared;
+using Application.Services.Shared.Dtos;
+using Domain.Entities.Authentication;
+using Application.Services.Operations.Auth.Dtos;
 
 
 namespace Application.Services.Helpers.Extensions;
 
 public static class DiApplication
 {
-
 
     public static void AddDiServicesRepositories(this IServiceCollection services)
     {
@@ -32,11 +36,15 @@ public static class DiApplication
 
         #region ObjectMapper
         services.AddScoped<ICommonObjectMapper, CommonObjectMapper>();
+
+        
+
+        // services.AddScoped<MapperManagement>();
         // services.AddScoped<IAuthenticationObjectMapperServices, AuthenticationObjectMapperServices>();
         #endregion
 
         #region Customer
-        services.AddScoped<ICustomerObjectMapperServices, CustomerObjectMapperServices>();
+        // services.AddScoped<ICustomerObjectMapperServices, CustomerObjectMapperServices>();
         services.AddScoped<ICustomerAddServices, CustomerAddServices>();
         // services.AddScoped<ICustomerSearchService, CustomerSearchService>();
         // services.AddScoped<ICustomerGetServices, CustomerGetServices>();
@@ -67,9 +75,10 @@ public static class DiApplication
         services.AddScoped<EmailServer>();
         // services.AddScoped<Email>();
         #endregion
-        
-          services.AddScoped<IAuthAdmServices,AuthAdmServices>();
-          services.AddScoped<IBusinessAuthRepository,BusinessAuthRepository>();
+
+        services.AddScoped<IAuthAdmServices, AuthAdmServices>();
+        services.AddScoped<IRegisterUserAccountServices, RegisterUserAccountServices>();
+        services.AddScoped<IBusinessAuthRepository, BusinessAuthRepository>();
 
     }
     public static void AddDiFluentValidationAutoValidation(this IServiceCollection services)
@@ -92,5 +101,5 @@ public static class DiApplication
         // #endregion
     }
 
-   
+
 }

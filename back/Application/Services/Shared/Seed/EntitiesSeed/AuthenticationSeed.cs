@@ -10,10 +10,10 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
 {
     public class AuthenticationSeed
     {
-        private readonly IRegisterServices _iRegisterServices;
-        public AuthenticationSeed(IRegisterServices iRegisterServices)
+        private readonly IFirstRegisterBusinessServices _iFirstRegisterBusinessServices;
+        public AuthenticationSeed(IFirstRegisterBusinessServices iFirstRegisterBusinessServices)
         {
-            _iRegisterServices = iRegisterServices;
+            _iFirstRegisterBusinessServices = iFirstRegisterBusinessServices;
         }
         private CompanyProfileDto NoStopTi()
         {
@@ -38,17 +38,17 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                     State = "MG",
                     Complement = ""
                 },
-                Contact = ContactDto.Create(
-                    0,
-                    DateTime.MinValue,
-                    DateTime.UtcNow,
-                    "contato@nostopti.com.br",
-                    "www.nostopti.com.br",
-                    "31988598734",
-                    "31988598734",
-                    "3134832404",
-                    socialMedias
-                )
+                // Contact = ContactDto.Create(
+                //     0,
+                //     DateTime.MinValue,
+                //     DateTime.UtcNow,
+                //     "contato@nostopti.com.br",
+                //     "www.nostopti.com.br",
+                //     "31988598734",
+                //     "31988598734",
+                //     "3134832404",
+                //     socialMedias
+                // )
             };
 
 
@@ -67,7 +67,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                 ConfirmPassword = "123"
             };
 
-            var result = await _iRegisterServices.RegisterAsync(user);
+            var result = await _iFirstRegisterBusinessServices.RegisterAsync(user);
 
             if (result.Authenticated)
                 return HttpStatusCode.Created;

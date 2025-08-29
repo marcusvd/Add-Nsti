@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnitOfWork.Persistence.Operations;
 using Domain.Entities.System.BusinessesCompanies;
 using Application.Services.Operations.Companies.Dtos;
-using Application.Services.Shared.Dtos.Mappers;
+using Application.Services.Shared.Mappers.BaseMappers;
 
 namespace Application.Services.Operations.Companies
 {
@@ -25,7 +25,7 @@ namespace Application.Services.Operations.Companies
         {
             if (entityDto == null) throw new Exception("Objeto era nulo.");
 
-            CompanyProfile entityConvertedToDb = _mapper.CompanyProfileMapper(entityDto);
+            CompanyProfile entityConvertedToDb = _mapper.Map<CompanyProfileDto, CompanyProfile>(entityDto);
 
             _GENERIC_REPO.CompaniesProfile.Add(entityConvertedToDb);
 

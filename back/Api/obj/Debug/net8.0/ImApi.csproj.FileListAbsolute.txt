@@ -2,8 +2,8 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\appsettings.Develo
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\appsettings.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\ImApi.staticwebassets.endpoints.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\ImApi.exe
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\ImApi.deps.json
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\ImApi.runtimeconfig.json
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Api\bin\Debug\net8.0\ImApi.deps.json
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Api\bin\Debug\net8.0\ImApi.runtimeconfig.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\ImApi.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\ImApi.pdb
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
@@ -136,9 +136,9 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\staticwebassets.bu
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\staticwebassets.build.json.cache
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\staticwebassets.development.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\ImApi.csproj.Up2Date
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Api\obj\Debug\net8.0\ImApi.csproj.Up2Date
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\ImApi.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\refint\ImApi.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\ImApi.pdb
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\ImApi.genruntimeconfig.cache
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\api\obj\Debug\net8.0\ref\ImApi.dll
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Api\obj\Debug\net8.0\ImApi.genruntimeconfig.cache
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Api\obj\Debug\net8.0\ref\ImApi.dll

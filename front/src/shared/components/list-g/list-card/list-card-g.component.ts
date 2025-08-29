@@ -44,7 +44,7 @@ export class ListCardGComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     this.paginatorLength();
 
-    this.paginatedEntities$ = this.entities$.pipe(
+    this.paginatedEntities$ = this.entities$?.pipe(
       map(entities => {
         if (!entities) return [];
 
@@ -79,8 +79,8 @@ export class ListCardGComponent implements OnChanges, OnInit, OnDestroy {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
 
-    this.paginatorAbove.pageIndex = e.pageIndex;
-    this.paginatorBelow.pageIndex = e.pageIndex;
+    this.paginatorAbove.pageIndex = e?.pageIndex;
+    this.paginatorBelow.pageIndex = e?.pageIndex;
 
     this.paginatedEntities$ = this.entities$.pipe(
       map(entities => {

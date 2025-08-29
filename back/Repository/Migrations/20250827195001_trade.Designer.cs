@@ -12,8 +12,8 @@ using Repository.Data.Context;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ImSystemDbContext))]
-    [Migration("20250823171533_change")]
-    partial class change
+    [Migration("20250827195001_trade")]
+    partial class trade
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,6 +165,9 @@ namespace Repository.Migrations
                     b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BusinessProfileId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CompanyAuthId")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -181,6 +184,8 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("BusinessProfileId");
 
                     b.HasIndex("ContactId");
 
@@ -269,6 +274,9 @@ namespace Repository.Migrations
                     b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BusinessProfileId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ContactId")
                         .HasColumnType("int");
 
@@ -285,6 +293,8 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("BusinessProfileId");
 
                     b.HasIndex("ContactId");
 
@@ -307,6 +317,10 @@ namespace Repository.Migrations
                     b.HasOne("Domain.Entities.Shared.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId");
+
+                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", null)
+                        .WithMany("Companies")
+                        .HasForeignKey("BusinessProfileId");
 
                     b.HasOne("Domain.Entities.Shared.Contact", "Contact")
                         .WithMany()
@@ -357,6 +371,10 @@ namespace Repository.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
+                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", null)
+                        .WithMany("UsersAccounts")
+                        .HasForeignKey("BusinessProfileId");
+
                     b.HasOne("Domain.Entities.Shared.Contact", "Contact")
                         .WithMany()
                         .HasForeignKey("ContactId");
@@ -369,6 +387,13 @@ namespace Repository.Migrations
             modelBuilder.Entity("Domain.Entities.Shared.Contact", b =>
                 {
                     b.Navigation("SocialMedias");
+                });
+
+            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.BusinessProfile", b =>
+                {
+                    b.Navigation("Companies");
+
+                    b.Navigation("UsersAccounts");
                 });
 
             modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.CompanyProfile", b =>

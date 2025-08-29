@@ -21,7 +21,7 @@ namespace Application.Services.Helpers.Extensions
         public static void AddDiAuthentication(this IServiceCollection services)
         {
             services.AddScoped<ILoginServices, LoginServices>();
-            services.AddScoped<IRegisterServices, RegisterServices>();
+            services.AddScoped<IFirstRegisterBusinessServices, FirstRegisterBusinessServices>();
             services.AddScoped<IAccountManagerServices, AccountManagerServices>();
             services.AddScoped<IAuthAdmServices, AuthAdmServices>();
             services.AddScoped<IBusinessesProfilesRepository, BusinessesProfilesRepository>();

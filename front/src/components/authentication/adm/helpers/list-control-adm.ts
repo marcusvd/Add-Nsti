@@ -61,8 +61,8 @@ export class ListControlAdm extends BaseList {
   labelHeaders = () => {
     return [
       { key: '', style: 'cursor: pointer;' },
-      { key: 'Nome', style: 'cursor: pointer;' },
-      // { key: 'Entidade', style: 'cursor: pointer;' },
+      { key: 'Empresa', style: 'cursor: pointer;' },
+      { key: 'Usuários', style: 'cursor: pointer;' },
       // { key: 'Cel', style: 'cursor: pointer;' }
     ]
   }
@@ -71,7 +71,7 @@ export class ListControlAdm extends BaseList {
     return [
       { key: 'id', style: '' },
       { key: 'name', style: '' },
-      // { key: 'entityTypeToView', style: '' },
+      { key: 'usersAmount', style: '' },
       // { key: 'contact', style: '' }
     ]
   }
@@ -114,6 +114,9 @@ export class ListControlAdm extends BaseList {
   }
 
   onClickIcons(obj: OnClickInterface) {
+
+    console.log(obj.action.split('|')[0])
+
     if (obj.action.split('|')[0] == 'edit')
       this.callRouter(`/customers/edit/${obj.entityId}`);
 
@@ -121,8 +124,10 @@ export class ListControlAdm extends BaseList {
       this.deleteFake(obj.entityId);
 
 
+    if (obj.action.split('|')[0] == 'person_add') {
+      this.callRouter(`/users/add-user-company/${obj.entityId}`);
+    }
 
-    // ex_callRouteWithObject('/side-nav/stock-product-router/detailed-product', this.products.find(x => x.id == obj.entityId), this._router)
   }
 
 
@@ -152,10 +157,9 @@ export class ListControlAdm extends BaseList {
     Object.assign(items, {
 
       id: {
-        key: '',
+        key: company.id,
         display: 'icons',
-        // icons: ['edit', 'delete'],
-        icons: ['edit|', 'delete|color:rgb(158, 64, 64);margin-left:10px;'],
+        icons: ['edit|', 'delete|color:rgb(158, 64, 64);margin-left:10px;', 'person_add|'],
         styleInsideCell: `color:rgb(11, 112, 155); cursor: pointer; font-size:20px;`,
         styleCell: '',
         route: ''
@@ -164,7 +168,11 @@ export class ListControlAdm extends BaseList {
       name: {
         key: company.name,
         styleCell: 'width:100%;',
+      },
+      usersAmount: {
+        key: company.companyUserAccounts.filter(c => c.companyAuthId == company.id).length,
 
+        styleCell: 'width:100%;',
       }
     })
 
@@ -172,31 +180,6 @@ export class ListControlAdm extends BaseList {
 
     return companyList;
   }
-
-
-
-
-  // startSupply(): Subscription | undefined {
-
-  //   let entities: CustomerListDto[] = [];
-
-  //   return this._listGDataService?.entities$.subscribe(
-  //     {
-  //       next: (x: Business[]) => {
-  //         x.forEach(
-  //           (y: Business) => {
-  //             this.entities = this.supplyItemsGrid(entities, y);
-  //             this.entities$ = of(this.entities);
-  //           })
-
-  //         this.getCurrent();
-  //       }
-  //     }
-  //   )
-
-
-  // }
-
 
   startSupply(url: string, id: number) {
 
@@ -208,11 +191,14 @@ export class ListControlAdm extends BaseList {
 
     business.pipe(map(x => {
       this.business = x;
+
       x?.companies.forEach(y => {
-        console.log(y)
+        const amountUsers = y.companyUserAccounts;
+        // const amountUsers = y.companyUserAccounts.filter(c => c.companyAuthId == y.id);
         this.entities = this.supplyItemsGrid(entities, y)
         this.entities$ = of(this.entities);
 
+        console.log(amountUsers)
         this.entitiesFiltered$ = this.entities$;
       })
 

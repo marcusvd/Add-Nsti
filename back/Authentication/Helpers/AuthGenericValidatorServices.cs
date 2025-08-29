@@ -1,4 +1,5 @@
 using System;
+using Authentication.Exceptions;
 using Microsoft.Extensions.Logging;
 
 
@@ -25,6 +26,14 @@ public class AuthGenericValidatorServices
             throw new ArgumentException(string.Join(", ", result.Errors));
         }
 
+    }
+
+
+    public bool Validate<T>(T dtoId, T paramId, string messageException)
+    {
+        if (!Equals(dtoId, paramId)) throw new AuthServicesException(messageException);
+        else
+            return true;
     }
 
 }

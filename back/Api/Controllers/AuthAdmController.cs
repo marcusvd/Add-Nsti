@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Operations.Auth.CompanyAuthServices;
+using Application.Services.Operations.Auth.Register;
 
 
 namespace Api.Controllers
@@ -13,35 +14,47 @@ namespace Api.Controllers
     [Route("api/{controller}")]
     public class AuthAdmController : ControllerBase
     {
-
-        // private readonly ILoginServices _iLoginServices;
-        // private readonly IRegisterServices _iRegisterServices;
         private readonly IAccountManagerServices _iAccountManagerServices;
         private readonly IAuthAdmServices _authAdmServices;
         private readonly ICompanyAuthServices _companyAuthServices;
+        private readonly IRegisterUserAccountServices _registerUserAccountServices;
 
         public AuthAdmController(
-
-            // ILoginServices iLoginServices,
-            // IRegisterServices iRegisterServices,
             IAccountManagerServices iAccountManagerServices,
             IAuthAdmServices authAdmServices,
-             ICompanyAuthServices companyAuthServices
+             ICompanyAuthServices companyAuthServices,
+             IRegisterUserAccountServices registerUserAccountServices
             )
         {
-            // _iLoginServices = iLoginServices;
-            // _iRegisterServices = iRegisterServices;
             _iAccountManagerServices = iAccountManagerServices;
             _authAdmServices = authAdmServices;
             _companyAuthServices = companyAuthServices;
+            _registerUserAccountServices = registerUserAccountServices;
         }
 
 
         [HttpGet("GetBusinessFullAsync/{id:min(1)}")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetBusinessFullAsync(int id)
         {
-            return Ok(await _authAdmServices.BusinessAsync(id));
+            return Ok(await _authAdmServices.GetBusinessFullAsync(id));
+
+        }
+
+        [HttpGet("GetBusinessAsync/{id:min(1)}")]
+        [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> GetBusinessAsync(int id)
+        {
+            return Ok(await _authAdmServices.GetBusinessAsync(id));
+
+        }
+
+        [HttpGet("GetCompanyAuthAsync/{id:min(1)}")]
+        [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> GetCompanyAsync(int id)
+        {
+            return Ok(await _companyAuthServices.GetCompanyAuthAsync(id));
 
         }
 
@@ -67,7 +80,14 @@ namespace Api.Controllers
             return Ok(await _iAccountManagerServices.CreateRoleAsync(roleDto));
         }
 
-    
+        [HttpPut("AddUserAccountAsync/{companyId:min(1)}")]
+        [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> AddUserAccountAsync([FromBody] AddUserExistingCompanyDto user, int companyId)
+        {
+            return Ok(await _registerUserAccountServices.AddUserExistingCompanyAsync(user,companyId));
+
+        }
+
 
     }
 }

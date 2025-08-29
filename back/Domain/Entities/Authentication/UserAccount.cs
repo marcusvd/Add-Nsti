@@ -4,8 +4,8 @@ namespace Domain.Entities.Authentication;
 
 public class UserAccount : IdentityUser<int>
 {
-    public int BusinessAuthId { get; set; }
     public required string UserProfileId { get; set; }
+    public int BusinessAuthId { get; set; }
     public BusinessAuth? BusinessAuth { get; set; }
     public DateTime Deleted { get; set; } = DateTime.MinValue;
     public DateTime Registered { get; set; } = DateTime.UtcNow;

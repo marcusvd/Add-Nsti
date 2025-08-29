@@ -10,28 +10,32 @@ using Authentication.Jwt;
 using Application.Services.Operations.Companies;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
+using Application.Services.Operations.Auth.CompanyAuthServices;
+using Application.Exceptions;
 
 
 namespace Application.Services.Operations.Auth.Register;
 
-public class RegisterServices : AuthenticationBase, IRegisterServices
+public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAccountServices
 {
     private readonly ILogger<AuthGenericValidatorServices> _logger;
     private readonly UserManager<UserAccount> _userManager;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly IAccountManagerServices _accountManagerServices;
     private readonly ICompanyProfileAddService _companyAddService;
+    private readonly ICompanyAuthServices _companyAuthService;
     private readonly IProfilesCrudService _profilesCrudService;
 
     private readonly JwtHandler _jwtHandler;
     private readonly IUrlHelper _url;
-    public RegisterServices(
+    public RegisterUserAccountServices(
           UserManager<UserAccount> userManager,
           JwtHandler jwtHandler,
           IUrlHelper url,
           IAccountManagerServices accountManagerServices,
           AuthGenericValidatorServices genericValidatorServices,
           ICompanyProfileAddService companyAddService,
+          ICompanyAuthServices companyAuthService,
           ILogger<AuthGenericValidatorServices> logger,
           IProfilesCrudService profilesCrudService
       ) : base(userManager, jwtHandler)
@@ -42,49 +46,42 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         _url = url;
         _genericValidatorServices = genericValidatorServices;
         _companyAddService = companyAddService;
+        _companyAuthService = companyAuthService;
         _logger = logger;
         _profilesCrudService = profilesCrudService;
     }
 
-    public async Task<UserToken> RegisterAsync(RegisterModel user)
+    public async Task<UserToken> AddUserExistingCompanyAsync(AddUserExistingCompanyDto user, int companyId)
     {
 
         _genericValidatorServices.IsObjNull(user);
 
+        _genericValidatorServices.Validate(user.companyAuthId, companyId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
+
         await ValidateUniqueUserCredentials(user);
 
-
-
-
-        var companyId = Guid.NewGuid().ToString();
-        var companyAuth = CreateCompanyAuth(user.CompanyName, companyId);
-        var companyProfile = CreateCompany(user.CompanyName, companyId);
-
-      
-        var businessProfileId = Guid.NewGuid().ToString();
-        var businessAuth = CreateBusinessAuth(companyAuth, businessProfileId);
-        var businessProfile = CreateBusinessProfile(businessProfileId);
-
-
         var userProfileId = Guid.NewGuid().ToString();
-        var userAccount = CreateUserAccount(user, businessAuth, userProfileId);
-        var userProfile = CreateUserProfile(userProfileId);
 
-        userAccount.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = companyAuth, UserAccount = userAccount });
-
-        //TODO: Remove this in production - only for testing
-        // userAccount.EmailConfirmed = true;
+        var companyAuth = await _companyAuthService.GetCompanyAuthAsync(user.companyAuthId);
+       
+        var userAccount = CreateUserAccount(user, companyAuth.BusinessId, userProfileId);
 
         var creationResult = await _userManager.CreateAsync(userAccount, user.Password);
 
-        await _profilesCrudService.AddUserProfileAsync(userProfile);
+        companyAuth.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = companyAuth, UserAccount = userAccount });
 
-        await _profilesCrudService.AddBusinessesProfilesAsync(businessProfile);
+        var userProfile = CreateUserProfile(userProfileId);
 
-        await _companyAddService.AddAsync(companyProfile);
+        await _companyAuthService.UpdateCompanyAuth(companyAuth);
 
+        var userProfileResult = await _profilesCrudService.AddUserProfileAsync(userProfile);
 
+        if (!userProfileResult)
+        {
+            _logger.LogError("UserProfile creation failed for {Email}. Errors: {Errors}", "", "");
 
+            throw new AuthServicesException("Error user profile create.");
+        }
 
         if (!creationResult.Succeeded)
         {
@@ -99,8 +96,8 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         var admRole = new UpdateUserRole
         {
             UserName = userAccount.Email,
-            Role = "SYSADMIN",
-            DisplayRole = "Administrador",
+            Role = "Users",
+            DisplayRole = "Usuários",
             Delete = false
         };
 
@@ -112,7 +109,7 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         return await CreateAuthenticationResponseAsync(userAccount);
     }
 
-    private async Task ValidateUniqueUserCredentials(RegisterModel register)
+    private async Task ValidateUniqueUserCredentials(AddUserExistingCompanyDto register)
     {
         if (await IsUserNameDuplicate(register.UserName))
         {
@@ -127,92 +124,47 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
         }
     }
 
-    private UserAccount CreateUserAccount(RegisterModel user, BusinessAuth business, string userProfileId)
-    {
-
-
-        var userAccount = new UserAccount()
+        private UserAccount CreateUserAccount(AddUserExistingCompanyDto user, int businessAuthId, string userProfileId)
         {
-            DisplayUserName = user.UserName,
-            UserName = user.Email,
-            Email = user.Email,
-            UserProfileId = userProfileId,
-            BusinessAuth = business
-        };
-
-        // 
 
 
-        return userAccount;
-    }
-    private CompanyAuth CreateCompanyAuth(string name, string companyProfileId)
-    {
+            var userAccount = new UserAccount()
+            {
+                DisplayUserName = user.UserName,
+                UserName = user.Email,
+                Email = user.Email,
+                UserProfileId = userProfileId,
+                BusinessAuthId = businessAuthId
+            };
 
-        var companyAuth = new CompanyAuth()
+            // 
+
+
+            return userAccount;
+        }
+    
+        private UserProfileDto CreateUserProfile(string userAccountId)
         {
-            Id = 0,
-            Name = name,
-            CompanyProfileId = companyProfileId,
-        };
-        return companyAuth;
-    }
-    private CompanyProfileDto CreateCompany(string name, string companyId)
-    {
-        var companyAuth = new CompanyProfileDto()
+            var userProfileDto = new UserProfileDto()
+            {
+                Id = 0,
+                UserAccountId = userAccountId,
+            };
+            return userProfileDto;
+        }
+   
+        private async Task<bool> IsUserNameDuplicate(string userName)
         {
-            Id = 0,
-            CompanyAuthId = companyId,
-        };
-        return companyAuth;
-    }
-    private UserProfileDto CreateUserProfile(string userAccountId)
-    {
-        var userProfileDto = new UserProfileDto()
+            var userAccount = await _userManager.FindByNameAsync(userName);
+
+            return userAccount != null;
+        }
+        private async Task<bool> IsEmailDuplicate(string email)
         {
-            Id = 0,
-            UserAccountId = userAccountId,
-        };
-        return userProfileDto;
-    }
+            var userAccount = await _userManager.FindByEmailAsync(email);
 
-    private BusinessAuth CreateBusinessAuth(CompanyAuth company, string BusinessProfileId)
-    {
-        var businessAuth = new BusinessAuth()
-        {
-            Id = 0,
-            Name = $"Group BusinessAuth {company.Name}",
-            BusinessProfileId = BusinessProfileId,
-            // UsersAccounts = new List<UserAccount>() { userAccount }
-            Companies = new List<CompanyAuth>() { company },
-        };
-
-        return businessAuth;
-    }
-    private BusinessProfileDto CreateBusinessProfile(string businessProfileId)
-    {
-        var businessProfileDto = new BusinessProfileDto()
-        {
-            Id = 0,
-            BusinessAuthId = businessProfileId,
-            // UsersAccounts = new List<UserAccount>() { userAccount }
-            // Companies = new List<CompanyAuth>() { company },
-        };
-
-        return businessProfileDto;
-    }
-
-    private async Task<bool> IsUserNameDuplicate(string userName)
-    {
-        var userAccount = await _userManager.FindByNameAsync(userName);
-
-        return userAccount != null;
-    }
-    private async Task<bool> IsEmailDuplicate(string email)
-    {
-        var userAccount = await _userManager.FindByEmailAsync(email);
-
-        return userAccount != null;
-    }
+            return userAccount != null;
+        }
 
     private async Task SendEmailConfirmationAsync(UserAccount userAccount)
     {
@@ -236,8 +188,6 @@ public class RegisterServices : AuthenticationBase, IRegisterServices
             throw;
         }
     }
-
-
 
     private async Task<string> GenerateEmailUrl(UserAccount userAccount)
     {

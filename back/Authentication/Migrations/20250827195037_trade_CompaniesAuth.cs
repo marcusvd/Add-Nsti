@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Authentication.Migrations
 {
     /// <inheritdoc />
-    public partial class change_entity_name_to_CompaniesAuth : Migration
+    public partial class trade_CompaniesAuth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,9 +61,11 @@ namespace Authentication.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CompanyId = table.Column<string>(type: "longtext", nullable: false)
+                    CompanyProfileId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TradeName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BusinessId = table.Column<int>(type: "int", nullable: false),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -87,9 +89,9 @@ namespace Authentication.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BusinessAuthId = table.Column<int>(type: "int", nullable: false),
                     UserProfileId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    BusinessAuthId = table.Column<int>(type: "int", nullable: false),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: true),

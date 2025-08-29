@@ -9,7 +9,8 @@ using Application.Exceptions;
 using Application.Services.Operations.Customers.Dtos;
 using Repository.Data.Operations.Main.Customers;
 using UnitOfWork.Persistence.Operations;
-using Application.Services.Operations.Customers.Dtos.Mappers;
+using Domain.Entities.System.Customers;
+// using Application.Services.Operations.Customers.Dtos.Mappers;
 
 namespace Application.Services.Operations.Customers;
 
@@ -17,18 +18,18 @@ public class CustomerUpdateServices : ICustomerUpdateServices
 {
 
     private readonly ICustomerRepository _iCustomerRepository;
-    private readonly ICustomerObjectMapperServices _ICustomerObjectMapperServices;
+    // private readonly ICustomerObjectMapperServices _ICustomerObjectMapperServices;
     private readonly IUnitOfWork _GENERIC_REPO;
 
 
     public CustomerUpdateServices(
         ICustomerRepository ICustomerRepository,
-        ICustomerObjectMapperServices ICustomerObjectMapperServices,
+        // ICustomerObjectMapperServices ICustomerObjectMapperServices,
         IUnitOfWork GENERIC_REPO
         )
     {
         _iCustomerRepository = ICustomerRepository;
-        _ICustomerObjectMapperServices = ICustomerObjectMapperServices;
+        // _ICustomerObjectMapperServices = ICustomerObjectMapperServices;
         _GENERIC_REPO = GENERIC_REPO;
     }
 
@@ -43,7 +44,9 @@ public class CustomerUpdateServices : ICustomerUpdateServices
             selector => selector
             );
 
-        var updated = _ICustomerObjectMapperServices.CustomerUpdateMapper(entity, fromDb);
+        // var updated = _ICustomerObjectMapperServices.CustomerUpdateMapper(entity, fromDb);
+
+        var updated = new Customer(){Name = "", TradeName = "", CNPJ = ""};
 
         _GENERIC_REPO.Customers.Update(updated);
 

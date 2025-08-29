@@ -2,7 +2,7 @@
 using Domain.Entities.Authentication;
 
 namespace Application.Services.Operations.Auth.Register;
-    public interface IRegisterServices
+    public interface IFirstRegisterBusinessServices
     {
         Task<UserToken> RegisterAsync(RegisterModel user);
     }

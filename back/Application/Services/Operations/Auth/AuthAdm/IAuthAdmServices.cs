@@ -6,6 +6,7 @@ namespace Authentication.Operations.AuthAdm;
 
 public interface IAuthAdmServices
 {
-        Task<BusinessAuth> BusinessAsync(int id);
+        Task<BusinessAuthDto> GetBusinessFullAsync(int id);
+        Task<BusinessAuth> GetBusinessAsync(int id);
         Task<bool> UpdateBusinessAuthAndProfileAsync(BusinessAuthUpdateAddCompanyDto businessAuthUpdateDto, int id);
 }

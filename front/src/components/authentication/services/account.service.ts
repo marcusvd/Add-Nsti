@@ -21,7 +21,7 @@ export class AccountService extends BackEndService<UserAccount> {
 
   constructor(
     private _warningsService: WarningsService,
-    private _router: Router
+    // private _router: Router
   ) { super() }
 
 
@@ -37,7 +37,8 @@ export class AccountService extends BackEndService<UserAccount> {
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
             body: 'E-mail Confirmado com sucesso.',
           }).subscribe(result => {
-            this._router.navigateByUrl('login');
+            // this._router.navigateByUrl('login');
+            this.callRouter('login');
           })
 
         }, 5000);
@@ -74,7 +75,8 @@ export class AccountService extends BackEndService<UserAccount> {
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
             body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
           }).subscribe(result => {
-            this._router.navigateByUrl('login');
+            // this._router.navigateByUrl('login');
+            this.callRouter('login');
           })
 
         }, 5000);
@@ -96,7 +98,8 @@ export class AccountService extends BackEndService<UserAccount> {
                 body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
 
               }).subscribe(result => {
-                this._router.navigateByUrl('login');
+                this.callRouter('login');
+                // this._router.navigateByUrl('login');
               })
 
             }, 5000);
@@ -116,7 +119,8 @@ export class AccountService extends BackEndService<UserAccount> {
               body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
 
             }).subscribe(result => {
-              this._router.navigateByUrl('login');
+              this.callRouter('login');
+              // this._router.navigateByUrl('login');
             })
 
           }, 5000);
@@ -158,13 +162,16 @@ export class AccountService extends BackEndService<UserAccount> {
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
             body: 'A senha foi modificada com sucesso!',
           }).subscribe(result => {
-            this._router.navigateByUrl('login');
+            // this._router.navigateByUrl('login');
+             this.callRouter('/login');
           })
 
         }, 5000);
 
-        this._router.navigate((['/']));
-        this._router.navigateByUrl('/login');
+        this.callRouter('/');
+        this.callRouter('/login');
+        // this._router.navigate((['/']));
+        // this._router.navigateByUrl('/login');
       }, error: (err: any) => {
         const erroCode: string = err.error.Message.split('|');
         switch (erroCode[0]) {

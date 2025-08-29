@@ -14,7 +14,7 @@ import { environment } from "environments/environment";
 export class LoginService extends BackEndService<UserTokenDto> {
 
   constructor(
-    private _router: Router
+    // private _router: Router
   ) { super() }
 
 
@@ -23,7 +23,7 @@ export class LoginService extends BackEndService<UserTokenDto> {
   }
 
   logOut() {
-    this._router.navigateByUrl('/login')
+    this.callRouter('/login')
     // this.openDialogLogin();
     localStorage.clear();
     // this._communicationsAlerts.defaultSnackMsg('5', 0, null, 4);

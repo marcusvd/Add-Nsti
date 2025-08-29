@@ -15,29 +15,29 @@ public class BusinessAuthRepository : AuthRepository<BusinessAuth>, IBusinessAut
     }
 
 
-    public async Task<BusinessAuth> GetBusinessFull(int id)
-    {
+    // public async Task<BusinessAuth> BusinessFullAsync(int id)
+    // {
 
-        var businessGroup = await GetByPredicate(
-         x => x.Id == id,
-         add =>
-         add.Include(x => x.UsersAccounts)
-        .Include(x => x.Companies),
-         selector => selector,
-         ordeBy => ordeBy.OrderBy(x => x.Name)
-         );
+    //     var businessGroup = await GetByPredicate(
+    //      x => x.Id == id,
+    //      add =>
+    //      add.Include(x => x.UsersAccounts)
+    //     .Include(x => x.Companies),
+    //      selector => selector,
+    //      ordeBy => ordeBy.OrderBy(x => x.Name)
+    //      );
 
-        if (businessGroup == null)
-            return new BusinessAuth
-            {
-                Id = -1,
-                Name = "Invalid",
-                BusinessProfileId = "-1"
-            };
+    //     if (businessGroup == null)
+    //         return new BusinessAuth
+    //         {
+    //             Id = -1,
+    //             Name = "Invalid",
+    //             BusinessProfileId = "-1"
+    //         };
 
-        return businessGroup;
+    //     return businessGroup;
 
-    }
+    // }
 
 
 

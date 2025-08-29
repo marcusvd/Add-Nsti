@@ -16,6 +16,7 @@ import { ImportsCompany } from "components/company/imports/imports-company";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { BusinessAuth } from "components/authentication/dtos/business-auth";
 import { map, Observable } from "rxjs";
+import { DefaultComponent } from "shared/components/default-component/default-component";
 
 @Component({
   selector: 'add-company',
@@ -25,7 +26,7 @@ import { map, Observable } from "rxjs";
   imports: [
     DefaultCompImports,
     ImportsCompany,
-    RouterModule
+    DefaultComponent
   ],
   providers: [
     CompanyAddProviders,
@@ -33,7 +34,7 @@ import { map, Observable } from "rxjs";
   ]
 })
 
-export class CompanyAddComponent extends BaseForm implements OnInit {
+export class AddCompanyComponent extends BaseForm implements OnInit {
 
   @Input('entity') entityBusiness$!: Observable<BusinessAuth>;
 
@@ -107,11 +108,9 @@ export class CompanyAddComponent extends BaseForm implements OnInit {
 
   _route = inject(Router);
   save() {
-    if (this.alertSave(this.formMain)) {
+    if (this.alertSave(this.formMain))
       this._companyService.save(this.formMain);
-       this.formLoad();
-      // this._route.navigate(['/users/adm-list', this?.formMain?.get('id')?.value]);
-    }
+
   }
 
   additionalCosts!: FormGroup;
@@ -142,16 +141,12 @@ export class CompanyAddComponent extends BaseForm implements OnInit {
   }
 
   ngOnInit(): void {
-    this.entityBusiness$.pipe(map(x => {
-      this.formLoad(x)
-    }
-    )).subscribe()
-    // const id = this._actRoute.snapshot.params['id'];
-    // this._companyService.loadById$<Business>('http://localhost:5156/api/AuthAdm/GetBusinessFullAsync', id).subscribe(
-    //   (x: Business) => {
-    //    console.log(x)
-    //   }
-    // )
+    const id = this._actRoute.snapshot.params['id'];
+    this._companyService.loadById$<BusinessAuth>('http://localhost:5156/api/AuthAdm/GetBusinessAsync', id).subscribe(
+      (x: BusinessAuth) => {
+        this.formLoad(x)
+      }
+    )
   }
 
 }

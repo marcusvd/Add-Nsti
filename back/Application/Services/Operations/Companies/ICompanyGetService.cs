@@ -5,7 +5,6 @@ namespace Application.Services.Operations.Companies
 {
     public interface ICompanyGetService
     {
-        // Task<CompanyDto> GetByIdStockIncludedAsync(int id);
-        // Task<CompanyDto[]> GetAllAsync();
+        Task<List<CompanyProfileDto>> GetAllAsync();
     }
 }

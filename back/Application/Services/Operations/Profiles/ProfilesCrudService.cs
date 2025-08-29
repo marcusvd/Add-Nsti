@@ -1,7 +1,9 @@
 
 using UnitOfWork.Persistence.Operations;
-using Application.Services.Shared.Dtos.Mappers;
+using Application.Services.Shared.Mappers.BaseMappers;
 using Application.Services.Operations.Profiles.Dtos;
+using Domain.Entities.System.Profiles;
+using Domain.Entities.System.BusinessesCompanies;
 
 namespace Application.Services.Operations.Companies;
     public class ProfilesCrudService : IProfilesCrudService
@@ -22,7 +24,7 @@ namespace Application.Services.Operations.Companies;
         {
             if (entityDto == null) throw new Exception("Objeto era nulo.");
 
-            var entityConvertedToDb = _mapper.UserProfileMapper(entityDto);
+            var entityConvertedToDb = _mapper.Map<UserProfileDto, UserProfile>(entityDto);
 
             _GENERIC_REPO.UsersProfiles.Add(entityConvertedToDb);
 
@@ -33,7 +35,7 @@ namespace Application.Services.Operations.Companies;
         {
             if (entityDto == null) throw new Exception("Objeto era nulo.");
 
-            var entityConvertedToDb = _mapper.BusinessProfileMapper(entityDto);
+            var entityConvertedToDb =_mapper.Map<BusinessProfileDto,BusinessProfile>(entityDto);
 
             _GENERIC_REPO.BusinessesProfiles.Add(entityConvertedToDb);
 

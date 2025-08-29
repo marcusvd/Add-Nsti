@@ -5,6 +5,7 @@ import { take } from "rxjs/operators";
 
 import { IBackEndService } from "./ibackend.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { NavigationExtras, Router } from "@angular/router";
 
 Injectable({
   providedIn: 'root'
@@ -25,6 +26,7 @@ export abstract class BackEndService<T> implements IBackEndService<T> {
 
   private _http = inject(HttpClient);
   private _snackBar = inject(MatSnackBar);
+  private _router = inject(Router);
 
   add$<T>(record: T, url: string): Observable<T> {
     return this._http.post<T>(`${url}`, record);
@@ -76,6 +78,23 @@ export abstract class BackEndService<T> implements IBackEndService<T> {
   deleteFake$<T>(url?: string, record?: any): Observable<T> {
     return this._http.put<T>(`${url}/${record.id}`, record).pipe(take(1));
   }
+
+
+  callRouter(url: string, entity?: any) {
+
+    const objectRoute: NavigationExtras = {
+      state: {
+        entity
+      }
+    };
+
+    if (entity)
+      this._router?.navigate([url], objectRoute);
+    else
+      this._router?.navigateByUrl(url);
+
+  }
+
 
   openSnackBar(message: string, style: string, action: string = 'Fechar', duration: number = 5000, horizontalPosition: any = 'center', verticalPosition: any = 'top') {
     this._snackBar?.open(message, action, {

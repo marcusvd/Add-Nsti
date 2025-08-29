@@ -8,8 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Authentication.Helpers;
 using Authentication.Context;
-using Authentication.AuthenticationRepository.UserAccountRepository;
-using Authentication.AuthenticationRepository.BusinessRepository;
 using Domain.Entities.Authentication;
 using Authentication.Jwt;
 
@@ -78,7 +76,7 @@ public static class IdentityConfiguration
         services.AddScoped<JwtHandler>();
         services.AddScoped<AuthGenericValidatorServices>();
       
-        // services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+        //  services.AddScoped<IRegisterUserAccountServices, UserAccountRepository>();
         // services.AddScoped<IBusinessRepository, BusinessRepository>();
         //
         services.AddScoped<IUrlHelper>(x =>

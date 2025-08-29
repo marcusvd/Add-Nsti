@@ -16,13 +16,13 @@ namespace Api.Controllers
     {
 
         private readonly ILoginServices _iLoginServices;
-        private readonly IRegisterServices _iRegisterServices;
+        private readonly IFirstRegisterBusinessServices _iRegisterServices;
         private readonly IAccountManagerServices _iAccountManagerServices;
 
         public AuthController(
 
             ILoginServices iLoginServices,
-            IRegisterServices iRegisterServices,
+            IFirstRegisterBusinessServices iRegisterServices,
             IAccountManagerServices iAccountManagerServices
             )
         {

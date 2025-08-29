@@ -5,28 +5,7 @@ namespace Application.Services.Shared.Dtos
 {
     public class ContactDto : RootBase
     {
-        public ContactDto(
-            int id,
-            DateTime deleted,
-            DateTime registered,
-            string email,
-            string site,
-            string cel,
-            string zap,
-            string landline,
-            List<SocialNetworkDto> socialMedias
-        )
-        {
-            Id = id;
-            Deleted = deleted;
-            Registered = registered;
-            Email = email;
-            Site = site;
-            Cel = cel;
-            Zap = zap;
-            Landline = landline;
-            SocialMedias = socialMedias;
-        }
+        public ContactDto(){}
 
         public string Email { get; set; }
         public string Site { get; set; }
@@ -34,22 +13,6 @@ namespace Application.Services.Shared.Dtos
         public string Zap { get; set; }
         public string Landline { get; set; }
         public List<SocialNetworkDto> SocialMedias { get; set; }
-        public static ContactDto Create(
-            int id,
-            DateTime deleted,
-            DateTime registered,
-            string email,
-            string site,
-            string cel,
-            string zap,
-            string landline,
-            List<SocialNetworkDto> socialMedias)
-        {
-            // Aqui você pode adicionar validações, normalizações, etc.
-            return new ContactDto(id, deleted, registered, email, site, cel, zap, landline, socialMedias);
-        }
-
-
 
     }
 }

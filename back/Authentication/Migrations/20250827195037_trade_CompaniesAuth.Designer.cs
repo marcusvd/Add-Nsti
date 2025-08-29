@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authentication.Migrations
 {
     [DbContext(typeof(IdImDbContext))]
-    [Migration("20250823232407_fdvfggfgfgfgfchange_entity_name_to_CompaniesAuth")]
-    partial class fdvfggfgfgfgfchange_entity_name_to_CompaniesAuth
+    [Migration("20250827195037_trade_CompaniesAuth")]
+    partial class trade_CompaniesAuth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,10 @@ namespace Authentication.Migrations
 
                     b.Property<DateTime>("Registered")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TradeName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

@@ -1,15 +1,9 @@
 
-namespace Application.Services.Shared.Dtos
+namespace Application.Services.Shared.Dtos;
+
+public abstract class RootBaseDto
 {
-    public abstract class RootBaseDto
-    {
-        public int Id { get; set; }
-        // public int UserId { get; set; }
-        // public UserAccountDto User { get; set; }
-        // public int CompanyId { get; set; }
-        // public CompanyDto Company { get; set; }
+    public int Id { get; set; }
     public DateTime Deleted { get; set; } = DateTime.MinValue;
     public DateTime Registered { get; set; } = DateTime.UtcNow;
-    }
-
 }

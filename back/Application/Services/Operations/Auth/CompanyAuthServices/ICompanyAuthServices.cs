@@ -6,5 +6,6 @@ namespace Application.Services.Operations.Auth.CompanyAuthServices;
 
 public interface ICompanyAuthServices
 {
-    Task<bool> AddAsync(CompanyAuth entity);
+    Task<CompanyAuth> GetCompanyAuthAsync(int id);
+    Task UpdateCompanyAuth(CompanyAuth companyAuth);
 }

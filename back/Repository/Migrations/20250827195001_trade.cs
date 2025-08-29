@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class change : Migration
+    public partial class trade : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -96,12 +96,18 @@ namespace Repository.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     ContactId = table.Column<int>(type: "int", nullable: true),
+                    BusinessProfileId = table.Column<int>(type: "int", nullable: true),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MN_Companies_profiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MN_Companies_profiles_MN_businesses_profiles_BusinessProfile~",
+                        column: x => x.BusinessProfileId,
+                        principalTable: "MN_businesses_profiles",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_MN_Companies_profiles_SD_Addresses_AddressId",
                         column: x => x.AddressId,
@@ -161,12 +167,18 @@ namespace Repository.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     ContactId = table.Column<int>(type: "int", nullable: true),
+                    BusinessProfileId = table.Column<int>(type: "int", nullable: true),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PF_UserProfiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PF_UserProfiles_MN_businesses_profiles_BusinessProfileId",
+                        column: x => x.BusinessProfileId,
+                        principalTable: "MN_businesses_profiles",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PF_UserProfiles_SD_Addresses_AddressId",
                         column: x => x.AddressId,
@@ -245,6 +257,11 @@ namespace Repository.Migrations
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MN_Companies_profiles_BusinessProfileId",
+                table: "MN_Companies_profiles",
+                column: "BusinessProfileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MN_Companies_profiles_ContactId",
                 table: "MN_Companies_profiles",
                 column: "ContactId");
@@ -265,6 +282,11 @@ namespace Repository.Migrations
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PF_UserProfiles_BusinessProfileId",
+                table: "PF_UserProfiles",
+                column: "BusinessProfileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PF_UserProfiles_ContactId",
                 table: "PF_UserProfiles",
                 column: "ContactId");
@@ -282,9 +304,6 @@ namespace Repository.Migrations
                 name: "CustomerCompany");
 
             migrationBuilder.DropTable(
-                name: "MN_businesses_profiles");
-
-            migrationBuilder.DropTable(
                 name: "PF_UserProfiles");
 
             migrationBuilder.DropTable(
@@ -295,6 +314,9 @@ namespace Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "MN_Customers");
+
+            migrationBuilder.DropTable(
+                name: "MN_businesses_profiles");
 
             migrationBuilder.DropTable(
                 name: "SD_Addresses");

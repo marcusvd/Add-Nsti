@@ -6,16 +6,16 @@ namespace Application.Services.Shared.Seed.EntitiesSeed;
 public class SeedFirstDbServices
 {
     private readonly IUnitOfWork _GENERIC_REPO;
-    private readonly IRegisterServices _iRegisterServices;
-    public SeedFirstDbServices(IUnitOfWork GENERIC_REPO, IRegisterServices iRegisterServices)
+    private readonly IFirstRegisterBusinessServices _iFirstRegisterBusinessServices;
+    public SeedFirstDbServices(IUnitOfWork GENERIC_REPO, IFirstRegisterBusinessServices iFirstRegisterBusinessServices)
     {
         _GENERIC_REPO = GENERIC_REPO;
-        _iRegisterServices = iRegisterServices;
+        _iFirstRegisterBusinessServices = iFirstRegisterBusinessServices;
     }
 
     public async Task<bool> CheckIfNeededSeed()
     {
-        AuthenticationSeed auth = new(_iRegisterServices);
+        AuthenticationSeed auth = new(_iFirstRegisterBusinessServices);
         CustomerSeed_NSTI customers = new();
 
         await auth.AddUser();

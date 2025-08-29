@@ -8,7 +8,7 @@ import { environment } from 'environments/environment';
 // import { IsUserRegistereValidator } from '../../authentication/is-user-registered-validator';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, RouterModule, RouterOutlet } from '@angular/router';
-import { CompanyAddComponent } from 'components/company/components/add/add-company.component';
+import { AddCompanyComponent } from 'components/company/components/add/add-company.component';
 import { AdmService } from '../../services/adm.service';
 import { ListControlAdm } from '../helpers/list-control-adm';
 import { ImportsListAdm } from '../imports/imports-list-adm';
@@ -21,10 +21,10 @@ import { ImportsListAdm } from '../imports/imports-list-adm';
   standalone: true,
   imports: [
     ImportsListAdm,
-    RouterOutlet,
+    // RouterOutlet,
     RouterModule,
     MatTabsModule,
-    CompanyAddComponent
+    // AddCompanyComponent
   ],
   providers: [
     AdmService
@@ -63,10 +63,12 @@ export class ListAdmComponent extends ListControlAdm implements OnInit {
 
   backend = `${environment._BACK_END_ROOT_URL}/authadm/GetBusinessFullAsync`
 
+  addRoute!: string
+
   ngOnInit(): void {
-
     const id = this._actRouter.snapshot.params['id'] as number;
-
+    this.addRoute = '/users/add-company/'+id
+    // this.addRoute = `/users/add-company/${id}`
     this.startSupply(this.backend, id)
   }
 

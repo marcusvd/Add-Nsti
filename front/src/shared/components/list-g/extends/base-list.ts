@@ -146,7 +146,11 @@ export class BaseList {
       }
     };
 
-    this._router?.navigate([url], objectRoute);
+    if (entity)
+      this._router?.navigate([url], objectRoute);
+    else
+      this._router?.navigateByUrl(url);
+
   }
 
 
