@@ -65,17 +65,9 @@ mat-paginator {
         }
     }
     max-width: calc(100vw - 10%);
-    // mat-card {
-    //     margin: 5px;
-    // }
-    // .cell:last-child {
-    //   flex: 3; // Makes the last cell 3 times larger
-    // }
+
 }
 
-// mat-card {
-//     margin: 5px;
-// }
 .btn-icon {
     padding: 0;
     margin: 0;
@@ -109,4 +101,52 @@ mat-paginator {
     flex-direction: column;
     flex-basis: 100%;
     width: 100%;
+}
+
+
+
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* Tooltip oculto */
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%; /* aparece acima */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 1000;
+}
+
+/* Seta do tooltip */
+.tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Mostrar ao passar o mouse */
+.tooltip:hover::after,
+.tooltip:hover::before {
+  opacity: 1;
 }

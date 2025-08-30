@@ -22,7 +22,7 @@ public class CompanyProfileEntityMapper : BaseMapper<CompanyProfile, CompanyProf
 
     public override CompanyProfileDto Map(CompanyProfile source)
     {
-        if (source == null) return new CompanyProfileDto() { CompanyAuthId = "invalid" };
+        if (source == null) return new CompanyProfileDto() { CompanyAuthId = "invalid", BusinessProfileId = "invalid" };
 
         var destination = base.Map(source);
 
@@ -50,7 +50,7 @@ public class CompanyProfileDtoMapper : BaseMapper<CompanyProfileDto, CompanyProf
 
     public override CompanyProfile Map(CompanyProfileDto source)
     {
-        if (source == null) return new CompanyProfile() { CompanyAuthId = "invalid" };
+        if (source == null) return new CompanyProfile() { CompanyAuthId = "invalid",};
 
         var destination = base.Map(source);
 
@@ -63,10 +63,10 @@ public class CompanyProfileDtoMapper : BaseMapper<CompanyProfileDto, CompanyProf
 
 public class CompanyAuthEntityMapper : BaseMapper<CompanyAuth, CompanyAuthDto>
 {
-    // private readonly IMapper<CompanyUserAccount, CompanyUserAccountDto> _companyUserAccountEntityMapper;
+    private readonly IMapper<CompanyUserAccount, CompanyUserAccountDto> _companyUserAccountEntityMapper;
     public CompanyAuthEntityMapper(IMapper<CompanyUserAccount, CompanyUserAccountDto> companyUserAccountEntityMapper)
     {
-        // _companyUserAccountEntityMapper = companyUserAccountEntityMapper;
+        _companyUserAccountEntityMapper = companyUserAccountEntityMapper;
     }
 
     public override CompanyAuthDto Map(CompanyAuth source)
@@ -75,7 +75,7 @@ public class CompanyAuthEntityMapper : BaseMapper<CompanyAuth, CompanyAuthDto>
 
         var destination = base.Map(source);
 
-        // destination.CompanyUserAccounts = _companyUserAccountEntityMapper.Map(source.CompanyUserAccounts).ToList();
+        destination.CompanyUserAccounts = _companyUserAccountEntityMapper.Map(source.CompanyUserAccounts).ToList();
 
 
         return destination;
@@ -84,11 +84,11 @@ public class CompanyAuthEntityMapper : BaseMapper<CompanyAuth, CompanyAuthDto>
 }
 public class CompanyAuthDtoMapper : BaseMapper<CompanyAuthDto, CompanyAuth>
 {
-    // private readonly IMapper<CompanyUserAccountDto, CompanyUserAccount> _companyUserAccountDtoMapper;
+    private readonly IMapper<CompanyUserAccountDto, CompanyUserAccount> _companyUserAccountDtoMapper;
 
     public CompanyAuthDtoMapper(IMapper<CompanyUserAccountDto, CompanyUserAccount> companyUserAccountDtoMapper)
     {
-        // _companyUserAccountDtoMapper = companyUserAccountDtoMapper;
+        _companyUserAccountDtoMapper = companyUserAccountDtoMapper;
     }
     public override CompanyAuth Map(CompanyAuthDto source)
     {
@@ -96,7 +96,7 @@ public class CompanyAuthDtoMapper : BaseMapper<CompanyAuthDto, CompanyAuth>
 
         var destination = base.Map(source);
 
-        // destination.CompanyUserAccounts = _companyUserAccountDtoMapper.Map(source.CompanyUserAccounts).ToList();
+        destination.CompanyUserAccounts = _companyUserAccountDtoMapper.Map(source.CompanyUserAccounts).ToList();
 
         return destination;
     }

@@ -15,7 +15,7 @@ using Application.Services.Shared.Mappers.BaseMappers;
 namespace Authentication.Operations.AuthAdm;
 
 public class AuthAdmServices : IAuthAdmServices
-// public class AuthAdmServices : CommonObjectMapper, IAuthAdmServices
+// public class AuthAdmServices : ObjectMapper, IAuthAdmServices
 {
     private UserManager<UserAccount> _userManager;
     private readonly IBusinessAuthRepository _businessAuthRepository;
@@ -23,11 +23,8 @@ public class AuthAdmServices : IAuthAdmServices
     private readonly ILogger<AuthGenericValidatorServices> _logger;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly JwtHandler _jwtHandler;
-    // private readonly IMapper<Address, AddressDto> _addressMapper;
-    // private readonly IMapper<Contact, ContactDto> _contactMapper;
 
-    private readonly ICommonObjectMapper _mapper;
-
+    private readonly IObjectMapper _mapper;
 
     public AuthAdmServices(
           UserManager<UserAccount> userManager,
@@ -36,12 +33,8 @@ public class AuthAdmServices : IAuthAdmServices
           ICompanyProfileAddService companyProfileAddService,
           JwtHandler jwtHandler,
           AuthGenericValidatorServices genericValidatorServices,
-              ICommonObjectMapper mapper
-      // IMapper<Address, AddressDto> addressMapper,
-      // IMapper<Contact, ContactDto> contactMapper
-
+          IObjectMapper mapper
       )
-    //   ) : base(addressMapper, contactMapper)
     {
         _userManager = userManager;
         _logger = logger;
@@ -50,9 +43,6 @@ public class AuthAdmServices : IAuthAdmServices
         _companyProfileAddService = companyProfileAddService;
         _genericValidatorServices = genericValidatorServices;
         _mapper = mapper;
-        // _addressMapper = addressMapper;
-        // _contactMapper = contactMapper;
-
     }
 
     public async Task<BusinessAuthDto> GetBusinessFullAsync(int id)
@@ -83,8 +73,6 @@ public class AuthAdmServices : IAuthAdmServices
 
         return businessGrouppDto;
 
-
-        // return await _businessAuthRepository.GetBusinessFull(id);
     }
     public async Task<BusinessAuth> GetBusinessAsync(int id)
     {
@@ -120,11 +108,8 @@ public class AuthAdmServices : IAuthAdmServices
 
         _genericValidatorServices.Validate(businessAuthUpdateDto.BusinessProfileId, businessAuth.BusinessProfileId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
 
-        // var businessAuthToDb = new BusinessAuth() { Id = 0, Name = "test", BusinessProfileId = "test" };
         businessAuth.Companies.Add(_mapper.Map<CompanyAuthDto, CompanyAuth>(businessAuthUpdateDto.Company ?? new CompanyAuthDto() { Name = "invalid", TradeName = "invalid", CompanyProfileId = "invalid" }));
-
-        // var businessAuthToDb = _mapper.BusinessAuthMapperUpdate(businessAuth, businessAuthUpdateDto);
-
+        
         businessAuth.Companies.ToList()[0].CompanyProfileId = CompanyProfileIdAuthId;
 
         CompanyProfileDto companyProfile = new()
@@ -136,25 +121,11 @@ public class AuthAdmServices : IAuthAdmServices
 
 
         _businessAuthRepository.Update(businessAuth);
-        // _businessAuthRepository.Update(businessAuthToDb);
 
         if (await _companyProfileAddService.AddAsync(companyProfile))
             return await _businessAuthRepository.SaveAsync();
 
         return false;
     }
-    // public bool Validate<T>(T dtoId, T paramId)
-    // {
-    //     if (!Equals(dtoId, paramId)) throw new AuthServicesException(GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
-    //     else
-    //         return true;
-    // }
-    // public bool ValidateIdsString(int dtoId, int paramId)
-    // {
-    //     if (dtoId != paramId) throw new AuthServicesException(GlobalErrorsMessagesException.EntityFromIdIsNull);
-    //     else
-    //         return true;
-    // }
-
 
 }

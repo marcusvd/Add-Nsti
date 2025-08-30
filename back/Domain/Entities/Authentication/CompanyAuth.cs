@@ -10,3 +10,4 @@ public class CompanyAuth : RootBaseAuth
     public BusinessAuth? Business { get; set; }
     public ICollection<CompanyUserAccount> CompanyUserAccounts { get; set; } = new List<CompanyUserAccount>();
 }
+

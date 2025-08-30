@@ -28,6 +28,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                 Id = 1,
                 // Name = "No Stop Ti",
                 CompanyAuthId = "!",
+                // BusinessProfileId = "!",
                 Address = new()
                 {
                     ZipCode = "30285100",

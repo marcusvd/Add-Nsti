@@ -10,10 +10,10 @@ namespace Application.Services.Operations.Companies
     public class CompanyProfileAddService : ICompanyProfileAddService
     {
 
-        private readonly ICommonObjectMapper _mapper;
+        private readonly IObjectMapper _mapper;
         private readonly IUnitOfWork _GENERIC_REPO;
         public CompanyProfileAddService(
-                        ICommonObjectMapper mapper,
+                        IObjectMapper mapper,
                         IUnitOfWork GENERIC_REPO)
         {
             _mapper = mapper;

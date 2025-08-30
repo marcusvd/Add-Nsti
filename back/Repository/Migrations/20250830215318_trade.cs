@@ -94,9 +94,9 @@ namespace Repository.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CompanyAuthId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    BusinessProfileId = table.Column<int>(type: "int", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     ContactId = table.Column<int>(type: "int", nullable: true),
-                    BusinessProfileId = table.Column<int>(type: "int", nullable: true),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -107,7 +107,8 @@ namespace Repository.Migrations
                         name: "FK_MN_Companies_profiles_MN_businesses_profiles_BusinessProfile~",
                         column: x => x.BusinessProfileId,
                         principalTable: "MN_businesses_profiles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MN_Companies_profiles_SD_Addresses_AddressId",
                         column: x => x.AddressId,

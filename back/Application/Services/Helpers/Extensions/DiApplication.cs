@@ -35,7 +35,7 @@ public static class DiApplication
         #endregion
 
         #region ObjectMapper
-        services.AddScoped<ICommonObjectMapper, CommonObjectMapper>();
+        services.AddScoped<IObjectMapper, ObjectMapper>();
 
         
 

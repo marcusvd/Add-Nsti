@@ -1,0 +1,14 @@
+<default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'mudar-aqui'" [textSubTitleComp]="'Cadastro de empresa'" [iconSubTitleComp]="'add'" [hideDivider]="true">
+  <div btns>
+
+  </div>
+  <div body  class="grid grid-cols-2 p-4">
+<edit-company>
+</edit-company>
+
+<list-g [headersLabel]="labelHeadersMiddle()" [headersFields]="fieldsHeadersMiddle()" [entities]="this.entitiesFiltered$">
+<!-- <list-g [headersLabel]="labelHeadersMiddle()" [headersFields]="fieldsHeadersMiddle()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)"
+            (outonPageChange)="onPageChange($event)"> -->
+        </list-g>
+  </div>
+</default-component>

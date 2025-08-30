@@ -9,22 +9,40 @@ namespace Application.Services.Shared.Mappers.BaseMappers;
 
 public class UserAccountEntityMapper : BaseMapper<UserAccount, UserAccountDto>
 {
+    private readonly IMapper<CompanyUserAccount, CompanyUserAccountDto> _companyUserAccountEntityMapper;
+    public UserAccountEntityMapper(IMapper<CompanyUserAccount, CompanyUserAccountDto> companyUserAccountEntityMapper)
+    {
+        _companyUserAccountEntityMapper = companyUserAccountEntityMapper;
+    }
+
+
     public override UserAccountDto Map(UserAccount source)
     {
-        if (source == null) return new UserAccountDto() { UserProfileId = "invalid", DisplayUserName = "invalid", Email = "invalid" };
+        if (source == null) return new UserAccountDto() {BusinessAuthId = -1, UserProfileId = "invalid", DisplayUserName = "invalid", Email = "invalid", UserName = "invalid" };
 
         var destination = base.Map(source);
+
+        destination.CompanyUserAccounts = _companyUserAccountEntityMapper.Map(source.CompanyUserAccounts).ToList();
 
         return destination;
     }
 }
 public class UserAccountDtoMapper : BaseMapper<UserAccountDto, UserAccount>
 {
+    private readonly IMapper<CompanyUserAccountDto, CompanyUserAccount> _companyUserAccountDtoMapper;
+    public UserAccountDtoMapper(IMapper<CompanyUserAccountDto, CompanyUserAccount> companyUserAccountDtoMapper)
+    {
+        _companyUserAccountDtoMapper = companyUserAccountDtoMapper;
+    }
+
+
     public override UserAccount Map(UserAccountDto source)
     {
         if (source == null) return new UserAccount() { UserProfileId = "invalid", DisplayUserName = "invalid", Email = "invalid" };
 
         var destination = base.Map(source);
+
+        destination.CompanyUserAccounts = _companyUserAccountDtoMapper.Map(source.CompanyUserAccounts).ToList();
 
         return destination;
     }

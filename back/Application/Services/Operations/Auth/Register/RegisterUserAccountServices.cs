@@ -12,6 +12,7 @@ using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
 using Application.Services.Operations.Auth.CompanyAuthServices;
 using Application.Exceptions;
+using Application.Services.Shared.Mappers.BaseMappers;
 
 
 namespace Application.Services.Operations.Auth.Register;
@@ -25,6 +26,7 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
     private readonly ICompanyProfileAddService _companyAddService;
     private readonly ICompanyAuthServices _companyAuthService;
     private readonly IProfilesCrudService _profilesCrudService;
+    private readonly IObjectMapper _objectMapper;
 
     private readonly JwtHandler _jwtHandler;
     private readonly IUrlHelper _url;
@@ -37,7 +39,8 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
           ICompanyProfileAddService companyAddService,
           ICompanyAuthServices companyAuthService,
           ILogger<AuthGenericValidatorServices> logger,
-          IProfilesCrudService profilesCrudService
+          IProfilesCrudService profilesCrudService,
+          IObjectMapper objectMapper
       ) : base(userManager, jwtHandler)
     {
         _userManager = userManager;
@@ -49,6 +52,7 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
         _companyAuthService = companyAuthService;
         _logger = logger;
         _profilesCrudService = profilesCrudService;
+        _objectMapper = objectMapper;
     }
 
     public async Task<UserToken> AddUserExistingCompanyAsync(AddUserExistingCompanyDto user, int companyId)
@@ -62,17 +66,24 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         var userProfileId = Guid.NewGuid().ToString();
 
-        var companyAuth = await _companyAuthService.GetCompanyAuthAsync(user.companyAuthId);
-       
-        var userAccount = CreateUserAccount(user, companyAuth.BusinessId, userProfileId);
+        // var companyAuth = _objectMapper.Map<CompanyAuthDto, CompanyAuth>(await _companyAuthService.GetCompanyAuthAsync(user.companyAuthId));
+
+        var companyAuthDto = await _companyAuthService.GetCompanyAuthAsync(user.companyAuthId);
+
+
+        var userAccountDto = CreateUserAccount(user, companyAuthDto.BusinessId, userProfileId);
+        var userAccount = _objectMapper.Map<UserAccountDto, UserAccount>(userAccountDto);
+
+
+
 
         var creationResult = await _userManager.CreateAsync(userAccount, user.Password);
 
-        companyAuth.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = companyAuth, UserAccount = userAccount });
+        companyAuthDto.CompanyUserAccounts.Add(new CompanyUserAccountDto { CompanyAuth = companyAuthDto, UserAccount = userAccountDto });
 
         var userProfile = CreateUserProfile(userProfileId);
 
-        await _companyAuthService.UpdateCompanyAuth(companyAuth);
+        await _companyAuthService.UpdateCompanyAuth(companyAuthDto);
 
         var userProfileResult = await _profilesCrudService.AddUserProfileAsync(userProfile);
 
@@ -124,47 +135,47 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
         }
     }
 
-        private UserAccount CreateUserAccount(AddUserExistingCompanyDto user, int businessAuthId, string userProfileId)
+    private UserAccountDto CreateUserAccount(AddUserExistingCompanyDto user, int businessAuthId, string userProfileId)
+    {
+
+
+        var userAccount = new UserAccountDto()
         {
+            DisplayUserName = user.UserName,
+            UserName = user.Email,
+            Email = user.Email,
+            UserProfileId = userProfileId,
+            BusinessAuthId = businessAuthId
+        };
+
+        // 
 
 
-            var userAccount = new UserAccount()
-            {
-                DisplayUserName = user.UserName,
-                UserName = user.Email,
-                Email = user.Email,
-                UserProfileId = userProfileId,
-                BusinessAuthId = businessAuthId
-            };
+        return userAccount;
+    }
 
-            // 
-
-
-            return userAccount;
-        }
-    
-        private UserProfileDto CreateUserProfile(string userAccountId)
+    private UserProfileDto CreateUserProfile(string userAccountId)
+    {
+        var userProfileDto = new UserProfileDto()
         {
-            var userProfileDto = new UserProfileDto()
-            {
-                Id = 0,
-                UserAccountId = userAccountId,
-            };
-            return userProfileDto;
-        }
-   
-        private async Task<bool> IsUserNameDuplicate(string userName)
-        {
-            var userAccount = await _userManager.FindByNameAsync(userName);
+            Id = 0,
+            UserAccountId = userAccountId,
+        };
+        return userProfileDto;
+    }
 
-            return userAccount != null;
-        }
-        private async Task<bool> IsEmailDuplicate(string email)
-        {
-            var userAccount = await _userManager.FindByEmailAsync(email);
+    private async Task<bool> IsUserNameDuplicate(string userName)
+    {
+        var userAccount = await _userManager.FindByNameAsync(userName);
 
-            return userAccount != null;
-        }
+        return userAccount != null;
+    }
+    private async Task<bool> IsEmailDuplicate(string email)
+    {
+        var userAccount = await _userManager.FindByEmailAsync(email);
+
+        return userAccount != null;
+    }
 
     private async Task SendEmailConfirmationAsync(UserAccount userAccount)
     {

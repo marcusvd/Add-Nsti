@@ -7,7 +7,7 @@
 
 // namespace Application.Services.Operations.Authentication.Dtos.Mappers;
 
-// public partial class AuthenticationObjectMapperServices : CommonObjectMapper, IAuthenticationObjectMapperServices
+// public partial class AuthenticationObjectMapperServices : ObjectMapper, IAuthenticationObjectMapperServices
 // {
 
 //     public UserAccount RegisterMapper(RegisterDto entity)

@@ -56,7 +56,7 @@ namespace Repository.Data.Operations.Repository;
             return query;
 
         }
-        public virtual async Task<T> GetById(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, Expression<Func<T, T>> selector = null, Func<IQueryable<T>, IOrderedQueryable<T>> ordeBy = null, bool disableTracking = true)
+        public virtual async Task<T> GetByPredicate(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, Expression<Func<T, T>> selector = null, Func<IQueryable<T>, IOrderedQueryable<T>> ordeBy = null, bool disableTracking = true)
         {
 
             IQueryable<T> query = _CONTEXT.Set<T>();

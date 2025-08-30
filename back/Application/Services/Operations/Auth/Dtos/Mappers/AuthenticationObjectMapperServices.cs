@@ -2,7 +2,7 @@
 
 // namespace Authentication.Dtos.Mappers;
 
-// public partial class AuthenticationObjectMapperServices : CommonObjectMapper, IAuthenticationObjectMapperServices
+// public partial class AuthenticationObjectMapperServices : ObjectMapper, IAuthenticationObjectMapperServices
 // {
 
 // }

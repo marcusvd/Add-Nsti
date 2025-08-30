@@ -117,9 +117,9 @@ export class ListControlAdm extends BaseList {
 
     console.log(obj.action.split('|')[0])
 
-    if (obj.action.split('|')[0] == 'edit')
-      this.callRouter(`/customers/edit/${obj.entityId}`);
-
+    if (obj.action.split('|')[0] == 'edit'){
+      this.callRouter(`users/edit-company/${obj.entityId}`);
+}
     if (obj.action.split('|')[0] == 'delete')
       this.deleteFake(obj.entityId);
 
@@ -159,8 +159,9 @@ export class ListControlAdm extends BaseList {
       id: {
         key: company.id,
         display: 'icons',
-        icons: ['edit|', 'delete|color:rgb(158, 64, 64);margin-left:10px;', 'person_add|'],
+        icons: ['edit|-|Alterar', 'delete|color:rgb(158, 64, 64);margin-left:10px;|Excluir', 'person_add|-|Adicionar usuário'],
         styleInsideCell: `color:rgb(11, 112, 155); cursor: pointer; font-size:20px;`,
+        iconsLabels: ['edit|-|Alterar', 'delete|color:rgb(158, 64, 64);margin-left:10px;', 'person_add|'],
         styleCell: '',
         route: ''
       },
@@ -170,8 +171,7 @@ export class ListControlAdm extends BaseList {
         styleCell: 'width:100%;',
       },
       usersAmount: {
-        key: company.companyUserAccounts.filter(c => c.companyAuthId == company.id).length,
-
+        keyN: company.companyUserAccounts.filter(c => c.companyAuthId == company.id).length,
         styleCell: 'width:100%;',
       }
     })
@@ -193,12 +193,10 @@ export class ListControlAdm extends BaseList {
       this.business = x;
 
       x?.companies.forEach(y => {
-        const amountUsers = y.companyUserAccounts;
-        // const amountUsers = y.companyUserAccounts.filter(c => c.companyAuthId == y.id);
+
         this.entities = this.supplyItemsGrid(entities, y)
         this.entities$ = of(this.entities);
 
-        console.log(amountUsers)
         this.entitiesFiltered$ = this.entities$;
       })
 

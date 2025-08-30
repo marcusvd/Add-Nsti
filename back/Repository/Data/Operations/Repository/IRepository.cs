@@ -22,7 +22,7 @@ namespace Repository.Data.Operations.Repository;
                                 Expression<Func<T, bool>> termPredicate = null,
                                 bool disableTracking = true
         );
-        Task<T> GetById(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, Expression<Func<T, T>> selector = null, Func<IQueryable<T>, IOrderedQueryable<T>> ordeBy = null, bool disableTracking = true);
+        Task<T> GetByPredicate(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, Expression<Func<T, T>> selector = null, Func<IQueryable<T>, IOrderedQueryable<T>> ordeBy = null, bool disableTracking = true);
         Task<Page<T>> GetPaged(
              Params parameters,
             Expression<Func<T, bool>> predicate = null,

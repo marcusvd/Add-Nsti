@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 import { environment } from 'environments/environment';
@@ -12,8 +12,23 @@ import { BaseForm } from 'shared/inheritance/forms/base-form';
 // import { IsUserRegisteredValidator } from '../validators/is-user-registered-validator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WarningsService } from 'components/warnings/services/warnings.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ImportsPanelAdm } from './imports/imports-panel-adm';
+import { DefaultComponent } from 'shared/components/default-component/default-component';
+import { EditCompanyComponent } from 'components/company/components/edit/edit-company.component';
+import { ListGComponent } from 'shared/components/list-g/list/list-g.component';
+import { ProfileService } from 'components/authentication/services/profile.service';
+import { CompanyProfileService, CompanyService } from 'components/authentication/services/company.service';
+import { CompanyAuth } from 'components/authentication/dtos/company-auth';
+import { ContactService } from 'shared/components/contact/services/contact.service';
+import { AddressService } from 'shared/components/address/services/address.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NameCpfCnpjComponent } from 'shared/components/administrative/name-cpf-cnpj/name-cpf-cnpj.component';
+import { BusinessData } from 'shared/components/administrative/name-cpf-cnpj/dto/business-data';
+import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
+import { AddressComponent } from 'shared/components/address/component/address.component';
+import { ContactComponent } from 'shared/components/contact/component/contact.component';
+import { CompanyProfile } from 'components/company/dtos/company-profile';
 
 
 @Component({
@@ -23,19 +38,33 @@ import { ImportsPanelAdm } from './imports/imports-panel-adm';
   standalone: true,
   imports: [
     ImportsPanelAdm,
-    
+    DefaultComponent,
+    NameCpfCnpjComponent,
+    ListGComponent,
+    AddressComponent,
+    ContactComponent,
+    MatTabsModule
   ],
-  providers: []
+  providers: [
+    ContactService,
+    AddressService,
+    IsMobileNumberPipe
+  ]
 })
 export class PanelAdmComponent extends BaseForm implements OnInit {
 
   constructor(
-    // private _profileService:  ProfileService,
+    private _companyService: CompanyService,
+    private _companyProfileService: CompanyProfileService,
     private _fb: FormBuilder,
     // private _isUserRegisteredValidator: IsUserRegisteredValidator,
     private _router: Router,
+    private _actRoute: ActivatedRoute,
     private _warningsService: WarningsService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _isMobileNumberPipe: IsMobileNumberPipe,
+    private _contactService: ContactService,
+    private _addressService: AddressService,
   ) { super() }
 
 
@@ -43,139 +72,89 @@ export class PanelAdmComponent extends BaseForm implements OnInit {
 
   backend = `${environment._BACK_END_ROOT_URL}/auth/ProfileAsync`
 
-  // registerTest() {
+  entitiesFiltered$: any;
+  address!: FormGroup;
+  contact!: FormGroup;
 
-  //   this.openSnackBar('CADASTRADO!' +'   '+ 'MARCUSMVD@HOTMAIL.COM.BR' + '.', 'warnings-success');
-
-  //   setTimeout(() => {
-
-  //     this.openAuthWarnings({
-  //       btn1: 'Fechar', btn2: '', title: 'AVISO:',
-  //       messageBody: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-  //       next: true, action: 'openLogin'
-  //     })
-
-  //   }, 5000);
-
-
-
-  // }
-
-  // register(tokenCaptcha: string | undefined) {
-
-  //   const user: any = this.formMain.value;
-
-  //   if (this.alertSave(this.formMain)) {
-  //     if (this.formMain.valid && tokenCaptcha) {
-  //       this._registerService.AddUser(user, this.formMain, this.backend)
-  //         .subscribe({
-  //           next: (user) => {
-  //             console.log(user)
-  //             this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
-
-  //             setTimeout(() => {
-  //               this._warningsService.openAuthWarnings({
-  //                 btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-  //                 body: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-  //               }).subscribe(result => {
-  //                 this._router.navigateByUrl('login');
-  //               })
-
-  //             }, 5000);
-
-  //           }, error: (err: any) => {
-  //             console.log(err)
-  //             const erroCode: string = err?.error?.Message?.split('|');
-  //             console.log(erroCode)
-  //             // switch (erroCode[0]) {
-  //             //   case '1.1': {
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'delay': '3',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-  //             //     this._errorMessage.next(erroCode[1])
-  //             //     form.controls['email'].setErrors({ errorEmailDuplicated: true })
-  //             //     break;
-  //             //   }
-  //             //   case '1.2': {
-  //             //     console.log(err);
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'delay': '3',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-  //             //     this._errorMessage.next(erroCode[1])
-  //             //     form.controls['userName'].setErrors({ errorUserNameDuplicated: true })
-  //             //     break;
-  //             //   }
-  //             //   case '200.0': {
-  //             //     console.log(err);
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'delay': '3',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-  //             //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-  //             //     break;
-  //             //   }
-  //             //   case '1.7': {
-  //             //     console.log(err);
-  //             //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-  //             //     // this._communicationsAlerts.communicationCustomized({
-  //             //     //   'message': erroCode[1],
-  //             //     //   'action': '',
-  //             //     //   'style': 'red-snackBar-error',
-  //             //     //   'delay': '3',
-  //             //     //   'positionVertical': 'center',
-  //             //     //   'positionHorizontal': 'top',
-  //             //     // });
-
-  //             //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-  //             //     break;
-  //             //   }
-  //             // }
-  //           }
-  //         })
-
-
-  //       // .subscribe((x: string) => {
-  //       //   this.loginErrorMessage = x;
-  //       //   // this._communicationsAlerts.defaultSnackMsg('7', 0);
-  //       //   console.log(x)
-  //       // })
-  //     }
-
-  //   }
-  // }
-
-  formLoad() {
-    return this.formMain = this._fb.group(
-      {
-      userName: ['', [Validators.required, Validators.minLength(3)]],
-      displayUserName: ['', [Validators.required, Validators.minLength(3)]],
-      companyName: ['', [Validators.required, Validators.minLength(3)]],
-      email: new FormControl(''),
-      // email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
-      password: ['', [Validators.required, Validators.minLength(3)]],
-      confirmPassword: ['', [Validators.required]],
-    }
-    // }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] }
-
-  )
+  labelHeadersMiddle = () => {
+    return [
+      { key: '', style: 'cursor: pointer;' },
+      { key: 'Nome', style: 'cursor: pointer;' },
+      { key: 'Email', style: 'cursor: pointer;' }
+    ]
   }
+
+  fieldsHeadersMiddle = () => {
+    return [
+      { key: 'id', style: '' },
+      { key: 'name', style: '' },
+      { key: 'email', style: '' }
+    ]
+  }
+
+  cpfCnpjBusinessData(data: BusinessData) {
+
+    this.setFormMain(data);
+    this.setEditressForm(data);
+    this.setContactForm(data);
+
+
+    this.sanitizeFormFields(this.formMain);
+  }
+
+  setFormMain(data: BusinessData) {
+    if (data.nome.length > 0)
+      this.formMain?.get('company')?.get('name')?.setValue(data.nome);
+  }
+
+  setEditressForm(data: BusinessData) {
+    this.address.reset();
+    this.address.get('zipcode')?.setValue(data.cep);
+    this._addressService.query(data.cep)
+    this.address.get('number')?.setValue(data.numero);
+    this.address.get('id')?.setValue(0);
+  }
+
+  setContactForm(data: BusinessData) {
+    this.contact.reset();
+    this.contact.get('id')?.setValue(0);
+    this.contact.get('email')?.setValue(data.email);
+
+    const isMobile = this._isMobileNumberPipe.transform(data.telefone)
+
+    if (isMobile.isMobile)
+      this.contact.get('cel')?.setValue(isMobile.phoneNum);
+    else
+      this.contact.get('landline')?.setValue(isMobile.phoneNum);
+  }
+
+  sanitizeFormFields(form: FormGroup): void {
+    Object.keys(form.controls).forEach(field => {
+      const control = form.get(field);
+      if (control instanceof FormGroup) {
+        this.sanitizeFormFields(control);
+      } else if (control && (control.value === null || control.value === undefined)) {
+        control.setValue('');
+      }
+    })
+  }
+
+
+  // formLoad() {
+  //   return this.formMain = this._fb.group(
+  //     {
+  //       userName: ['', [Validators.required, Validators.minLength(3)]],
+  //       displayUserName: ['', [Validators.required, Validators.minLength(3)]],
+  //       companyName: ['', [Validators.required, Validators.minLength(3)]],
+  //       email: new FormControl(''),
+  //       // email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
+  //       password: ['', [Validators.required, Validators.minLength(3)]],
+  //       confirmPassword: ['', [Validators.required]],
+  //     }
+  //     // }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] }
+
+  //   )
+  // }
 
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
@@ -210,8 +189,50 @@ export class PanelAdmComponent extends BaseForm implements OnInit {
     window.history.back();
   }
 
+  formLoad(auth?: CompanyAuth, profile?: CompanyProfile): FormGroup {
+
+    return this.formMain = this._fb.group({
+      id: [auth?.id ?? 0, [Validators.required]],
+      name: [auth?.name ?? '', [Validators.required, Validators.maxLength(100)]],
+      tradeName: [auth?.tradeName ?? '', [Validators.required, Validators.maxLength(100)]],
+      companyProfileId: [auth?.companyProfileId],
+      businessId: [auth?.businessId],
+
+      // companyId: [0, [Validators.required]],
+      // companyId: [localStorage.getItem("companyId"), [Validators.required]],
+      cnpj: [auth?.cnpj ?? '', []],
+      // description: ['', [Validators.maxLength(500)]],
+      entityType: [true, []],
+      // registered: [new Date(), [Validators.required]],
+      address: this.address = this._addressService.formLoad(profile?.address),
+      contact: this.contact = this._contactService.formLoad(profile?.contact)
+    })
+
+  }
+
+  // deleted
+  // Registered
+
+
   ngOnInit(): void {
-    this.formLoad();
+    const id = this._actRoute.snapshot.params['id'];
+
+
+
+    this._companyService.loadById$<CompanyAuth>('http://localhost:5156/api/AuthAdm/GetCompanyAuthAsync', id).subscribe(
+      (companyAuth: CompanyAuth) => {
+
+        this._companyService.loadById$<CompanyProfile>('http://localhost:5156/api/AuthAdm/GetCompanyProfileAsync', companyAuth.companyProfileId).subscribe(
+          (companyProfile: CompanyProfile) => {
+            console.log(companyProfile)
+            console.log(companyAuth)
+            this.formLoad(companyAuth, companyProfile);
+          }
+        )
+
+
+      }
+    )
   }
 
 }

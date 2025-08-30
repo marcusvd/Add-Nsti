@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Operations.Auth.CompanyAuthServices;
 using Application.Services.Operations.Auth.Register;
+using Application.Exceptions;
 
 
 namespace Api.Controllers
@@ -52,10 +53,20 @@ namespace Api.Controllers
 
         [HttpGet("GetCompanyAuthAsync/{id:min(1)}")]
         [Authorize(Roles = "SYSADMIN")]
-        public async Task<IActionResult> GetCompanyAsync(int id)
+        public async Task<IActionResult> GetCompanyAuthAsync(int id)
         {
             return Ok(await _companyAuthServices.GetCompanyAuthAsync(id));
 
+        }
+
+        [HttpGet("GetCompanyProfileAsync/{companyAuthId}")]
+        [AllowAnonymous]
+        // [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> GetCompanyProfileAsync(string companyAuthId)
+        {
+            if (string.IsNullOrWhiteSpace(companyAuthId)) throw new Exception(GlobalErrorsMessagesException.IvalidId);
+
+            return Ok(await _companyAuthServices.GetCompanyProfileFullAsync(companyAuthId));
         }
 
         [HttpPut("UpdateUserRole")]

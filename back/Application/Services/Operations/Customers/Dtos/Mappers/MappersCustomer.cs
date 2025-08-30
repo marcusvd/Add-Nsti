@@ -7,7 +7,7 @@
 
 // namespace Application.Services.Operations.Customers.Dtos.Mappers;
 
-// public partial class CustomerObjectMapperServices : CommonObjectMapper, ICustomerObjectMapperServices
+// public partial class CustomerObjectMapperServices : ObjectMapper, ICustomerObjectMapperServices
 // {
 //     public List<CustomerDto> CustomerListMake(List<Customer> list)
 //     {

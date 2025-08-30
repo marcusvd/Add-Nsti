@@ -48,6 +48,7 @@ public class ImSystemDbContext : DbContext
         builder.ApplyConfiguration(new CustomerFluentApi());
         builder.ApplyConfiguration(new CompanyFluentApi());
         builder.ApplyConfiguration(new CustomerCompanyFluentApi());
+        builder.ApplyConfiguration(new BusinessProfileFluentApi());
 
         //builder.Entity<UserProfile>(x => 
         // {

@@ -162,7 +162,7 @@ namespace Repository.Migrations
                     b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BusinessProfileId")
+                    b.Property<int>("BusinessProfileId")
                         .HasColumnType("int");
 
                     b.Property<string>("CompanyAuthId")
@@ -315,15 +315,19 @@ namespace Repository.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", null)
+                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", "BusinessProfile")
                         .WithMany("Companies")
-                        .HasForeignKey("BusinessProfileId");
+                        .HasForeignKey("BusinessProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Shared.Contact", "Contact")
                         .WithMany()
                         .HasForeignKey("ContactId");
 
                     b.Navigation("Address");
+
+                    b.Navigation("BusinessProfile");
 
                     b.Navigation("Contact");
                 });

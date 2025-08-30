@@ -16,7 +16,7 @@ import { RegisterService } from 'components/authentication/services/register.ser
 import { IsUserRegisteredValidator } from 'components/authentication/validators/is-user-registered-validator';
 import { PasswordConfirmationValidator } from 'components/authentication/validators/password-confirmation-validator';
 import { PasswordValidator } from 'components/authentication/validators/password-validator';
-import { AddUserCompanyService } from 'components/authentication/services/add-user-company.service';
+import { CompanyService } from '../../../authentication/services/company.service';
 import { CompanyAuth } from 'components/authentication/dtos/company-auth';
 import { AddUserExistingCompanyDto } from 'components/authentication/dtos/add-user-existing-company-dto';
 
@@ -37,7 +37,7 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
 
   constructor(
     private _registerService: RegisterService,
-    private _addUserCompanyService: AddUserCompanyService,
+    private _addUserCompanyService: CompanyService,
     private _fb: FormBuilder,
     private _isUserRegisteredValidator: IsUserRegisteredValidator,
     private _router: Router,

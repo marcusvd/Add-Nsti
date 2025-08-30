@@ -9,10 +9,10 @@ namespace Application.Services.Operations.Companies
     public class CompanyGetService : ICompanyGetService
     {
 
-        private readonly ICommonObjectMapper _mapper;
+        private readonly IObjectMapper _mapper;
         private readonly IUnitOfWork _GENERIC_REPO;
         public CompanyGetService(
-                        ICommonObjectMapper mapper,
+                        IObjectMapper mapper,
                         IUnitOfWork GENERIC_REPO)
         {
             _mapper = mapper;

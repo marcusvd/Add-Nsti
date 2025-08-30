@@ -38,7 +38,7 @@ public class CustomerUpdateServices : ICustomerUpdateServices
         if (entity == null) throw new GlobalServicesException(GlobalErrorsMessagesException.IsObjNull);
         if (customerId != entity.Id) throw new GlobalServicesException(GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
 
-        var fromDb = await _iCustomerRepository.GetById(
+        var fromDb = await _iCustomerRepository.GetByPredicate(
             x => x.Id == customerId,
             null,
             selector => selector
@@ -60,7 +60,7 @@ public class CustomerUpdateServices : ICustomerUpdateServices
     public async Task<HttpStatusCode> DeleteFakeAsync(int customerId)
     {
 
-        var fromDb = await _iCustomerRepository.GetById(
+        var fromDb = await _iCustomerRepository.GetByPredicate(
             x => x.Id == customerId,
             toInclude => toInclude.Include(x => x.Address)
             .Include(x => x.Contact)

@@ -8,13 +8,15 @@ import { FieldsInterface } from '../list/interfaces/fields-interface';
 import { OnClickInterface } from '../list/interfaces/on-click-interface';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'list-card-g',
   standalone: true,
   templateUrl: './list-card-g.component.html',
   imports: [
-    importsModules
+    importsModules,
+
   ],
   styleUrls: ['./list-card-g.component.scss']
 })
