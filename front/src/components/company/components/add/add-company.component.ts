@@ -17,6 +17,9 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { BusinessAuth } from "components/authentication/dtos/business-auth";
 import { map, Observable } from "rxjs";
 import { DefaultComponent } from "shared/components/default-component/default-component";
+import { CpfCnpjComponent } from "shared/components/administrative/cpf-cnpj/cpf-cnpj.component";
+import { CompanyNamesComponent } from "../commons-components/company-names/company-names.component";
+import { DocType } from "shared/components/administrative/cpf-cnpj/dto/doc-type";
 
 @Component({
   selector: 'add-company',
@@ -26,7 +29,9 @@ import { DefaultComponent } from "shared/components/default-component/default-co
   imports: [
     DefaultCompImports,
     ImportsCompany,
-    DefaultComponent
+    DefaultComponent,
+    CpfCnpjComponent,
+    CompanyNamesComponent
   ],
   providers: [
     CompanyAddProviders,
@@ -46,6 +51,8 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
 
   address!: FormGroup;
   contact!: FormGroup;
+  isCpf = true;
+
 
   constructor(
     private _companyService: CompanyAddService,
@@ -64,13 +71,32 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
     this.setAddressForm(data);
     this.setContactForm(data);
 
+    this.address?.setValue(this.address.value)
+    this.contact?.setValue(this.contact.value)
 
     this.sanitizeFormFields(this.formMain);
   }
 
   setFormMain(data: BusinessData) {
-    if (data.nome.length > 0)
+    if (data.nome.length > 0) {
       this.formMain?.get('company')?.get('name')?.setValue(data.nome);
+      this.formMain?.get('company')?.get('tradeName')?.setValue(data.nome);
+    }
+  }
+
+  isValidCpf(isCpfValid: DocType) {
+    if (isCpfValid.entity == 'cpf' && isCpfValid.result) {
+      this.formMain?.get('companyName')?.setValue('');
+      this.isCpf = true;
+      this.address?.setValue({})
+      this.contact?.setValue({})
+    }
+    else {
+      this.isCpf = false;
+      this.formMain?.get('companyName')?.setValue('');
+      this.address?.setValue({})
+       this.contact?.setValue({})
+    }
   }
 
   setAddressForm(data: BusinessData) {
@@ -125,13 +151,7 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
         name: ['', [Validators.required, Validators.maxLength(100)]],
         tradeName: ['', [Validators.required, Validators.maxLength(100)]],
         companyProfileId: ['back-end'],
-        entityType: [],
-        // companyId: [0, [Validators.required]],
-        // companyId: [localStorage.getItem("companyId"), [Validators.required]],
-        cnpj: ['', []],
-        // description: ['', [Validators.maxLength(500)]],
-        // entityType: [true, []],
-        // registered: [new Date(), [Validators.required]],
+        cnpj: ['', [Validators.required]],
 
       }),
       address: this.address = this._addressService.formLoad(),
@@ -141,6 +161,7 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
   }
 
   ngOnInit(): void {
+
     const id = this._actRoute.snapshot.params['id'];
     this._companyService.loadById$<BusinessAuth>('http://localhost:5156/api/AuthAdm/GetBusinessAsync', id).subscribe(
       (x: BusinessAuth) => {

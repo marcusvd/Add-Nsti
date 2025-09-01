@@ -37,7 +37,7 @@ public class ProfilesCrudService : IProfilesCrudService
     {
         if (entityDto == null) throw new Exception("Objeto era nulo.");
 
-        var entityConvertedToDb = _mapper.Map<BusinessProfileDto, BusinessProfile>(entityDto);
+        var entityConvertedToDb = entityDto.ToEntity();
 
         var company = _mapper.Map<CompanyProfileDto,CompanyProfile>(entityDto.Companies.ToList());
 

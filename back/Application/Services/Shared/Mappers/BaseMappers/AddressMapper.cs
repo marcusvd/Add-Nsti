@@ -7,7 +7,7 @@ public class AddressEntityMapper : BaseMapper<Address, AddressDto>
 {
     public override AddressDto Map(Address source)
     {
-        if (source == null) return new AddressDto();
+        if (source == null) return AddressMapper.Incomplete();
 
         var destination = base.Map(source);
 
@@ -19,7 +19,7 @@ public class AddressDtoMapper : BaseMapper<AddressDto, Address>
 {
       public override Address Map(AddressDto source)
     {
-        if (source == null) return new Address();
+        if (source == null) return AddressMapper.Incomplete().ToEntity();
 
         var destination = base.Map(source);
 

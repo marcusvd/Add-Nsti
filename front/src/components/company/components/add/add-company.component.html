@@ -1,4 +1,6 @@
-<default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="this.formMain.get('name')?.value" [textSubTitleComp]="'Cadastro de empresa'" [iconSubTitleComp]="'add'" [hideDivider]="true">
+<default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'"
+  [textTitleComp]="this.formMain.get('name')?.value" [textSubTitleComp]="'Cadastro de empresa'"
+  [iconSubTitleComp]="'add'" [hideDivider]="true">
   <div btns>
 
   </div>
@@ -9,10 +11,15 @@
         <h3 class="title-categories-divide-comp">Identificação</h3>
       </div>
 
-      <div>
+      <!-- <div>
         <name-cpf-cnpj (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)" [formMain]="subForm"> </name-cpf-cnpj>
+      </div> -->
+      <div class="p-4">
+        <company-names [formMain]="this.subForm">
+        </company-names>
+        <cpf-cnpj [formMain]="this.subForm" (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)" (isValidCpf)="isValidCpf($event)">
+        </cpf-cnpj>
       </div>
-
 
     </mat-card>
 

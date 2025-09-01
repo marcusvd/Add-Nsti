@@ -10,6 +10,7 @@ using Authentication.Jwt;
 using Application.Services.Operations.Companies;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
+using Application.Services.Shared.Dtos;
 
 
 namespace Application.Services.Operations.Auth.Register;
@@ -57,7 +58,7 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
         var businessProfileId = Guid.NewGuid().ToString();
 
         var companyAuth = CreateCompanyAuth(user.CompanyName, companyId);
-        var companyProfile = CreateCompany(companyId);
+        var companyProfile = CreateCompany(companyId, user);
 
         var businessAuth = CreateBusinessAuth(companyAuth, businessProfileId);
 
@@ -74,7 +75,7 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
 
         var creationResult = await _userManager.CreateAsync(userAccount, user.Password);
 
-        await _profilesCrudService.AddUserProfileAsync(userProfile);
+        // await _profilesCrudService.AddUserProfileAsync(userProfile);
 
         await _profilesCrudService.AddBusinessesProfilesAsync(businessProfile);
 
@@ -154,22 +155,30 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
         };
         return companyAuth;
     }
-    private CompanyProfileDto CreateCompany(string companyId)
+    private CompanyProfileDto CreateCompany(string companyId, RegisterModel user)
     {
-        var companyAuth = new CompanyProfileDto()
+        if (user.Address is null)
+            user.Address = AddressMapper.Incomplete().ToEntity();
+
+        if (user.Contact is null)
+            user.Contact = ContactMapper.Incomplete().ToEntity();
+
+        var companyProfile = new CompanyProfileDto()
         {
             Id = 0,
             CompanyAuthId = companyId,
-            // BusinessProfileId = businessProfileId
+            CNPJ = user.CNPJ,
+            Address = user.Address.ToDto(),
+            Contact = user.Contact.ToDto()
         };
-        return companyAuth;
+        return companyProfile;
     }
     private UserProfileDto CreateUserProfile(string userAccountId)
     {
         var userProfileDto = new UserProfileDto()
         {
             Id = 0,
-            UserAccountId = userAccountId,
+            UserAccountId = userAccountId
         };
         return userProfileDto;
     }
@@ -189,14 +198,19 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
     }
     private BusinessProfileDto CreateBusinessProfile(string businessProfileId, CompanyProfileDto company, UserProfileDto user)
     {
+
         var businessProfileDto = new BusinessProfileDto()
         {
             Id = 0,
             BusinessAuthId = businessProfileId,
-            UsersAccounts = new List<UserProfileDto>() { user },
+            UsersAccounts = new List<UserProfileDto>() { user},
             Companies = new List<CompanyProfileDto>() { company }
         };
 
+        // user.BusinessProfileId = businessProfileDto.Id;
+
+        // businessProfileDto.UsersAccounts.Add(user);
+        
         return businessProfileDto;
     }
 

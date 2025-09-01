@@ -3,13 +3,13 @@ namespace Domain.Entities.Shared
 {
     public class Address: RootBase
     {
-        public string? ZipCode { get; set; }
-        public string? Street { get; set; }
-        public string? Number { get; set; }
-        public string? District { get; set; }
-        public string? City { get; set; }
-        public string? State { get; set; }
-        public string? Complement { get; set; }
+        public required string ZipCode { get; set; } = string.Empty;
+        public required string Street { get; set; } = string.Empty;
+        public required string Number { get; set; } = string.Empty;
+        public required string District { get; set; } = string.Empty;
+        public required string City { get; set; } = string.Empty;
+        public required string State { get; set; } = string.Empty;
+        public  string? Complement { get; set; }
     }
 
 }

@@ -3,6 +3,7 @@ import { ContactDto } from "shared/components/contact/dtos/contact-dto";
 
 export class CompanyProfile {
   companyAuthId!: number;
+  cnpj!: string;
   businessProfileId!: number;
   businessProfile!: number;
   address!: AddressDto;

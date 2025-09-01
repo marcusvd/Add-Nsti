@@ -14,6 +14,12 @@ import { IsUserRegisteredValidator } from '../validators/is-user-registered-vali
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WarningsService } from 'components/warnings/services/warnings.service';
 import { Router } from '@angular/router';
+import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
+import { BusinessData } from 'shared/components/administrative/cpf-cnpj/dto/business-data';
+import { RegisterHelper } from './helper/register-helper';
+import { AddressService } from 'shared/components/address/services/address.service';
+import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
+import { ContactService } from 'shared/components/contact/services/contact.service';
 
 
 @Component({
@@ -22,13 +28,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css'],
   standalone: true,
   imports: [
-    ImportsRegister
+    ImportsRegister,
+    CpfCnpjComponent
   ],
   providers: [
-    RegisterService
+    RegisterService,
+    AddressService,
+    IsMobileNumberPipe
   ]
 })
-export class RegisterComponent extends BaseForm implements OnInit {
+export class RegisterComponent extends RegisterHelper implements OnInit {
 
   constructor(
     private _registerService: RegisterService,
@@ -36,8 +45,9 @@ export class RegisterComponent extends BaseForm implements OnInit {
     private _isUserRegisteredValidator: IsUserRegisteredValidator,
     private _router: Router,
     private _warningsService: WarningsService,
-    private _snackBar: MatSnackBar
-  ) { super() }
+    private _contactService: ContactService,
+    override _addressService: AddressService,
+  ) { super(_addressService) }
 
 
   loginErrorMessage: string = '';
@@ -162,13 +172,18 @@ export class RegisterComponent extends BaseForm implements OnInit {
     }
   }
 
+
+
   formLoad() {
     return this.formMain = this._fb.group({
       userName: ['', [Validators.required, Validators.minLength(3)]],
       companyName: ['', [Validators.required, Validators.minLength(3)]],
       email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
       password: ['', [Validators.required, Validators.minLength(3)]],
+      cnpj: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
+      address: [],
+      contact: []
     }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
   }
 
@@ -192,21 +207,14 @@ export class RegisterComponent extends BaseForm implements OnInit {
   }
 
 
-
-  // openSnackBar(message: string, style: string, action: string = 'Fechar', duration: number = 5000, horizontalPosition: any = 'center', verticalPosition: any = 'top') {
-  //   this._snackBar?.open(message, action, {
-  //     duration: duration, // Tempo em milissegundos (5 segundos)
-  //     panelClass: [style], // Aplica a classe personalizada
-  //     horizontalPosition: horizontalPosition, // Centraliza horizontalmente
-  //     verticalPosition: verticalPosition, // Posição vertical (pode ser 'top' ou 'bottom')
-  //   });
-  // }
   back() {
     window.history.back();
   }
 
   ngOnInit(): void {
     this.formLoad();
+    this.address = this._addressService.formLoad()
+    this.contact = this._contactService.formLoad()
   }
 
 }

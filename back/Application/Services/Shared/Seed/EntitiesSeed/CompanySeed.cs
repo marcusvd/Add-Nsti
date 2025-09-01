@@ -22,6 +22,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                 // Name = "No Stop Ti",
                 CompanyAuthId = "!",
                 BusinessProfileId = -1,
+                CNPJ = "",
                 Address = new()
                 {
 

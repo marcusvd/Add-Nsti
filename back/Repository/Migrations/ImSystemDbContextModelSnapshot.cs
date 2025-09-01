@@ -31,6 +31,7 @@ namespace Repository.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Complement")
@@ -40,21 +41,26 @@ namespace Repository.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("District")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Number")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Registered")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Street")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ZipCode")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -165,6 +171,10 @@ namespace Repository.Migrations
                     b.Property<int>("BusinessProfileId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CNPJ")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("CompanyAuthId")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -271,7 +281,7 @@ namespace Repository.Migrations
                     b.Property<int?>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BusinessProfileId")
+                    b.Property<int>("BusinessProfileId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ContactId")
@@ -372,15 +382,19 @@ namespace Repository.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", null)
+                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", "BusinessProfile")
                         .WithMany("UsersAccounts")
-                        .HasForeignKey("BusinessProfileId");
+                        .HasForeignKey("BusinessProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.Shared.Contact", "Contact")
                         .WithMany()
                         .HasForeignKey("ContactId");
 
                     b.Navigation("Address");
+
+                    b.Navigation("BusinessProfile");
 
                     b.Navigation("Contact");
                 });

@@ -6,6 +6,7 @@ public class BusinessAuthUpdateAddCompanyDto : RootBaseDto
 {
 
     public required string BusinessProfileId { get; set; }
+    public required string CNPJ { get; set; }
     public CompanyAuthDto? Company { get; set; }
     public AddressDto? Address { get; set; }
     public ContactDto? Contact { get; set; }

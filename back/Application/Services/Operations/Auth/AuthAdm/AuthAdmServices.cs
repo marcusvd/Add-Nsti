@@ -115,6 +115,7 @@ public class AuthAdmServices : IAuthAdmServices
         CompanyProfileDto companyProfile = new()
         {
             CompanyAuthId = businessAuth.Companies.ToList()[0].CompanyProfileId,
+            CNPJ = businessAuthUpdateDto.CNPJ,
             Address = businessAuthUpdateDto.Address,
             Contact = businessAuthUpdateDto.Contact
         };

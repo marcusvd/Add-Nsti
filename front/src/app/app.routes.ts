@@ -8,8 +8,10 @@ import { ConfirmEmailComponent } from 'components/authentication/confirm-email/c
 import { ForgotPasswordComponent } from 'components/authentication/forgot-password/forgot-password.component';
 import { PasswordResetComponent } from 'components/authentication/password-reset/password-reset.component';
 
+
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  // { path: 'login', component: RegisterComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'confirm-email', component: ConfirmEmailComponent },
   { path: 'forgot', component: ForgotPasswordComponent },

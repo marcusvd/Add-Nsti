@@ -28,7 +28,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                 Id = 1,
                 // Name = "No Stop Ti",
                 CompanyAuthId = "!",
-                // BusinessProfileId = "!",
+                 CNPJ = "invalid",
                 Address = new()
                 {
                     ZipCode = "30285100",
@@ -65,7 +65,8 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
                 Email = "marcusmvd@hotmail.com",
                 CompanyName = "ADD-NSTI",
                 Password = "123",
-                ConfirmPassword = "123"
+                ConfirmPassword = "123",
+                 CNPJ = "invalid" 
             };
 
             var result = await _iFirstRegisterBusinessServices.RegisterAsync(user);

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class trade : Migration
+    public partial class userAccountProfile_BusinessProfile : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,17 +38,17 @@ namespace Repository.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ZipCode = table.Column<string>(type: "longtext", nullable: true)
+                    ZipCode = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Street = table.Column<string>(type: "longtext", nullable: true)
+                    Street = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Number = table.Column<string>(type: "longtext", nullable: true)
+                    Number = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    District = table.Column<string>(type: "longtext", nullable: true)
+                    District = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "longtext", nullable: true)
+                    City = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    State = table.Column<string>(type: "longtext", nullable: true)
+                    State = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Complement = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -95,6 +95,8 @@ namespace Repository.Migrations
                     CompanyAuthId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BusinessProfileId = table.Column<int>(type: "int", nullable: false),
+                    CNPJ = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     ContactId = table.Column<int>(type: "int", nullable: true),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -164,11 +166,11 @@ namespace Repository.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    BusinessProfileId = table.Column<int>(type: "int", nullable: false),
                     UserAccountId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     ContactId = table.Column<int>(type: "int", nullable: true),
-                    BusinessProfileId = table.Column<int>(type: "int", nullable: true),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -179,7 +181,8 @@ namespace Repository.Migrations
                         name: "FK_PF_UserProfiles_MN_businesses_profiles_BusinessProfileId",
                         column: x => x.BusinessProfileId,
                         principalTable: "MN_businesses_profiles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PF_UserProfiles_SD_Addresses_AddressId",
                         column: x => x.AddressId,

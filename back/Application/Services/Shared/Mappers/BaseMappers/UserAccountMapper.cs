@@ -67,7 +67,7 @@ public class UserProfileEntityMapper : BaseMapper<UserProfile, UserProfileDto>
 
         var destination = base.Map(source);
 
-        destination.Address = _addressMapper.Map(source.Address ?? new Address());
+        destination.Address = _addressMapper.Map(source.Address ?? AddressMapper.Incomplete().ToEntity());
         destination.Contact = _contactMapper.Map(source.Contact ?? new Contact());
 
         return destination;
@@ -92,7 +92,7 @@ public class UserProfileDtoMapper : BaseMapper<UserProfileDto, UserProfile>
 
         var destination = base.Map(source);
 
-        destination.Address = _addressMapper.Map(source.Address ?? new AddressDto());
+        destination.Address = _addressMapper.Map(source.Address ?? AddressMapper.Incomplete());
         destination.Contact = _contactMapper.Map(source.Contact ?? new ContactDto());
 
         return destination;

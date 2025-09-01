@@ -1,0 +1,34 @@
+<div  [formGroup]="formMain">
+  <div class="w-full">
+    <mat-label style="font-weight: bold;" class="text-slate-900">CNPJ / CPF</mat-label>
+    <mat-form-field class="w-full" appearance="outline">
+      <input type="text" #cpf (input)="getCnpjData(cpf.value,formMain, 'cnpj')" (input)="cpfCnpjValidator.isValid(cpf.value,formMain, 'cnpj')" matInput [mask]="'000.000.000-00||00.000.000/0000-00'" [placeholder]="'00.000.000/0000-00'" formControlName="cnpj" aria-label="CPF">
+      <mat-error>
+        <span>{{cpfCnpjValidator.isValidCpf(formMain,'cnpj')}}</span>
+        <span>{{cpfCnpjValidator.isValidCnpj(formMain,'cnpj')}}</span>
+      </mat-error>
+      <mat-icon class="main-color-scss" matPrefix>badge</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <!-- <div class="w-full grid grid-rows-2 gap-4">
+    <div class="w-full grid sm:grid-cols-2 grid-cols-1 gap-4">
+      <div class="w-full">
+
+      </div>
+
+    </div>
+  </div> -->
+</div>
+  <!-- <div class="w-full">
+              <mat-label class="text-slate-900"> <b>Empresa</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input  matInput type="text" formControlName="companyName"
+                  aria-label="companyName">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'companyName','required')">{{defaultMessages.requiredMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>business</mat-icon>
+              </mat-form-field>
+            </div> -->

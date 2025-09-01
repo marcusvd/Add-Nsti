@@ -30,8 +30,7 @@
                 <input #email (input)="inputEmail(email.value)" matInput type="text" formControlName="email"
                   aria-label="email">
                 <mat-error>
-                  <span
-                    *ngIf="formErrorAndTouched(formMain, 'email','required')">{{defaultMessages.requiredMsg}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'email','required')">{{defaultMessages.requiredMsg}}</span>
                   <span *ngIf="formErrorAndTouched(formMain, 'email','email')">{{defaultMessages.emailMsg}}</span>
                   <span *ngIf="formErrorAndTouched(formMain, 'email','inUse')">{{'Este e-mail já esta registrador no sistema!'}}</span>
                 </mat-error>
@@ -41,8 +40,7 @@
             <div class="w-full">
               <mat-label class="text-slate-900"> <b>Nome de usuário</b></mat-label>
               <mat-form-field class="w-full" appearance="outline">
-                <input  matInput type="text" formControlName="userName"
-                  aria-label="userName">
+                <input matInput type="text" formControlName="userName" aria-label="userName">
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'userName','required')">{{defaultMessages.requiredMsg}}</span>
@@ -52,10 +50,23 @@
               </mat-form-field>
             </div>
             <div class="w-full">
+              <cpf-cnpj [formMain]="formMain" (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)" (isValidCpf)="isValidCpf($event)">
+              </cpf-cnpj>
+
+            </div>
+            <mat-label *ngIf="!isCpf" class="text-slate-900"> <b>Empresa</b></mat-label>
+            <div *ngIf="!isCpf" class="grid grid-cols-[50px_1fr] w-full p-3 border-2 mb-4">
+              <div>
+                <mat-icon class="main-color-scss" matPrefix>business</mat-icon>
+              </div>
+              <div class="pt-1">{{this.formMain?.get('companyName')?.value}}</div>
+            </div>
+
+
+            <div *ngIf="isCpf" class="w-full">
               <mat-label class="text-slate-900"> <b>Empresa</b></mat-label>
               <mat-form-field class="w-full" appearance="outline">
-                <input  matInput type="text" formControlName="companyName"
-                  aria-label="companyName">
+                <input matInput type="text" formControlName="companyName" aria-label="companyName">
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'companyName','required')">{{defaultMessages.requiredMsg}}</span>
@@ -71,10 +82,8 @@
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'password','required')">{{defaultMessages.requiredMsg}}</span>
-                  <span
-                    *ngIf="formErrorAndTouched(formMain, 'password','wordPwd')">{{'Senha não pode ser as palavras SENHA ou PASSWORD.'}}</span>
-                  <span
-                    *ngIf="formErrorAndTouched(formMain, 'password','usrPwdIsEqual')">{{'A senha não pode ser o nome de usuário'}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'password','wordPwd')">{{'Senha não pode ser as palavras SENHA ou PASSWORD.'}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'password','usrPwdIsEqual')">{{'A senha não pode ser o nome de usuário'}}</span>
                 </mat-error>
                 <mat-icon class="main-color-scss" matPrefix>https</mat-icon>
                 <mat-icon class="main-color-scss cursor-pointer" matSuffix
@@ -88,8 +97,8 @@
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'confirmPassword','required')">{{defaultMessages.requiredMsg}}</span>
-                  <span
-                    *ngIf="formErrorAndTouched(formMain, 'confirmPassword','invalidPasswordConfirmation')">{{'As senhas não coincidem.'}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'confirmPassword','invalidPasswordConfirmation')">{{'As
+                    senhas não coincidem.'}}</span>
                 </mat-error>
                 <mat-icon class="main-color-scss" matPrefix>https</mat-icon>
                 <mat-icon class="main-color-scss cursor-pointer" matSuffix
@@ -117,7 +126,7 @@
       </div>
       <div>
       </div>
-
+{{formMain.value | json}}
       <div class="p-4 flex justify-center">
         <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Cadastrar'" [icon]="'lock_open'"
           (btn)="register(token.sendForm())"></btn-g>

@@ -22,13 +22,13 @@ public class CompanyProfileEntityMapper : BaseMapper<CompanyProfile, CompanyProf
 
     public override CompanyProfileDto Map(CompanyProfile source)
     {
-        if (source == null) return new CompanyProfileDto() { CompanyAuthId = "invalid", BusinessProfileId = "invalid" };
+        if (source == null) return new CompanyProfileDto() { CompanyAuthId = "invalid", BusinessProfileId = 0,  CNPJ = "invalid" };
 
         var destination = base.Map(source);
 
-        destination.Address = _addressMapper.Map(source.Address = new Address());
+        destination.Address = _addressMapper.Map(source.Address = AddressMapper.Incomplete().ToEntity());
         destination.Contact = _contactMapper.Map(source.Contact = new Contact());
-
+        destination.CNPJ = source.CNPJ;
         return destination;
     }
 
@@ -50,12 +50,13 @@ public class CompanyProfileDtoMapper : BaseMapper<CompanyProfileDto, CompanyProf
 
     public override CompanyProfile Map(CompanyProfileDto source)
     {
-        if (source == null) return new CompanyProfile() { CompanyAuthId = "invalid",};
+        if (source == null) return new CompanyProfile() { CompanyAuthId = "invalid", CNPJ = "invalid" };
 
         var destination = base.Map(source);
 
-        destination.Address = _addressDtoMapper.Map(source.Address ?? new AddressDto());
+        destination.Address = _addressDtoMapper.Map(source.Address ?? AddressMapper.Incomplete());
         destination.Contact = _contactDtoMapper.Map(source.Contact ?? new ContactDto());
+        destination.CNPJ = source.CNPJ;
         return destination;
     }
 

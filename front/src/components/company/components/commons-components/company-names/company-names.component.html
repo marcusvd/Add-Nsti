@@ -1,0 +1,27 @@
+<div [formGroup]="formMain">
+          <div class="w-full grid sm:grid-cols-2 grid-cols-1 gap-4">
+
+            <div class="w-full">
+                <mat-label>Nome</mat-label>
+                <mat-form-field class="w-full" appearance="outline">
+                    <input matInput type="text" formControlName="name" aria-label="Nome">
+                    <mat-error>
+                        <span>{{validatorMessages.required(formMain,'name', 'Nome')}}</span>
+                        <span>{{validatorMessages.minMaxLength(formMain,'name', 'Nome',0,150)}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="w-full">
+                <mat-label>Nome Fantasia</mat-label>
+                <mat-form-field class="w-full" appearance="outline">
+                    <input matInput type="text" formControlName="tradeName" aria-label="Nome">
+                    <mat-error>
+                        <span>{{validatorMessages.required(formMain,'tradeName', 'Nome fantasia')}}</span>
+                        <span>{{validatorMessages.minMaxLength(formMain,'tradeName', 'Nome fantasia',0,150)}}</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+        </div>
+</div>

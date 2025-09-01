@@ -57,7 +57,10 @@ public class BusinessProfileFluentApi : IEntityTypeConfiguration<BusinessProfile
         //Many to maany
         builder.HasKey(x => x.Id);
         builder.HasMany(x => x.Companies).WithOne(x => x.BusinessProfile).HasForeignKey(fk => fk.BusinessProfileId);
-        // builder.Ignore(x => x.Id);
+
+        //Many to maany
+        builder.HasMany(x => x.UsersAccounts).WithOne(x => x.BusinessProfile).HasForeignKey(fk => fk.BusinessProfileId);
+        
     }
 }
 
