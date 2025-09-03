@@ -6,7 +6,6 @@ export class CompanyAuth {
   businessId!: number;
   name!: string;
   tradeName!: string;
-  cnpj!: string;
   companyProfileId!: string;
   companyUserAccounts!: CompanyUserAccount[];
   deleted!: Date;

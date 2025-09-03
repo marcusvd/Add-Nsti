@@ -182,8 +182,8 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
       password: ['', [Validators.required, Validators.minLength(3)]],
       cnpj: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
-      address: [],
-      contact: []
+      address:  this.address = this._addressService.formLoad(),
+      contact:     this.contact = this._contactService.formLoad()
     }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
   }
 
@@ -213,8 +213,8 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
   ngOnInit(): void {
     this.formLoad();
-    this.address = this._addressService.formLoad()
-    this.contact = this._contactService.formLoad()
+    // this.address = this._addressService.formLoad()
+    // this.contact = this._contactService.formLoad()
   }
 
 }

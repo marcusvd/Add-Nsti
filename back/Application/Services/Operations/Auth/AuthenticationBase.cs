@@ -4,6 +4,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Authentication.Jwt;
 using Domain.Entities.Authentication;
+using Application.Services.Operations.Auth.Dtos;
 
 namespace Application.Services.Operations.Auth;
 
@@ -94,6 +95,25 @@ public class AuthenticationBase
         return token;
     }
 
+    private protected RoleDto CreateRole(string role, string DisplayRole)
+    {
+        return new RoleDto
+        {
+            Name = role,
+            DisplayRole = DisplayRole,
+        };
+    }
+
+    private protected UpdateUserRole CreateUpdateUserRole(string userNameOrEmail, string role, string DisplayRole, bool delete)
+    {
+        return new UpdateUserRole
+        {
+            UserName = userNameOrEmail,
+            Role = role,
+            DisplayRole = DisplayRole,
+            Delete = delete
+        };
+    }
 
     public static async Task SendAsync(string To = "register@nostopti.com.br", string From = "register@nostopti.com.br", string DisplayName = "Sonny System",
     string Subject = "Test Subject", string Body = "Test", string MailServer = "smtp.nostopti.com.br",

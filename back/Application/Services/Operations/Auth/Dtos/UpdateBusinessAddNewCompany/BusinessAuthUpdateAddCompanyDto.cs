@@ -7,7 +7,7 @@ public class BusinessAuthUpdateAddCompanyDto : RootBaseDto
 
     public required string BusinessProfileId { get; set; }
     public required string CNPJ { get; set; }
-    public CompanyAuthDto? Company { get; set; }
+    public CompanyAuthDto Company { get; set; } = new() { CompanyProfileId = "invalid", Name = "invalid", TradeName = "invalid" };
     public AddressDto? Address { get; set; }
     public ContactDto? Contact { get; set; }
 }

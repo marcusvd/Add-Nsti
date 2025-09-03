@@ -1,20 +1,14 @@
 
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { inject } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 
-import { environment } from 'environments/environment';
 import { BaseForm } from 'shared/inheritance/forms/base-form';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { WarningsService } from 'components/warnings/services/warnings.service';
-import { Router } from '@angular/router';
-import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
-import { BusinessData } from 'shared/components/administrative/cpf-cnpj/dto/business-data';
-import { ContactService } from 'shared/components/contact/services/contact.service';
 import { AddressService } from 'shared/components/address/services/address.service';
-import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
+import { BusinessData } from 'shared/components/administrative/cpf-cnpj/dto/business-data';
 import { DocType } from 'shared/components/administrative/cpf-cnpj/dto/doc-type';
+import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
 
 
 
@@ -55,19 +49,25 @@ export class RegisterHelper extends BaseForm {
   }
 
   isValidCpf(isCpfValid: DocType) {
-    if (isCpfValid.entity == 'cpf' && isCpfValid.result) {
-      this.formMain?.get('companyName')?.setValue('');
-      this.isCpf = true;
-      this.formMain.get('address')?.setValue(null)
-      this.formMain.get('contact')?.setValue(null)
-    }
-    else {
-      this.isCpf = false;
-      this.formMain?.get('companyName')?.setValue('');
-      this.formMain.get('address')?.setValue(null)
-      this.formMain.get('contact')?.setValue(null)
-    }
+    this.formMain?.get('companyName')?.setValue('');
+    this.address?.reset();
+    this.contact?.reset();
   }
+
+  // isValidCpf(isCpfValid: DocType) {
+  //   if (isCpfValid.entity == 'cpf' && isCpfValid.result) {
+  //     this.formMain?.get('companyName')?.setValue('');
+  //     this.isCpf = true;
+  //     this.formMain.get('address')?.setValue(null)
+  //     this.formMain.get('contact')?.setValue(null)
+  //   }
+  //   else {
+  //     this.isCpf = false;
+  //     this.formMain?.get('companyName')?.setValue('');
+  //     this.formMain.get('address')?.setValue(null)
+  //     this.formMain.get('contact')?.setValue(null)
+  //   }
+  // }
 
 
   setAddressForm(data: BusinessData) {

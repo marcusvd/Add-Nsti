@@ -7,12 +7,15 @@ using Microsoft.Extensions.Logging;
 using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Operations.Account;
 using Authentication.Jwt;
-using Application.Services.Operations.Companies;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
-using Application.Services.Operations.Auth.CompanyAuthServices;
 using Application.Exceptions;
-using Application.Services.Shared.Mappers.BaseMappers;
+using Authentication.AuthenticationRepository.BusinessRepository;
+using Authentication.AuthenticationRepository.BusinessAuthRepository;
+using UnitOfWork.Persistence.Operations;
+using Repository.Data.Operations.BusinessesProfiles;
+using Microsoft.EntityFrameworkCore;
+using Domain.Entities.System.BusinessesCompanies;
 
 
 namespace Application.Services.Operations.Auth.Register;
@@ -23,12 +26,10 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
     private readonly UserManager<UserAccount> _userManager;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly IAccountManagerServices _accountManagerServices;
-    private readonly ICompanyProfileAddService _companyAddService;
-    private readonly ICompanyAuthServices _companyAuthService;
-    private readonly IProfilesCrudService _profilesCrudService;
-    private readonly IObjectMapper _objectMapper;
-
-    private readonly JwtHandler _jwtHandler;
+    private readonly ICompanyAuthRepository _companyAuthRepository;
+    private readonly IBusinessAuthRepository _businessAuthRepository;
+    private readonly IUnitOfWork _GENERIC_REPO;
+    private readonly IBusinessesProfilesRepository _businessesProfilesRepository;
     private readonly IUrlHelper _url;
     public RegisterUserAccountServices(
           UserManager<UserAccount> userManager,
@@ -36,28 +37,26 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
           IUrlHelper url,
           IAccountManagerServices accountManagerServices,
           AuthGenericValidatorServices genericValidatorServices,
-          ICompanyProfileAddService companyAddService,
-          ICompanyAuthServices companyAuthService,
-          ILogger<AuthGenericValidatorServices> logger,
-          IProfilesCrudService profilesCrudService,
-          IObjectMapper objectMapper
+          ICompanyAuthRepository companyAuthRepository,
+          IBusinessAuthRepository businessAuthRepository,
+          IUnitOfWork GENERIC_REPO,
+          IBusinessesProfilesRepository businessesProfilesRepository,
+          ILogger<AuthGenericValidatorServices> logger
       ) : base(userManager, jwtHandler)
     {
         _userManager = userManager;
         _accountManagerServices = accountManagerServices;
-        _jwtHandler = jwtHandler;
         _url = url;
         _genericValidatorServices = genericValidatorServices;
-        _companyAddService = companyAddService;
-        _companyAuthService = companyAuthService;
+        _companyAuthRepository = companyAuthRepository;
+        _businessAuthRepository = businessAuthRepository;
+        _GENERIC_REPO = GENERIC_REPO;
+        _businessesProfilesRepository = businessesProfilesRepository;
         _logger = logger;
-        _profilesCrudService = profilesCrudService;
-        _objectMapper = objectMapper;
     }
 
     public async Task<UserToken> AddUserExistingCompanyAsync(AddUserExistingCompanyDto user, int companyId)
     {
-
         _genericValidatorServices.IsObjNull(user);
 
         _genericValidatorServices.Validate(user.companyAuthId, companyId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
@@ -66,60 +65,83 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         var userProfileId = Guid.NewGuid().ToString();
 
-        // var companyAuth = _objectMapper.Map<CompanyAuthDto, CompanyAuth>(await _companyAuthService.GetCompanyAuthAsync(user.companyAuthId));
+        var companyAuth = await GetCompanyAuthAsync(user.companyAuthId);
 
-        var companyAuthDto = await _companyAuthService.GetCompanyAuthAsync(user.companyAuthId);
-
-
-        var userAccountDto = CreateUserAccount(user, companyAuthDto.BusinessId, userProfileId);
-        var userAccount = _objectMapper.Map<UserAccountDto, UserAccount>(userAccountDto);
-
-
-
+        var userAccount = CreateUserAccount(user, companyAuth.BusinessId, userProfileId).ToEntity() ?? (UserAccount)_genericValidatorServices.ReplaceNullObj<UserAccount>();
 
         var creationResult = await _userManager.CreateAsync(userAccount, user.Password);
 
-        companyAuthDto.CompanyUserAccounts.Add(new CompanyUserAccountDto { CompanyAuth = companyAuthDto, UserAccount = userAccountDto });
+        companyAuth.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = companyAuth, UserAccount = userAccount });
 
-        var userProfile = CreateUserProfile(userProfileId);
+        var businessAuth = await GetBusinessAuthAsync(companyAuth.BusinessId);
 
-        await _companyAuthService.UpdateCompanyAuth(companyAuthDto);
+        businessAuth.Companies.Add(companyAuth);
 
-        var userProfileResult = await _profilesCrudService.AddUserProfileAsync(userProfile);
+        var businessProfile = await GetBusinessProfileAsync(businessAuth.BusinessProfileId);
 
-        if (!userProfileResult)
-        {
-            _logger.LogError("UserProfile creation failed for {Email}. Errors: {Errors}", "", "");
+        _businessAuthRepository.Update(businessAuth);
 
-            throw new AuthServicesException("Error user profile create.");
-        }
+        var userProfile = CreateUserProfile(userProfileId, businessProfile.Id).ToEntity();
 
-        if (!creationResult.Succeeded)
-        {
-            _logger.LogError("User creation failed for {Email}. Errors: {Errors}",
-            userAccount.Email, string.Join(", ", creationResult.Errors));
+        _GENERIC_REPO.UsersProfiles.Add(userProfile);
 
-            throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenRegisterUserAccount);
-        }
+        var userProfileResult = await _GENERIC_REPO.save();
+
+        ResultUserCreation(creationResult.Succeeded, userProfileResult, userAccount.Email, creationResult.Errors.ToString() ?? ($"User creation failed for {userAccount.Email}."));
 
         await SendEmailConfirmationAsync(userAccount);
 
-        var admRole = new UpdateUserRole
-        {
-            UserName = userAccount.Email,
-            Role = "Users",
-            DisplayRole = "Usuários",
-            Delete = false
-        };
+        var admRole = CreateRole("Users", "Usuários");
+        var updateRole = CreateUpdateUserRole(userAccount.Email, "Users", "Usuários", false);
 
         //TODO: Move this to seeding class.
-        await _accountManagerServices.CreateRoleAsync(new RoleDto { Name = admRole.Role, DisplayRole = admRole.DisplayRole });
+        await _accountManagerServices.CreateRoleAsync(admRole);
 
-        await _accountManagerServices.UpdateUserRoles(admRole);
+        await _accountManagerServices.UpdateUserRoles(updateRole);
 
         return await CreateAuthenticationResponseAsync(userAccount);
     }
 
+
+    private async Task<CompanyAuth> GetCompanyAuthAsync(int companyAuthId)
+    {
+        return await _companyAuthRepository.GetByPredicate(
+         x => x.Id == companyAuthId,
+         null,
+         selector => selector,
+         null
+         );
+    }
+    private async Task<BusinessAuth> GetBusinessAuthAsync(int businessId)
+    {
+        return await _businessAuthRepository.GetByPredicate(
+                    x => x.Id == businessId,
+                    null,
+                    selector => selector,
+                    null
+                    );
+    }
+    private async Task<BusinessProfile> GetBusinessProfileAsync(string businessProfileId)
+    {
+        return await _businessesProfilesRepository.GetByPredicate(
+            x => x.BusinessAuthId == businessProfileId,
+
+            add => add.Include(x => x.Companies),
+            selector => selector,
+            null
+            );
+
+    }
+    private void ResultUserCreation(bool userAccount, bool userProfile, string userEmail, string errosMsg)
+    {
+
+        if (!userAccount || !userProfile)
+        {
+            _logger.LogError("User creation failed for {Email}. Errors: {Errors}", userEmail, string.Join(", ", errosMsg));
+
+            throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenRegisterUserAccount);
+        }
+    }
     private async Task ValidateUniqueUserCredentials(AddUserExistingCompanyDto register)
     {
         if (await IsUserNameDuplicate(register.UserName))
@@ -134,10 +156,8 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
             throw new AuthServicesException(AuthErrorsMessagesException.EmailAlreadyRegisterd);
         }
     }
-
     private UserAccountDto CreateUserAccount(AddUserExistingCompanyDto user, int businessAuthId, string userProfileId)
     {
-
 
         var userAccount = new UserAccountDto()
         {
@@ -148,22 +168,18 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
             BusinessAuthId = businessAuthId
         };
 
-        // 
-
-
         return userAccount;
     }
-
-    private UserProfileDto CreateUserProfile(string userAccountId)
+    private UserProfileDto CreateUserProfile(string userAccountId, int businessProfileId)
     {
         var userProfileDto = new UserProfileDto()
         {
             Id = 0,
             UserAccountId = userAccountId,
+            BusinessProfileId = businessProfileId
         };
         return userProfileDto;
     }
-
     private async Task<bool> IsUserNameDuplicate(string userName)
     {
         var userAccount = await _userManager.FindByNameAsync(userName);
@@ -176,7 +192,6 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         return userAccount != null;
     }
-
     private async Task SendEmailConfirmationAsync(UserAccount userAccount)
     {
         try
@@ -199,7 +214,6 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
             throw;
         }
     }
-
     private async Task<string> GenerateEmailUrl(UserAccount userAccount)
     {
         var urlConfirmMail = _url.Action("ConfirmEmailAddress", "auth", new
@@ -211,7 +225,6 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         return urlConfirmMail;
     }
-
     private string FormatEmailUrl(string baseUrl, string urlWithToken, string replace, UserAccount userAccount)
     {
         string mensagemBoasVindas = $@"

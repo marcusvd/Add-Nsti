@@ -26,7 +26,7 @@
       <contact [formMain]="this.contact"></contact>
     </mat-card>
 
-    <div>{{formMain?.value|json}}</div>
+    <div>{{formMain.value|json}}</div>
 
     <div class="mb-14 align-h-center">
       <btn-g [name]="'Salvar'" [icon]="'save'" (btn)="save()"></btn-g>

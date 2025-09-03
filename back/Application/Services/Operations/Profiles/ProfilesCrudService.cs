@@ -15,7 +15,8 @@ public class ProfilesCrudService : IProfilesCrudService
     private readonly IUnitOfWork _GENERIC_REPO;
     public ProfilesCrudService(
                     IObjectMapper mapper,
-                    IUnitOfWork GENERIC_REPO)
+                    IUnitOfWork GENERIC_REPO
+                    )
     {
         _mapper = mapper;
         _GENERIC_REPO = GENERIC_REPO;

@@ -17,7 +17,7 @@
       <div class="p-4">
         <company-names [formMain]="this.subForm">
         </company-names>
-        <cpf-cnpj [formMain]="this.subForm" (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)" (isValidCpf)="isValidCpf($event)">
+        <cpf-cnpj [formMain]="formMain" (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)" (isValidCpf)="isValidCpf($event)">
         </cpf-cnpj>
       </div>
 
@@ -37,7 +37,7 @@
       <contact [formMain]="this.contact"></contact>
     </mat-card>
 
-    <div>{{formMain?.value|json}}</div>
+    <div>{{formMain.value|json}}</div>
 
     <div class="mb-14 align-h-center">
       <btn-g [name]="'Salvar'" [icon]="'save'" (btn)="save()"></btn-g>

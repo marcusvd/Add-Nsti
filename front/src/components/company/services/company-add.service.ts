@@ -8,7 +8,7 @@ import { AddCompanyUpdateBusinessAuth } from "../components/add/dto/add-company-
 
 
 @Injectable({ providedIn: 'root' })
-export class CompanyAddService extends BackEndService<CompanyAuth> {
+export class CompanyAddService extends BackEndService<AddCompanyUpdateBusinessAuth> {
 
   constructor() {
     super();
@@ -17,9 +17,6 @@ export class CompanyAddService extends BackEndService<CompanyAuth> {
 
 
   save(form: FormGroup) {
-
-form.get('address')
-
     const toSave: AddCompanyUpdateBusinessAuth = { ...form.value }
     console.log(toSave)
     this.update$<AddCompanyUpdateBusinessAuth>('http://localhost:5156/api/BaseManagement/UpdateBusinessAddCompanyAsync', toSave).subscribe({

@@ -11,6 +11,10 @@ using Application.Services.Operations.Companies;
 using Application.Services.Operations.Companies.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Application.Services.Shared.Mappers.BaseMappers;
+using Repository.Data.Operations.BusinessesProfiles;
+using Domain.Entities.System.BusinessesCompanies;
+using Application.Services.Shared.Dtos;
+using UnitOfWork.Persistence.Operations;
 
 namespace Authentication.Operations.AuthAdm;
 
@@ -19,30 +23,35 @@ public class AuthAdmServices : IAuthAdmServices
 {
     private UserManager<UserAccount> _userManager;
     private readonly IBusinessAuthRepository _businessAuthRepository;
+    private readonly IBusinessesProfilesRepository _businessesProfilesRepository;
     private readonly ICompanyProfileAddService _companyProfileAddService;
     private readonly ILogger<AuthGenericValidatorServices> _logger;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly JwtHandler _jwtHandler;
-
     private readonly IObjectMapper _mapper;
+    private readonly IUnitOfWork _GENERIC_REPO;
 
     public AuthAdmServices(
           UserManager<UserAccount> userManager,
           ILogger<AuthGenericValidatorServices> logger,
           IBusinessAuthRepository businessAuthRepository,
+          IBusinessesProfilesRepository businessesProfilesRepository,
           ICompanyProfileAddService companyProfileAddService,
           JwtHandler jwtHandler,
           AuthGenericValidatorServices genericValidatorServices,
-          IObjectMapper mapper
+          IObjectMapper mapper,
+          IUnitOfWork GENERIC_REPO
       )
     {
         _userManager = userManager;
         _logger = logger;
         _jwtHandler = jwtHandler;
         _businessAuthRepository = businessAuthRepository;
+        _businessesProfilesRepository = businessesProfilesRepository;
         _companyProfileAddService = companyProfileAddService;
         _genericValidatorServices = genericValidatorServices;
         _mapper = mapper;
+        _GENERIC_REPO = GENERIC_REPO;
     }
 
     public async Task<BusinessAuthDto> GetBusinessFullAsync(int id)
@@ -58,23 +67,10 @@ public class AuthAdmServices : IAuthAdmServices
                 ordeBy => ordeBy.OrderBy(x => x.Name)
                 );
 
-
-        var businessGrouppDto = _mapper.Map<BusinessAuth, BusinessAuthDto>(businessGroup);
-
-
-        if (businessGroup == null)
-            return new BusinessAuthDto
-            {
-                Id = -1,
-                Name = "Invalid",
-                BusinessProfileId = "-1"
-            };
-
-
-        return businessGrouppDto;
+        return businessGroup.ToDto();
 
     }
-    public async Task<BusinessAuth> GetBusinessAsync(int id)
+    public async Task<BusinessAuthDto> GetBusinessAsync(int id)
     {
         var businessGroup = await _businessAuthRepository.GetByPredicate(
               x => x.Id == id,
@@ -84,14 +80,9 @@ public class AuthAdmServices : IAuthAdmServices
               );
 
         if (businessGroup == null)
-            return new BusinessAuth
-            {
-                Id = -1,
-                Name = "Invalid",
-                BusinessProfileId = "-1"
-            };
+            return (BusinessAuthDto)_genericValidatorServices.ReplaceNullObj<BusinessAuthDto>();
 
-        return businessGroup;
+        return businessGroup.ToDto();
     }
     public async Task<bool> UpdateBusinessAuthAndProfileAsync(BusinessAuthUpdateAddCompanyDto businessAuthUpdateDto, int id)
     {
@@ -100,33 +91,65 @@ public class AuthAdmServices : IAuthAdmServices
 
         string CompanyProfileIdAuthId = Guid.NewGuid().ToString();
 
-        var businessAuth = await _businessAuthRepository.GetByPredicate(
-            x => x.Id == id && x.Deleted == DateTime.MinValue,
-            null,
-            selector => selector,
-            null);
+        var businessAuth = await GetBusinessAuthAsync(id);
 
         _genericValidatorServices.Validate(businessAuthUpdateDto.BusinessProfileId, businessAuth.BusinessProfileId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
 
-        businessAuth.Companies.Add(_mapper.Map<CompanyAuthDto, CompanyAuth>(businessAuthUpdateDto.Company ?? new CompanyAuthDto() { Name = "invalid", TradeName = "invalid", CompanyProfileId = "invalid" }));
-        
+        businessAuth.Companies.Add(businessAuthUpdateDto.Company.ToEntity() ?? (CompanyAuth)_genericValidatorServices.ReplaceNullObj<CompanyAuth>());
+
         businessAuth.Companies.ToList()[0].CompanyProfileId = CompanyProfileIdAuthId;
 
-        CompanyProfileDto companyProfile = new()
-        {
-            CompanyAuthId = businessAuth.Companies.ToList()[0].CompanyProfileId,
-            CNPJ = businessAuthUpdateDto.CNPJ,
-            Address = businessAuthUpdateDto.Address,
-            Contact = businessAuthUpdateDto.Contact
-        };
+        var businessProfile = await GetBusinessProfileAsync(businessAuth.BusinessProfileId);
 
+        var companyProfile = CompanyProfileEntityBuilder(businessAuthUpdateDto, CompanyProfileIdAuthId);
+
+        businessProfile.Companies.Add(companyProfile);
+
+        return await UpdateSave(businessAuth, businessProfile);
+    }
+
+    private async Task<BusinessAuth> GetBusinessAuthAsync(int id)
+    {
+        return await _businessAuthRepository.GetByPredicate(
+                    x => x.Id == id && x.Deleted == DateTime.MinValue,
+                    null,
+                    selector => selector,
+                    null);
+    }
+
+    private async Task<BusinessProfile> GetBusinessProfileAsync(string businessAuth)
+    {
+        return await _businessesProfilesRepository.GetByPredicate(
+            x => x.BusinessAuthId == businessAuth,
+            null,
+            selector => selector,
+            null
+            );
+    }
+
+    private CompanyProfile CompanyProfileEntityBuilder(BusinessAuthUpdateAddCompanyDto dto, string companyProfileIdAuthId)
+    {
+        return new()
+        {
+            CompanyAuthId = companyProfileIdAuthId,
+            CNPJ = dto.CNPJ,
+            Address = dto.Address.ToEntity(),
+            Contact = dto.Contact.ToEntity()
+        };
+    }
+
+    private async Task<bool> UpdateSave(BusinessAuth businessAuth, BusinessProfile businessProfile)
+    {
 
         _businessAuthRepository.Update(businessAuth);
+        _businessesProfilesRepository.Update(businessProfile);
 
-        if (await _companyProfileAddService.AddAsync(companyProfile))
-            return await _businessAuthRepository.SaveAsync();
+        if (await _businessAuthRepository.SaveAsync() && await _GENERIC_REPO.save())
+            return true;
 
         return false;
     }
+
+
 
 }

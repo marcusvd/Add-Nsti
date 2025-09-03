@@ -5,6 +5,8 @@ import { ModelDto } from "./model-dto";
 export class EquipmentDto extends RootBase{
   description!:string;
   ModelId!:number;
+  companyId!:number;
+  userId!:number;
   Model!:ModelDto;
   ManufacturerId!:number;
   Manufacturer!:ManufacturerDto;

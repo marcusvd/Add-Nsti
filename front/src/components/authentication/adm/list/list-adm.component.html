@@ -10,7 +10,7 @@
   <!-- <default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'Despesas Anuais'" [textSubTitleComp]="'Cadastro'" [iconSubTitleComp]="'add'"> -->
   <div btns>
     <div class="p-4">
-      <h3>{{this.business?.name}}</h3>
+      <h3>{{this.business.name}}</h3>
       <div class="!bg-backgroud-color">
         <btn-g btn-1 [name]="'Adicionar'" [icon]="'add'" (btn)="callRouter(addRoute)"></btn-g>
       </div>

@@ -200,7 +200,7 @@ export class PanelAdmComponent extends BaseForm implements OnInit {
 
       // companyId: [0, [Validators.required]],
       // companyId: [localStorage.getItem("companyId"), [Validators.required]],
-      cnpj: [auth?.cnpj ?? '', []],
+      cnpj: [profile?.cnpj ?? '', []],
       // description: ['', [Validators.maxLength(500)]],
       entityType: [true, []],
       // registered: [new Date(), [Validators.required]],

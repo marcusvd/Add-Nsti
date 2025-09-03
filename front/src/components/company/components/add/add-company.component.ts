@@ -43,16 +43,9 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
 
   @Input('entity') entityBusiness$!: Observable<BusinessAuth>;
 
-  title: string = 'Cadastro';
-  subTitle: string = 'Cliente';
-  borderAround: boolean = false;
-
-  screenFieldPosition: string = 'row';
 
   address!: FormGroup;
   contact!: FormGroup;
-  isCpf = true;
-
 
   constructor(
     private _companyService: CompanyAddService,
@@ -62,8 +55,6 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
     private _actRoute: ActivatedRoute,
     private _fb: FormBuilder
   ) { super() }
-
-
 
   cpfCnpjBusinessData(data: BusinessData) {
 
@@ -85,18 +76,9 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
   }
 
   isValidCpf(isCpfValid: DocType) {
-    if (isCpfValid.entity == 'cpf' && isCpfValid.result) {
-      this.formMain?.get('companyName')?.setValue('');
-      this.isCpf = true;
-      this.address?.setValue({})
-      this.contact?.setValue({})
-    }
-    else {
-      this.isCpf = false;
-      this.formMain?.get('companyName')?.setValue('');
-      this.address?.setValue({})
-       this.contact?.setValue({})
-    }
+    this.formMain?.get('companyName')?.setValue('');
+    this.address?.reset({id:0});
+    this.contact?.reset({id:0});
   }
 
   setAddressForm(data: BusinessData) {
@@ -151,12 +133,11 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
         name: ['', [Validators.required, Validators.maxLength(100)]],
         tradeName: ['', [Validators.required, Validators.maxLength(100)]],
         companyProfileId: ['back-end'],
-        cnpj: ['', [Validators.required]],
 
       }),
+      cnpj: [''],
       address: this.address = this._addressService.formLoad(),
       contact: this.contact = this._contactService.formLoad()
-
     })
   }
 
