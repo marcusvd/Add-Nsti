@@ -953,6 +953,7 @@
       },
       "UnitOfWork/1.0.0": {
         "dependencies": {
+          "Authentication": "1.0.0",
           "Repository": "1.0.0"
         },
         "runtime": {

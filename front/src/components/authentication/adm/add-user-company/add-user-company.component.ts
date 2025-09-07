@@ -1,6 +1,6 @@
 
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 import { environment } from 'environments/environment';
@@ -10,15 +10,20 @@ import { BaseForm } from 'shared/inheritance/forms/base-form';
 import { ImportsaddUserCompany } from './imports/imports-add-user-company';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { WarningsService } from 'components/warnings/services/warnings.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AddUserExistingCompanyDto } from 'components/authentication/dtos/add-user-existing-company-dto';
+import { CompanyAuth } from 'components/authentication/dtos/company-auth';
 import { RegisterService } from 'components/authentication/services/register.service';
 import { IsUserRegisteredValidator } from 'components/authentication/validators/is-user-registered-validator';
 import { PasswordConfirmationValidator } from 'components/authentication/validators/password-confirmation-validator';
 import { PasswordValidator } from 'components/authentication/validators/password-validator';
+import { WarningsService } from 'components/warnings/services/warnings.service';
+import { AddressComponent } from 'shared/components/address/component/address.component';
+import { AddressService } from 'shared/components/address/services/address.service';
+import { ContactComponent } from 'shared/components/contact/component/contact.component';
+import { ContactService } from 'shared/components/contact/services/contact.service';
 import { CompanyService } from '../../../authentication/services/company.service';
-import { CompanyAuth } from 'components/authentication/dtos/company-auth';
-import { AddUserExistingCompanyDto } from 'components/authentication/dtos/add-user-existing-company-dto';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @Component({
@@ -27,13 +32,23 @@ import { AddUserExistingCompanyDto } from 'components/authentication/dtos/add-us
   styleUrls: ['./add-user-company.component.css'],
   standalone: true,
   imports: [
-    ImportsaddUserCompany
+    ImportsaddUserCompany,
+    MatCheckboxModule,
+    AddressComponent,
+    ContactComponent
   ],
   providers: [
-    RegisterService
+    RegisterService,
+    AddressService,
+    ContactService
   ]
 })
 export class AddUserCompanyComponent extends BaseForm implements OnInit {
+
+
+
+  private _addressService = inject(AddressService);
+  private _contactService = inject(ContactService);
 
   constructor(
     private _registerService: RegisterService,
@@ -47,133 +62,70 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
   ) { super() }
 
 
-  loginErrorMessage: string = '';
-  businessId!:number;
 
   backend = `${environment._BACK_END_ROOT_URL}/AuthAdm/AddUserAccountAsync`
+  businessId!: number;
+  formFull!: boolean;
+  address!: FormGroup;
+  contact!: FormGroup;
 
-  // add-user-companyTest() {
-
-  //   this.openSnackBar('CADASTRADO!' +'   '+ 'MARCUSMVD@HOTMAIL.COM.BR' + '.', 'warnings-success');
-
-  //   setTimeout(() => {
-
-  //     this.openAuthWarnings({
-  //       btn1: 'Fechar', btn2: '', title: 'AVISO:',
-  //       messageBody: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-  //       next: true, action: 'openLogin'
-  //     })
-
-  //   }, 5000);
+  registerFull(full: MatCheckboxChange) {
+    this.formFull = full.checked;
+  }
 
 
-
-  // }
 
   register() {
 
+
+
+    if (this.formFull) {
+      if (this.alertSave(this.formMain) && this.alertSave(this.address) && this.alertSave(this.contact)) {
+        this.registerAfterChecked(this.address, this.contact);
+      }
+    }
+    else {
+      if (this.alertSave(this.formMain)) {
+        this.registerAfterChecked();
+      }
+    }
+
+  }
+
+  registerAfterChecked(address?: FormGroup, contact?: FormGroup) {
+
     const user: AddUserExistingCompanyDto = this.formMain.value;
 
-    if (this.alertSave(this.formMain)) {
-      if (this.formMain.valid) {
-        this._registerService.AddUserInAExistingCompany(user, this.backend)
-          .subscribe({
-            next: (user) => {
-              this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
-
-              this._router.navigateByUrl(`users/adm-list/${this.businessId}`);
-              // setTimeout(() => {
-              //   this._warningsService.openAuthWarnings({
-              //     btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-              //     body: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-              //   }).subscribe(result => {
-              //     this._router.navigateByUrl('login');
-              //   })
-
-              // }, 5000);
-
-            }, error: (err: any) => {
-              console.log(err)
-              const erroCode: string = err?.error?.Message?.split('|');
-              console.log(erroCode)
-              // switch (erroCode[0]) {
-              //   case '1.1': {
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'delay': '3',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
-              //     this._errorMessage.next(erroCode[1])
-              //     form.controls['email'].setErrors({ errorEmailDuplicated: true })
-              //     break;
-              //   }
-              //   case '1.2': {
-              //     console.log(err);
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'delay': '3',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
-              //     this._errorMessage.next(erroCode[1])
-              //     form.controls['userName'].setErrors({ errorUserNameDuplicated: true })
-              //     break;
-              //   }
-              //   case '200.0': {
-              //     console.log(err);
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'delay': '3',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
-              //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-              //     break;
-              //   }
-              //   case '1.7': {
-              //     console.log(err);
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'delay': '3',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
-
-              //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-              //     break;
-              //   }
-              // }
-            }
-          })
-
-
-        // .subscribe((x: string) => {
-        //   this.loginErrorMessage = x;
-        //   // this._communicationsAlerts.defaultSnackMsg('7', 0);
-        //   console.log(x)
-        // })
-      }
-
+    if (address != null && contact != null) {
+      user.address = address.value
+      user.contact = contact.value
     }
+
+    if (this.formMain.valid) {
+      this._registerService.AddUserInAExistingCompany(user, this.backend)
+        .subscribe({
+          next: (user) => {
+            this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
+
+            this._router.navigateByUrl(`users/adm-list/${this.businessId}`);
+
+          }, error: (err: any) => {
+            console.log(err)
+            const erroCode: string = err?.error?.Message?.split('|');
+            console.log(erroCode)
+
+          }
+        })
+    }
+
   }
+
+
 
   formLoad(x?: CompanyAuth) {
     return this.formMain = this._fb.group({
-      id:[x?.id, [Validators.required]],
-      companyAuthId:[x?.id, [Validators.required]],
+      id: [x?.id, [Validators.required]],
+      companyAuthId: [x?.id, [Validators.required]],
       userName: ['', [Validators.required, Validators.minLength(3)]],
       companyName: [x?.name, [Validators.required, Validators.minLength(3)]],
       email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
@@ -181,6 +133,22 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
       confirmPassword: ['', [Validators.required]],
     }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
   }
+
+  //  typeRegister(full: boolean) {
+
+  //   if (full) {
+  //     this.address = this._addressService.formLoad();
+  //     this.contact = this._contactService.formLoad();
+  //     this.formMain.setControl('address', this.address);
+  //     this.formMain.setControl('contact', this.contact);
+  //   } else {
+  //     this.address = this._fb.group({});
+  //     this.contact = this._fb.group({});
+  //     this.formMain.setControl('address', this.address);
+  //     this.formMain.setControl('contact', this.contact);
+  //   }
+
+  // }
 
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
@@ -196,11 +164,6 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
     }
   }
 
-  inputEmail(arg0: string) {
-    if (arg0.length == 0)
-      this.loginErrorMessage = '';
-  }
-
   back() {
     window.history.back();
   }
@@ -208,11 +171,14 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
   ngOnInit(): void {
     const id = this._actRouter.snapshot.params['id'] as number;
     const backend = `${environment._BACK_END_ROOT_URL}/authadm/GetCompanyAuthAsync`
+
     this._addUserCompanyService.loadById$<CompanyAuth>(backend, id.toString()).subscribe((x: CompanyAuth) => {
       this.formLoad(x);
       this.businessId = x.businessId;
     })
 
+    this.address = this._addressService.formLoad();
+    this.contact = this._contactService.formLoad();
   }
 
 }

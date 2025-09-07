@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { CommunicationAlerts } from "shared/services/messages/snack-bar.service";
-import { UserAccount } from "../dtos/user-account";
+import { UserAccountAuthDto } from "../../authentication/dtos/user-account-auth-dto";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { BackEndService } from "shared/services/back-end/backend.service";
 import { LoginDto } from "../dtos/login-dto";
@@ -18,8 +18,8 @@ export class LoginService extends BackEndService<UserTokenDto> {
   ) { super() }
 
 
-  login$(user: UserAccount) {
-    return this.add$<UserAccount>(user, `${environment._BACK_END_ROOT_URL}/auth/LoginAsync`);
+  login$(user: UserAccountAuthDto) {
+    return this.add$<UserAccountAuthDto>(user, `${environment._BACK_END_ROOT_URL}/auth/LoginAsync`);
   }
 
   logOut() {

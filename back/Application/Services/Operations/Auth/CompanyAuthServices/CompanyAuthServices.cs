@@ -1,45 +1,41 @@
 using Authentication.Helpers;
 using Domain.Entities.Authentication;
-using Microsoft.Extensions.Logging;
-using Authentication.AuthenticationRepository.BusinessRepository;
 using Application.Exceptions;
-using Repository.Data.Operations.Companies;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Shared.Mappers.BaseMappers;
-using Domain.Entities.System.BusinessesCompanies;
 using Microsoft.EntityFrameworkCore;
+using UnitOfWork.Persistence.Operations;
+using Domain.Entities.System.BusinessesCompanies;
+using System.Linq;
+using Domain.Entities.System.Profiles;
+using Application.Services.Shared.Dtos;
+using Application.Services.Operations.Profiles.Dtos;
 
 namespace Application.Services.Operations.Auth.CompanyAuthServices;
 
 
 public class CompanyAuthServices : ICompanyAuthServices
 {
-    private readonly ILogger<AuthGenericValidatorServices> _logger;
-    private readonly ICompanyAuthRepository _companyAuthRepository;
-    private readonly ICompanyProfileRepository _companyProfileRepository;
+    private readonly IUnitOfWork _GENERIC_REPO;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly IObjectMapper _objectMapper;
 
     public CompanyAuthServices(
           AuthGenericValidatorServices genericValidatorServices,
-          ILogger<AuthGenericValidatorServices> logger,
-          ICompanyAuthRepository companyAuthRepository,
-          ICompanyProfileRepository companyProfileRepository,
+          IUnitOfWork GENERIC_REPO,
           IObjectMapper objectMapper
       )
     {
 
         _genericValidatorServices = genericValidatorServices;
-        _companyAuthRepository = companyAuthRepository;
-        _companyProfileRepository = companyProfileRepository;
+        _GENERIC_REPO = GENERIC_REPO;
         _objectMapper = objectMapper;
-        _logger = logger;
     }
 
     public async Task<CompanyAuthDto> GetCompanyAuthAsync(int id)
     {
-        var result = await _companyAuthRepository.GetByPredicate(
+        var result = await _GENERIC_REPO.CompaniesAuth.GetByPredicate(
             x => x.Id == id && x.Deleted == DateTime.MinValue,
             null,
             selector => selector,
@@ -50,10 +46,23 @@ public class CompanyAuthServices : ICompanyAuthServices
 
         return _objectMapper.Map<CompanyAuth, CompanyAuthDto>(result);
     }
+    public async Task<CompanyAuthDto> GetCompanyAuthFullAsync(int id)
+    {
+        var companyAuth = await _GENERIC_REPO.CompaniesAuth.GetByPredicate(
+            x => x.Id == id && x.Deleted == DateTime.MinValue,
+            add => add.Include(x => x.CompanyUserAccounts),
+            selector => selector,
+            null
+            );
+
+        var result = companyAuth ?? (CompanyAuth)_genericValidatorServices.ReplaceNullObj<CompanyAuth>();
+
+        return result.ToDto();
+    }
 
     public async Task<CompanyProfileDto> GetCompanyProfileFullAsync(string companyAuthId)
     {
-        var result = await _companyProfileRepository.GetByPredicate(
+        var companyProfile = await _GENERIC_REPO.CompaniesProfile.GetByPredicate(
             x => x.CompanyAuthId == companyAuthId && x.Deleted == DateTime.MinValue,
             add => add.Include(x => x.Address)
             .Include(x => x.Contact),
@@ -61,9 +70,73 @@ public class CompanyAuthServices : ICompanyAuthServices
             null
             );
 
-        if (result == null) throw new Exception(GlobalErrorsMessagesException.IsObjNull);
+        var result = companyProfile ?? (CompanyProfile)_genericValidatorServices.ReplaceNullObj<CompanyProfile>();
 
-        return _objectMapper.Map<CompanyProfile, CompanyProfileDto>(result);
+        return result.ToDto();
+    }
+    public async Task<List<UserAccountDto>> GetUsersByCompanyIdAsync(int companyAuthId)
+    {
+        var companyUserAccount = await GetCompanyUserAccountByCompanyId(companyAuthId);
+
+        var userAccounts = companyUserAccount.Select(x => x.UserAccount).ToList();
+
+        return userAccounts.Select(x => x.ToDto()).ToList() ?? [];
+    }
+
+    private async Task<List<CompanyUserAccount>> GetCompanyUserAccountByCompanyId(int companyAuthId)
+    {
+        var companiesUsers = await _GENERIC_REPO.CompaniesUserAccounts.Get(
+            x => x.CompanyAuthId == companyAuthId && x.Deleted == DateTime.MinValue,
+              add => add.Include(x => x.UserAccount),
+            selector => selector
+            ).ToListAsync();
+
+        if (companiesUsers == null) return new List<CompanyUserAccount>();
+
+        return companiesUsers;
+    }
+
+    public async Task<UserAuthProfileDto> GetUserByIdFullAsync(int id)
+    {
+
+        var userAccount = await GetUserAccountByIdAsync(id);
+        var userprofile = await GetUserProfileByProfileIdAsync(userAccount.UserProfileId);
+
+        return MakerUserAccountProfile(userAccount, userprofile);
+    }
+
+    private UserAuthProfileDto MakerUserAccountProfile(UserAccount userAccountAuth, UserProfile userProfile)
+    {
+        return new UserAuthProfileDto()
+        {
+            UserAccountAuth = userAccountAuth.ToDto(),
+            UserAccountProfile = userProfile.ToDto()
+            // Email = userAccountAuth.Email,
+            // DisplayUserName = userAccountAuth.DisplayUserName,
+            // UserName = userAccountAuth.UserName ?? "Não Cadastrado",
+            // Address = userProfile.Address.ToDto() ?? (AddressDto)_genericValidatorServices.ReplaceNullObj<AddressDto>(),
+            // Contact = userProfile.Contact.ToDto() ?? (ContactDto)_genericValidatorServices.ReplaceNullObj<ContactDto>()
+        };
+    }
+
+    private async Task<UserAccount> GetUserAccountByIdAsync(int id)
+    {
+        return await _GENERIC_REPO.UsersAccounts.GetByPredicate(
+                x => x.Id == id,
+                null,
+                selector => selector,
+                null
+                );
+    }
+    private async Task<UserProfile> GetUserProfileByProfileIdAsync(string userProfileId)
+    {
+        return await _GENERIC_REPO.UsersProfiles.GetByPredicate(
+         x => x.UserAccountId == userProfileId,
+         add => add.Include(x => x.Address)
+         .Include(x => x.Contact),
+         selector => selector,
+         null
+         );
     }
 
     public Task UpdateCompanyAuth(CompanyAuthDto companyAuth)
@@ -71,7 +144,7 @@ public class CompanyAuthServices : ICompanyAuthServices
 
         CompanyAuth update = _objectMapper.Map<CompanyAuthDto, CompanyAuth>(companyAuth);
 
-        _companyAuthRepository.Update(update);
+        _GENERIC_REPO.CompaniesAuth.Update(update);
 
         return Task.CompletedTask;
     }

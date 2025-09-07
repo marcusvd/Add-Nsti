@@ -7,17 +7,23 @@ using Authentication.Jwt;
 using Microsoft.Extensions.Logging;
 using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Operations.Auth;
+using Application.Services.Operations.Auth.Account.dtos;
+using Authentication.AuthenticationRepository.UserAccountRepository;
+using Application.Exceptions;
+using Domain.Entities.System.Profiles;
+using UnitOfWork.Persistence.Operations;
 
 
 namespace Application.Services.Operations.Account;
 
 public class AccountManagerServices : AuthenticationBase, IAccountManagerServices
 {
-    private readonly ILogger<AuthGenericValidatorServices> _logger;
+    private readonly ILogger<AccountManagerServices> _logger;
     private readonly UserManager<UserAccount> _userManager;
     private readonly RoleManager<Role> _roleManager;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
-    private readonly JwtHandler _jwtHandler;
+    // private readonly IUserAccountRepository _userAccountRepository;
+    private readonly IUnitOfWork _GENERIC_REPO;
     private readonly IUrlHelper _url;
     public AccountManagerServices(
           UserManager<UserAccount> userManager,
@@ -25,93 +31,79 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
           JwtHandler jwtHandler,
           IUrlHelper url,
           AuthGenericValidatorServices genericValidatorServices,
-          ILogger<AuthGenericValidatorServices> logger
-      ) : base(userManager, jwtHandler)
+          ILogger<AccountManagerServices> logger,
+          // //   IUserAccountRepository userAccountRepository,
+          IUnitOfWork GENERIC_REPO
+      ) : base(userManager, jwtHandler, logger, url)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _jwtHandler = jwtHandler;
-        _genericValidatorServices = genericValidatorServices;
         _logger = logger;
         _url = url;
+        _genericValidatorServices = genericValidatorServices;
+        _GENERIC_REPO = GENERIC_REPO;
+        // _userAccountRepository = userAccountRepository;
     }
 
-    public async Task<bool> IsUserExistCheckByEmailAsync(string email) => await IsUserExist(email);
+    public async Task<IdentityResult> IsUserExistCheckByEmailAsync(string email) => await IsUserExist(email);
+    public async Task<IdentityResult> RequestEmailChangeAsync(RequestEmailChangeDto updateUserAccountEmailDto)
+    {
+        var userAccount = await FindUserAsync(updateUserAccountEmailDto.OldEmail);
+        userAccount.Email = updateUserAccountEmailDto.NewEmail;
 
-    public async Task<bool> ConfirmEmailAddressAsync(ConfirmEmail confirmEmail)
+        if (userAccount == null)
+            return IdentityResult.Failed(new IdentityError { Description = "Usuário não encontrado." });
+
+        var genToken = GenerateUrlTokenEmailChange(userAccount, "ConfirmRequestEmailChange", "auth", updateUserAccountEmailDto.NewEmail);
+
+
+        var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-request-email-change", "api/auth/ConfirmRequestEmailChange", "I.M - Link para confirmação mudança de email."]);
+        // var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/request-email-change", "api/auth/RequestEmailChange", "I.M - Link para confirmação mudança de email."]);
+
+
+
+        await SendEmailConfirmationAsync(dataConfirmEmail, dataConfirmEmail.EmailUpdated());
+
+        return IdentityResult.Success;
+    }
+    public async Task<IdentityResult> ConfirmYourEmailChangeAsync(ConfirmEmailChangeDto confirmRequestEmailChange)
+    {
+        var userAccount = await FindUserByIdAsync(confirmRequestEmailChange.Id);
+        if (userAccount == null)
+            return IdentityResult.Failed(new IdentityError { Description = "Usuário não encontrado." });
+
+        var result = await _userManager.ChangeEmailAsync(userAccount, confirmRequestEmailChange.Email, confirmRequestEmailChange.Token);
+        if (result.Succeeded)
+        {
+            userAccount.UserName = confirmRequestEmailChange.Email;
+            userAccount.Email = confirmRequestEmailChange.Email;
+            await _userManager.UpdateAsync(userAccount);
+        }
+
+        return result;
+    }
+    public async Task<IdentityResult> ConfirmEmailAddressAsync(ConfirmEmail confirmEmail)
     {
         var userAccout = await FindUserAsync(confirmEmail.Email);
 
         var result = await _userManager.ConfirmEmailAsync(userAccout, confirmEmail.Token);
 
-        return result.Succeeded;
+        return result;
 
     }
-
-    public async Task<bool> ForgotPasswordAsync(ForgotPassword forgotPassword)
+    public async Task<IdentityResult> ForgotPasswordAsync(ForgotPassword forgotPassword)
     {
-        var userAccout = await FindUserAsync(forgotPassword.Email);
+        var userAccount = await FindUserAsync(forgotPassword.Email);
 
-        await SendEmailConfirmationAsync(userAccout);
+        var genToken = GenerateUrlTokenPasswordReset(userAccount, "ForgotPassword", "auth");
 
-        return true;
+        var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/password-reset", "api/auth/ForgotPassword", "I.M - Link para recadastramento de senha."]);
+
+        await SendEmailConfirmationAsync(dataConfirmEmail, dataConfirmEmail.PasswordReset());
+
+        return IdentityResult.Success;
     }
-
-    private async Task SendEmailConfirmationAsync(UserAccount userAccount)
-    {
-        try
-        {
-            var confirmationUrl = await UrlPasswordReset(userAccount);
-
-            if (string.IsNullOrEmpty(confirmationUrl))
-            {
-                _logger.LogError("Failed to generate email password reset URL for {Email}", userAccount.Email);
-                throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenGenerateEmailLink);
-            }
-
-            var formattedUrl = FormatEmailUrl("http://localhost:4200/password-reset", confirmationUrl, "api/auth/ForgotPassword", userAccount);
-
-            await SendAsync(To: userAccount.Email ?? "", Subject: "I.M - Link para recadastramento de senha.", Body: formattedUrl);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error sending confirmation email to {Email}", userAccount.Email);
-            throw;
-        }
-    }
-
-    public async Task<string> UrlPasswordReset(UserAccount userAccount)
-    {
-        var token = await _userManager.GeneratePasswordResetTokenAsync(userAccount);
-
-        var urlReset = _url.Action("ForgotPassword", "auth", new { token, email = userAccount.Email, userName = userAccount.UserName }) ?? throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenGenerateEmailLink); ;
-
-        return urlReset;
-    }
-
-    private string FormatEmailUrl(string baseUrl, string urlWithToken, string replace, UserAccount userAccount)
-    {
-        string mensagemBoasVindas = $@"
-              Olá {userAccount.NormalizedUserName},
-
-    Recebemos uma solicitação para redefinir a senha da sua conta no I.M – Sistema de Gestão de Ordens de Serviço.
-
-    Para continuar com a recuperação de acesso, clique no link abaixo e siga as instruções para criar uma nova senha:
-
-    🔗 {baseUrl}{urlWithToken.Replace(replace, "")}
-
-    Este link é válido por tempo limitado e deve ser utilizado apenas por você. Se você não solicitou essa recuperação, recomendamos que ignore este e-mail. Nenhuma alteração será feita na sua conta sem sua autorização.
-
-    O I.M está comprometido com a segurança e a praticidade no seu dia a dia. Se tiver qualquer dúvida ou dificuldade, nossa equipe de suporte está à disposição para ajudar.
-
-    Atenciosamente,  
-    Equipe I.M  
-    suporte@im.com.br
-";
-        return mensagemBoasVindas;
-    }
-
-    public async Task<bool> ResetPasswordAsync(ResetPassword resetPassword)
+    public async Task<IdentityResult> ResetPasswordAsync(ResetPassword resetPassword)
     {
         var userAccount = await _userManager.FindByEmailAsync(resetPassword.Email) ?? throw new AuthServicesException(AuthErrorsMessagesException.ObjectIsNull);
 
@@ -119,8 +111,48 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
 
         if (!identityResult.Succeeded) throw new AuthServicesException($"{AuthErrorsMessagesException.ResetPassword} - {identityResult}");
 
-        return identityResult.Succeeded;
+        return identityResult;
     }
+    public async Task<IdentityResult> UpdateUserAccountAuthAsync(UserAccountAuthUpdateDto userAccount, int id)
+    {
+
+        _genericValidatorServices.Validate(userAccount.Id, id, GlobalErrorsMessagesException.EntityFromIdIsNull);
+
+        var userAccountFromDb = await _userManager.FindByEmailAsync(userAccount.Email) ?? (UserAccount)_genericValidatorServices.ReplaceNullObj<UserAccount>();
+
+        var toUpdate = userAccount.ToUpdate(userAccountFromDb);
+
+        return await _userManager.UpdateAsync(toUpdate);
+
+    }
+    public async Task<IdentityResult> UpdateUserAccountProfileAsync(UserAccountProfileUpdateDto userAccount, int id)
+    {
+
+        _genericValidatorServices.Validate(userAccount.Id, id, GlobalErrorsMessagesException.EntityFromIdIsNull);
+
+        var userAccountFromDb = await GetUserProfileAsync(id);
+
+        var toUpdate = userAccount.ToUpdate(userAccountFromDb);
+
+        _GENERIC_REPO.UsersProfiles.Update(toUpdate);
+
+        if (await _GENERIC_REPO.Save())
+            return IdentityResult.Success;
+        else
+            return IdentityResult.Failed(new IdentityError() { Description = "Faild update profile user" });
+
+    }
+
+    private async Task<UserProfile> GetUserProfileAsync(int id)
+    {
+        return await _GENERIC_REPO.UsersProfiles.GetByPredicate(
+                   x => x.Id == id,
+                   null,
+                   selector => selector,
+                   null
+                   ) ?? (UserProfile)_genericValidatorServices.ReplaceNullObj<UserProfile>();
+    }
+
 
     public async Task<string> UpdateUserRoles(UpdateUserRole role)
     {
@@ -138,9 +170,7 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
             return "Role Added";
         }
     }
-
     public async Task<IList<string>> GetRolesAsync(UserAccount userAccount) => await _userManager.GetRolesAsync(userAccount);
-
     public async Task<IdentityResult> CreateRoleAsync(RoleDto roleDto) => await _roleManager.CreateAsync(new Role { Name = roleDto.Name, DisplayRole = roleDto.DisplayRole });
 }
 

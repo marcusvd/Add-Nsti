@@ -13,8 +13,8 @@ public class UserAccountDto : RootBaseDto
     public string? RefreshToken { get; set; }
     public required string DisplayUserName { get; set; }
     public required string Email { get; set; }
-    public DateTime RefreshTokenExpiryTime { get; set; }
-    // public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+    public bool EmailConfirmed { get; set; }
+    public DateTime RefreshTokenExpiryTime { get; set; }   
     public ICollection<CompanyUserAccountDto> CompanyUserAccounts { get; set; } = new List<CompanyUserAccountDto>();
 }
 
@@ -34,6 +34,7 @@ public static class UserAccountMapper
             RefreshToken = dto.RefreshToken,
             DisplayUserName = dto.DisplayUserName,
             Email = dto.Email,
+            EmailConfirmed = dto.EmailConfirmed,
             RefreshTokenExpiryTime = dto.RefreshTokenExpiryTime,
 
 
@@ -56,6 +57,7 @@ public static class UserAccountMapper
             RefreshToken = entity.RefreshToken,
             DisplayUserName = entity.DisplayUserName,
             Email = entity.Email,
+            EmailConfirmed = entity.EmailConfirmed,
             RefreshTokenExpiryTime = entity.RefreshTokenExpiryTime,
 
         };
@@ -76,6 +78,7 @@ public static class UserAccountMapper
             RefreshToken = "Cadastro Incompleto",
             DisplayUserName = "Cadastro Incompleto",
             Email = "Cadastro Incompleto",
+            EmailConfirmed = false,
             RefreshTokenExpiryTime = DateTime.Now,
 
         };

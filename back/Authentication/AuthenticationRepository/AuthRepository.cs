@@ -1,5 +1,7 @@
+using System.Linq.Expressions;
 using Authentication.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 
 namespace Authentication.AuthenticationRepository;
@@ -23,7 +25,7 @@ public class AuthRepository<T> : IAuthRepository<T> where T : class
         _dbContext.Set<T>().Remove(entity);
     }
 
-    public IQueryable<T> Get(System.Linq.Expressions.Expression<Func<T, bool>> predicate, Func<IQueryable<T>, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<T, object>> include, System.Linq.Expressions.Expression<Func<T, T>> selector, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, System.Linq.Expressions.Expression<Func<T, bool>> termPredicate, bool disableTracking = true)
+    public IQueryable<T> Get(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, Expression<Func<T, T>> selector = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Expression<Func<T, bool>> termPredicate = null, bool disableTracking = true)
     {
         IQueryable<T> query = _dbContext.Set<T>();
         if (disableTracking)
@@ -44,7 +46,7 @@ public class AuthRepository<T> : IAuthRepository<T> where T : class
         return query;
     }
 
-    public async Task<T?> GetByPredicate(System.Linq.Expressions.Expression<Func<T, bool>> predicate, Func<IQueryable<T>, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<T, object>> include, System.Linq.Expressions.Expression<Func<T, T>> selector, Func<IQueryable<T>, IOrderedQueryable<T>> ordeBy, bool disableTracking = true)
+    public async Task<T> GetByPredicate(System.Linq.Expressions.Expression<Func<T, bool>> predicate, Func<IQueryable<T>, Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<T, object>> include, System.Linq.Expressions.Expression<Func<T, T>> selector, Func<IQueryable<T>, IOrderedQueryable<T>> ordeBy, bool disableTracking = true)
     {
         IQueryable<T> query = _dbContext.Set<T>();
 
@@ -71,5 +73,5 @@ public class AuthRepository<T> : IAuthRepository<T> where T : class
         _dbContext.Set<T>().Update(entity);
     }
 
-    public async Task<bool> SaveAsync() =>  await _dbContext.SaveChangesAsync() > 0 ? true : false;
+    // public async Task<bool> SaveAsync() =>  await _dbContext.SaveChangesAsync() > 0 ? true : false;
 }

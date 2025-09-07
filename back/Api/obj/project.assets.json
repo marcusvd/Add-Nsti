@@ -1616,6 +1616,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Authentication": "1.0.0",
           "Repository": "1.0.0"
         },
         "compile": {
@@ -4224,11 +4225,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
+      "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj",
       "projectName": "ImApi",
-      "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
+      "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\obj\\",
+      "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

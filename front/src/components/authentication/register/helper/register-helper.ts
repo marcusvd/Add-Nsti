@@ -91,14 +91,14 @@ export class RegisterHelper extends BaseForm {
       this.contact.get('landline')?.setValue(isMobile.phoneNum);
   }
 
-  sanitizeFormFields(form: FormGroup): void {
-    Object.keys(form.controls).forEach(field => {
-      const control = form.get(field);
-      if (control instanceof FormGroup) {
-        this.sanitizeFormFields(control);
-      } else if (control && (control.value === null || control.value === undefined)) {
-        control.setValue('');
-      }
-    })
-  }
+  // sanitizeFormFields(form: FormGroup): void {
+  //   Object.keys(form.controls).forEach(field => {
+  //     const control = form.get(field);
+  //     if (control instanceof FormGroup) {
+  //       this.sanitizeFormFields(control);
+  //     } else if (control && (control.value === null || control.value === undefined)) {
+  //       control.setValue('');
+  //     }
+  //   })
+  // }
 }

@@ -1,5 +1,5 @@
 import { CompanyAuth } from "./company-auth";
-import { UserAccount } from "./user-account";
+import { UserAccountAuthDto } from "../../authentication/dtos/user-account-auth-dto";
 
 export class CompanyUserAccount
 {
@@ -7,7 +7,7 @@ export class CompanyUserAccount
      companyAuth!: CompanyAuth;
 
      userAccountId!: number;
-     userAccount!: UserAccount;
+     userAccount!: UserAccountAuthDto;
 
      LinkedOn!: Date;
 }

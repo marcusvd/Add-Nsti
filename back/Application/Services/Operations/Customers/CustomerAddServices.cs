@@ -36,7 +36,7 @@ namespace Application.Services.Operations.Customers
 
             _GENERIC_REPO.Customers.Add(entityToDb);
 
-            if (await _GENERIC_REPO.save())
+            if (await _GENERIC_REPO.Save())
                 return HttpStatusCode.Created;
 
             throw new GlobalServicesException(GlobalErrorsMessagesException.UnknownError);

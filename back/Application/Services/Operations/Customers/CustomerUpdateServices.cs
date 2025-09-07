@@ -50,7 +50,7 @@ public class CustomerUpdateServices : ICustomerUpdateServices
 
         _GENERIC_REPO.Customers.Update(updated);
 
-        var result = await _GENERIC_REPO.save();
+        var result = await _GENERIC_REPO.Save();
 
         if (result)
             return HttpStatusCode.OK;
@@ -81,7 +81,7 @@ public class CustomerUpdateServices : ICustomerUpdateServices
 
         _GENERIC_REPO.Customers.Update(fromDb);
 
-        var result = await _GENERIC_REPO.save();
+        var result = await _GENERIC_REPO.Save();
 
         if (result)
             return HttpStatusCode.OK;

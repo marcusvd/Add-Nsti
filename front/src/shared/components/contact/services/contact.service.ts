@@ -28,6 +28,19 @@ export class ContactService extends BaseForm {
     }, { validator: atLeastOneContactValidator() });
 
   }
+
+  objContactNoRegister() {
+    return {
+       id:0,
+      email:"Não Cadastrado",
+      cel: "Não Cadastrado",
+      zap:"Não Cadastrado",
+      landline: "Não Cadastrado",
+      site: "Não Cadastrado",
+      socialMedias: this._fb.array([])
+    }
+  }
+
   seedingSocialnetworks(socialMedias?: SocialMediasDto[]) {
 
     socialMedias?.forEach((item: SocialMediasDto) => {

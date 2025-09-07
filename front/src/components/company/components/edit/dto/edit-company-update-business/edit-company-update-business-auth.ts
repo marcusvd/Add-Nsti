@@ -6,7 +6,7 @@ import { RootBase } from "shared/entities-dtos/root-base";
 export class AddCompanyUpdateBusinessAuth extends RootBase {
   // name!: string;
   businessProfileId!: string;
-  override company!: CompanyAuth;
+  company!: CompanyAuth;
   address!: AddressDto;
   contact!: ContactDto;
 }

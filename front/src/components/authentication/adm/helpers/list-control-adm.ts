@@ -13,7 +13,7 @@ import { CompanyAuth } from 'components/authentication/dtos/company-auth';
 export class ListControlAdm extends BaseList {
 
 
-  business!: BusinessAuth;
+  business: BusinessAuth = new BusinessAuth();
 
   entityBusiness$!: Observable<BusinessAuth>;
 

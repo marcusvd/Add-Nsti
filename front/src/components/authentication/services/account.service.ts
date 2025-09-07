@@ -1,29 +1,33 @@
 
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 
 import { WarningsService } from 'components/warnings/services/warnings.service';
 import { take } from 'rxjs';
 import { BackEndService } from '../../../shared/services/back-end/backend.service';
 import { ConfirmEmail } from '../dtos/confirm-email';
-import { UserAccount } from '../dtos/user-account';
+import { UserAccountAuthDto } from "../../authentication/dtos/user-account-auth-dto";
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { ForgotPassword } from '../dtos/forgot-password';
 import { ResetPassword } from '../dtos/reset-password';
+import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
+import { ConfirmEmailChangeDto } from '../dtos/confirm-email-change-dto';
 
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class AccountService extends BackEndService<UserAccount> {
+export class AccountService extends BackEndService<UserAccountAuthDto> {
+
+  //  private override _router = inject(Router);
 
   constructor(
     private _warningsService: WarningsService,
-    // private _router: Router
   ) { super() }
 
+  result: boolean = false;
 
   confirmEmail(confirmEmail: ConfirmEmail) {
     return this.add$<ConfirmEmail>(confirmEmail, `${environment._BACK_END_ROOT_URL}/auth/confirmEmailAddress`).pipe(take(1)).subscribe({
@@ -61,6 +65,62 @@ export class AccountService extends BackEndService<UserAccount> {
       }
     })
 
+  }
+  confirmEmailChange(confirmEmail: ConfirmEmailChangeDto) {
+
+    return this.add$<ConfirmEmailChangeDto>(confirmEmail, `${environment._BACK_END_ROOT_URL}/auth/ConfirmRequestEmailChange`).pipe(take(1)).subscribe({
+      next: (x) => {
+
+        let result: any = x;
+        result = result as ResponseIdentiyApiDto;
+
+        this.result = result.succeeded;
+
+        if (result.succeeded) {
+
+          this.openSnackBar('E-mail Confirmado com sucesso.', 'warnings-success');
+
+          setTimeout(() => {
+
+            this._warningsService.openAuthWarnings({
+              btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
+              body: 'E-mail Confirmado com sucesso.',
+            }).subscribe(result => {
+              this._router.navigateByUrl('login');
+              this.callRouter('login');
+            })
+
+          }, 5000);
+        }
+
+        if (!result.succeeded)
+          this.failConfirmEmailChange('Falha ao confirmar e-mail.');
+
+      }, error: (err: any) => {
+
+        this.failConfirmEmailChange(err);
+
+      }
+    })
+
+  }
+
+
+  private failConfirmEmailChange(errors: any) {
+    this.openSnackBar('Falha ao confirmar e-mail.', 'warnings-error');
+
+    setTimeout(() => {
+
+      this._warningsService.openAuthWarnings({
+        btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
+        body: 'Falha ao confirmar e-mail.',
+      }).subscribe(
+        //   result => {
+        //   console.log(result)
+        // }
+      )
+
+    }, 5000);
   }
 
   forgotMyPassword(forgotPassword: ForgotPassword) {
@@ -163,7 +223,7 @@ export class AccountService extends BackEndService<UserAccount> {
             body: 'A senha foi modificada com sucesso!',
           }).subscribe(result => {
             // this._router.navigateByUrl('login');
-             this.callRouter('/login');
+            this.callRouter('/login');
           })
 
         }, 5000);

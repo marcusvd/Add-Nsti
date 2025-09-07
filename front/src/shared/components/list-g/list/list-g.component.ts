@@ -44,7 +44,7 @@ export class ListGComponent implements OnChanges, OnInit, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     this.paginatorLength();
 
-    this.paginatedEntities$ = this.entities$.pipe(
+    this.paginatedEntities$ = this.entities$?.pipe(
       map(entities => {
         if (!entities) return [];
 
@@ -62,7 +62,7 @@ export class ListGComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy.unsubscribe();
+    this.destroy?.unsubscribe();
   }
 
   paginatorLength() {

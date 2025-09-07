@@ -18,3 +18,5 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\UnitOfWork\obj\Debug\net8.0\UnitOfWork.
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\UnitOfWork\obj\Debug\net8.0\refint\UnitOfWork.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\UnitOfWork\obj\Debug\net8.0\UnitOfWork.pdb
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\UnitOfWork\obj\Debug\net8.0\ref\UnitOfWork.dll
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\UnitOfWork\bin\Debug\net8.0\Authentication.dll
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\UnitOfWork\bin\Debug\net8.0\Authentication.pdb

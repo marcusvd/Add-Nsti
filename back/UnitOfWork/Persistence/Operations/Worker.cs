@@ -7,18 +7,24 @@ using Repository.Data.PersonalData.Operations;
 using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.Main.Customers;
 using Repository.Data.Operations.BusinessesProfiles;
+using Authentication.AuthenticationRepository.BusinessRepository;
+using Authentication.Context;
+using Authentication.AuthenticationRepository.BusinessAuthRepository;
+using Authentication.AuthenticationRepository.UserAccountRepository;
 
 namespace UnitOfWork.Persistence.Operations
 {
     public class Worker : IUnitOfWork
     {
         private readonly ImSystemDbContext _CONTEXT;
-        public Worker(ImSystemDbContext CONTEXT)
+        private readonly IdImDbContext _ID_CONTEXT;
+        public Worker(ImSystemDbContext CONTEXT, IdImDbContext ID_CONTEXT)
         {
             _CONTEXT = CONTEXT;
+            _ID_CONTEXT = ID_CONTEXT;
         }
 
-        #region USER_PROFILE
+        #region BUSINESSES
         private BusinessesProfilesRepository _BUSINESS_PROFILE_REPO;
         public IBusinessesProfilesRepository BusinessesProfiles
         {
@@ -27,14 +33,30 @@ namespace UnitOfWork.Persistence.Operations
                 return _BUSINESS_PROFILE_REPO = _BUSINESS_PROFILE_REPO ?? new BusinessesProfilesRepository(_CONTEXT);
             }
         }
+        private BusinessAuthRepository _BUSINESS_AUTH;
+        public IBusinessAuthRepository BusinessesAuth
+        {
+            get
+            {
+                return _BUSINESS_AUTH = _BUSINESS_AUTH ?? new BusinessAuthRepository(_ID_CONTEXT);
+            }
+        }
         #endregion      
-        #region USER_PROFILE
+        #region USER
         private UserProfileRepository _USER_PROFILE_REPO;
         public IUserProfileRepository UsersProfiles
         {
             get
             {
                 return _USER_PROFILE_REPO = _USER_PROFILE_REPO ?? new UserProfileRepository(_CONTEXT);
+            }
+        }
+        private UserAccountRepository _USER_ACCOUNT_REPO;
+        public IUserAccountRepository UsersAccounts
+        {
+            get
+            {
+                return _USER_ACCOUNT_REPO = _USER_ACCOUNT_REPO ?? new UserAccountRepository(_ID_CONTEXT);
             }
         }
         #endregion      
@@ -57,7 +79,30 @@ namespace UnitOfWork.Persistence.Operations
                 return _COMPANIES_REPO = _COMPANIES_REPO ?? new CompanyProfileRepository(_CONTEXT);
             }
         }
+        private CompanyAuthRepository _COMPANIES_AUTH;
+        public ICompanyAuthRepository CompaniesAuth
+        {
+            get
+            {
+                return _COMPANIES_AUTH = _COMPANIES_AUTH ?? new CompanyAuthRepository(_ID_CONTEXT);
+            }
+        }
         #endregion
+        #region COMPANY_USERACCOUNT
+        
+        private CompanyAuthUserAccountRepository _COMPANIES_USERACCOUNTS_REPO;
+        public ICompanyAuthUserAccountRepository CompaniesUserAccounts
+        {
+            get
+            {
+                return _COMPANIES_USERACCOUNTS_REPO = _COMPANIES_USERACCOUNTS_REPO ?? new CompanyAuthUserAccountRepository(_ID_CONTEXT);
+            }
+        }
+        #endregion
+    
+    
+    
+    
         #region ADDRESSES
         private AddressesRepository _ADDRESSES_REPO;
         public IAddressesRepository Addresses
@@ -78,11 +123,15 @@ namespace UnitOfWork.Persistence.Operations
             }
         }
         #endregion
-        
 
-        public async Task<bool> save()
+
+        public async Task<bool> Save()
         {
             return await _CONTEXT.SaveChangesAsync() > 0;
+        }
+        public async Task<bool> SaveID()
+        {
+            return await _ID_CONTEXT.SaveChangesAsync() > 0;
         }
     }
 }

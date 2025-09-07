@@ -54,10 +54,9 @@
           </div>
           <div class="grid justify-center">
             <captcha #token [hidden]="!formMain.valid"></captcha>
-            <div class="w-full grid grid-rows-1 p-4 text-red-600 text-center" *ngIf="loginErrorMessage">
-              {{loginErrorMessage}}
-            </div>
-
+          </div>
+          <div class="w-full grid grid-rows-1 p-4 text-red-600 text-center" *ngIf="loginErrorMessage">
+            {{loginErrorMessage}}
           </div>
           <div class="p-4 w-full">
             <div>
@@ -73,7 +72,7 @@
         <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Acessar'" [icon]="'lock_open'"
           (btn)="login(token.sendForm())"></btn-g>
       </div>
-      
+
     </mat-card>
   </div>
 </div>

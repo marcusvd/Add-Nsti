@@ -7,6 +7,7 @@ using Authentication.Jwt;
 using Microsoft.Extensions.Logging;
 
 using Authentication.AuthenticationRepository.UserAccountRepository;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Application.Services.Operations.Auth.Login;
@@ -15,20 +16,21 @@ public class LoginServices : AuthenticationBase, ILoginServices
 {
     private UserManager<UserAccount> _userManager;
     private readonly IUserAccountRepository _userAccountRepository;
-    private readonly ILogger<AuthGenericValidatorServices> _logger;
+    private readonly ILogger<LoginServices> _logger;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     // private readonly EmailServer _emailService;
     private readonly JwtHandler _jwtHandler;
     // private readonly IAuthenticationObjectMapperServices _mapper;
     public LoginServices(
           UserManager<UserAccount> userManager,
-          ILogger<AuthGenericValidatorServices> logger,
+          ILogger<LoginServices> logger,
            IUserAccountRepository userAccountRepository,
           //   EmailServer emailService,
           JwtHandler jwtHandler,
+          IUrlHelper url,
           //   IAuthenticationObjectMapperServices mapper,
           AuthGenericValidatorServices genericValidatorServices
-      ) : base(userManager, jwtHandler)
+      ) : base(userManager, jwtHandler, logger, url)
     {
         _userManager = userManager;
         _logger = logger;

@@ -5,6 +5,7 @@ export class DefaultMessages {
 
   static requiredMsg = 'Obrigatório!';
   static emailMsg = 'E-mail inválido!';
+  static emailDuplicateMsg = 'Este e-mail já esta registrador nosistema!';
   static requiredTrueMsg = 'Obrigatório!';
   static invalidCpfMsg = 'CPF, inválido!';
   static invalidCnpjMsg = 'CNPJ, inválido!';

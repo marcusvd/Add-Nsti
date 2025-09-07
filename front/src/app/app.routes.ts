@@ -7,6 +7,7 @@ import { RegisterComponent } from 'components/authentication/register/register.c
 import { ConfirmEmailComponent } from 'components/authentication/confirm-email/confirm-email.component';
 import { ForgotPasswordComponent } from 'components/authentication/forgot-password/forgot-password.component';
 import { PasswordResetComponent } from 'components/authentication/password-reset/password-reset.component';
+import { ConfirmEmailChangedComponent } from 'components/authentication/confirm-email-changed/confirm-email-changed.component';
 
 
 export const routes: Routes = [
@@ -14,6 +15,7 @@ export const routes: Routes = [
   // { path: 'login', component: RegisterComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'confirm-email', component: ConfirmEmailComponent },
+  { path: 'confirm-request-email-change', component: ConfirmEmailChangedComponent },
   { path: 'forgot', component: ForgotPasswordComponent },
   { path: 'password-reset', component: PasswordResetComponent },
   { path: 'unknown-route', component: UnknownRouteComponent },

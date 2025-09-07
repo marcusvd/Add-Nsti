@@ -5,8 +5,6 @@ using Application.Services.Operations.Customers;
 using Application.Services.Shared.Seed.EntitiesSeed;
 using Application.Services.Operations.Companies;
 using Application.Services.Shared.Mappers.BaseMappers;
-using Application.Services.Operations.Customers.Search;
-
 using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.Main.Customers;
 
@@ -16,11 +14,7 @@ using FluentValidation.AspNetCore;
 using Authentication.Operations.AuthAdm;
 using Authentication.AuthenticationRepository.BusinessAuthRepository;
 using Application.Services.Operations.Auth.Register;
-using Domain.Entities.Shared;
-using Application.Services.Shared.Dtos;
-using Domain.Entities.Authentication;
-using Application.Services.Operations.Auth.Dtos;
-
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services.Helpers.Extensions;
 

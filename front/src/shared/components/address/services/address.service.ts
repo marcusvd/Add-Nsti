@@ -27,6 +27,21 @@ export class AddressService extends BaseForm {
       complement: [addr?.complement ?? '', [Validators.maxLength(500)]]
     });
   }
+
+  objAddressNoRegister() {
+    return {
+      id:0,
+      zipcode: "00000000",
+      street: "Não Cadastrado",
+      number: "Não Cadastrado",
+      district: "Não Cadastrado",
+      city: "Não Cadastrado",
+      state: "NO",
+      complement: "Não Cadastrado"
+    }
+  }
+
+
   validationCep!: RegExp;
   query(cep: string) {
     // var validationCep = '0000';

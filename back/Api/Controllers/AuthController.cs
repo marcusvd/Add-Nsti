@@ -1,4 +1,6 @@
 ﻿using Application.Services.Operations.Account;
+using Application.Services.Operations.Auth.Account.dtos;
+using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Operations.Auth.Login;
 using Application.Services.Operations.Auth.Register;
 using Domain.Entities.Authentication;
@@ -54,10 +56,35 @@ namespace Api.Controllers
 
             return Ok(result);
         }
+
         [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPassword forgotPassword)
         {
             return Ok(await _iAccountManagerServices.ForgotPasswordAsync(forgotPassword));
+        }
+
+        [HttpPost("RequestEmailChange")]
+        public async Task<IActionResult> RequestEmailChangeAsync([FromBody] RequestEmailChangeDto requestEmailChangeDto)
+        {
+            return Ok(await _iAccountManagerServices.RequestEmailChangeAsync(requestEmailChangeDto));
+        }
+
+        [HttpPut("UpdateUserAccountAuthAsync/{id:min(1)}")]
+        public async Task<IActionResult> UpdateUserAccountAuthAsync([FromBody] UserAccountAuthUpdateDto userAccountUpdate, int id)
+        {
+            return Ok(await _iAccountManagerServices.UpdateUserAccountAuthAsync(userAccountUpdate, id));
+        }
+
+        [HttpPut("UpdateUserAccountProfileAsync/{id:min(1)}")]
+        public async Task<IActionResult> UpdateUserAccountProfileAsync([FromBody] UserAccountProfileUpdateDto userAccountUpdate, int id)
+        {
+            return Ok(await _iAccountManagerServices.UpdateUserAccountProfileAsync(userAccountUpdate, id));
+        }
+
+        [HttpPost("ConfirmRequestEmailChange")]
+        public async Task<IActionResult> ConfirmRequestEmailChange([FromBody] ConfirmEmailChangeDto confirmRequestEmailChange)
+        {
+            return Ok(await _iAccountManagerServices.ConfirmYourEmailChangeAsync(confirmRequestEmailChange));
         }
 
         [HttpPost("ResetPasswordAsync")]

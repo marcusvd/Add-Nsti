@@ -29,7 +29,7 @@ namespace Application.Services.Operations.Companies
 
             _GENERIC_REPO.CompaniesProfile.Add(entityConvertedToDb);
 
-            return await _GENERIC_REPO.save();
+            return await _GENERIC_REPO.Save();
 
         }
     }

@@ -1,0 +1,18 @@
+<div class="w-full grid sm:grid-cols-[1fr_150px] sm:gap-4 items-center" [formGroup]="formMain">
+
+  <div>
+    <mat-label class="text-slate-900"> <b>Email</b></mat-label>
+    <mat-form-field class="w-full" appearance="outline">
+      <input #email matInput type="text" formControlName="email" aria-label="email">
+      <mat-error>
+        <span *ngIf="formErrorAndTouched(formMain, 'email','required')">{{defaultMessages.requiredMsg}}</span>
+        <span *ngIf="formErrorAndTouched(formMain, 'email','email')">{{defaultMessages.emailMsg}}</span>
+        <span *ngIf="formErrorAndTouched(formMain, 'email','inUse')">{{defaultMessages.emailDuplicateMsg}}</span>
+      </mat-error>
+      <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
+    </mat-form-field>
+  </div>
+  <div>
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -5,11 +5,12 @@ import { environment } from "environments/environment";
 import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BackEndService } from "shared/services/back-end/backend.service";
-import { UserAccount } from "../dtos/user-account";
+import { UserAccountAuthDto } from "../dtos/user-account-auth-dto";
+import { ResponseIdentiyApiDto } from "../dtos/response-identiy-api-dto";
 
 
 @Injectable({ providedIn: 'root' })
-export class IsUserRegisteredValidator extends  BackEndService<UserAccount> implements AsyncValidator {
+export class IsUserRegisteredValidator extends  BackEndService<UserAccountAuthDto> implements AsyncValidator {
 
   constructor() {super()}
 
@@ -20,9 +21,9 @@ export class IsUserRegisteredValidator extends  BackEndService<UserAccount> impl
 
     if (control.value.includes('@') && control.value.includes('.')) {
 
-      return this.loadByName$<boolean>(`${environment._BACK_END_ROOT_URL}/auth/IsUserExistCheckByEmailAsync`, control.value)
+      return this.loadByName$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/auth/IsUserExistCheckByEmailAsync`, control.value)
         .pipe(map(x => {
-          return x ? { inUse: true } : null;
+          return x.succeeded ? { inUse: true } : null;
         }))
     }
 

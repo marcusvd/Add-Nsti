@@ -9,6 +9,7 @@ using Application.Services.Operations.Auth.Register;
 using Application.Exceptions;
 
 
+
 namespace Api.Controllers
 {
     [ApiController]
@@ -35,8 +36,8 @@ namespace Api.Controllers
 
 
         [HttpGet("GetBusinessFullAsync/{id:min(1)}")]
-        // [Authorize(Roles = "SYSADMIN")]
-        [AllowAnonymous]
+        [Authorize(Roles = "SYSADMIN")]
+        // [AllowAnonymous]
         public async Task<IActionResult> GetBusinessFullAsync(int id)
         {
             return Ok(await _authAdmServices.GetBusinessFullAsync(id));
@@ -58,10 +59,17 @@ namespace Api.Controllers
             return Ok(await _companyAuthServices.GetCompanyAuthAsync(id));
 
         }
+        [HttpGet("GetCompanyAuthFullAsync/{id:min(1)}")]
+        [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> GetCompanyAuthFullAsync(int id)
+        {
+            return Ok(await _companyAuthServices.GetCompanyAuthFullAsync(id));
+
+        }
 
         [HttpGet("GetCompanyProfileAsync/{companyAuthId}")]
-        [AllowAnonymous]
-        // [Authorize(Roles = "SYSADMIN")]
+        // [AllowAnonymous]
+        [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetCompanyProfileAsync(string companyAuthId)
         {
             if (string.IsNullOrWhiteSpace(companyAuthId)) throw new Exception(GlobalErrorsMessagesException.IvalidId);
@@ -95,9 +103,27 @@ namespace Api.Controllers
         [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> AddUserAccountAsync([FromBody] AddUserExistingCompanyDto user, int companyId)
         {
-            return Ok(await _registerUserAccountServices.AddUserExistingCompanyAsync(user,companyId));
+            return Ok(await _registerUserAccountServices.AddUserExistingCompanyAsync(user, companyId));
 
         }
+        
+        
+        [HttpGet("GetUsersByCompanyIdAsync/{companyAuthId:min(1)}")]
+        // [AllowAnonymous]
+        [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> GetUsersByCompanyIdAsync(int companyAuthId)
+        {
+            return Ok(await _companyAuthServices.GetUsersByCompanyIdAsync(companyAuthId));
+        }
+        [HttpGet("GetUserByIdFullAsync/{id:min(1)}")]
+        [AllowAnonymous]
+        // [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> GetUserByIdFullAsync(int id)
+        {
+
+            return Ok(await _companyAuthServices.GetUserByIdFullAsync(id));
+        }
+
 
 
     }

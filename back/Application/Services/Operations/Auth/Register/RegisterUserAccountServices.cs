@@ -10,48 +10,40 @@ using Authentication.Jwt;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
 using Application.Exceptions;
-using Authentication.AuthenticationRepository.BusinessRepository;
-using Authentication.AuthenticationRepository.BusinessAuthRepository;
 using UnitOfWork.Persistence.Operations;
-using Repository.Data.Operations.BusinessesProfiles;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.System.BusinessesCompanies;
+using Application.Services.Shared.Dtos;
+using Application.Services.Operations.Auth.Account.dtos;
 
 
 namespace Application.Services.Operations.Auth.Register;
 
 public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAccountServices
 {
-    private readonly ILogger<AuthGenericValidatorServices> _logger;
+    private readonly ILogger<RegisterUserAccountServices> _logger;
     private readonly UserManager<UserAccount> _userManager;
     private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly IAccountManagerServices _accountManagerServices;
-    private readonly ICompanyAuthRepository _companyAuthRepository;
-    private readonly IBusinessAuthRepository _businessAuthRepository;
     private readonly IUnitOfWork _GENERIC_REPO;
-    private readonly IBusinessesProfilesRepository _businessesProfilesRepository;
-    private readonly IUrlHelper _url;
+
+
+    // private readonly IUrlHelper _url;
     public RegisterUserAccountServices(
           UserManager<UserAccount> userManager,
           JwtHandler jwtHandler,
           IUrlHelper url,
           IAccountManagerServices accountManagerServices,
           AuthGenericValidatorServices genericValidatorServices,
-          ICompanyAuthRepository companyAuthRepository,
-          IBusinessAuthRepository businessAuthRepository,
           IUnitOfWork GENERIC_REPO,
-          IBusinessesProfilesRepository businessesProfilesRepository,
-          ILogger<AuthGenericValidatorServices> logger
-      ) : base(userManager, jwtHandler)
+          ILogger<RegisterUserAccountServices> logger
+      ) : base(userManager, jwtHandler, logger, url)
     {
         _userManager = userManager;
         _accountManagerServices = accountManagerServices;
-        _url = url;
+        // _url = url;
         _genericValidatorServices = genericValidatorServices;
-        _companyAuthRepository = companyAuthRepository;
-        _businessAuthRepository = businessAuthRepository;
         _GENERIC_REPO = GENERIC_REPO;
-        _businessesProfilesRepository = businessesProfilesRepository;
         _logger = logger;
     }
 
@@ -79,17 +71,22 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         var businessProfile = await GetBusinessProfileAsync(businessAuth.BusinessProfileId);
 
-        _businessAuthRepository.Update(businessAuth);
+        _GENERIC_REPO.BusinessesAuth.Update(businessAuth);
 
-        var userProfile = CreateUserProfile(userProfileId, businessProfile.Id).ToEntity();
+        var userProfile = CreateUserProfile(userProfileId, businessProfile.Id, user.Contact ?? (ContactDto)_genericValidatorServices.ReplaceNullObj<ContactDto>(), user.Address ?? (AddressDto)_genericValidatorServices.ReplaceNullObj<AddressDto>()).ToEntity();
+
 
         _GENERIC_REPO.UsersProfiles.Add(userProfile);
 
-        var userProfileResult = await _GENERIC_REPO.save();
+        var userProfileResult = await _GENERIC_REPO.Save();
 
         ResultUserCreation(creationResult.Succeeded, userProfileResult, userAccount.Email, creationResult.Errors.ToString() ?? ($"User creation failed for {userAccount.Email}."));
 
-        await SendEmailConfirmationAsync(userAccount);
+        var genToken = GenerateUrlTokenEmailConfirmation(userAccount, "ConfirmEmailAddress", "auth");
+
+        var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", "api/auth/ConfirmEmailAddress", "I.M - Link para confirmação de e-mail"]);
+
+        await SendEmailConfirmationAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
 
         var admRole = CreateRole("Users", "Usuários");
         var updateRole = CreateUpdateUserRole(userAccount.Email, "Users", "Usuários", false);
@@ -101,11 +98,9 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         return await CreateAuthenticationResponseAsync(userAccount);
     }
-
-
     private async Task<CompanyAuth> GetCompanyAuthAsync(int companyAuthId)
     {
-        return await _companyAuthRepository.GetByPredicate(
+        return await _GENERIC_REPO.CompaniesAuth.GetByPredicate(
          x => x.Id == companyAuthId,
          null,
          selector => selector,
@@ -114,7 +109,7 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
     }
     private async Task<BusinessAuth> GetBusinessAuthAsync(int businessId)
     {
-        return await _businessAuthRepository.GetByPredicate(
+        return await _GENERIC_REPO.BusinessesAuth.GetByPredicate(
                     x => x.Id == businessId,
                     null,
                     selector => selector,
@@ -123,7 +118,7 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
     }
     private async Task<BusinessProfile> GetBusinessProfileAsync(string businessProfileId)
     {
-        return await _businessesProfilesRepository.GetByPredicate(
+        return await _GENERIC_REPO.BusinessesProfiles.GetByPredicate(
             x => x.BusinessAuthId == businessProfileId,
 
             add => add.Include(x => x.Companies),
@@ -131,16 +126,6 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
             null
             );
 
-    }
-    private void ResultUserCreation(bool userAccount, bool userProfile, string userEmail, string errosMsg)
-    {
-
-        if (!userAccount || !userProfile)
-        {
-            _logger.LogError("User creation failed for {Email}. Errors: {Errors}", userEmail, string.Join(", ", errosMsg));
-
-            throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenRegisterUserAccount);
-        }
     }
     private async Task ValidateUniqueUserCredentials(AddUserExistingCompanyDto register)
     {
@@ -170,13 +155,15 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         return userAccount;
     }
-    private UserProfileDto CreateUserProfile(string userAccountId, int businessProfileId)
+    private UserProfileDto CreateUserProfile(string userAccountId, int businessProfileId, ContactDto contact, AddressDto address)
     {
         var userProfileDto = new UserProfileDto()
         {
             Id = 0,
             UserAccountId = userAccountId,
-            BusinessProfileId = businessProfileId
+            BusinessProfileId = businessProfileId,
+            Address = address,
+            Contact = contact
         };
         return userProfileDto;
     }
@@ -192,66 +179,42 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         return userAccount != null;
     }
-    private async Task SendEmailConfirmationAsync(UserAccount userAccount)
-    {
-        try
-        {
-            var confirmationUrl = await GenerateEmailUrl(userAccount);
+   
 
-            if (string.IsNullOrEmpty(confirmationUrl))
-            {
-                _logger.LogError("Failed to generate email confirmation URL for {Email}", userAccount.Email);
-                throw new AuthServicesException(AuthErrorsMessagesException.ErrorWhenGenerateEmailLink);
-            }
+  
+   
+    //     private string FormatEmailUrl(string baseUrl, string urlWithToken, string replace, UserAccount userAccount,DataConfirmEmail dataConfirmEmail)
+    //     {
 
-            var formattedUrl = FormatEmailUrl("http://localhost:4200/confirm-email", confirmationUrl, "api/auth/ConfirmEmailAddress", userAccount);
 
-            await SendAsync(To: userAccount.Email, Subject: "I.M - Link para confirmação de e-mail", Body: formattedUrl);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error sending confirmation email to {Email}", userAccount.Email);
-            throw;
-        }
-    }
-    private async Task<string> GenerateEmailUrl(UserAccount userAccount)
-    {
-        var urlConfirmMail = _url.Action("ConfirmEmailAddress", "auth", new
-        {
-            token = await _userManager.GenerateEmailConfirmationTokenAsync(userAccount),
-            email = userAccount.Email
+    //         // Assunto: Bem-vindo ao I.M – Confirmação de Cadastro
 
-        }) ?? throw new InvalidOperationException("Unable to generate email confirmation URL.");
+    //         string mensagemBoasVindas = $@"
 
-        return urlConfirmMail;
-    }
-    private string FormatEmailUrl(string baseUrl, string urlWithToken, string replace, UserAccount userAccount)
-    {
-        string mensagemBoasVindas = $@"
-Assunto: Bem-vindo ao I.M – Confirmação de Cadastro
+    //     {dataConfirmEmail.SubjectEmail}
 
-Olá {userAccount.NormalizedUserName},
+    // Olá {userAccount.NormalizedUserName},
 
-Seja muito bem-vindo ao I.M, o seu novo sistema de gestão de ordens de serviço!
+    // Seja muito bem-vindo ao I.M, o seu novo sistema de gestão de ordens de serviço!
 
-Estamos felizes por tê-lo conosco. Este e-mail confirma que o endereço utilizado no cadastro está correto e ativo. Para concluir seu registro e começar a usar o sistema, basta clicar no botão abaixo:
+    // Estamos felizes por tê-lo conosco. Este e-mail confirma que o endereço utilizado no cadastro está correto e ativo. Para concluir seu registro e começar a usar o sistema, basta clicar no botão abaixo:
 
-Confirme seu e-mail clicando no link abaixo:
+    // Confirme seu e-mail clicando no link abaixo:
 
-🔗 {baseUrl}{urlWithToken.Replace(replace, "")}
+    // 🔗 {baseUrl}{urlWithToken.Replace(replace, "")}
 
-O I.M foi criado para tornar sua rotina mais eficiente, organizada e segura. A partir de agora, você poderá acompanhar suas ordens de serviço com mais agilidade e controle.
+    // O I.M foi criado para tornar sua rotina mais eficiente, organizada e segura. A partir de agora, você poderá acompanhar suas ordens de serviço com mais agilidade e controle.
 
-Se você não realizou esse cadastro, por favor ignore este e-mail.
+    // Se você não realizou esse cadastro, por favor ignore este e-mail.
 
-Ficou com alguma dúvida? Nossa equipe está pronta para ajudar.
+    // Ficou com alguma dúvida? Nossa equipe está pronta para ajudar.
 
-Atenciosamente,  
-Equipe I.M  
-suporte@im.com.br
-";
+    // Atenciosamente,  
+    // Equipe I.M  
+    // suporte@im.com.br
+    // ";
 
-        return mensagemBoasVindas;
-    }
+    //         return mensagemBoasVindas;
+    //     }
 
 }

@@ -31,7 +31,7 @@ public class ProfilesCrudService : IProfilesCrudService
 
         _GENERIC_REPO.UsersProfiles.Add(entityConvertedToDb);
 
-        return await _GENERIC_REPO.save();
+        return await _GENERIC_REPO.Save();
 
     }
     public async Task<bool> AddBusinessesProfilesAsync(BusinessProfileDto entityDto)
@@ -46,7 +46,7 @@ public class ProfilesCrudService : IProfilesCrudService
 
         _GENERIC_REPO.BusinessesProfiles.Add(entityConvertedToDb);
 
-        return await _GENERIC_REPO.save();
+        return await _GENERIC_REPO.Save();
 
     }
 }

@@ -22,6 +22,6 @@ public class SeedFirstDbServices
 
         // _GENERIC_REPO.Customers.AddRangeAsync(customers.CustomerAdd());
 
-        return await _GENERIC_REPO.save();
+        return await _GENERIC_REPO.Save();
     }
 }

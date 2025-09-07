@@ -1,13 +1,19 @@
 <!-- <default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'mudar-aqui'"  [textSubTitleComp]="'Cadastro de empresa'" [iconSubTitleComp]="'add'" [hideDivider]="true"> -->
-<default-component *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'mudar-aqui'" [textSubTitleComp]="'Cadastro de empresa'"
-  [iconSubTitleComp]="'add'" [hideDivider]="true">
+<default-component *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="this.formMain.get('tradeName')?.value"
+  [textSubTitleComp]="'Cadastro de empresa'" [iconSubTitleComp]="'add'" [hideDivider]="true">
   <div btns>
 
   </div>
-  <div body class="grid grid-cols-2">
+  <div body>
     <mat-tab-group [formGroup]="formMain" class="p-4" animationDuration="0ms">
       <mat-tab label="Identificação">
-        <name-cpf-cnpj (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)" [formMain]="formMain"> </name-cpf-cnpj>
+        <div class="p-4">
+          <company-names [formMain]="this.formMain">
+          </company-names>
+          <cpf-cnpj [formMain]="formMain" (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)"
+            (isValidCpf)="isValidCpf($event)">
+          </cpf-cnpj>
+        </div>
       </mat-tab>
       <mat-tab label="Endereço">
         <mat-card class="border-card-categories-divide-comp">
@@ -19,6 +25,15 @@
           <contact [formMain]="this.contact"></contact>
         </mat-card>
       </mat-tab>
+      <mat-tab label="Usuários">
+
+        <list-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$" (outOnClickIcons)="onClickIcons($event)">
+          <!-- <list-g  (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)"
+            (outonPageChange)="onPageChange($event)"> -->
+        </list-g>
+
+      </mat-tab>
     </mat-tab-group>
   </div>
+
 </default-component>
