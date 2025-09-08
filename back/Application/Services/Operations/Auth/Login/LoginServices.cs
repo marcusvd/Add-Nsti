@@ -6,64 +6,39 @@ using Authentication.Helpers;
 using Authentication.Jwt;
 using Microsoft.Extensions.Logging;
 
-using Authentication.AuthenticationRepository.UserAccountRepository;
 using Microsoft.AspNetCore.Mvc;
+using UnitOfWork.Persistence.Operations;
 
 
 namespace Application.Services.Operations.Auth.Login;
 
 public class LoginServices : AuthenticationBase, ILoginServices
 {
-    private UserManager<UserAccount> _userManager;
-    private readonly IUserAccountRepository _userAccountRepository;
+    // private UserManager<UserAccount> _userManager;
     private readonly ILogger<LoginServices> _logger;
-    private readonly AuthGenericValidatorServices _genericValidatorServices;
-    // private readonly EmailServer _emailService;
-    private readonly JwtHandler _jwtHandler;
-    // private readonly IAuthenticationObjectMapperServices _mapper;
+     private readonly IUnitOfWork _GENERIC_REPO;
+
+    
     public LoginServices(
-          UserManager<UserAccount> userManager,
+        //   UserManager<UserAccount> userManager,
           ILogger<LoginServices> logger,
-           IUserAccountRepository userAccountRepository,
-          //   EmailServer emailService,
+            IUnitOfWork GENERIC_REPO,
           JwtHandler jwtHandler,
-          IUrlHelper url,
-          //   IAuthenticationObjectMapperServices mapper,
-          AuthGenericValidatorServices genericValidatorServices
-      ) : base(userManager, jwtHandler, logger, url)
+          IUrlHelper url
+      ) : base(jwtHandler, logger, url, GENERIC_REPO)
     {
-        _userManager = userManager;
+        // _userManager = userManager;
         _logger = logger;
-        // _emailService = emailService;
-        _jwtHandler = jwtHandler;
-        _userAccountRepository = userAccountRepository;
-        // _mapper = mapper;
-        _genericValidatorServices = genericValidatorServices;
+        _GENERIC_REPO = GENERIC_REPO;
     }
-    //     public async Task<UserAccount> GetUserAccountFull(string email)
-    //     {
-    //         var userAny = _dbContext.Users.AsNoTracking().Any();
-
-    //         var invalidUser = new UserAccount
-    //         {
-    //             Id = -1,
-    //             UserName = "Invalid",
-    //             DisplayUserName = "Invalid@Invalid.com.br",
-    //             Email = "Invalid@Invalid.com.br"
-    //         };
-
-    //         if (userAny)
-    //             return await _dbContext.Users.AsNoTracking().Include(x => x.CompanyUserAccounts).FirstOrDefaultAsync(x => x.Email.Equals(email)) ?? invalidUser;
-
-    //         return invalidUser;
-    //     }
+   
     public async Task<UserToken> LoginAsync(LoginModel user)
     {
-        _genericValidatorServices.IsObjNull(user);
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(user);
 
         // var userAccount = await FindUserAsync(user.Email);
 
-         var userAccount = await _userAccountRepository.GetUserAccountFull(user.Email);
+         var userAccount = await _GENERIC_REPO.UsersAccounts.GetUserAccountFull(user.Email);
 
 
         if (userAccount == null)
@@ -90,40 +65,7 @@ public class LoginServices : AuthenticationBase, ILoginServices
 
         return await CreateAuthenticationResponseAsync(userAccount);
     }
-
-
-    private async Task<bool> HandleTwoFactorAuthenticationAsync(UserAccount userAccount)
-    {
-        if (!await _userManager.GetTwoFactorEnabledAsync(userAccount))
-            return false;
-
-        var validProviders = await _userManager.GetValidTwoFactorProvidersAsync(userAccount);
-
-        if (!validProviders.Contains("Email"))
-            return false;
-
-        var token = await _userManager.GenerateTwoFactorTokenAsync(userAccount, "Email");
-
-        await SendTwoFactorTokenAsync(userAccount, token);
-
-        return true;
-    }
-
-    private async Task SendTwoFactorTokenAsync(UserAccount userAccount, string token)
-    {
-        try
-        {
-            // await _emailService.SendAsync(To: userAccount.Email,
-            //         Subject: "SONNY: Autenticação de dois fatores",
-            //         Body: $"Código: Autenticação de dois fatores: {token}");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to send 2FA token to {Email}", userAccount.Email);
-            throw new AuthServicesException(AuthErrorsMessagesException.TwoFactorTokenSendFailed);
-        }
-    }
-
+   
     private async Task ValidateAccountStatusAsync(UserAccount userAccount)
     {
         if (await IsAccountLockedOutAsync(userAccount))

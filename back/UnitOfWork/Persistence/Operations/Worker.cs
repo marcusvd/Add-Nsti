@@ -3,14 +3,18 @@ using Repository.Data.Context;
 
 
 using Repository.Data.PersonalData.Contracts;
-using Repository.Data.PersonalData.Operations;
 using Repository.Data.Operations.Companies;
-using Repository.Data.Operations.Main.Customers;
 using Repository.Data.Operations.BusinessesProfiles;
-using Authentication.AuthenticationRepository.BusinessRepository;
-using Authentication.Context;
-using Authentication.AuthenticationRepository.BusinessAuthRepository;
-using Authentication.AuthenticationRepository.UserAccountRepository;
+using Authentication.Helpers;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
+using Domain.Entities.Authentication;
+using Repository.Data.Operations.AuthRepository.UserAccountRepository;
+using Repository.Data.Context.Auth;
+using Repository.Data.Operations.AuthRepository.BusinessRepository;
+using Repository.Data.Operations.Customers;
+using Repository.Data.Operations.AddressRepository;
+using Repository.Data.Operations.ContactsRepository;
 
 namespace UnitOfWork.Persistence.Operations
 {
@@ -18,10 +22,15 @@ namespace UnitOfWork.Persistence.Operations
     {
         private readonly ImSystemDbContext _CONTEXT;
         private readonly IdImDbContext _ID_CONTEXT;
-        public Worker(ImSystemDbContext CONTEXT, IdImDbContext ID_CONTEXT)
+        private readonly ILogger<GenericValidatorServices> _LOGGER;
+        public Worker(ImSystemDbContext CONTEXT, IdImDbContext ID_CONTEXT, ILogger<GenericValidatorServices> LOGGER, UserManager<UserAccount> USER_MANAGER, RoleManager<Role> ROLE_MANAGER)
         {
             _CONTEXT = CONTEXT;
             _ID_CONTEXT = ID_CONTEXT;
+            _LOGGER = LOGGER;
+            _USER_MANAGER_REPO = USER_MANAGER;
+            _ROLE_MANAGER_REPO = ROLE_MANAGER;
+
         }
 
         #region BUSINESSES
@@ -59,7 +68,16 @@ namespace UnitOfWork.Persistence.Operations
                 return _USER_ACCOUNT_REPO = _USER_ACCOUNT_REPO ?? new UserAccountRepository(_ID_CONTEXT);
             }
         }
-        #endregion      
+
+        private UserManager<UserAccount> _USER_MANAGER_REPO;
+        public UserManager<UserAccount> UsersManager => _USER_MANAGER_REPO;
+
+        private RoleManager<Role> _ROLE_MANAGER_REPO;
+
+        public RoleManager<Role> RolesManager => _ROLE_MANAGER_REPO;
+
+
+        #endregion
         #region CUSTOMER
         private CustomerRepository _CUSTOMER_REPO;
         public ICustomerRepository Customers
@@ -89,7 +107,7 @@ namespace UnitOfWork.Persistence.Operations
         }
         #endregion
         #region COMPANY_USERACCOUNT
-        
+
         private CompanyAuthUserAccountRepository _COMPANIES_USERACCOUNTS_REPO;
         public ICompanyAuthUserAccountRepository CompaniesUserAccounts
         {
@@ -99,17 +117,17 @@ namespace UnitOfWork.Persistence.Operations
             }
         }
         #endregion
-    
-    
-    
-    
+
+
+
+
         #region ADDRESSES
-        private AddressesRepository _ADDRESSES_REPO;
-        public IAddressesRepository Addresses
+        private AddressRepository _ADDRESSES_REPO;
+        public IAddressRepository Addresses
         {
             get
             {
-                return _ADDRESSES_REPO = _ADDRESSES_REPO ?? new AddressesRepository(_CONTEXT);
+                return _ADDRESSES_REPO = _ADDRESSES_REPO ?? new AddressRepository(_CONTEXT);
             }
         }
         #endregion
@@ -122,6 +140,19 @@ namespace UnitOfWork.Persistence.Operations
                 return _CONTACTS_REPO = _CONTACTS_REPO ?? new ContactsRepository(_CONTEXT);
             }
         }
+        #endregion
+
+        #region 
+        private GenericValidatorServices GENERIC_VALIDATOR_SERVICES;
+        public IGenericValidatorServices _GenericValidatorServices
+        {
+            get
+            {
+                return GENERIC_VALIDATOR_SERVICES = GENERIC_VALIDATOR_SERVICES ?? new GenericValidatorServices(_LOGGER);
+            }
+        }
+
+      
         #endregion
 
 

@@ -842,7 +842,8 @@
           "Microsoft.EntityFrameworkCore": "8.0.13",
           "Microsoft.EntityFrameworkCore.Design": "8.0.4",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0",
-          "Pomelo.EntityFrameworkCore.MySql": "8.0.3"
+          "Pomelo.EntityFrameworkCore.MySql": "8.0.3",
+          "Repository": "1.0.0"
         },
         "runtime": {
           "Authentication.dll": {

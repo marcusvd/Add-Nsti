@@ -1,16 +1,10 @@
-using System;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
-
 using Application.Exceptions;
 using Application.Services.Operations.Customers.Dtos;
-using Repository.Data.Operations.Main.Customers;
 using UnitOfWork.Persistence.Operations;
 using Domain.Entities.System.Customers;
-// using Application.Services.Operations.Customers.Dtos.Mappers;
+using Repository.Data.Operations.Customers;
 
 namespace Application.Services.Operations.Customers;
 
@@ -18,18 +12,15 @@ public class CustomerUpdateServices : ICustomerUpdateServices
 {
 
     private readonly ICustomerRepository _iCustomerRepository;
-    // private readonly ICustomerObjectMapperServices _ICustomerObjectMapperServices;
     private readonly IUnitOfWork _GENERIC_REPO;
 
 
     public CustomerUpdateServices(
         ICustomerRepository ICustomerRepository,
-        // ICustomerObjectMapperServices ICustomerObjectMapperServices,
         IUnitOfWork GENERIC_REPO
         )
     {
         _iCustomerRepository = ICustomerRepository;
-        // _ICustomerObjectMapperServices = ICustomerObjectMapperServices;
         _GENERIC_REPO = GENERIC_REPO;
     }
 

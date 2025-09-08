@@ -29,6 +29,8 @@ import { UserAccountProfileUpdateDto } from 'components/authentication/dtos/user
 import { UserAuthProfileDto } from 'components/authentication/dtos/user-auth-profile-dto';
 import { UserAccountAuthDto } from 'components/authentication/dtos/user-account-auth-dto';
 import { UserProfileDto } from 'components/authentication/dtos/user-profile-dto';
+import { AddressDto } from 'shared/components/address/dtos/address-dto';
+import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
 
@@ -76,7 +78,8 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
 
   backend = `${environment._BACK_END_ROOT_URL}/AuthAdm/AddUserAccountAsync`
   backendEmailUpdate = `${environment._BACK_END_ROOT_URL}/auth/RequestEmailChange`
-  backendUserAccountProfileUpdate = `${environment._BACK_END_ROOT_URL}/auth/UpdateUserAccountProfileAsync`
+  backendAddress = `${environment._BACK_END_ROOT_URL}/Address/UpdateAddressAsync`
+  backendContact = `${environment._BACK_END_ROOT_URL}/contact/UpdateContactAsync`
 
   emailChange(newEmail: string) {
     const changeEmail = new UpdateUserAccountEmailDto(this.oldEmail ?? '', newEmail)
@@ -84,18 +87,26 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   }
 
   contactUpdate() {
+
+     if (this.alertSave(this.contact)) {
+      const toUpdate: ContactDto = this.contact.value;
+      this._profileService.updateContactUserProfile(toUpdate, this.backendContact)
+        .subscribe({
+          next: (x => {
+            console.log(x);
+          })
+        });
+    }
+
+
   }
+
 
   addressUpdate() {
 
-    // console.log(this.formMain.get('address')?.value)
-    this.formMain?.get('id')?.patchValue(this?.userProfile?.id)
-
     if (this.alertSave(this.address)) {
-      const toUpdate: UserAccountProfileUpdateDto = this.formMain.value;
-
-
-      this._profileService.updateUserProfile(toUpdate, this.backendUserAccountProfileUpdate)
+      const toUpdate: AddressDto = this.address.value;
+      this._profileService.updateAddressUserProfile(toUpdate, this.backendAddress)
         .subscribe({
           next: (x => {
             console.log(x);

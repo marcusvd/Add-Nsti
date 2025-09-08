@@ -1,12 +1,15 @@
 using System.Threading.Tasks;
 
 using Repository.Data.PersonalData.Contracts;
-using Repository.Data.Operations.Main.Customers;
 using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.BusinessesProfiles;
-using Authentication.AuthenticationRepository.BusinessRepository;
-using Authentication.AuthenticationRepository.BusinessAuthRepository;
-using Authentication.AuthenticationRepository.UserAccountRepository;
+using Authentication.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Domain.Entities.Authentication;
+using Repository.Data.Operations.AuthRepository.UserAccountRepository;
+using Repository.Data.Operations.AuthRepository.BusinessRepository;
+using Repository.Data.Operations.Customers;
+using Repository.Data.Operations.AddressRepository;
 
 namespace UnitOfWork.Persistence.Operations
 {
@@ -15,6 +18,8 @@ namespace UnitOfWork.Persistence.Operations
         #region USER
         IUserProfileRepository UsersProfiles { get; }
         IUserAccountRepository UsersAccounts { get; }
+        UserManager<UserAccount> UsersManager { get; }
+        RoleManager<Role> RolesManager { get; }
         #endregion
 
         #region BUSINESS
@@ -36,12 +41,16 @@ namespace UnitOfWork.Persistence.Operations
         #endregion
 
         #region ADDRESSES
-        IAddressesRepository Addresses { get; }
+        IAddressRepository Addresses { get; }
         #endregion
 
         #region CONTACTS
         IContactsRepository Contacts { get; }
         #endregion
+        #region GENERIC_VALIDATOR
+        IGenericValidatorServices _GenericValidatorServices { get; }
+        #endregion
+
         Task<bool> Save();
         Task<bool> SaveID();
     }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Authentication.Helpers;
-using Authentication.Context;
+using Repository.Data.Context.Auth;
 using Domain.Entities.Authentication;
 using Authentication.Jwt;
 
@@ -74,7 +74,7 @@ public static class IdentityConfiguration
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         //
         services.AddScoped<JwtHandler>();
-        services.AddScoped<AuthGenericValidatorServices>();
+    
       
         //  services.AddScoped<IRegisterUserAccountServices, UserAccountRepository>();
         // services.AddScoped<IBusinessRepository, BusinessRepository>();

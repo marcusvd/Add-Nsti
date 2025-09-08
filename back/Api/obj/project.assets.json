@@ -1557,7 +1557,8 @@
           "Microsoft.EntityFrameworkCore": "8.0.13",
           "Microsoft.EntityFrameworkCore.Design": "8.0.4",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0",
-          "Pomelo.EntityFrameworkCore.MySql": "8.0.3"
+          "Pomelo.EntityFrameworkCore.MySql": "8.0.3",
+          "Repository": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Authentication.dll": {}
@@ -4225,11 +4226,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj",
+      "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
       "projectName": "ImApi",
-      "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj",
+      "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\obj\\",
+      "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

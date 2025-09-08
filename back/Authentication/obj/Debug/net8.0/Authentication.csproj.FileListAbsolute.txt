@@ -16,3 +16,7 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\obj\Debug\net8.0\refint\
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\obj\Debug\net8.0\Authentication.pdb
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\obj\Debug\net8.0\Authentication.genruntimeconfig.cache
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\obj\Debug\net8.0\ref\Authentication.dll
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\bin\Debug\net8.0\Pagination.dll
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\bin\Debug\net8.0\Repository.dll
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\bin\Debug\net8.0\Repository.pdb
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Authentication\bin\Debug\net8.0\Pagination.pdb

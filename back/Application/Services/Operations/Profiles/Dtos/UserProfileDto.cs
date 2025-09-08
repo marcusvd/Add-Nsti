@@ -63,6 +63,31 @@ public static class UserProfileMapper
 
         return userAccount;
     }
+    public static UserProfile ToUpdate(this UserProfileDto dto, UserProfile db)
+    {
+      
+        if (dto.Address is null)
+            dto.Address = AddressMapper.Incomplete();
+
+        if (dto.Contact is null)
+            dto.Contact = ContactMapper.Incomplete();
+
+        if (db.Address is null)
+            db.Address = AddressMapper.Incomplete().ToEntity();
+
+        if (db.Contact is null)
+            db.Contact = ContactMapper.Incomplete().ToEntity();
+
+            db.Id = dto.Id;
+            db.UserAccountId = dto.UserAccountId;
+            db.Deleted = dto.Deleted;
+            db.Registered = dto.Registered;
+            db.BusinessProfileId = dto.BusinessProfileId;
+            db.Address = dto.Address.ToEntity();
+            db.Contact = dto.Contact.ToEntity();
+
+        return db;
+    }
 
     public static UserProfileDto Incomplete()
     {

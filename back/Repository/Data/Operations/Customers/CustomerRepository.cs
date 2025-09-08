@@ -9,22 +9,20 @@ using Repository.Helpers;
 using System.Collections.Generic;
 using Domain.Entities.System.Customers;
 
-namespace Repository.Data.Operations.Main.Customers
+namespace Repository.Data.Operations.Customers;
+
+public class CustomerRepository : Repository<Customer>, ICustomerRepository
 {
-    public class CustomerRepository : Repository<Customer>, ICustomerRepository
+    private readonly ImSystemDbContext _CONTEXT;
+
+    public CustomerRepository(ImSystemDbContext CONTEXT) : base(CONTEXT)
     {
-        private readonly ImSystemDbContext _CONTEXT;
+        _CONTEXT = CONTEXT;
+    }
 
-        public CustomerRepository(ImSystemDbContext CONTEXT) : base(CONTEXT)
-        {
-            _CONTEXT = CONTEXT;
-        }
-
-          public async void AddRangeAsync(List<Customer> entities)
-        {
-            await _CONTEXT.MN_Customers.AddRangeAsync(entities);
-        }
-       
+    public async void AddRangeAsync(List<Customer> entities)
+    {
+        await _CONTEXT.MN_Customers.AddRangeAsync(entities);
     }
 
 }

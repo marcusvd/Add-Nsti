@@ -7,11 +7,11 @@ using Application.Services.Operations.Auth.Login;
 using Application.Services.Operations.Auth.Register;
 using Application.Services.Operations.Account;
 using Authentication.Operations.AuthAdm;
-using Authentication.AuthenticationRepository.UserAccountRepository;
-using Authentication.AuthenticationRepository.BusinessRepository;
 using Application.Services.Operations.Auth.CompanyAuthServices;
 using Repository.Data.Operations.BusinessesProfiles;
 using Repository.Data.Operations.Companies;
+using Repository.Data.Operations.AuthRepository.BusinessRepository;
+using Repository.Data.Operations.AuthRepository.UserAccountRepository;
 
 namespace Application.Services.Helpers.Extensions
 {

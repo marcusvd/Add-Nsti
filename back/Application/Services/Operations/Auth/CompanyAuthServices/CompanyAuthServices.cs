@@ -1,4 +1,3 @@
-using Authentication.Helpers;
 using Domain.Entities.Authentication;
 using Application.Exceptions;
 using Application.Services.Operations.Companies.Dtos;
@@ -7,7 +6,6 @@ using Application.Services.Shared.Mappers.BaseMappers;
 using Microsoft.EntityFrameworkCore;
 using UnitOfWork.Persistence.Operations;
 using Domain.Entities.System.BusinessesCompanies;
-using System.Linq;
 using Domain.Entities.System.Profiles;
 using Application.Services.Shared.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
@@ -18,19 +16,15 @@ namespace Application.Services.Operations.Auth.CompanyAuthServices;
 public class CompanyAuthServices : ICompanyAuthServices
 {
     private readonly IUnitOfWork _GENERIC_REPO;
-    private readonly AuthGenericValidatorServices _genericValidatorServices;
-    private readonly IObjectMapper _objectMapper;
+    // private readonly IObjectMapper _objectMapper;
 
     public CompanyAuthServices(
-          AuthGenericValidatorServices genericValidatorServices,
-          IUnitOfWork GENERIC_REPO,
-          IObjectMapper objectMapper
+          IUnitOfWork GENERIC_REPO
+        // //   IObjectMapper objectMapper
       )
     {
-
-        _genericValidatorServices = genericValidatorServices;
         _GENERIC_REPO = GENERIC_REPO;
-        _objectMapper = objectMapper;
+        // _objectMapper = objectMapper;
     }
 
     public async Task<CompanyAuthDto> GetCompanyAuthAsync(int id)
@@ -44,7 +38,7 @@ public class CompanyAuthServices : ICompanyAuthServices
 
         if (result == null) throw new Exception(GlobalErrorsMessagesException.IsObjNull);
 
-        return _objectMapper.Map<CompanyAuth, CompanyAuthDto>(result);
+        return result.ToDto();
     }
     public async Task<CompanyAuthDto> GetCompanyAuthFullAsync(int id)
     {
@@ -55,11 +49,10 @@ public class CompanyAuthServices : ICompanyAuthServices
             null
             );
 
-        var result = companyAuth ?? (CompanyAuth)_genericValidatorServices.ReplaceNullObj<CompanyAuth>();
+        var result = companyAuth ?? (CompanyAuth)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<CompanyAuth>();
 
         return result.ToDto();
     }
-
     public async Task<CompanyProfileDto> GetCompanyProfileFullAsync(string companyAuthId)
     {
         var companyProfile = await _GENERIC_REPO.CompaniesProfile.GetByPredicate(
@@ -70,7 +63,7 @@ public class CompanyAuthServices : ICompanyAuthServices
             null
             );
 
-        var result = companyProfile ?? (CompanyProfile)_genericValidatorServices.ReplaceNullObj<CompanyProfile>();
+        var result = companyProfile ?? (CompanyProfile)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<CompanyProfile>();
 
         return result.ToDto();
     }
@@ -82,7 +75,6 @@ public class CompanyAuthServices : ICompanyAuthServices
 
         return userAccounts.Select(x => x.ToDto()).ToList() ?? [];
     }
-
     private async Task<List<CompanyUserAccount>> GetCompanyUserAccountByCompanyId(int companyAuthId)
     {
         var companiesUsers = await _GENERIC_REPO.CompaniesUserAccounts.Get(
@@ -95,7 +87,6 @@ public class CompanyAuthServices : ICompanyAuthServices
 
         return companiesUsers;
     }
-
     public async Task<UserAuthProfileDto> GetUserByIdFullAsync(int id)
     {
 
@@ -104,21 +95,14 @@ public class CompanyAuthServices : ICompanyAuthServices
 
         return MakerUserAccountProfile(userAccount, userprofile);
     }
-
     private UserAuthProfileDto MakerUserAccountProfile(UserAccount userAccountAuth, UserProfile userProfile)
     {
         return new UserAuthProfileDto()
         {
             UserAccountAuth = userAccountAuth.ToDto(),
             UserAccountProfile = userProfile.ToDto()
-            // Email = userAccountAuth.Email,
-            // DisplayUserName = userAccountAuth.DisplayUserName,
-            // UserName = userAccountAuth.UserName ?? "Não Cadastrado",
-            // Address = userProfile.Address.ToDto() ?? (AddressDto)_genericValidatorServices.ReplaceNullObj<AddressDto>(),
-            // Contact = userProfile.Contact.ToDto() ?? (ContactDto)_genericValidatorServices.ReplaceNullObj<ContactDto>()
         };
     }
-
     private async Task<UserAccount> GetUserAccountByIdAsync(int id)
     {
         return await _GENERIC_REPO.UsersAccounts.GetByPredicate(
@@ -138,18 +122,13 @@ public class CompanyAuthServices : ICompanyAuthServices
          null
          );
     }
-
     public Task UpdateCompanyAuth(CompanyAuthDto companyAuth)
     {
-
-        CompanyAuth update = _objectMapper.Map<CompanyAuthDto, CompanyAuth>(companyAuth);
+        CompanyAuth update = companyAuth.ToEntity();
 
         _GENERIC_REPO.CompaniesAuth.Update(update);
 
         return Task.CompletedTask;
     }
-
-
-
 
 }

@@ -12,15 +12,15 @@ namespace Authentication.Operations.AuthAdm;
 
 public class AuthAdmServices : IAuthAdmServices
 {
-    private readonly AuthGenericValidatorServices _genericValidatorServices;
+    // private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly IUnitOfWork _GENERIC_REPO;
 
     public AuthAdmServices(
-                    AuthGenericValidatorServices genericValidatorServices,
+                    // // AuthGenericValidatorServices genericValidatorServices,
                     IUnitOfWork GENERIC_REPO
       )
     {
-        _genericValidatorServices = genericValidatorServices;
+        // _genericValidatorServices = genericValidatorServices;
         _GENERIC_REPO = GENERIC_REPO;
     }
 
@@ -50,22 +50,22 @@ public class AuthAdmServices : IAuthAdmServices
               );
 
         if (businessGroup == null)
-            return (BusinessAuthDto)_genericValidatorServices.ReplaceNullObj<BusinessAuthDto>();
+            return (BusinessAuthDto)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<BusinessAuthDto>();
 
         return businessGroup.ToDto();
     }
     public async Task<bool> UpdateBusinessAuthAndProfileAsync(BusinessAuthUpdateAddCompanyDto businessAuthUpdateDto, int id)
     {
 
-        _genericValidatorServices.Validate(businessAuthUpdateDto.Id, id, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
+        _GENERIC_REPO._GenericValidatorServices.Validate(businessAuthUpdateDto.Id, id, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
 
         string CompanyProfileIdAuthId = Guid.NewGuid().ToString();
 
         var businessAuth = await GetBusinessAuthAsync(id);
 
-        _genericValidatorServices.Validate(businessAuthUpdateDto.BusinessProfileId, businessAuth.BusinessProfileId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
+        _GENERIC_REPO._GenericValidatorServices.Validate(businessAuthUpdateDto.BusinessProfileId, businessAuth.BusinessProfileId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
 
-        businessAuth.Companies.Add(businessAuthUpdateDto.Company.ToEntity() ?? (CompanyAuth)_genericValidatorServices.ReplaceNullObj<CompanyAuth>());
+        businessAuth.Companies.Add(businessAuthUpdateDto.Company.ToEntity() ?? (CompanyAuth)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<CompanyAuth>());
 
         businessAuth.Companies.ToList()[0].CompanyProfileId = CompanyProfileIdAuthId;
 

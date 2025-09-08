@@ -214,6 +214,9 @@
             "projectReferences": {
               "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj": {
                 "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj"
+              },
+              "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj": {
+                "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj"
               }
             }
           }

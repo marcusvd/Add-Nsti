@@ -6,6 +6,7 @@ using Authentication.Settings;
 
 // using Authentication.Settings;
 using Repository.Data.Context;
+using Repository.Data.Context.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 

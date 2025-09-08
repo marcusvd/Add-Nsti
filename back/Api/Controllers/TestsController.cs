@@ -11,22 +11,22 @@ namespace ImApi.Controllers;
 public class TestControlController : ControllerBase
 {
 
-    private readonly AuthGenericValidatorServices _genericValidatorServices;
+    // private readonly AuthGenericValidatorServices _genericValidatorServices;
     public TestControlController(
 
-        AuthGenericValidatorServices genericValidatorServices
+        // AuthGenericValidatorServices genericValidatorServices
     )
     {
-        _genericValidatorServices = genericValidatorServices;
+        // _genericValidatorServices = genericValidatorServices;
 
     }
 
     [HttpGet("Tests")]
     public async Task<IActionResult> Tests()
     {
-        var result = (CompanyAuth)_genericValidatorServices.ReplaceNullObj<CompanyAuth>();
+        // var result = (CompanyAuth)_genericValidatorServices.ReplaceNullObj<CompanyAuth>();
 
-        return Ok(result);
+        return Ok("result");
     }
 
 }

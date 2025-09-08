@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Authentication.Helpers;
 using Domain.Entities.Authentication;
 using Authentication.Exceptions;
 using Microsoft.Extensions.Logging;
 using Application.Services.Operations.Auth.Dtos;
-using Application.Services.Operations.Account;
 using Authentication.Jwt;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
@@ -14,44 +12,30 @@ using UnitOfWork.Persistence.Operations;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.System.BusinessesCompanies;
 using Application.Services.Shared.Dtos;
-using Application.Services.Operations.Auth.Account.dtos;
-
 
 namespace Application.Services.Operations.Auth.Register;
 
 public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAccountServices
 {
     private readonly ILogger<RegisterUserAccountServices> _logger;
-    private readonly UserManager<UserAccount> _userManager;
-    private readonly AuthGenericValidatorServices _genericValidatorServices;
-    private readonly IAccountManagerServices _accountManagerServices;
     private readonly IUnitOfWork _GENERIC_REPO;
 
-
-    // private readonly IUrlHelper _url;
     public RegisterUserAccountServices(
-          UserManager<UserAccount> userManager,
           JwtHandler jwtHandler,
           IUrlHelper url,
-          IAccountManagerServices accountManagerServices,
-          AuthGenericValidatorServices genericValidatorServices,
           IUnitOfWork GENERIC_REPO,
           ILogger<RegisterUserAccountServices> logger
-      ) : base(userManager, jwtHandler, logger, url)
+      ) : base(jwtHandler, logger, url, GENERIC_REPO)
     {
-        _userManager = userManager;
-        _accountManagerServices = accountManagerServices;
-        // _url = url;
-        _genericValidatorServices = genericValidatorServices;
         _GENERIC_REPO = GENERIC_REPO;
         _logger = logger;
     }
 
     public async Task<UserToken> AddUserExistingCompanyAsync(AddUserExistingCompanyDto user, int companyId)
     {
-        _genericValidatorServices.IsObjNull(user);
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(user);
 
-        _genericValidatorServices.Validate(user.companyAuthId, companyId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
+        _GENERIC_REPO._GenericValidatorServices.Validate(user.companyAuthId, companyId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
 
         await ValidateUniqueUserCredentials(user);
 
@@ -59,9 +43,9 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         var companyAuth = await GetCompanyAuthAsync(user.companyAuthId);
 
-        var userAccount = CreateUserAccount(user, companyAuth.BusinessId, userProfileId).ToEntity() ?? (UserAccount)_genericValidatorServices.ReplaceNullObj<UserAccount>();
+        var userAccount = CreateUserAccount(user, companyAuth.BusinessId, userProfileId).ToEntity() ?? (UserAccount)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<UserAccount>();
 
-        var creationResult = await _userManager.CreateAsync(userAccount, user.Password);
+        var creationResult = await _GENERIC_REPO.UsersManager.CreateAsync(userAccount, user.Password);
 
         companyAuth.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = companyAuth, UserAccount = userAccount });
 
@@ -73,7 +57,7 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         _GENERIC_REPO.BusinessesAuth.Update(businessAuth);
 
-        var userProfile = CreateUserProfile(userProfileId, businessProfile.Id, user.Contact ?? (ContactDto)_genericValidatorServices.ReplaceNullObj<ContactDto>(), user.Address ?? (AddressDto)_genericValidatorServices.ReplaceNullObj<AddressDto>()).ToEntity();
+        var userProfile = CreateUserProfile(userProfileId, businessProfile.Id, user.Contact ?? (ContactDto)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<ContactDto>(), user.Address ?? (AddressDto)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<AddressDto>()).ToEntity();
 
 
         _GENERIC_REPO.UsersProfiles.Add(userProfile);
@@ -92,9 +76,9 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
         var updateRole = CreateUpdateUserRole(userAccount.Email, "Users", "Usuários", false);
 
         //TODO: Move this to seeding class.
-        await _accountManagerServices.CreateRoleAsync(admRole);
+        await CreateRoleAsync(admRole);
 
-        await _accountManagerServices.UpdateUserRoles(updateRole);
+        await UpdateUserRoles(updateRole);
 
         return await CreateAuthenticationResponseAsync(userAccount);
     }
@@ -169,52 +153,15 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
     }
     private async Task<bool> IsUserNameDuplicate(string userName)
     {
-        var userAccount = await _userManager.FindByNameAsync(userName);
+        var userAccount = await _GENERIC_REPO.UsersManager.FindByNameAsync(userName);
 
         return userAccount != null;
     }
     private async Task<bool> IsEmailDuplicate(string email)
     {
-        var userAccount = await _userManager.FindByEmailAsync(email);
+        var userAccount = await _GENERIC_REPO.UsersManager.FindByEmailAsync(email);
 
         return userAccount != null;
     }
-   
-
-  
-   
-    //     private string FormatEmailUrl(string baseUrl, string urlWithToken, string replace, UserAccount userAccount,DataConfirmEmail dataConfirmEmail)
-    //     {
-
-
-    //         // Assunto: Bem-vindo ao I.M – Confirmação de Cadastro
-
-    //         string mensagemBoasVindas = $@"
-
-    //     {dataConfirmEmail.SubjectEmail}
-
-    // Olá {userAccount.NormalizedUserName},
-
-    // Seja muito bem-vindo ao I.M, o seu novo sistema de gestão de ordens de serviço!
-
-    // Estamos felizes por tê-lo conosco. Este e-mail confirma que o endereço utilizado no cadastro está correto e ativo. Para concluir seu registro e começar a usar o sistema, basta clicar no botão abaixo:
-
-    // Confirme seu e-mail clicando no link abaixo:
-
-    // 🔗 {baseUrl}{urlWithToken.Replace(replace, "")}
-
-    // O I.M foi criado para tornar sua rotina mais eficiente, organizada e segura. A partir de agora, você poderá acompanhar suas ordens de serviço com mais agilidade e controle.
-
-    // Se você não realizou esse cadastro, por favor ignore este e-mail.
-
-    // Ficou com alguma dúvida? Nossa equipe está pronta para ajudar.
-
-    // Atenciosamente,  
-    // Equipe I.M  
-    // suporte@im.com.br
-    // ";
-
-    //         return mensagemBoasVindas;
-    //     }
 
 }

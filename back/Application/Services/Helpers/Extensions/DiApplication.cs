@@ -1,20 +1,18 @@
 using Microsoft.Extensions.DependencyInjection;
-
-// using Application.Services.Operations.Customers.Dtos.Mappers;
 using Application.Services.Operations.Customers;
 using Application.Services.Shared.Seed.EntitiesSeed;
 using Application.Services.Operations.Companies;
 using Application.Services.Shared.Mappers.BaseMappers;
 using Repository.Data.Operations.Companies;
-using Repository.Data.Operations.Main.Customers;
-
 using UnitOfWork.Persistence.Operations;
 using Application.Services.Shared.Email;
 using FluentValidation.AspNetCore;
 using Authentication.Operations.AuthAdm;
-using Authentication.AuthenticationRepository.BusinessAuthRepository;
 using Application.Services.Operations.Auth.Register;
-using Microsoft.Extensions.Logging;
+using Authentication.Helpers;
+using Repository.Data.Operations.AuthRepository.BusinessRepository;
+using Application.Services.Helpers.ServicesLauncher;
+using Repository.Data.Operations.Customers;
 
 namespace Application.Services.Helpers.Extensions;
 
@@ -31,7 +29,7 @@ public static class DiApplication
         #region ObjectMapper
         services.AddScoped<IObjectMapper, ObjectMapper>();
 
-        
+
 
         // services.AddScoped<MapperManagement>();
         // services.AddScoped<IAuthenticationObjectMapperServices, AuthenticationObjectMapperServices>();
@@ -73,6 +71,9 @@ public static class DiApplication
         services.AddScoped<IAuthAdmServices, AuthAdmServices>();
         services.AddScoped<IRegisterUserAccountServices, RegisterUserAccountServices>();
         services.AddScoped<IBusinessAuthRepository, BusinessAuthRepository>();
+        services.AddScoped<IGenericValidatorServices, GenericValidatorServices>();
+        services.AddScoped<IServiceLaucherService, ServiceLaucherService>();
+
 
     }
     public static void AddDiFluentValidationAutoValidation(this IServiceCollection services)
