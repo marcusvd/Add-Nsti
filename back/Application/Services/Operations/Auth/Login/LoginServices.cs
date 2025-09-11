@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 
 using Microsoft.AspNetCore.Mvc;
 using UnitOfWork.Persistence.Operations;
+using Application.Services.Operations.Auth.Account.dtos;
 
 
 namespace Application.Services.Operations.Auth.Login;
@@ -16,11 +17,11 @@ public class LoginServices : AuthenticationBase, ILoginServices
 {
     // private UserManager<UserAccount> _userManager;
     private readonly ILogger<LoginServices> _logger;
-     private readonly IUnitOfWork _GENERIC_REPO;
+    private readonly IUnitOfWork _GENERIC_REPO;
 
-    
+
     public LoginServices(
-        //   UserManager<UserAccount> userManager,
+          //   UserManager<UserAccount> userManager,
           ILogger<LoginServices> logger,
             IUnitOfWork GENERIC_REPO,
           JwtHandler jwtHandler,
@@ -31,14 +32,12 @@ public class LoginServices : AuthenticationBase, ILoginServices
         _logger = logger;
         _GENERIC_REPO = GENERIC_REPO;
     }
-   
-    public async Task<UserToken> LoginAsync(LoginModel user)
+
+    public async Task<UserToken> LoginAsync(LoginModelDto user)
     {
         _GENERIC_REPO._GenericValidatorServices.IsObjNull(user);
 
-        // var userAccount = await FindUserAsync(user.Email);
-
-         var userAccount = await _GENERIC_REPO.UsersAccounts.GetUserAccountFull(user.Email);
+        var userAccount = await FindUserAsync(user.Email);
 
 
         if (userAccount == null)
@@ -49,12 +48,14 @@ public class LoginServices : AuthenticationBase, ILoginServices
 
         await ValidateAccountStatusAsync(userAccount);
 
-        if (!await IsPasswordValidAsync(userAccount, user.Password))
+        var result = await IsPasswordValidAsync(userAccount, user.Password);
+
+        if (!result.Succeeded)
         {
             _logger.LogWarning("Invalid password attempt for user: {UserId}", userAccount.Id);
             throw new AuthServicesException(AuthErrorsMessagesException.InvalidUserNameOrPassword);
         }
-
+     
         if (await HandleTwoFactorAuthenticationAsync(userAccount))
         {
             _logger.LogInformation("2FA required for user: {UserId}", userAccount.Id);
@@ -65,7 +66,7 @@ public class LoginServices : AuthenticationBase, ILoginServices
 
         return await CreateAuthenticationResponseAsync(userAccount);
     }
-   
+
     private async Task ValidateAccountStatusAsync(UserAccount userAccount)
     {
         if (await IsAccountLockedOutAsync(userAccount))

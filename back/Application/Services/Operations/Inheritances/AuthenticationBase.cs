@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Application.Services.Operations.Auth.Account.dtos;
 using Microsoft.AspNetCore.Mvc;
 using UnitOfWork.Persistence.Operations;
+using Application.Exceptions;
 
 namespace Application.Services.Operations.Auth;
 
@@ -83,21 +84,20 @@ public class AuthenticationBase
             throw new AuthServicesException(AuthErrorsMessagesException.TwoFactorTokenSendFailed);
         }
     }
-    private protected async Task<bool> IsPasswordValidAsync(UserAccount userAccount, string password)
+    private protected async Task<IdentityResult> IsPasswordValidAsync(UserAccount userAccount, string password)
     {
         var isValid = await _GENERIC_REPO.UsersManager.CheckPasswordAsync(userAccount, password);
 
         if (isValid)
-        {
-            await _GENERIC_REPO.UsersManager.ResetAccessFailedCountAsync(userAccount);
-            return true;
-        }
+            return await _GENERIC_REPO.UsersManager.ResetAccessFailedCountAsync(userAccount);
         else
         {
             await _GENERIC_REPO.UsersManager.AccessFailedAsync(userAccount);
-            return false;
+            return IdentityResult.Failed(new IdentityError() { Description = "User or password is invalid." });
         }
     }
+  
+
     private protected void ResultUserCreation(bool userAccount, bool userProfile, string userEmail, string errosMsg)
     {
         if (!userAccount || !userProfile)
@@ -148,9 +148,9 @@ public class AuthenticationBase
             DisplayRole = DisplayRole,
         };
     }
-    private protected UpdateUserRole CreateUpdateUserRole(string userNameOrEmail, string role, string DisplayRole, bool delete)
+    private protected UpdateUserRoleDto CreateUpdateUserRole(string userNameOrEmail, string role, string DisplayRole, bool delete)
     {
-        return new UpdateUserRole
+        return new UpdateUserRoleDto
         {
             UserName = userNameOrEmail,
             Role = role,
@@ -223,7 +223,7 @@ public class AuthenticationBase
             SubjectEmail = dataConfirmation[3]
         };
     }
-    public async Task<string> UpdateUserRoles(UpdateUserRole role)
+    public async Task<string> UpdateUserRoles(UpdateUserRoleDto role)
     {
         var myUser = await FindUserAsync(role.UserName);
 
@@ -278,7 +278,7 @@ public class AuthenticationBase
 
         return result;
     }
-    public async Task<IdentityResult> ConfirmEmailAddressAsync(ConfirmEmail confirmEmail)
+    public async Task<IdentityResult> ConfirmEmailAddressAsync(ConfirmEmailDto confirmEmail)
     {
         var userAccout = await FindUserAsync(confirmEmail.Email);
 
@@ -287,7 +287,7 @@ public class AuthenticationBase
         return result;
 
     }
-    public async Task<IdentityResult> ForgotPasswordAsync(ForgotPassword forgotPassword)
+    public async Task<IdentityResult> ForgotPasswordAsync(ForgotPasswordDto forgotPassword)
     {
         var userAccount = await FindUserAsync(forgotPassword.Email);
 
@@ -299,7 +299,7 @@ public class AuthenticationBase
 
         return IdentityResult.Success;
     }
-    public async Task<IdentityResult> ResetPasswordAsync(ResetPassword resetPassword)
+    public async Task<IdentityResult> ResetPasswordAsync(ResetPasswordDto resetPassword)
     {
         var userAccount = await _GENERIC_REPO.UsersManager.FindByEmailAsync(resetPassword.Email) ?? throw new AuthServicesException(AuthErrorsMessagesException.ObjectIsNull);
 
@@ -309,7 +309,13 @@ public class AuthenticationBase
 
         return identityResult;
     }
-    private protected async Task ValidateUniqueUserCredentials(RegisterModel register)
+
+    public async Task<IdentityResult> PasswdChangeAsync(UserAccount user, string CurrentPwd, string NewPwd)
+    {
+        return await _GENERIC_REPO.UsersManager.ChangePasswordAsync(user, CurrentPwd, NewPwd);
+    }
+
+    private protected async Task ValidateUniqueUserCredentials(RegisterModelDto register)
     {
         if (await IsUserNameDuplicate(register.UserName))
         {

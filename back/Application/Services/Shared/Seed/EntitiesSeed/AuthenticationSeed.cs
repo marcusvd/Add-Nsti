@@ -5,6 +5,7 @@ using Application.Services.Shared.Dtos;
 
 using Application.Services.Operations.Auth.Register;
 using Domain.Entities.Authentication;
+using Application.Services.Operations.Auth.Dtos;
 
 namespace Application.Services.Shared.Seed.EntitiesSeed
 {
@@ -59,7 +60,7 @@ namespace Application.Services.Shared.Seed.EntitiesSeed
         public async Task<HttpStatusCode> AddUser()
         {
 
-            var user = new RegisterModel()
+            var user = new RegisterModelDto()
             {
                 UserName = "Marcus Dias",
                 Email = "marcusmvd@hotmail.com",

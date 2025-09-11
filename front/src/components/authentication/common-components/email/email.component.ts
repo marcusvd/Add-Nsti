@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BtnGComponent } from 'shared/components/btn-g/btn-g.component';
+
+
 import { BaseForm } from 'shared/inheritance/forms/base-form';
 
 @Component({

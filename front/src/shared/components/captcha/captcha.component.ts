@@ -65,6 +65,7 @@ export class CaptchaComponent {
 
   token: string | undefined;
   @ViewChild('form') ngFormNode!: NgForm
+  @ViewChild('recaptcha') recaptcha!: NgForm
 
   constructor() {
     this.token = undefined;
@@ -82,7 +83,9 @@ export class CaptchaComponent {
     }
   }
 
-
+  resetCaptcha() {
+    this.recaptcha.reset()
+  }
 
 
 

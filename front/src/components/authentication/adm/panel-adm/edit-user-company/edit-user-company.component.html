@@ -1,11 +1,11 @@
 <default-component [main_container]="'sm:w-[800px] space-around'" [formGroup]="formMain" *ngIf="formMain"
-  [digitTitleComp]="'|'" [textTitleComp]="'Novo usuário'" [textSubTitleComp]="'Usuário'" [iconSubTitleComp]="'add'"
-  [hideDivider]="true">
+  [digitTitleComp]="'|'" [textTitleComp]="formMain.get('email')?.value" [textSubTitleComp]="'Usuário'"
+  [iconSubTitleComp]="'add'" [hideDivider]="true">
   <div btns>
 
   </div>
   <div body>
-    <div class="sm:grid justify-start">
+    <!-- <div class="sm:grid justify-start">
       <div class="sm:w-[800px] space-around">
         <div [formGroup]="formMain" *ngIf="formMain">
           .
@@ -14,26 +14,9 @@
 
               <email-field [formMain]="formMain">
                 <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'" (btn)="emailChange(formMain.get('email')?.value)"></btn-g>
-                <!-- <div class="flex justify-start">
-                </div> -->
+
               </email-field>
               <div class="pb-4"></div>
-              <!-- <div class="w-full">
-                <mat-label class="text-slate-900"> <b>Email</b></mat-label>
-                <mat-form-field class="w-full" appearance="outline">
-                  <input #email matInput type="text" formControlName="email" aria-label="email">
-                  <mat-error>
-                    <span
-                      *ngIf="formErrorAndTouched(formMain, 'email','required')">{{defaultMessages.requiredMsg}}</span>
-                    <span *ngIf="formErrorAndTouched(formMain, 'email','email')">{{defaultMessages.emailMsg}}</span>
-                    <span *ngIf="formErrorAndTouched(formMain, 'email','inUse')">{{'Este e-mail já esta registrador no
-                      sistema!'}}</span>
-                  </mat-error>
-                  <mat-icon class="main-color-scss" matPrefix>email</mat-icon>
-                </mat-form-field>
-              </div> -->
-
-
 
               <div class="w-full">
                 <mat-label class="text-slate-900"> <b>Nome de exibição</b></mat-label>
@@ -42,7 +25,6 @@
                   <mat-error>
                     <span
                       *ngIf="formErrorAndTouched(formMain, 'displayUserName','required')">{{defaultMessages.requiredMsg}}</span>
-                    <!-- <span *ngIf="formErrorAndTouched(formMain, 'displayUserName','email')">{{defaultMessages.emailMsg}}</span> -->
                   </mat-error>
                   <mat-icon class="main-color-scss" matPrefix>person</mat-icon>
                 </mat-form-field>
@@ -55,7 +37,7 @@
           <div>
             <mat-card class="border-card-categories-divide-comp">
               <address [formMain]="address"></address>
-              
+
               <div class="pb-4 pr-4 pl-4 grid justify-center">
                 <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'" (btn)="addressUpdate()"></btn-g>
               </div>
@@ -78,7 +60,70 @@
           <btn-g mat-dialog-close [name]="'Cadastrar'" [icon]="'lock_open'" (btn)="register()"></btn-g>
         </div>
       </div>
-    </div>
+    </div> -->
 
+
+    <mat-tab-group [formGroup]="formMain" class="p-4" animationDuration="0ms">
+      <mat-tab label="Identificação">
+
+
+
+        <mat-card class="border-card-categories-divide-comp">
+          <div class="p-4">
+            <h3 class="title-categories-divide-comp">Identificação</h3>
+          </div>
+          <div class="p-4 w-full grid-cols-1 gap-4">
+            <email-field [formMain]="formMain">
+
+
+            </email-field>
+            <div class="w-full">
+              <mat-label class="text-slate-900"> <b>Nome de exibição</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input matInput type="text" formControlName="displayUserName" aria-label="displayUserName">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'displayUserName','required')">{{defaultMessages.requiredMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>person</mat-icon>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </mat-card>
+
+        <div class="p-4 flex justify-center">
+          <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'"
+            (btn)="emailChange(formMain.get('email')?.value)"></btn-g>
+        </div>
+
+
+
+      </mat-tab>
+      <mat-tab label="Endereço">
+        <mat-card class="border-card-categories-divide-comp">
+          <address [formMain]="address"></address>
+        </mat-card>
+        <div class="pb-4 pr-4 pl-4 grid justify-center">
+          <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'" (btn)="addressUpdate()"></btn-g>
+        </div>
+      </mat-tab>
+      <mat-tab label="Contatos">
+        <mat-card class="border-card-categories-divide-comp">
+          <contact [formMain]="this.contact"></contact>
+        </mat-card>
+        <div class="pb-4 pr-4 pl-4 grid justify-center">
+          <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'" (btn)="contactUpdate()"></btn-g>
+        </div>
+      </mat-tab>
+      <mat-tab label="Segurança">
+        <div class="grid sm:grid-cols-2 grid-cols-1">
+          <password-change [userIdRoute]="userIdRoute" [userName]="emailUserName()">
+          </password-change>
+          <account-status [userName]="emailUserName()">
+          </account-status>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </default-component>

@@ -45,8 +45,6 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 })
 export class AddUserCompanyComponent extends BaseForm implements OnInit {
 
-
-
   private _addressService = inject(AddressService);
   private _contactService = inject(ContactService);
 
@@ -58,7 +56,7 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
     private _router: Router,
     private _actRouter: ActivatedRoute,
     private _warningsService: WarningsService,
-    private _snackBar: MatSnackBar
+    // private _snackBar = inject(MatSnackBar);
   ) { super() }
 
 

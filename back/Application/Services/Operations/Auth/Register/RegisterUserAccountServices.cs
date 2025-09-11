@@ -66,9 +66,9 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         ResultUserCreation(creationResult.Succeeded, userProfileResult, userAccount.Email, creationResult.Errors.ToString() ?? ($"User creation failed for {userAccount.Email}."));
 
-        var genToken = GenerateUrlTokenEmailConfirmation(userAccount, "ConfirmEmailAddress", "auth");
+        var genToken = await GenerateUrlTokenEmailConfirmation(userAccount, "ConfirmEmailAddress", "auth");
 
-        var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", "api/auth/ConfirmEmailAddress", "I.M - Link para confirmação de e-mail"]);
+        var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [genToken, "http://localhost:4200/confirm-email", "api/auth/ConfirmEmailAddress", "I.M - Link para confirmação de e-mail"]);
 
         await SendEmailConfirmationAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
 

@@ -31,6 +31,10 @@ import { UserAccountAuthDto } from 'components/authentication/dtos/user-account-
 import { UserProfileDto } from 'components/authentication/dtos/user-profile-dto';
 import { AddressDto } from 'shared/components/address/dtos/address-dto';
 import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
+import { PasswordChangeComponent } from 'components/authentication/password-change/password-change.component';
+import { AccountStatusComponent } from 'components/authentication/account-status/account-status.component';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
 
@@ -43,8 +47,11 @@ import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
     ImportsEditUserCompany,
     EmailComponent,
     MatCheckboxModule,
+    MatTabsModule,
     AddressComponent,
-    ContactComponent
+    ContactComponent,
+    PasswordChangeComponent,
+    AccountStatusComponent
   ],
   providers: [
     RegisterService,
@@ -60,8 +67,8 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
     private _isUserRegisteredValidator: IsUserRegisteredValidator,
     private _router: Router,
     private _actRouter: ActivatedRoute,
-    private _warningsService: WarningsService,
-    private _snackBar: MatSnackBar
+    // private _warningsService: WarningsService,
+    // private _snackBar: MatSnackBar
   ) { super() }
 
   private _addressService = inject(AddressService);
@@ -75,6 +82,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   address!: FormGroup;
   contact!: FormGroup;
   oldEmail: string | undefined = '';
+  userIdRoute!: number;
 
   backend = `${environment._BACK_END_ROOT_URL}/AuthAdm/AddUserAccountAsync`
   backendEmailUpdate = `${environment._BACK_END_ROOT_URL}/auth/RequestEmailChange`
@@ -82,13 +90,20 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   backendContact = `${environment._BACK_END_ROOT_URL}/contact/UpdateContactAsync`
 
   emailChange(newEmail: string) {
-    const changeEmail = new UpdateUserAccountEmailDto(this.oldEmail ?? '', newEmail)
-    this._registerService.RequestEmailChange(changeEmail, this.backendEmailUpdate);
+
+    const emailChanged = newEmail === this.oldEmail;
+    const emailIsValid = this.formMain.get('email')?.valid;
+    if (!emailChanged && emailIsValid) {
+      const changeEmail = new UpdateUserAccountEmailDto(this.oldEmail ?? '', newEmail)
+      this._registerService.RequestEmailChange(changeEmail, this.backendEmailUpdate);
+    }
+
   }
+
 
   contactUpdate() {
 
-     if (this.alertSave(this.contact)) {
+    if (this.alertSave(this.contact)) {
       const toUpdate: ContactDto = this.contact.value;
       this._profileService.updateContactUserProfile(toUpdate, this.backendContact)
         .subscribe({
@@ -98,9 +113,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
         });
     }
 
-
   }
-
 
   addressUpdate() {
 
@@ -113,36 +126,37 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
           })
         });
     }
-
-
   }
+
+
+
 
   // registerFull(full: MatCheckboxChange) {
   //   this.formFull = full.checked;
   // }
-  register() {
+  // register() {
 
-    const user: any = this.formMain.value;
+  //   const user: any = this.formMain.value;
 
-    if (this.alertSave(this.formMain)) {
-      if (this.formMain.valid) {
-        this._registerService.AddUserInAExistingCompany(user, this.backend)
-          .subscribe({
-            next: (user) => {
-              this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
+  //   if (this.alertSave(this.formMain)) {
+  //     if (this.formMain.valid) {
+  //       this._registerService.AddUserInAExistingCompany(user, this.backend)
+  //         .subscribe({
+  //           next: (user) => {
+  //             this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
 
-            }, error: (err: any) => {
-              console.log(err)
-              const erroCode: string = err?.error?.Message?.split('|');
-              console.log(erroCode)
+  //           }, error: (err: any) => {
+  //             console.log(err)
+  //             const erroCode: string = err?.error?.Message?.split('|');
+  //             console.log(erroCode)
 
-            }
-          })
+  //           }
+  //         })
 
-      }
+  //     }
 
-    }
-  }
+  //   }
+  // }
 
 
   userAuth!: UserAccountAuthDto | undefined;
@@ -182,6 +196,8 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   //   }
   // }
 
+ emailUserName =() => this.formMain?.get('email')?.value as string;
+
 
   back() {
     window.history.back();
@@ -189,7 +205,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
 
   ngOnInit(): void {
     const id = this._actRouter.snapshot.params['id'] as number;
-
+    this.userIdRoute = id;
     const backend = `${environment._BACK_END_ROOT_URL}/authadm/GetUserByIdFullAsync`
 
     this._registerService.loadById$<UserAuthProfileDto>(backend, id.toString()).subscribe((x: UserAuthProfileDto) => {

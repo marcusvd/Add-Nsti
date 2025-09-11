@@ -1,10 +1,14 @@
 
+import { inject } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as diacritics from 'diacritics';
 import { DefaultMessages } from 'shared/components/validators/default-messages';
 import { ValidatorMessages } from 'shared/components/validators/validators-messages';
 
 export class BaseForm {
+
+  private _snackBar = inject(MatSnackBar);
 
   companyId = localStorage.getItem('companyId')
     ? JSON.parse(localStorage.getItem('companyId')!)
@@ -89,6 +93,15 @@ export class BaseForm {
     })
   }
 
+
+  openSnackBar(message: string, style: string, action: string = 'Fechar', duration: number = 5000, horizontalPosition: any = 'center', verticalPosition: any = 'top') {
+    this._snackBar?.open(message, action, {
+      duration: duration, // Tempo em milissegundos (5 segundos)
+      panelClass: [style], // Aplica a classe personalizada
+      horizontalPosition: horizontalPosition, // Centraliza horizontalmente
+      verticalPosition: verticalPosition, // Posição vertical (pode ser 'top' ou 'bottom')
+    });
+  }
 
   alertSave(form: FormGroup) {
     if (!form?.valid) {

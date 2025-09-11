@@ -25,7 +25,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("RegisterAsync")]
-        public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel user)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterModelDto user)
         {
             var result = await _ServiceLaucherService.RegisterServices.RegisterAsync(user);
 
@@ -33,7 +33,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("LoginAsync")]
-        public async Task<IActionResult> LoginAsync([FromBody] LoginModel user)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginModelDto user)
         {
             var result = await _ServiceLaucherService.LoginServices.LoginAsync(user);
 
@@ -41,7 +41,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("ConfirmEmailAddress")]
-        public async Task<IActionResult> ConfirmEmailAddressAsync([FromBody] ConfirmEmail confirmEmail)
+        public async Task<IActionResult> ConfirmEmailAddressAsync([FromBody] ConfirmEmailDto confirmEmail)
         {
             var result = await _ServiceLaucherService.AccountManagerServices.ConfirmEmailAddressAsync(confirmEmail);
 
@@ -49,7 +49,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPassword forgotPassword)
+        public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPasswordDto forgotPassword)
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.ForgotPasswordAsync(forgotPassword));
         }
@@ -79,11 +79,11 @@ namespace Api.Controllers
         }
 
         [HttpPost("ResetPasswordAsync")]
-        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPassword resetPassword)
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDto resetPassword)
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.ResetPasswordAsync(resetPassword));
         }
-
+      
         [HttpGet("IsUserExistCheckByEmailAsync/{email}")]
         public async Task<IActionResult> IsUserExistCheckByEmailAsync(string email)
         {

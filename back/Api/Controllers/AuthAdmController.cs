@@ -98,7 +98,7 @@ namespace Api.Controllers
 
         [HttpPut("UpdateUserRole")]
         [Authorize(Roles = "SYSADMIN")]
-        public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRole role)
+        public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleDto role)
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.UpdateUserRoles(role));
 
@@ -126,8 +126,39 @@ namespace Api.Controllers
 
         }
 
+        [HttpPost("PasswordChangeAsync")]
+        public async Task<IActionResult> PasswordChangeAsync([FromBody] PasswordChangeDto passwordChange)
+        {
+            return Ok(await _ServiceLaucherService.AccountManagerServices.PasswordChangeAsync(passwordChange));
+        }
 
+        [HttpGet("GetAccountStatus/{email}")]
+        [Authorize(Roles = "SYSADMIN")]
+        public async Task<IActionResult> GetAccountStatus(string email)
+        {
+            var emailConfirmed = await _ServiceLaucherService.AccountManagerServices.IsEmailConfirmedAsync(email);
+            var accountLockedOut = await _ServiceLaucherService.AccountManagerServices.IsAccountLockedOut(email);
 
+            AccountStatusDto result = new() { IsEmailConfirmed = emailConfirmed, IsAccountLockedOut = accountLockedOut };
+
+            return Ok(result);
+        }
+
+        [HttpPut("ManualConfirmEmailAddress")]
+        public async Task<IActionResult> ManualConfirmEmailAddress([FromBody] EmailConfirmManualDto emailConfirmManual)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.ManualConfirmEmailAddress(emailConfirmManual);
+
+            return Ok(result);
+        }
+        
+        [HttpPut("ManualAccountLockedOut")]
+        public async Task<IActionResult> ManualAccountLockedOut([FromBody] AccountLockedOutManualDto AccountLockedOutManual)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.ManualAccountLockedOut(AccountLockedOutManual);
+
+            return Ok(result);
+        }
 
 
     }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pagination")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7b5fb5bcee656dc71acacf5f94560726d032f68")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+481ab463a54baf9a8f0b3c3e89a13652a4497202")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pagination")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pagination")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

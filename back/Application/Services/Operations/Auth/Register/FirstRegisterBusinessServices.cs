@@ -17,27 +17,18 @@ namespace Application.Services.Operations.Auth.Register;
 
 public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterBusinessServices
 {
-    // private readonly ILogger<FirstRegisterBusinessServices> _logger;
     private readonly IUnitOfWork _GENERIC_REPO;
-    // private readonly IUrlHelper _url;
     public FirstRegisterBusinessServices(
-        // //   UserManager<UserAccount> userManager,
           JwtHandler jwtHandler,
           IUrlHelper url,
-        // //   IAccountManagerServices accountManagerServices,
-        //   AuthGenericValidatorServices genericValidatorServices,
           IUnitOfWork GENERIC_REPO,
           ILogger<FirstRegisterBusinessServices> logger
       ) : base(jwtHandler, logger, url, GENERIC_REPO)
     {
-        // _userManager = userManager;
-        // _accountManagerServices = accountManagerServices;
-        // _url = url;
-        // _genericValidatorServices = genericValidatorServices;
         _GENERIC_REPO = GENERIC_REPO;
     }
 
-    public async Task<UserToken> RegisterAsync(RegisterModel user)
+    public async Task<UserToken> RegisterAsync(RegisterModelDto user)
     {
 
         _GENERIC_REPO._GenericValidatorServices.IsObjNull(user);
@@ -96,7 +87,7 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
     }
 
     
-    private UserAccount CreateUserAccount(RegisterModel user, BusinessAuth business, string userProfileId)
+    private UserAccount CreateUserAccount(RegisterModelDto user, BusinessAuth business, string userProfileId)
     {
 
 
@@ -123,21 +114,21 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
         };
         return companyAuth;
     }
-    private CompanyProfileDto CreateCompany(string companyId, RegisterModel user)
+    private CompanyProfileDto CreateCompany(string companyId, RegisterModelDto user)
     {
         if (user.Address is null)
-            user.Address = AddressMapper.Incomplete().ToEntity();
+            user.Address = AddressMapper.Incomplete();
 
         if (user.Contact is null)
-            user.Contact = ContactMapper.Incomplete().ToEntity();
+            user.Contact = ContactMapper.Incomplete();
 
         var companyProfile = new CompanyProfileDto()
         {
             Id = 0,
             CompanyAuthId = companyId,
             CNPJ = user.CNPJ,
-            Address = user.Address.ToDto(),
-            Contact = user.Contact.ToDto()
+            Address = user.Address,
+            Contact = user.Contact
         };
         return companyProfile;
     }

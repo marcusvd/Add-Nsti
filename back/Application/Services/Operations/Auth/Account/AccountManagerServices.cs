@@ -22,7 +22,6 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
           JwtHandler jwtHandler,
           IUrlHelper url,
           ILogger<AccountManagerServices> logger,
-
           IUnitOfWork GENERIC_REPO
       ) : base(jwtHandler, logger, url, GENERIC_REPO)
     {
@@ -30,8 +29,8 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
         _url = url;
         _GENERIC_REPO = GENERIC_REPO;
     }
-    
-   public async Task<IdentityResult> UpdateUserAccountAuthAsync(UserAccountAuthUpdateDto userAccount, int id)
+
+    public async Task<IdentityResult> UpdateUserAccountAuthAsync(UserAccountAuthUpdateDto userAccount, int id)
     {
 
         _GENERIC_REPO._GenericValidatorServices.Validate(userAccount.Id, id, GlobalErrorsMessagesException.EntityFromIdIsNull);
@@ -60,23 +59,64 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
             return IdentityResult.Failed(new IdentityError() { Description = "Faild update profile user" });
 
     }
-    // public async Task<IdentityResult> UpdateUserAccountProfileAsync(UserAccountProfileUpdateDto userAccount, int id)
-    // {
+    public async Task<bool> IsAccountLockedOut(string email)
+    {
+        var user = await FindUserAsync(email);
 
-    //     _GENERIC_REPO._GenericValidatorServices.Validate(userAccount.Id, id, GlobalErrorsMessagesException.EntityFromIdIsNull);
+        return await IsAccountLockedOutAsync(user);
+    }
+    public async Task<bool> IsEmailConfirmedAsync(string email)
+    {
+        var user = await FindUserAsync(email);
 
-    //     var userAccountFromDb = await GetUserProfileAsync(id);
+        return await IsEmailConfirmedAsync(user);
+    }
 
-    //     var toUpdate = userAccount.ToUpdate(userAccountFromDb);
+    public async Task<IdentityResult> ManualConfirmEmailAddress(EmailConfirmManualDto emailConfirmManual)
+    {
+        var userAccount = await FindUserAsync(emailConfirmManual.Email);
 
-    //     _GENERIC_REPO.UsersProfiles.Update(toUpdate);
+        userAccount.EmailConfirmed = emailConfirmManual.EmailConfirmed;
 
-    //     if (await _GENERIC_REPO.Save())
-    //         return IdentityResult.Success;
-    //     else
-    //         return IdentityResult.Failed(new IdentityError() { Description = "Faild update profile user" });
+        return await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
+    }
+    public async Task<IdentityResult> ManualAccountLockedOut(AccountLockedOutManualDto emailConfirmManual)
+    {
+        var userAccount = await FindUserAsync(emailConfirmManual.Email);
 
-    // }
+        if (emailConfirmManual.AccountLockedOut)
+            userAccount.LockoutEnd = DateTime.Now.AddYears(10);
+        else
+            userAccount.LockoutEnd = DateTime.MinValue;
+
+        return await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
+    }
+
+
+
+    public async Task<IdentityResult> PasswordChangeAsync(PasswordChangeDto passwordChange)
+    {
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(passwordChange);
+
+        if (passwordChange.UserId <= 0)
+            return IdentityResult.Failed(new IdentityError() { Description = "userId is required." });
+
+        if (string.IsNullOrWhiteSpace(passwordChange.Password) || string.IsNullOrWhiteSpace(passwordChange.CurrentPwd))
+            return IdentityResult.Failed(new IdentityError() { Description = "'current password and new password are required.'" });
+
+        var userFromDb = await FindUserByIdAsync(passwordChange.UserId);
+
+        _GENERIC_REPO._GenericValidatorServices.Validate(userFromDb.Id, passwordChange.UserId, GlobalErrorsMessagesException.IdIsDifferentFromEntityUpdate);
+
+        if (userFromDb is null)
+        {
+            _logger.LogWarning("User with ID {UserId} not found.", passwordChange.UserId);
+            return IdentityResult.Failed(new IdentityError() { Description = "USER NOT FOUND." });
+        }
+
+        return await PasswdChangeAsync(userFromDb, passwordChange.CurrentPwd, passwordChange.Password);
+    }
 
     private async Task<UserProfile> GetUserProfileAsync(int id)
     {

@@ -36,7 +36,6 @@ export class ProfileComponent extends BaseForm implements OnInit {
     private _isUserRegisteredValidator: IsUserRegisteredValidator,
     private _router: Router,
     private _warningsService: WarningsService,
-    private _snackBar: MatSnackBar
   ) { super() }
 
 

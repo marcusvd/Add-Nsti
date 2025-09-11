@@ -10,7 +10,7 @@ import { AddressAddImports } from './imports/address-imports';
 @Component({
   selector: 'address',
   templateUrl: './address.component.html',
-  styleUrls: ['./address.component.css'],
+  styleUrls: ['./address.component.scss'],
   standalone: true,
   imports: [
     AddImportsGShared,

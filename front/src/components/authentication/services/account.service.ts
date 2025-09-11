@@ -13,6 +13,10 @@ import { ForgotPassword } from '../dtos/forgot-password';
 import { ResetPassword } from '../dtos/reset-password';
 import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
 import { ConfirmEmailChangeDto } from '../dtos/confirm-email-change-dto';
+import { PasswordChangeDto } from '../dtos/password-change-dto';
+import { AccountStatusDto } from '../dtos/account-status-dto';
+import { EmailConfirmManualDto } from '../dtos/email-confirm-manual-dto';
+import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto';
 
 
 @Injectable({
@@ -20,9 +24,6 @@ import { ConfirmEmailChangeDto } from '../dtos/confirm-email-change-dto';
 })
 
 export class AccountService extends BackEndService<UserAccountAuthDto> {
-
-  //  private override _router = inject(Router);
-
   constructor(
     private _warningsService: WarningsService,
   ) { super() }
@@ -36,12 +37,10 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
         this.openSnackBar('E-mail Confirmado com sucesso.', 'warnings-success');
 
         setTimeout(() => {
-
           this._warningsService.openAuthWarnings({
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
             body: 'E-mail Confirmado com sucesso.',
           }).subscribe(result => {
-            // this._router.navigateByUrl('login');
             this.callRouter('login');
           })
 
@@ -66,6 +65,7 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
     })
 
   }
+
   confirmEmailChange(confirmEmail: ConfirmEmailChangeDto) {
 
     return this.add$<ConfirmEmailChangeDto>(confirmEmail, `${environment._BACK_END_ROOT_URL}/auth/ConfirmRequestEmailChange`).pipe(take(1)).subscribe({
@@ -105,15 +105,15 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
   }
 
+  private failConfirmEmailChange(error: any) {
 
-  private failConfirmEmailChange(errors: any) {
-    this.openSnackBar('Falha ao confirmar e-mail.', 'warnings-error');
+    this.openSnackBar(error, 'warnings-error');
 
     setTimeout(() => {
 
       this._warningsService.openAuthWarnings({
         btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-        body: 'Falha ao confirmar e-mail.',
+        body: error,
       }).subscribe(
         //   result => {
         //   console.log(result)
@@ -130,12 +130,10 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
         this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');
 
         setTimeout(() => {
-
           this._warningsService.openAuthWarnings({
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
             body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
           }).subscribe(result => {
-            // this._router.navigateByUrl('login');
             this.callRouter('login');
           })
 
@@ -147,25 +145,20 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
 
         switch (erroCode[0]) {
-
           case 'User not found.': {
             this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');
 
             setTimeout(() => {
-
               this._warningsService.openAuthWarnings({
                 btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
                 body: 'E-mail recuperação de senha enviado com sucesso. Verifique seu e-mail para redefinir sua senha. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!',
 
               }).subscribe(result => {
                 this.callRouter('login');
-                // this._router.navigateByUrl('login');
               })
 
             }, 5000);
-
             break;
-
           }
         }
 
@@ -212,8 +205,6 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   reset(resetPassword: ResetPassword) {
     return this.add$(resetPassword, `${environment._BACK_END_ROOT_URL}/auth/ResetPasswordAsync`).pipe(take(1)).subscribe({
       next: () => {
-
-
         this.openSnackBar('A senha foi modificada com sucesso!', 'warnings-success');
 
         setTimeout(() => {
@@ -222,7 +213,6 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
             btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
             body: 'A senha foi modificada com sucesso!',
           }).subscribe(result => {
-            // this._router.navigateByUrl('login');
             this.callRouter('/login');
           })
 
@@ -230,22 +220,11 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
         this.callRouter('/');
         this.callRouter('/login');
-        // this._router.navigate((['/']));
-        // this._router.navigateByUrl('/login');
       }, error: (err: any) => {
         const erroCode: string = err.error.Message.split('|');
         switch (erroCode[0]) {
           case '1.12': {
-            // this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-            // this._communicationsAlerts.communicationCustomized({
-            //   'message': erroCode[1],
-            //   'action': '',
-            //   'style': 'red-snackBar-error',
-            //   'delay': '',
-            //   'positionVertical': 'center',
-            //   'positionHorizontal': 'top',
-            // });
-            // this.openAuthWarnings({ btn1: 'Fechar', btn2: '', messageBody: erroCode[1] })
+
             break;
           }
 
@@ -253,6 +232,59 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
       }
     })
   }
+
+  passwordChange(passwordChange: PasswordChangeDto) {
+
+    return this.add$<PasswordChangeDto>(passwordChange, `${environment._BACK_END_ROOT_URL}/authadm/PasswordChangeAsync`).pipe(take(1)).subscribe({
+      next: (x) => {
+
+        let result: any = x;
+        result = result as ResponseIdentiyApiDto;
+
+        this.result = result.succeeded;
+
+        if (result.succeeded) {
+
+          this.openSnackBar('Senha modificada com sucesso.', 'warnings-success');
+
+          setTimeout(() => {
+
+            this._warningsService.openAuthWarnings({
+              btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
+              body: 'Senha modificada com sucesso.',
+            }).subscribe(result => {
+              this._router.navigateByUrl('login');
+              this.callRouter('login');
+            })
+
+          }, 5000);
+        }
+
+        if (!result.succeeded)
+          this.failConfirmEmailChange('Falha ao modificar senha.');
+
+      }, error: (err: any) => {
+        console.log(err)
+        this.failConfirmEmailChange(err);
+
+      }
+    })
+
+  }
+
+
+  getAccountStatus$(email: string) {
+    return this.loadByName$<AccountStatusDto>(`${environment._BACK_END_ROOT_URL}/authadm/GetAccountStatus`, email)
+  }
+
+  updateAccountStatusEmailConfirm$(emailConfirmManual: EmailConfirmManualDto) {
+        return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualConfirmEmailAddress`, emailConfirmManual)
+  }
+
+  updateAccountLockedOutManual$(accountLockedOutManual: AccountLockedOutManualDto) {
+        return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualAccountLockedOut`, accountLockedOutManual)
+  }
+
 
 }
 

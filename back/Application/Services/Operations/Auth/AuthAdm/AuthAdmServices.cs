@@ -1,5 +1,4 @@
 using Domain.Entities.Authentication;
-using Authentication.Helpers;
 using Application.Exceptions;
 using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Operations.Companies.Dtos;
@@ -12,11 +11,9 @@ namespace Authentication.Operations.AuthAdm;
 
 public class AuthAdmServices : IAuthAdmServices
 {
-    // private readonly AuthGenericValidatorServices _genericValidatorServices;
     private readonly IUnitOfWork _GENERIC_REPO;
 
     public AuthAdmServices(
-                    // // AuthGenericValidatorServices genericValidatorServices,
                     IUnitOfWork GENERIC_REPO
       )
     {
@@ -77,7 +74,6 @@ public class AuthAdmServices : IAuthAdmServices
 
         return await UpdateSave(businessAuth, businessProfile);
     }
-
     private async Task<BusinessAuth> GetBusinessAuthAsync(int id)
     {
         return await _GENERIC_REPO.BusinessesAuth.GetByPredicate(
@@ -86,7 +82,6 @@ public class AuthAdmServices : IAuthAdmServices
                     selector => selector,
                     null);
     }
-
     private async Task<BusinessProfile> GetBusinessProfileAsync(string businessAuth)
     {
         return await _GENERIC_REPO.BusinessesProfiles.GetByPredicate(
@@ -96,7 +91,6 @@ public class AuthAdmServices : IAuthAdmServices
             null
             );
     }
-
     private CompanyProfile CompanyProfileEntityBuilder(BusinessAuthUpdateAddCompanyDto dto, string companyProfileIdAuthId)
     {
         return new()
@@ -107,7 +101,6 @@ public class AuthAdmServices : IAuthAdmServices
             Contact = dto.Contact.ToEntity()
         };
     }
-
     private async Task<bool> UpdateSave(BusinessAuth businessAuth, BusinessProfile businessProfile)
     {
 
@@ -119,7 +112,5 @@ public class AuthAdmServices : IAuthAdmServices
 
         return false;
     }
-
-
 
 }

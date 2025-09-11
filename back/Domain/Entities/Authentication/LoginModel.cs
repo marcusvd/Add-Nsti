@@ -1,9 +1,9 @@
 
-namespace Domain.Entities.Authentication;
+// namespace Domain.Entities.Authentication;
 
-public class LoginModel
-{
-    public string? UserName { get; set; }
-    public required string Email { get; set; }
-    public required string Password { get; set; }
-}
+// public class LoginModel
+// {
+//     public string? UserName { get; set; }
+//     public required string Email { get; set; }
+//     public required string Password { get; set; }
+// }

@@ -13,6 +13,9 @@ export class DefaultMessages {
   static invalidPhoneMaskMsg = 'Telefone, inválido!';
   static invalidCepMsg = 'CEP, inválido!';
   static invalidPasswordMsg = 'Senha, inválida!';
+  static invalidWordPasswordMsg = 'Senha não pode ser as palavras SENHA ou PASSWORD.';
+  static invalidUserNameAsPasswordMsg = 'A senha não pode ser o nome de usuário';
+  static invalidPasswordNotEqualConfirmPasswordMsg = 'As senhas não coincidem.';
   static invalidPasswordConfirmMsg = 'Confirmação de senha, inválida!';
   static invalidCpfOrCnpjMsg = 'CPF ou CNPJ, inválido!';
   static invalidCpfOrCnpjMaskMsg = 'CPF ou CNPJ, inválido!';

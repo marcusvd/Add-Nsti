@@ -1,13 +1,13 @@
 
-using System.ComponentModel.DataAnnotations;
+// using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities.Authentication;
+// namespace Domain.Entities.Authentication;
 
-public class ConfirmEmail
-{
-        [Required]
-        public string Token { get; set; } = string.Empty;
+// public class ConfirmEmail
+// {
+//         [Required]
+//         public string Token { get; set; } = string.Empty;
 
-        [DataType(DataType.EmailAddress)]
-        public required string Email { get; set; }
-}
+//         [DataType(DataType.EmailAddress)]
+//         public required string Email { get; set; }
+// }

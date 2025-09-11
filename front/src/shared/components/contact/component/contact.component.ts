@@ -9,7 +9,7 @@ import { ContactService } from '../services/contact.service';
 @Component({
   selector: 'contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css'],
+  styleUrls: ['./contact.component.scss'],
   standalone: true,
   imports: [
      AddImportsGShared,
