@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Application.Services.Operations.Auth.Account.dtos;
 using Microsoft.AspNetCore.Mvc;
 using UnitOfWork.Persistence.Operations;
-using Application.Exceptions;
 
 namespace Application.Services.Operations.Auth;
 
@@ -32,6 +31,18 @@ public class AuthenticationBase
         _url = url;
         _GENERIC_REPO = GENERIC_REPO;
     }
+
+    private protected DateTime DateTimeNow
+    {
+
+        get
+        {
+            DateTime now = DateTime.Now;
+            return new DateTime(now.Year, now.Month, now.Day, now.Hour - 3, now.Minute, 0, 0);
+        }
+    }
+
+
     private protected async Task<UserAccount> FindUserAsync(string userNameOrEmail)
     {
         return await _GENERIC_REPO.UsersManager.FindByEmailAsync(userNameOrEmail) ?? await _GENERIC_REPO.UsersManager.FindByNameAsync(userNameOrEmail) ?? new UserAccount() { UserProfileId = "Invalid", DisplayUserName = "Invalid" };
@@ -96,7 +107,7 @@ public class AuthenticationBase
             return IdentityResult.Failed(new IdentityError() { Description = "User or password is invalid." });
         }
     }
-  
+
 
     private protected void ResultUserCreation(bool userAccount, bool userProfile, string userEmail, string errosMsg)
     {

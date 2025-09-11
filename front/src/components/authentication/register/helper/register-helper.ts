@@ -20,11 +20,7 @@ export class RegisterHelper extends BaseForm {
     super()
   }
 
-
-  // private _contactService = inject(ContactService);
-  // private _addressService = inject(AddressService);
   private _isMobileNumberPipe = inject(IsMobileNumberPipe);
-
 
   address!: FormGroup;
   contact!: FormGroup;
@@ -54,22 +50,6 @@ export class RegisterHelper extends BaseForm {
     this.contact?.reset();
   }
 
-  // isValidCpf(isCpfValid: DocType) {
-  //   if (isCpfValid.entity == 'cpf' && isCpfValid.result) {
-  //     this.formMain?.get('companyName')?.setValue('');
-  //     this.isCpf = true;
-  //     this.formMain.get('address')?.setValue(null)
-  //     this.formMain.get('contact')?.setValue(null)
-  //   }
-  //   else {
-  //     this.isCpf = false;
-  //     this.formMain?.get('companyName')?.setValue('');
-  //     this.formMain.get('address')?.setValue(null)
-  //     this.formMain.get('contact')?.setValue(null)
-  //   }
-  // }
-
-
   setAddressForm(data: BusinessData) {
     this.address.reset();
     this.address.get('zipcode')?.setValue(data.cep);
@@ -91,14 +71,4 @@ export class RegisterHelper extends BaseForm {
       this.contact.get('landline')?.setValue(isMobile.phoneNum);
   }
 
-  // sanitizeFormFields(form: FormGroup): void {
-  //   Object.keys(form.controls).forEach(field => {
-  //     const control = form.get(field);
-  //     if (control instanceof FormGroup) {
-  //       this.sanitizeFormFields(control);
-  //     } else if (control && (control.value === null || control.value === undefined)) {
-  //       control.setValue('');
-  //     }
-  //   })
-  // }
 }

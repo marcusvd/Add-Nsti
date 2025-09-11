@@ -63,7 +63,7 @@ export class LoginComponent extends BaseForm implements OnInit {
   //       if (this.formMain.valid && tokenCaptcha)
 
 
-  login(tokenCaptcha: string | undefined) {
+  login(tokenCaptcha?: string) {
 
     if (this.alertSave(this.formMain)) {
 

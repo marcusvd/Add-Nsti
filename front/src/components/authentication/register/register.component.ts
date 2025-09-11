@@ -1,25 +1,23 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 import { environment } from 'environments/environment';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
 import { RegisterService } from '../services/register.service';
 
-import { ImportsRegister } from './imports/imports-register';
+import { WarningsService } from 'components/warnings/services/warnings.service';
+import { AddressService } from 'shared/components/address/services/address.service';
+import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
+import { CaptchaComponent } from 'shared/components/captcha/captcha.component';
+import { ContactService } from 'shared/components/contact/services/contact.service';
+import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
+import { IsUserRegisteredValidator } from '../validators/is-user-registered-validator';
 import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
 import { PasswordValidator } from '../validators/password-validator';
-import { IsUserRegisteredValidator } from '../validators/is-user-registered-validator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { WarningsService } from 'components/warnings/services/warnings.service';
-import { Router } from '@angular/router';
-import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
-import { BusinessData } from 'shared/components/administrative/cpf-cnpj/dto/business-data';
 import { RegisterHelper } from './helper/register-helper';
-import { AddressService } from 'shared/components/address/services/address.service';
-import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
-import { ContactService } from 'shared/components/contact/services/contact.service';
+import { ImportsRegister } from './imports/imports-register';
 
 
 @Component({
@@ -39,6 +37,8 @@ import { ContactService } from 'shared/components/contact/services/contact.servi
 })
 export class RegisterComponent extends RegisterHelper implements OnInit {
 
+  @ViewChild('token') reCaptcha!: CaptchaComponent;
+
   constructor(
     private _registerService: RegisterService,
     private _fb: FormBuilder,
@@ -52,25 +52,8 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
   loginErrorMessage: string = '';
 
-  backend = `${environment._BACK_END_ROOT_URL}/auth/RegisterAsync`
+  backend = `${environment._BACK_END_ROOT_URL}/auth/RegisterAsync`;
 
-  // registerTest() {
-
-  //   this.openSnackBar('CADASTRADO!' +'   '+ 'MARCUSMVD@HOTMAIL.COM.BR' + '.', 'warnings-success');
-
-  //   setTimeout(() => {
-
-  //     this.openAuthWarnings({
-  //       btn1: 'Fechar', btn2: '', title: 'AVISO:',
-  //       messageBody: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-  //       next: true, action: 'openLogin'
-  //     })
-
-  //   }, 5000);
-
-
-
-  // }
 
   register(tokenCaptcha: string | undefined) {
 
@@ -81,7 +64,6 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
         this._registerService.AddUser(user, this.formMain, this.backend)
           .subscribe({
             next: (user) => {
-              console.log(user)
               this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
 
               setTimeout(() => {
@@ -95,84 +77,16 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
               }, 5000);
 
             }, error: (err: any) => {
-              console.log(err)
+              this.reCaptcha.resetCaptcha();
               const erroCode: string = err?.error?.Message?.split('|');
               console.log(erroCode)
-              // switch (erroCode[0]) {
-              //   case '1.1': {
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'delay': '3',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
-              //     this._errorMessage.next(erroCode[1])
-              //     form.controls['email'].setErrors({ errorEmailDuplicated: true })
-              //     break;
-              //   }
-              //   case '1.2': {
-              //     console.log(err);
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'delay': '3',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
-              //     this._errorMessage.next(erroCode[1])
-              //     form.controls['userName'].setErrors({ errorUserNameDuplicated: true })
-              //     break;
-              //   }
-              //   case '200.0': {
-              //     console.log(err);
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'delay': '3',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
-              //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-              //     break;
-              //   }
-              //   case '1.7': {
-              //     console.log(err);
-              //     this._communicationsAlerts.defaultSnackMsg(erroCode[1], 1, null, 4);
-              //     // this._communicationsAlerts.communicationCustomized({
-              //     //   'message': erroCode[1],
-              //     //   'action': '',
-              //     //   'style': 'red-snackBar-error',
-              //     //   'delay': '3',
-              //     //   'positionVertical': 'center',
-              //     //   'positionHorizontal': 'top',
-              //     // });
 
-              //     this.openAuthWarnings({ btn1: 'Fechar', btn2: '', title: 'Erro de autenticação', messageBody: erroCode[1] })
-              //     break;
-              //   }
-              // }
             }
           })
-
-
-        // .subscribe((x: string) => {
-        //   this.loginErrorMessage = x;
-        //   // this._communicationsAlerts.defaultSnackMsg('7', 0);
-        //   console.log(x)
-        // })
       }
 
     }
   }
-
-
 
   formLoad() {
     return this.formMain = this._fb.group({
@@ -182,14 +96,13 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
       password: ['', [Validators.required, Validators.minLength(3)]],
       cnpj: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
-      address:  this.address = this._addressService.formLoad(),
-      contact:     this.contact = this._contactService.formLoad()
+      address: this.address = this._addressService.formLoad(),
+      contact: this.contact = this._contactService.formLoad()
     }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
   }
 
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
-
 
   pwdHideShow() {
     if (this.pwdType === 'password') {
@@ -206,15 +119,12 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
       this.loginErrorMessage = '';
   }
 
-
   back() {
     window.history.back();
   }
 
   ngOnInit(): void {
     this.formLoad();
-    // this.address = this._addressService.formLoad()
-    // this.contact = this._contactService.formLoad()
   }
 
 }

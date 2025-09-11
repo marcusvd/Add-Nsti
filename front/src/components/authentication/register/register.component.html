@@ -128,8 +128,7 @@
       </div>
 {{formMain.value | json}}
       <div class="p-4 flex justify-center">
-        <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Cadastrar'" [icon]="'lock_open'"
-          (btn)="register(token.sendForm())"></btn-g>
+        <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Cadastrar'" [icon]="'lock_open'" (btn)="register(token.sendForm())"></btn-g>
       </div>
     </mat-card>
   </div>

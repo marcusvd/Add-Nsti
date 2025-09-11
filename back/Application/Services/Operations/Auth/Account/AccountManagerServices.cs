@@ -85,9 +85,11 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
         var userAccount = await FindUserAsync(emailConfirmManual.Email);
 
         if (emailConfirmManual.AccountLockedOut)
-            userAccount.LockoutEnd = DateTime.Now.AddYears(10);
+        {
+            userAccount.LockoutEnd = DateTimeNow;
+        }
         else
-            userAccount.LockoutEnd = DateTime.MinValue;
+            userAccount.LockoutEnd = DateTimeOffset.MinValue;
 
         return await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
     }
