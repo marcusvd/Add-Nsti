@@ -8,6 +8,7 @@ namespace Authentication.Exceptions;
         public static readonly string UserNameAlreadyRegisterd = "1.2|Nome de usuário ja cadastrado.";
         public static readonly string IsEmailConfirmed = "1.3|Email já foi confirmado.";
         public static readonly string InvalidUserNameOrPassword = "1.4|Usuário ou senha incorreto.";
+        public static readonly string PasswordWillExpire = "1.15|O a senha expirou, acesse o email e redefina sua senha para o desbloqueio de sua conta.";
         public static readonly string ErrorIdUpdateUserAccount = "1.5|Dados inválidos. id's não coincidem.";
         public static readonly string UserAccountNotFound = "1.6|Usuário ou senha incorreto."; //this is the real one -> "Usuário não encontrado."
         public static readonly string ErrorWhenRegisterUserAccount = "1.7|Não foi possível cadastrar o usuário, verifique os dados e tente novamente, obrigado!";

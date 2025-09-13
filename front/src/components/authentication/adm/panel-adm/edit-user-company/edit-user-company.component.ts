@@ -9,32 +9,28 @@ import { BaseForm } from 'shared/inheritance/forms/base-form';
 
 import { ImportsEditUserCompany } from './imports/imports-edit-user-company';
 
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { WarningsService } from 'components/warnings/services/warnings.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegisterService } from 'components/authentication/services/register.service';
 import { IsUserRegisteredValidator } from 'components/authentication/validators/is-user-registered-validator';
 // import { AddUserCompanyService } from 'components/authentication/services/edit-user-company.service';
-import { CompanyAuth } from 'components/authentication/dtos/company-auth';
 
-import { AddressService } from 'shared/components/address/services/address.service';
-import { ContactService } from 'shared/components/contact/services/contact.service';
-import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
-import { AddressComponent } from 'shared/components/address/component/address.component';
-import { ContactComponent } from 'shared/components/contact/component/contact.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
+import { AccountStatusComponent } from 'components/authentication/account-status/account-status.component';
 import { EmailComponent } from 'components/authentication/common-components/email/email.component';
 import { UpdateUserAccountEmailDto } from 'components/authentication/dtos/update-user-account-email-dto';
-import { ProfileService } from 'components/authentication/services/profile.service';
-import { UserAccountProfileUpdateDto } from 'components/authentication/dtos/user-account-profile-update-dto';
-import { UserAuthProfileDto } from 'components/authentication/dtos/user-auth-profile-dto';
 import { UserAccountAuthDto } from 'components/authentication/dtos/user-account-auth-dto';
+import { UserAuthProfileDto } from 'components/authentication/dtos/user-auth-profile-dto';
 import { UserProfileDto } from 'components/authentication/dtos/user-profile-dto';
+import { PasswordExpiresComponent } from 'components/authentication/password-expires/password-expires.component';
+import { PasswordResetAdmComponent } from 'components/authentication/password-reset-adm/password-reset-adm.component';
+import { ProfileService } from 'components/authentication/services/profile.service';
+import { AddressComponent } from 'shared/components/address/component/address.component';
 import { AddressDto } from 'shared/components/address/dtos/address-dto';
+import { AddressService } from 'shared/components/address/services/address.service';
+import { ContactComponent } from 'shared/components/contact/component/contact.component';
 import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
-import { MatTabsModule } from '@angular/material/tabs';
-import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
-import { PasswordChangeComponent } from 'components/authentication/password-change/password-change.component';
-import { AccountStatusComponent } from 'components/authentication/account-status/account-status.component';
+import { ContactService } from 'shared/components/contact/services/contact.service';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
 
@@ -50,8 +46,9 @@ import { AccountStatusComponent } from 'components/authentication/account-status
     MatTabsModule,
     AddressComponent,
     ContactComponent,
-    PasswordChangeComponent,
-    AccountStatusComponent
+    PasswordExpiresComponent,
+    AccountStatusComponent,
+    PasswordResetAdmComponent
   ],
   providers: [
     RegisterService,
@@ -60,6 +57,7 @@ import { AccountStatusComponent } from 'components/authentication/account-status
   ]
 })
 export class EditUserCompanyComponent extends BaseForm implements OnInit {
+
 
   constructor(
     // private _addUserCompanyService: AddUserCompanyService,
@@ -82,7 +80,12 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   address!: FormGroup;
   contact!: FormGroup;
   oldEmail: string | undefined = '';
+  email: string | undefined = '';
   userIdRoute!: number;
+  lastLogin!: Date;
+  userAuth!: UserAccountAuthDto | undefined;
+  userProfile!: UserProfileDto | undefined;
+  willExpires!: Date;
 
   backend = `${environment._BACK_END_ROOT_URL}/AuthAdm/AddUserAccountAsync`
   backendEmailUpdate = `${environment._BACK_END_ROOT_URL}/auth/RequestEmailChange`
@@ -159,15 +162,16 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   // }
 
 
-  userAuth!: UserAccountAuthDto | undefined;
-  userProfile!: UserProfileDto | undefined;
+
 
   formLoad(x?: UserAuthProfileDto) {
 
     this.oldEmail = x?.userAccountAuth.email;
 
     this.userAuth = x?.userAccountAuth
+    this.lastLogin = x?.userAccountAuth.lastLogin ?? this.minDate;
     this.userProfile = x?.userAccountProfile;
+    this.email = x?.userAccountAuth.email;
 
     return this.formMain = this._fb.group({
       id: [x?.id, [Validators.required]],
@@ -181,22 +185,11 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
 
   }
 
-  // pwdType: string = 'password';
-  // pwdIcon: string = 'visibility_off';
+  
 
 
 
-  // pwdHideShow() {
-  //   if (this.pwdType === 'password') {
-  //     this.pwdType = 'text';
-  //     this.pwdIcon = 'visibility';
-  //   } else {
-  //     this.pwdType = 'password';
-  //     this.pwdIcon = 'visibility_off';
-  //   }
-  // }
-
- emailUserName =() => this.formMain?.get('email')?.value as string;
+  emailUserName = () => this.formMain?.get('email')?.value as string;
 
 
   back() {

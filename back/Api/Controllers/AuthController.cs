@@ -37,6 +37,9 @@ namespace Api.Controllers
         {
             var result = await _ServiceLaucherService.LoginServices.LoginAsync(user);
 
+            result = result;
+
+
             return Ok(result);
         }
 
@@ -83,7 +86,7 @@ namespace Api.Controllers
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.ResetPasswordAsync(resetPassword));
         }
-      
+
         [HttpGet("IsUserExistCheckByEmailAsync/{email}")]
         public async Task<IActionResult> IsUserExistCheckByEmailAsync(string email)
         {

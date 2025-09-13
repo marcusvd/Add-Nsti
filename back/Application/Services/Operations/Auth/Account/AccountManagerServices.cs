@@ -9,6 +9,7 @@ using Application.Exceptions;
 using Domain.Entities.System.Profiles;
 using UnitOfWork.Persistence.Operations;
 using Application.Services.Operations.Profiles.Dtos;
+using Authentication.Exceptions;
 
 
 namespace Application.Services.Operations.Account;
@@ -71,7 +72,6 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
 
         return await IsEmailConfirmedAsync(user);
     }
-
     public async Task<IdentityResult> ManualConfirmEmailAddress(EmailConfirmManualDto emailConfirmManual)
     {
         var userAccount = await FindUserAsync(emailConfirmManual.Email);
@@ -85,17 +85,11 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
         var userAccount = await FindUserAsync(emailConfirmManual.Email);
 
         if (emailConfirmManual.AccountLockedOut)
-        {
-            userAccount.LockoutEnd = DateTimeNow;
-        }
+            userAccount.LockoutEnd = DateTime.Now.AddYears(10);
         else
-            userAccount.LockoutEnd = DateTimeOffset.MinValue;
-
+            userAccount.LockoutEnd = DateTime.MinValue;
         return await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
     }
-
-
-
     public async Task<IdentityResult> PasswordChangeAsync(PasswordChangeDto passwordChange)
     {
 
@@ -114,11 +108,69 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
         if (userFromDb is null)
         {
             _logger.LogWarning("User with ID {UserId} not found.", passwordChange.UserId);
-            return IdentityResult.Failed(new IdentityError() { Description = "USER NOT FOUND." });
+            return IdentityResult.Failed(new IdentityError() { Description = "USER NOT F OUND." });
         }
 
         return await PasswdChangeAsync(userFromDb, passwordChange.CurrentPwd, passwordChange.Password);
     }
+
+    public async Task<bool> IsPasswordExpiresAsync(int userId)
+    {
+        var user = await FindUserByIdAsync(userId);
+        if (user.WillExpire.Year == DateTime.MinValue.Year)
+            return false;
+        else
+            return true;
+    }
+    public async Task<IdentityResult> MarkPasswordExpireAsync(PasswordWillExpiresDto passwordWillExpires)
+    {
+        var userAccount = await FindUserByIdAsync(passwordWillExpires.UserId);
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
+
+        if (passwordWillExpires.UserId <= 0) throw new AuthServicesException(GlobalErrorsMessagesException.IdIsNull);
+
+        return await WillExpire(userAccount, passwordWillExpires.WillExpires);
+
+    }
+
+
+    private async Task<IdentityResult> WillExpire(UserAccount userAccount, bool expires)
+    {
+
+        // var genToken = await GenerateUrlTokenPasswordReset(userAccount, "ForgotPassword", "auth");
+        var genToken = await _GENERIC_REPO.UsersManager.GeneratePasswordResetTokenAsync(userAccount);
+
+        if (expires && (await _GENERIC_REPO.UsersManager.ResetPasswordAsync(userAccount, genToken, "123456")).Succeeded)
+        {
+            userAccount.WillExpire = DateTime.Now;
+            userAccount.EmailConfirmed = true;
+        }
+        else
+            userAccount.WillExpire = DateTime.MinValue;
+
+        return await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
+
+
+    }
+    public async Task<IdentityResult> StaticPasswordDefined(ResetStaticPasswordDto reset)
+    {
+        var userAccount = await FindUserAsync(reset.Email);
+
+        var genToken = await _GENERIC_REPO.UsersManager.GeneratePasswordResetTokenAsync(userAccount);
+
+        userAccount.WillExpire = DateTime.MinValue;
+        userAccount.LockoutEnd = DateTimeOffset.MinValue;
+
+        if ((await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount)).Succeeded)
+            return await _GENERIC_REPO.UsersManager.ResetPasswordAsync(userAccount, genToken, reset.Password);
+
+        return IdentityResult.Failed(new IdentityError() { Description = "Fail when trying to change password." });
+
+
+        // return await _GENERIC_REPO.UsersManager.ResetPasswordAsync(userAccount, genToken, reset.Password);
+    }
+
 
     private async Task<UserProfile> GetUserProfileAsync(int id)
     {

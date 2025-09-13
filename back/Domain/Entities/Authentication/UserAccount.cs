@@ -8,8 +8,9 @@ public class UserAccount : IdentityUser<int>
     public int BusinessAuthId { get; set; }
     public BusinessAuth? BusinessAuth { get; set; }
     public DateTime Deleted { get; set; } = DateTime.MinValue;
-    public DateTime Registered { get; set; } = DateTime.UtcNow;
-    public DateTime? LastLogin { get; set; }
+    public DateTime Registered { get; set; } = DateTime.Now;
+    public DateTime LastLogin { get; set; }
+    public DateTime WillExpire { get; set; } = DateTime.MinValue;
     public string? RefreshToken { get; set; }
     public required string DisplayUserName { get; set; }
     public override string Email { get; set; } = string.Empty;

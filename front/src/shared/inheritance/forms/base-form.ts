@@ -5,6 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as diacritics from 'diacritics';
 import { DefaultMessages } from 'shared/components/validators/default-messages';
 import { ValidatorMessages } from 'shared/components/validators/validators-messages';
+import { DatePipe } from '@angular/common';
+import { pipe } from 'rxjs';
+
 
 export class BaseForm {
 
@@ -81,7 +84,6 @@ export class BaseForm {
     return form?.get(field)?.hasError(error) && form?.get(field)?.touched;
   }
 
-
   sanitizeFormFields(form: FormGroup): void {
     Object.keys(form.controls).forEach(field => {
       const control = form.get(field);
@@ -109,9 +111,9 @@ export class BaseForm {
       form?.markAllAsTouched();
       return false;
     }
-    else {
+    else
       return true;
-    }
+    
 
   }
 }

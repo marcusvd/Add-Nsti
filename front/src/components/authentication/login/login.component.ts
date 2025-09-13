@@ -33,7 +33,7 @@ export class LoginComponent extends BaseForm implements OnInit {
       this.loginErrorMessage = '';
   }
 
-  inputPwd(pwd:string){
+  inputPwd(pwd: string) {
     if (pwd.length == 0)
       this.loginErrorMessage = '';
   }
@@ -65,84 +65,96 @@ export class LoginComponent extends BaseForm implements OnInit {
 
   login(tokenCaptcha?: string) {
 
+    // if (this.alertSave(this.formMain)) {
+
     if (this.alertSave(this.formMain)) {
+      if (this.formMain.valid && tokenCaptcha)
 
-      this._loginService?.login$(this?.formMain?.value).subscribe({
-        next: (user: any) => {
+        this._loginService?.login$(this?.formMain?.value).subscribe({
+          next: (user: any) => {
 
-          if (user?.authenticated) {
+            if (user?.authenticated) {
 
-            this.loginErrorMessage = '';
-            if (user.action == "TwoFactor")
-              this._router.navigateByUrl('two-factor');
+              this.loginErrorMessage = '';
+              if (user.action == "TwoFactor")
+                this._router.navigateByUrl('two-factor');
 
-            console.log(user as UserTokenDto)
+              console.log(user as UserTokenDto)
 
-            localStorage.setItem("myUser", JSON.stringify(user));
+              localStorage.setItem("myUser", JSON.stringify(user));
 
-            this._warningsService.openSnackBar('SEJA BEM-VINDO!', 'warnings-success');
-
-
-            this._router.navigateByUrl('/');
+              this._warningsService.openSnackBar('SEJA BEM-VINDO!', 'warnings-success');
 
 
-          }
-          else {
-          }
+              this._router.navigateByUrl('/');
 
-        }, error: (err: any) => {
-          const erroCode: string = err.error.Message.split('|');
-          this.reCaptcha.resetCaptcha();
-          switch (erroCode[0]) {
-            case '1.0': {
-              // this.resendEmailConfim(user);
-              this.loginErrorMessage = erroCode[1]
-              break;
+
             }
-            case '1.4': {
-              this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
-              this.loginErrorMessage = erroCode[1]
-              break;
+            else {
             }
-            case '1.11': {
-              this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
-              this._warningsService.openAuthWarnings({
-                btnLeft: 'Fechar', btnRight: '', title: 'ERRO DE AUTENTICAÇÃO:',
-                body: erroCode[1]
-              })
-              break;
-            }
-            case '1.6': {
-              this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
-              this.loginErrorMessage = erroCode[1]
-              break;
-            }
-            case 'User not found.': {
-              this._warningsService.openSnackBar('USUÁRIO NÃO CADASTRADO NO SISTEMA.', 'warnings-error');
-              this.loginErrorMessage = 'Usuário não cadastrado no sistema.'
 
-              setTimeout(() => {
+          }, error: (err: any) => {
+
+
+            localStorage.removeItem("myUser");
+
+            const erroCode: string = err.error.Message.split('|');
+            // this.reCaptcha.resetCaptcha();
+            switch (erroCode[0]) {
+              case '1.0': {
+                // this.resendEmailConfim(user);
+                this.loginErrorMessage = erroCode[1]
+                break;
+              }
+              case '1.4': {
+                this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+                this.loginErrorMessage = erroCode[1]
+                break;
+              }
+              case '1.11': {
+                this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
                 this._warningsService.openAuthWarnings({
-                  btnLeft: 'Sim', btnRight: 'Não', title: 'AVISO:',
-                  body: "Usuário não cadastrado no sistema, deseja cadastrar?",
-                }).subscribe(result => {
-
-                  if (result)
-                    this._router.navigateByUrl('register');
-
-                  if (!result)
-                    this._router.navigateByUrl('login');
-
+                  btnLeft: 'Fechar', btnRight: '', title: 'ERRO DE AUTENTICAÇÃO:',
+                  body: erroCode[1]
                 })
+                break;
+              }
+              case '1.6': {
+                this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+                this.loginErrorMessage = erroCode[1]
+                break;
+              }
+              case '1.15': {
+                this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+                this.loginErrorMessage = erroCode[1]
+                break;
+              }
+              case 'User not found.': {
+                this._warningsService.openSnackBar('USUÁRIO NÃO CADASTRADO NO SISTEMA.', 'warnings-error');
+                this.loginErrorMessage = 'Usuário não cadastrado no sistema.'
 
-              }, 5000);
+                setTimeout(() => {
+                  this._warningsService.openAuthWarnings({
+                    btnLeft: 'Sim', btnRight: 'Não', title: 'AVISO:',
+                    body: "Usuário não cadastrado no sistema, deseja cadastrar?",
+                  }).subscribe(result => {
 
-              break;
+                    if (result)
+                      this._router.navigateByUrl('register');
+
+                    if (!result)
+                      this._router.navigateByUrl('login');
+
+                  })
+
+                }, 5000);
+
+                break;
+              }
             }
-          }
 
-        }
-      })
+          }
+        })
     }
   }
 

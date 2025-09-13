@@ -50,9 +50,9 @@ public static class IdentityConfiguration
              opt.Password.RequireUppercase = false;
              opt.Password.RequiredLength = 3;
              //
-             opt.Lockout.MaxFailedAccessAttempts = 3;
-             opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
              opt.Lockout.AllowedForNewUsers = true;
+             opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(3);
+             opt.Lockout.MaxFailedAccessAttempts = 3;
          })
             .AddEntityFrameworkStores<IdImDbContext>()
            .AddDefaultTokenProviders()

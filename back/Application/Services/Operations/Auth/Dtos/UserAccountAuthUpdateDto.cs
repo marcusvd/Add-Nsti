@@ -8,7 +8,8 @@ public class UserAccountAuthUpdateDto : RootBaseDto
     public int BusinessAuthId { get; set; }
     public required string UserName { get; set; }
     public required string UserProfileId { get; set; }
-    public DateTime? LastLogin { get; set; }
+    public DateTime LastLogin { get; set; }
+    public DateTime WillExpire { get; set; }
     public string? RefreshToken { get; set; }
     public required string DisplayUserName { get; set; }
     public required string Email { get; set; }
@@ -29,6 +30,7 @@ public static class UserAccountAuthUpdateDtoMapper
            db.UserName = dto.UserName;
            db.UserProfileId = dto.UserProfileId;
            db.LastLogin = dto.LastLogin;
+           db.WillExpire = dto.WillExpire;
            db.RefreshToken = dto.RefreshToken;
            db.DisplayUserName = dto.DisplayUserName;
            db.RefreshTokenExpiryTime = dto.RefreshTokenExpiryTime;

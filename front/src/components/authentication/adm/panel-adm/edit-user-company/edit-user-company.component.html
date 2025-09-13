@@ -118,10 +118,20 @@
       </mat-tab>
       <mat-tab label="Segurança">
         <div class="grid sm:grid-cols-2 grid-cols-1">
-          <password-change [userIdRoute]="userIdRoute" [userName]="emailUserName()">
-          </password-change>
-          <account-status [userName]="emailUserName()">
+          <!-- <password-change [userIdRoute]="userIdRoute" [userName]="emailUserName()">
+          </password-change> -->
+          <!-- <password-reset-adm [formMain]="formMain" [email]="email"></password-reset-adm> -->
+
+
+          <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute">
+          </password-expires>
+
+          <account-status [userName]="emailUserName()" [lastLogin]="lastLogin">
           </account-status>
+          <div class="grid  grid-cols-1">
+            <password-reset-adm [email]="email"></password-reset-adm>
+          </div>
+
         </div>
       </mat-tab>
     </mat-tab-group>

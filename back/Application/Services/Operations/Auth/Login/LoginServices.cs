@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using UnitOfWork.Persistence.Operations;
 using Application.Services.Operations.Auth.Account.dtos;
+using Application.Exceptions;
+using Application.Services.Operations.Auth.Dtos;
 
 
 namespace Application.Services.Operations.Auth.Login;
@@ -39,23 +41,25 @@ public class LoginServices : AuthenticationBase, ILoginServices
 
         var userAccount = await FindUserAsync(user.Email);
 
+        await IsValidUserAccount(userAccount.Email, userAccount.Id == -33);
 
-        if (userAccount == null)
+
+        if (userAccount.WillExpire.Year != DateTime.MinValue.Year)
         {
-            _logger.LogWarning("Login attempt for non-existent user: {Username}", user.Email);
-            throw new AuthServicesException(AuthErrorsMessagesException.UserAccountNotFound);
+            await ForgotPasswordAsync(new ForgotPasswordDto() { Email = user.Email });
+            throw new AuthServicesException(AuthErrorsMessagesException.PasswordWillExpire);
         }
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
 
         await ValidateAccountStatusAsync(userAccount);
 
         var result = await IsPasswordValidAsync(userAccount, user.Password);
 
-        if (!result.Succeeded)
-        {
-            _logger.LogWarning("Invalid password attempt for user: {UserId}", userAccount.Id);
-            throw new AuthServicesException(AuthErrorsMessagesException.InvalidUserNameOrPassword);
-        }
-     
+        await IsValidUserAccount(userAccount.Email, !result.Succeeded);
+
+        await WriteLastLogin(userAccount.Email);
+
         if (await HandleTwoFactorAuthenticationAsync(userAccount))
         {
             _logger.LogInformation("2FA required for user: {UserId}", userAccount.Id);
@@ -65,6 +69,17 @@ public class LoginServices : AuthenticationBase, ILoginServices
         _logger.LogInformation("Successful login for user: {UserId}", userAccount.Id);
 
         return await CreateAuthenticationResponseAsync(userAccount);
+    }
+
+    private async Task<bool> IsValidUserAccount(string userEmail, bool result)
+    {
+        if (result)
+        {
+            _logger.LogWarning("Invalid password attempt for user: {Email}", userEmail);
+            throw new AuthServicesException(AuthErrorsMessagesException.InvalidUserNameOrPassword);
+        }
+
+        return await Task.FromResult(false);
     }
 
     private async Task ValidateAccountStatusAsync(UserAccount userAccount)
@@ -95,6 +110,28 @@ public class LoginServices : AuthenticationBase, ILoginServices
         {
             _logger.LogError(ex, "Failed to send account locked notification to {Email}", userAccount.Email);
         }
+    }
+    private async Task<IdentityResult> WriteLastLogin(string email)
+    {
+        var userAccount = await FindUserAsync(email);
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
+
+        userAccount.LastLogin = DateTime.Now;
+
+        var Update = await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
+
+        return Update;
+
+    }
+    public async Task<DateTime> GetLastLogin(string email)
+    {
+        var userAccount = await FindUserAsync(email);
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
+
+        return userAccount.LastLogin;
+
     }
 
 }

@@ -15,6 +15,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("api/{controller}")]
+    [Authorize(Roles = "SYSADMIN")]
     public class AuthAdmController : ControllerBase
     {
         private readonly IServiceLaucherService _ServiceLaucherService;
@@ -40,7 +41,7 @@ namespace Api.Controllers
 
 
         [HttpGet("GetBusinessFullAsync/{id:min(1)}")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         // [AllowAnonymous]
         public async Task<IActionResult> GetBusinessFullAsync(int id)
         {
@@ -49,7 +50,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetBusinessAsync/{id:min(1)}")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetBusinessAsync(int id)
         {
             return Ok(await _ServiceLaucherService.AuthAdmServices.GetBusinessAsync(id));
@@ -57,14 +58,14 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetCompanyAuthAsync/{id:min(1)}")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetCompanyAuthAsync(int id)
         {
             return Ok(await _ServiceLaucherService.CompanyAuthServices.GetCompanyAuthAsync(id));
 
         }
         [HttpGet("GetCompanyAuthFullAsync/{id:min(1)}")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetCompanyAuthFullAsync(int id)
         {
             return Ok(await _ServiceLaucherService.CompanyAuthServices.GetCompanyAuthFullAsync(id));
@@ -72,13 +73,13 @@ namespace Api.Controllers
         }
         [HttpGet("GetUsersByCompanyIdAsync/{companyAuthId:min(1)}")]
         // [AllowAnonymous]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetUsersByCompanyIdAsync(int companyAuthId)
         {
             return Ok(await _ServiceLaucherService.CompanyAuthServices.GetUsersByCompanyIdAsync(companyAuthId));
         }
         [HttpGet("GetUserByIdFullAsync/{id:min(1)}")]
-        [AllowAnonymous]
+        // [AllowAnonymous]
         // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetUserByIdFullAsync(int id)
         {
@@ -88,7 +89,7 @@ namespace Api.Controllers
 
         [HttpGet("GetCompanyProfileAsync/{companyAuthId}")]
         // [AllowAnonymous]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetCompanyProfileAsync(string companyAuthId)
         {
             if (string.IsNullOrWhiteSpace(companyAuthId)) throw new Exception(GlobalErrorsMessagesException.IvalidId);
@@ -97,7 +98,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("UpdateUserRole")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRoleDto role)
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.UpdateUserRoles(role));
@@ -105,21 +106,21 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetRoles")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetRolesAsync([FromBody] UserAccount userAccount)
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.GetRolesAsync(userAccount));
         }
 
         [HttpPost("CreateRole")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> CreateRoleAsync([FromBody] RoleDto roleDto)
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.CreateRoleAsync(roleDto));
         }
 
         [HttpPut("AddUserAccountAsync/{companyId:min(1)}")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> AddUserAccountAsync([FromBody] AddUserExistingCompanyDto user, int companyId)
         {
             return Ok(await _ServiceLaucherService.RegisterUserAccountServices.AddUserExistingCompanyAsync(user, companyId));
@@ -133,7 +134,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetAccountStatus/{email}")]
-        [Authorize(Roles = "SYSADMIN")]
+        // [Authorize(Roles = "SYSADMIN")]
         public async Task<IActionResult> GetAccountStatus(string email)
         {
             var emailConfirmed = await _ServiceLaucherService.AccountManagerServices.IsEmailConfirmedAsync(email);
@@ -151,11 +152,35 @@ namespace Api.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpPut("ManualAccountLockedOut")]
         public async Task<IActionResult> ManualAccountLockedOut([FromBody] AccountLockedOutManualDto AccountLockedOutManual)
         {
             var result = await _ServiceLaucherService.AccountManagerServices.ManualAccountLockedOut(AccountLockedOutManual);
+
+            return Ok(result);
+        }
+
+        [HttpPut("MarkPasswordExpireAsync")]
+        public async Task<IActionResult> MarkPasswordExpireAsync([FromBody] PasswordWillExpiresDto passwordWillExpires)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.MarkPasswordExpireAsync(passwordWillExpires);
+
+            return Ok(result);
+        }
+
+        [HttpPut("StaticPasswordDefined")]
+        public async Task<IActionResult> StaticPasswordDefined([FromBody] ResetStaticPasswordDto reset)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.StaticPasswordDefined(reset);
+
+            return Ok(result);
+        }
+
+        [HttpGet("IsPasswordExpiresAsync/{userId}")]
+        public async Task<IActionResult> IsPasswordExpiresAsync(int userId)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.IsPasswordExpiresAsync(userId);
 
             return Ok(result);
         }

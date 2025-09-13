@@ -14,6 +14,9 @@ public interface IAccountManagerServices
     Task<IdentityResult> ForgotPasswordAsync(ForgotPasswordDto forgotPassword);
     Task<IdentityResult> ResetPasswordAsync(ResetPasswordDto resetPassword);
     Task<IdentityResult> PasswordChangeAsync(PasswordChangeDto passwordChange);
+    Task<IdentityResult> MarkPasswordExpireAsync(PasswordWillExpiresDto passwordWillExpires);
+    Task<IdentityResult> StaticPasswordDefined(ResetStaticPasswordDto reset);
+    Task<bool> IsPasswordExpiresAsync(int userId);
     Task<bool> IsAccountLockedOut(string email);
     Task<bool> IsEmailConfirmedAsync(string email);
     Task<IdentityResult> ManualConfirmEmailAddress(EmailConfirmManualDto EmailConfirmManual);

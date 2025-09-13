@@ -32,20 +32,9 @@ public class AuthenticationBase
         _GENERIC_REPO = GENERIC_REPO;
     }
 
-    private protected DateTime DateTimeNow
-    {
-
-        get
-        {
-            DateTime now = DateTime.Now;
-            return new DateTime(now.Year, now.Month, now.Day, now.Hour - 3, now.Minute, 0, 0);
-        }
-    }
-
-
     private protected async Task<UserAccount> FindUserAsync(string userNameOrEmail)
     {
-        return await _GENERIC_REPO.UsersManager.FindByEmailAsync(userNameOrEmail) ?? await _GENERIC_REPO.UsersManager.FindByNameAsync(userNameOrEmail) ?? new UserAccount() { UserProfileId = "Invalid", DisplayUserName = "Invalid" };
+        return await _GENERIC_REPO.UsersManager.FindByEmailAsync(userNameOrEmail) ?? await _GENERIC_REPO.UsersManager.FindByNameAsync(userNameOrEmail) ?? new UserAccount() { Id = -33, UserProfileId = "Invalid", DisplayUserName = "Invalid" };
     }
     private protected async Task<UserAccount> FindUserByIdAsync(int id)
     {
@@ -107,8 +96,6 @@ public class AuthenticationBase
             return IdentityResult.Failed(new IdentityError() { Description = "User or password is invalid." });
         }
     }
-
-
     private protected void ResultUserCreation(bool userAccount, bool userProfile, string userEmail, string errosMsg)
     {
         if (!userAccount || !userProfile)
@@ -302,9 +289,9 @@ public class AuthenticationBase
     {
         var userAccount = await FindUserAsync(forgotPassword.Email);
 
-        var genToken = GenerateUrlTokenPasswordReset(userAccount, "ForgotPassword", "auth");
+        var genToken = await GenerateUrlTokenPasswordReset(userAccount, "ForgotPassword", "auth");
 
-        var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/password-reset", "api/auth/ForgotPassword", "I.M - Link para recadastramento de senha."]);
+        var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [genToken, "http://localhost:4200/password-reset", "api/auth/ForgotPassword", "I.M - Link para recadastramento de senha."]);
 
         await SendEmailConfirmationAsync(dataConfirmEmail, dataConfirmEmail.PasswordReset());
 
@@ -316,16 +303,22 @@ public class AuthenticationBase
 
         IdentityResult identityResult = await _GENERIC_REPO.UsersManager.ResetPasswordAsync(userAccount, resetPassword.Token, resetPassword.Password);
 
+        if (identityResult.Succeeded)
+        {
+            userAccount.WillExpire = DateTime.MinValue;
+            userAccount.LockoutEnd = DateTimeOffset.MinValue;
+            userAccount.EmailConfirmed = true;
+            await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
+        }
+
         if (!identityResult.Succeeded) throw new AuthServicesException($"{AuthErrorsMessagesException.ResetPassword} - {identityResult}");
 
         return identityResult;
     }
-
     public async Task<IdentityResult> PasswdChangeAsync(UserAccount user, string CurrentPwd, string NewPwd)
     {
         return await _GENERIC_REPO.UsersManager.ChangePasswordAsync(user, CurrentPwd, NewPwd);
     }
-
     private protected async Task ValidateUniqueUserCredentials(RegisterModelDto register)
     {
         if (await IsUserNameDuplicate(register.UserName))

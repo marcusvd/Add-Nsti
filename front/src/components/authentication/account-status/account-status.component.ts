@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, Input, OnInit } from '@angular/core';
 import { ImportsAccountStatus } from './imports/imports-account-status';
 import { BaseForm } from 'shared/inheritance/forms/base-form';
 import { AccountService } from '../services/account.service';
@@ -17,7 +17,10 @@ import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto
   styleUrl: './account-status.component.scss'
 })
 
-export class AccountStatusComponent extends BaseForm implements OnInit {
+export class AccountStatusComponent extends BaseForm implements OnInit, AfterViewInit {
+  ngAfterViewInit(): void {
+    this.neverLoggedIn();
+  }
 
 
   ngOnInit(): void {
@@ -25,6 +28,7 @@ export class AccountStatusComponent extends BaseForm implements OnInit {
   }
 
   @Input() userName!: string;
+  @Input() lastLogin!: Date | string;
   _accountService = inject(AccountService);
   _fb = inject(FormBuilder);
   emailConfirmManual = new EmailConfirmManualDto();
@@ -33,6 +37,11 @@ export class AccountStatusComponent extends BaseForm implements OnInit {
   lockedOutLabel!: string;
   lockedOutLabelCssClass!: string;
   lockedOutIcon!: string;
+
+  neverLoggedInLabel!: string;
+  neverLoggedInLabelCssClass!: string;
+  neverLoggedInIcon!: string;
+  dateString: boolean = false;
 
   emailConfirmedLabel!: string;
   emailConfirmedLabelCssClass!: string;
@@ -70,6 +79,27 @@ export class AccountStatusComponent extends BaseForm implements OnInit {
     }
   }
 
+  neverLoggedIn() {
+
+    const lLogin = new Date(this.lastLogin);
+
+    if (lLogin.getUTCFullYear() == this.minDate.getUTCFullYear()) {
+      this.lastLogin = 'Nunca';
+      this.dateString = true;
+      this.neverLoggedInIcon = 'cancel';
+      this.neverLoggedInLabelCssClass = 'text-red-700';
+    }
+    else {
+      this.neverLoggedInLabel = 'Desbloqueado';
+      this.neverLoggedInIcon = 'access_alarm';
+      this.neverLoggedInLabelCssClass = 'text-green-700';
+      this.dateString = false;
+    }
+
+
+  }
+
+
   emailConfirmedOnChage(x: boolean) {
     if (x) {
       this.emailConfirmedLabel = 'Confirmado';
@@ -86,34 +116,56 @@ export class AccountStatusComponent extends BaseForm implements OnInit {
 
   }
 
-  actionEmailConfirm(x: MatCheckboxChange) {
+  actionEmailConfirm(change: MatCheckboxChange) {
 
     this.emailConfirmManual.email = this.userName;
-    this.emailConfirmManual.emailConfirmed = x.checked;
+    this.emailConfirmManual.emailConfirmed = change.checked;
 
     this._accountService.updateAccountStatusEmailConfirm$(this.emailConfirmManual).subscribe(
       {
-        next: (x: ResponseIdentiyApiDto) => {
+
+        next: (x => {
           if (x.succeeded) {
             this.startInitial();
+            if (change.checked)
+              this.openSnackBar('CONFIRMADO!', 'warnings-success');
+            else
+              this.openSnackBar('NÃO CONFIRMADO!', 'warnings-alert');
+
           }
-        }
+        }),
+        error: (error => {
+          {
+            this.openSnackBar(error, 'warnings-error');
+          }
+        })
       }
     )
   }
 
-  actionLockedOut(x: MatCheckboxChange) {
+
+  actionLockedOut(change: MatCheckboxChange) {
 
     this.accountLockedOutManual.email = this.userName;
-    this.accountLockedOutManual.accountLockedOut = x.checked;
+    this.accountLockedOutManual.accountLockedOut = change.checked;
 
     this._accountService.updateAccountLockedOutManual$(this.accountLockedOutManual).subscribe(
       {
-        next: (x: ResponseIdentiyApiDto) => {
+        next: (x => {
           if (x.succeeded) {
             this.startInitial();
+            if (change.checked)
+              this.openSnackBar('BLOQUEADO!', 'warnings-alert');
+            else
+              this.openSnackBar('DESBLOQUEADO!', 'warnings-success');
+
           }
-        }
+        }),
+        error: (error => {
+          {
+            this.openSnackBar(error, 'warnings-error');
+          }
+        })
       }
     )
   }

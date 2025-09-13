@@ -7,5 +7,6 @@ namespace Application.Services.Operations.Auth.Login;
 public interface ILoginServices
 {
     Task<UserToken> LoginAsync(LoginModelDto user);
-    
+    Task<DateTime> GetLastLogin(string email);
+
 }

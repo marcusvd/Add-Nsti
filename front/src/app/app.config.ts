@@ -4,12 +4,20 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors, withJsonpSupport } from '@angular/common/http';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { registerLocaleData } from '@angular/common';
+import ptBr from '@angular/common/locales/pt';
+import ptBrExtra from '@angular/common/locales/extra/pt';
+import { LOCALE_ID } from '@angular/core';
+
+
+registerLocaleData(ptBr, 'pt-Br', ptBrExtra)
 
 import { IConfig, NgxMaskModule } from "ngx-mask";
-import { MatPaginatorIntl } from '@angular/material/paginator';
+
 import { CustomMatPaginatorIntl } from 'shared/components/list-g/list/custom-mat-aginator-intl.service';
 import { AuthInterceptor } from 'components/authentication/interceptors/auth-interceptor';
-// import { AuthInterceptor } from 'components/authentication/interceptors/auth-interceptor';
+import { from } from 'rxjs';
 
 
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -22,6 +30,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
+    {provide:LOCALE_ID, useValue: 'pt-BR'},
     provideAnimationsAsync(),
     provideHttpClient(
       withJsonpSupport(),

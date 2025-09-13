@@ -11,6 +11,7 @@ import { RegisterService } from '../services/register.service';
 import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
 import { PasswordValidator } from '../validators/password-validator';
 import { ImportsPasswordReset } from './imports/imports-password-change';
+import { PasswordFieldComponent } from '../common-components/password/password.component';
 
 
 @Component({
@@ -19,7 +20,8 @@ import { ImportsPasswordReset } from './imports/imports-password-change';
   styleUrls: ['./password-change.component.scss'],
   standalone: true,
   imports: [
-    ImportsPasswordReset
+    ImportsPasswordReset,
+    PasswordFieldComponent
   ],
   providers: [
     RegisterService
@@ -31,6 +33,10 @@ export class PasswordChangeComponent extends BaseForm implements OnChanges {
 
   @Input() userIdRoute!: number;
   @Input() userName!: string;
+
+
+  pwdType: string = 'password';
+  pwdIcon: string = 'visibility_off';
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -65,21 +71,19 @@ export class PasswordChangeComponent extends BaseForm implements OnChanges {
     return this.formMain;
   }
 
-  pwdTypeCurrent: string = 'password';
-  pwdIconCurrent: string = 'visibility_off';
+  // pwdTypeCurrent: string = 'password';
+  // pwdIconCurrent: string = 'visibility_off';
 
-  currentPwdHideShow() {
-    if (this.pwdTypeCurrent === 'password') {
-      this.pwdTypeCurrent = 'text';
-      this.pwdIconCurrent = 'visibility';
-    } else {
-      this.pwdTypeCurrent = 'password';
-      this.pwdIconCurrent = 'visibility_off';
-    }
-  }
+  // currentPwdHideShow() {
+  //   if (this.pwdTypeCurrent === 'password') {
+  //     this.pwdTypeCurrent = 'text';
+  //     this.pwdIconCurrent = 'visibility';
+  //   } else {
+  //     this.pwdTypeCurrent = 'password';
+  //     this.pwdIconCurrent = 'visibility_off';
+  //   }
+  // }
 
-  pwdType: string = 'password';
-  pwdIcon: string = 'visibility_off';
 
   pwdHideShow() {
     if (this.pwdType === 'password') {

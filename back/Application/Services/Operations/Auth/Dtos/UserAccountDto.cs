@@ -9,12 +9,13 @@ public class UserAccountDto : RootBaseDto
     public required string UserName { get; set; }
     public required string UserProfileId { get; set; }
     public BusinessAuthDto BusinessAuth { get; set; } = BusinessAuthMapper.Incomplete();
-    public DateTime? LastLogin { get; set; }
+    public DateTime LastLogin { get; set; }
+    public DateTime WillExpire { get; set; }
     public string? RefreshToken { get; set; }
     public required string DisplayUserName { get; set; }
     public required string Email { get; set; }
     public bool EmailConfirmed { get; set; }
-    public DateTime RefreshTokenExpiryTime { get; set; }   
+    public DateTime RefreshTokenExpiryTime { get; set; }
     public ICollection<CompanyUserAccountDto> CompanyUserAccounts { get; set; } = new List<CompanyUserAccountDto>();
 }
 
@@ -31,6 +32,7 @@ public static class UserAccountMapper
             UserName = dto.UserName,
             UserProfileId = dto.UserProfileId,
             LastLogin = dto.LastLogin,
+            WillExpire = dto.WillExpire,
             RefreshToken = dto.RefreshToken,
             DisplayUserName = dto.DisplayUserName,
             Email = dto.Email,

@@ -11,6 +11,7 @@ import { AccountService } from '../services/account.service';
 import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
 import { PasswordValidator } from '../validators/password-validator';
 import { ImportsPasswordReset } from './imports/imports-password-reset';
+import { PasswordFieldComponent } from '../common-components/password/password.component';
 
 
 @Component({
@@ -19,10 +20,11 @@ import { ImportsPasswordReset } from './imports/imports-password-reset';
   styleUrls: ['./password-reset.component.scss'],
   standalone: true,
   imports: [
-    ImportsPasswordReset
+    ImportsPasswordReset,
+    PasswordFieldComponent
   ],
   providers: [
-    RegisterService
+    RegisterService,
   ]
 })
 export class PasswordResetComponent extends BaseForm implements OnInit {
@@ -31,11 +33,12 @@ export class PasswordResetComponent extends BaseForm implements OnInit {
   loginErrorMessage: string = '';
 
   constructor(
+
     private _activatedRoute: ActivatedRoute,
     private _accountService: AccountService,
     private _fb: FormBuilder
-  ) { super() }
 
+  ) { super() }
 
   passwordChange(tokenCaptcha: string | undefined) {
 
@@ -47,7 +50,16 @@ export class PasswordResetComponent extends BaseForm implements OnInit {
 
   }
 
+
+  outPwdField($event: any) {
+
+    const event = $event as InputEvent
+
+  }
+
+
   formLoad(param: any) {
+
     this.formMain = this._fb.group({
       token: [param['token'], [Validators.required]],
       email: [param['email'], [Validators.required]],
@@ -57,6 +69,7 @@ export class PasswordResetComponent extends BaseForm implements OnInit {
     }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
 
     return this.formMain;
+
   }
 
   pwdType: string = 'password';

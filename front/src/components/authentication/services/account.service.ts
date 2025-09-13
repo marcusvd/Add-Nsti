@@ -17,6 +17,8 @@ import { PasswordChangeDto } from '../dtos/password-change-dto';
 import { AccountStatusDto } from '../dtos/account-status-dto';
 import { EmailConfirmManualDto } from '../dtos/email-confirm-manual-dto';
 import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto';
+import { PasswordWillExpiresDto } from '../dtos/password-will-expires-dto';
+import { ResetStaticPasswordDto } from '../dtos/reset-static-password-dto';
 
 
 @Injectable({
@@ -272,17 +274,28 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
   }
 
-
   getAccountStatus$(email: string) {
     return this.loadByName$<AccountStatusDto>(`${environment._BACK_END_ROOT_URL}/authadm/GetAccountStatus`, email)
   }
 
   updateAccountStatusEmailConfirm$(emailConfirmManual: EmailConfirmManualDto) {
-        return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualConfirmEmailAddress`, emailConfirmManual)
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualConfirmEmailAddress`, emailConfirmManual)
   }
 
   updateAccountLockedOutManual$(accountLockedOutManual: AccountLockedOutManualDto) {
-        return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualAccountLockedOut`, accountLockedOutManual)
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualAccountLockedOut`, accountLockedOutManual)
+  }
+
+  markPasswordExpire$(passwordWillExpires: PasswordWillExpiresDto) {
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/MarkPasswordExpireAsync`, passwordWillExpires)
+  }
+
+  isPasswordExpires$(id: number) {
+    return this.loadById$<boolean>(`${environment._BACK_END_ROOT_URL}/authadm/IsPasswordExpiresAsync`, id.toString())
+  }
+
+  staticPasswordDefined$(reset: ResetStaticPasswordDto) {
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/staticPasswordDefined`, reset)
   }
 
 
