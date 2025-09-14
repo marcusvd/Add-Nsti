@@ -123,14 +123,17 @@
           <!-- <password-reset-adm [formMain]="formMain" [email]="email"></password-reset-adm> -->
 
 
+          <account-status [userName]="emailUserName()" [lastLogin]="lastLogin">
+          </account-status>
           <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute">
           </password-expires>
 
-          <account-status [userName]="emailUserName()" [lastLogin]="lastLogin">
-          </account-status>
-          <div class="grid  grid-cols-1">
-            <password-reset-adm [email]="email"></password-reset-adm>
-          </div>
+          <password-reset-adm [email]="email"></password-reset-adm>
+
+
+            <time-interval-g>
+            </time-interval-g>
+
 
         </div>
       </mat-tab>

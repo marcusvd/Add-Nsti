@@ -31,6 +31,8 @@ import { AddressService } from 'shared/components/address/services/address.servi
 import { ContactComponent } from 'shared/components/contact/component/contact.component';
 import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
 import { ContactService } from 'shared/components/contact/services/contact.service';
+import { TimeIntervaGComponent } from 'shared/components/time-interval-g/time-interval-g.component';
+// import { IgxTimePickerComponent } from 'igniteui-angular';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
 
@@ -48,7 +50,9 @@ import { ContactService } from 'shared/components/contact/services/contact.servi
     ContactComponent,
     PasswordExpiresComponent,
     AccountStatusComponent,
-    PasswordResetAdmComponent
+    PasswordResetAdmComponent,
+    TimeIntervaGComponent
+    // IgxTimePickerComponent
   ],
   providers: [
     RegisterService,
@@ -86,6 +90,11 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   userAuth!: UserAccountAuthDto | undefined;
   userProfile!: UserProfileDto | undefined;
   willExpires!: Date;
+
+ horaInicio: string = '08:00';
+  horaFim: string = '18:00';
+
+
 
   backend = `${environment._BACK_END_ROOT_URL}/AuthAdm/AddUserAccountAsync`
   backendEmailUpdate = `${environment._BACK_END_ROOT_URL}/auth/RequestEmailChange`
@@ -185,7 +194,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
 
   }
 
-  
+
 
 
 

@@ -41,7 +41,7 @@ public class LoginServices : AuthenticationBase, ILoginServices
 
         var userAccount = await FindUserAsync(user.Email);
 
-        await IsValidUserAccount(userAccount.Email, userAccount.Id == -33);
+        await IsValidUserAccount(userAccount.Email, userAccount.Id == -1);
 
 
         if (userAccount.WillExpire.Year != DateTime.MinValue.Year)

@@ -70,7 +70,7 @@ export class LoginComponent extends BaseForm implements OnInit {
     if (this.alertSave(this.formMain)) {
       if (this.formMain.valid && tokenCaptcha)
 
-        this._loginService?.login$(this?.formMain?.value).subscribe({
+        this._loginService?.login$(this?.formMain?.value)?.subscribe({
           next: (user: any) => {
 
             if (user?.authenticated) {
@@ -98,7 +98,8 @@ export class LoginComponent extends BaseForm implements OnInit {
 
             localStorage.removeItem("myUser");
 
-            const erroCode: string = err.error.Message.split('|');
+            const erroMessage: string = err?.error?.Message;
+            const erroCode = erroMessage ? erroMessage.split('|') : ['0', 'Falha na comunicação com o servidor.']
             // this.reCaptcha.resetCaptcha();
             switch (erroCode[0]) {
               case '1.0': {
@@ -129,26 +130,9 @@ export class LoginComponent extends BaseForm implements OnInit {
                 this.loginErrorMessage = erroCode[1]
                 break;
               }
-              case 'User not found.': {
-                this._warningsService.openSnackBar('USUÁRIO NÃO CADASTRADO NO SISTEMA.', 'warnings-error');
-                this.loginErrorMessage = 'Usuário não cadastrado no sistema.'
-
-                setTimeout(() => {
-                  this._warningsService.openAuthWarnings({
-                    btnLeft: 'Sim', btnRight: 'Não', title: 'AVISO:',
-                    body: "Usuário não cadastrado no sistema, deseja cadastrar?",
-                  }).subscribe(result => {
-
-                    if (result)
-                      this._router.navigateByUrl('register');
-
-                    if (!result)
-                      this._router.navigateByUrl('login');
-
-                  })
-
-                }, 5000);
-
+              default: {
+                this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+                this.loginErrorMessage = erroCode[1];
                 break;
               }
             }

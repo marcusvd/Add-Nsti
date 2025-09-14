@@ -34,7 +34,7 @@ public class AuthenticationBase
 
     private protected async Task<UserAccount> FindUserAsync(string userNameOrEmail)
     {
-        return await _GENERIC_REPO.UsersManager.FindByEmailAsync(userNameOrEmail) ?? await _GENERIC_REPO.UsersManager.FindByNameAsync(userNameOrEmail) ?? new UserAccount() { Id = -33, UserProfileId = "Invalid", DisplayUserName = "Invalid" };
+        return await _GENERIC_REPO.UsersManager.FindByEmailAsync(userNameOrEmail) ?? await _GENERIC_REPO.UsersManager.FindByNameAsync(userNameOrEmail) ?? new UserAccount() { Id = -1, UserProfileId = "Invalid", DisplayUserName = "Invalid", Email="User not found" };
     }
     private protected async Task<UserAccount> FindUserByIdAsync(int id)
     {

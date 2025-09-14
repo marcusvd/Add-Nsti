@@ -184,6 +184,13 @@ namespace Api.Controllers
 
             return Ok(result);
         }
+        // [HttpGet("AcesseTimeIntervalStartEndAsync")]
+        // public async Task<IActionResult> AcesseTimeIntervalSimpleAsync()
+        // {
+        //     var result = await _ServiceLaucherService.AccountManagerServices.IsPasswordExpiresAsync(userId);
+
+        //     return Ok(result);
+        // }
 
 
     }
