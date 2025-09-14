@@ -10,6 +10,7 @@ public class UserAccountDto : RootBaseDto
     public required string UserProfileId { get; set; }
     public BusinessAuthDto BusinessAuth { get; set; } = BusinessAuthMapper.Incomplete();
     public DateTime LastLogin { get; set; }
+    public AccessControlDto AccessControl {get; set;}
     public DateTime WillExpire { get; set; }
     public string? RefreshToken { get; set; }
     public required string DisplayUserName { get; set; }

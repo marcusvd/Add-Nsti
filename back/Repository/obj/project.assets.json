@@ -2925,23 +2925,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {},
+    "C:\\Users\\adm02\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj",
+      "projectUniqueName": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj",
       "projectName": "Repository",
-      "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Repository\\Repository.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Repository\\obj\\",
+      "projectPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\Repository.csproj",
+      "packagesPath": "C:\\Users\\adm02\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\adm02\\Desktop\\ADD-NSTI\\back\\Repository\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\adm02\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2956,11 +2956,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj": {
-              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj"
+            "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Domain\\Domain.csproj"
             },
-            "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj": {
-              "projectPath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj"
+            "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj": {
+              "projectPath": "C:\\Users\\adm02\\Desktop\\Add-Nsti\\back\\Pagination\\Pagination.csproj"
             }
           }
         }
@@ -2975,7 +2975,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -3014,7 +3014,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
