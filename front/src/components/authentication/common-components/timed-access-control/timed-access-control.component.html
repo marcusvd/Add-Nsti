@@ -1,0 +1,41 @@
+<div [formGroup]="formMain" *ngIf="formMain">
+  <mat-card class="border-card-categories-divide-comp">
+    <div class="grid justify-center" [formGroup]="formMain" *ngIf="formMain">
+      <div class="p-4">
+        <h3 class="title-categories-divide-comp">ACESSO LIBERADO</h3>
+      </div>
+
+      <div >
+        <p class="pl-4">Irrestrito: <span class="text-color-main">{{'00:00'}}</span></p>
+      </div>
+
+      <div class="grid grid-cols-2 justify-center gap-2 p-2">
+        <time-g [formMain]="formMain" [formCtrlName]="'start'" [lblTimer]="'Inicio'" [timeFormat_24_12]="24"
+          (outTimeSelected)="onTimeSelectedStart($event)">
+        </time-g>
+        <time-g [formMain]="formMain" [formCtrlName]="'end'" [lblTimer]="'Fim'" [timeFormat_24_12]="24"
+          (outTimeSelected)="onTimeSelectedEnd($event)">
+        </time-g>
+        <!-- <mat-form-field class="w-full flex justify-center">
+          <mat-label>Início</mat-label>
+          <input matInput placeholder="00:00" [ngxTimepicker]="startTimePicker" [value]="startTime" #startValue (selectionchange)="onTimeSelected(startValue.value,'start')" [format]="24" formControlName="start">
+          <ngx-material-timepicker #startTimePicker></ngx-material-timepicker>
+        </mat-form-field>
+
+        <mat-form-field class="w-full flex justify-center">
+          <mat-label>Fim</mat-label>
+          <input matInput placeholder="00:00" [ngxTimepicker]="endTimePicker" [value]="endTime" #endValue  (selectionchange)="onTimeSelected(endValue.value,'end')" [format]="24" formControlName="end">
+          <ngx-material-timepicker #endTimePicker></ngx-material-timepicker>
+        </mat-form-field> -->
+
+      </div>
+    </div>
+    <!-- <div>{{formMain.value | json}}</div> -->
+    <div class="pl-4" *ngIf="formFieldStartValue && formFieldEndValue">
+      <p>Intervalo: <span class="text-remove-color">{{ formFieldStartValue }} - {{ formFieldEndValue }}</span></p>
+    </div>
+     <div class="pb-4 flex justify-center">
+      <btn-g mat-dialog-close [isDisabled]="!formMain.valid" [name]="'Definir'" [icon]="'access_alarm'" (btn)="save()"></btn-g>
+    </div>
+  </mat-card>
+</div>

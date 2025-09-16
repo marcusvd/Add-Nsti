@@ -18,8 +18,10 @@ namespace UnitOfWork.Persistence.Operations
         #region USER
         IUserProfileRepository UsersProfiles { get; }
         IUserAccountRepository UsersAccounts { get; }
+        ITimedAccessControlRepository TimedAccessControls { get; }
         UserManager<UserAccount> UsersManager { get; }
         RoleManager<Role> RolesManager { get; }
+
         #endregion
 
         #region BUSINESS

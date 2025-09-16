@@ -184,13 +184,22 @@ namespace Api.Controllers
 
             return Ok(result);
         }
-        // [HttpGet("AcesseTimeIntervalStartEndAsync")]
-        // public async Task<IActionResult> AcesseTimeIntervalSimpleAsync()
-        // {
-        //     var result = await _ServiceLaucherService.AccountManagerServices.IsPasswordExpiresAsync(userId);
+        
+        [HttpPost("TimedAccessControlStartEndPostAsync")]
+        public async Task<IActionResult> AcesseTimeIntervalSimpleAsync(TimedAccessControlStartEndPostDto timedAccessControl)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.TimedAccessControlStartEndUpdateAsync(timedAccessControl);
 
-        //     return Ok(result);
-        // }
+            return Ok(result);
+        }
+
+        [HttpGet("GetTimedAccessControlAsync/{userId:min(1)}")]
+        public async Task<IActionResult> GetTimedAccessControlAsync(int userId)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.GetTimedAccessControlAsync(userId);
+
+            return Ok(result);
+        }
 
 
     }

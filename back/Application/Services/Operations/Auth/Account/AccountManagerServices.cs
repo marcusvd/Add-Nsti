@@ -10,6 +10,9 @@ using Domain.Entities.System.Profiles;
 using UnitOfWork.Persistence.Operations;
 using Application.Services.Operations.Profiles.Dtos;
 using Authentication.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Differencing;
 
 
 namespace Application.Services.Operations.Account;
@@ -170,8 +173,49 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
 
         // return await _GENERIC_REPO.UsersManager.ResetPasswordAsync(userAccount, genToken, reset.Password);
     }
+    public async Task<IdentityResult> TimedAccessControlStartEndUpdateAsync(TimedAccessControlStartEndPostDto timedAccessControl)
+    {
+        var userAccount = await GetUserIncluded(timedAccessControl.UserId);
 
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(timedAccessControl);
 
+         var id = userAccount?.TimedAccessControl?.Id;
+
+        if (userAccount?.TimedAccessControl?.Id > 0)
+        {
+            _GENERIC_REPO.TimedAccessControls.Update(timedAccessControl.ToUpdate(id ?? throw new AuthServicesException(GlobalErrorsMessagesException.IdIsNull)));
+
+            if (await _GENERIC_REPO.SaveID())
+                return IdentityResult.Success;
+        }
+        else
+            userAccount.TimedAccessControl = timedAccessControl.ToPost();
+        
+        return await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
+    }
+
+    public async Task<TimedAccessControlDto> GetTimedAccessControlAsync(int userId)
+    {
+
+        var _now = DateTime.Now;
+        var start = new DateTime(_now.Year, _now.Month, _now.Day, 00, 00, 00);
+        var end = new DateTime(_now.Year, _now.Month, _now.Day, 00, 00, 00);
+
+        var times = await GetUserIncluded(userId);
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(times);
+
+        return times.TimedAccessControl.ToDto() ?? new TimedAccessControlDto() { Start = start, End = end };
+    }
+
+    private async Task<UserAccount> GetUserIncluded(int userId)
+    {
+        return await _GENERIC_REPO.UsersAccounts.GetByPredicate(x =>
+                       x.Id == userId && x.Deleted.Year == DateTime.MinValue.Year,
+                       add => add.Include(x => x.TimedAccessControl),
+                       selector => selector,
+                       null);
+    }
     private async Task<UserProfile> GetUserProfileAsync(int id)
     {
         return await _GENERIC_REPO.UsersProfiles.GetByPredicate(

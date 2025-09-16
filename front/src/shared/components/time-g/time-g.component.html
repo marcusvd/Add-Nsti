@@ -1,0 +1,7 @@
+<div [formGroup]="formMain" *ngIf="formMain">
+  <mat-form-field [class]="formFieldCssClass">
+    <mat-label>{{lblTimer}}</mat-label>
+    <input  matInput placeholder="HH:MM" readonly [ngxTimepicker]="startTimePicker" [value]="selectedTime" #startValue (selectionchange)="onTimeSelected(startValue.value)" [format]="timeFormat_24_12" [formControlName]="formCtrlName">
+    <ngx-material-timepicker #startTimePicker></ngx-material-timepicker>
+  </mat-form-field>
+</div>

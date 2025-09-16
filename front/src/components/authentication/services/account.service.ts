@@ -19,6 +19,8 @@ import { EmailConfirmManualDto } from '../dtos/email-confirm-manual-dto';
 import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto';
 import { PasswordWillExpiresDto } from '../dtos/password-will-expires-dto';
 import { ResetStaticPasswordDto } from '../dtos/reset-static-password-dto';
+import { TimedAccessControlStartEndPostDto } from '../dtos/date-time-access-control-start-end-post-dto';
+import { TimedAccessControlDto } from '../dtos/date-time-access-control-dto';
 
 
 @Injectable({
@@ -297,6 +299,16 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   staticPasswordDefined$(reset: ResetStaticPasswordDto) {
     return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/staticPasswordDefined`, reset)
   }
+
+  timedAccessControlStartEndPostAsync$(timedAccessControlStartEnd: TimedAccessControlStartEndPostDto) {
+    return this.add$<any>(timedAccessControlStartEnd, `${environment._BACK_END_ROOT_URL}/authadm/TimedAccessControlStartEndPostAsync`)
+  }
+
+  getTimedAccessControlAsync$(userId: number) {
+    return this.loadById$<TimedAccessControlDto>(`${environment._BACK_END_ROOT_URL}/authadm/getTimedAccessControlAsync`, userId.toString())
+  }
+
+
 
 
 }

@@ -64,6 +64,25 @@
 
 
     <mat-tab-group [formGroup]="formMain" class="p-4" animationDuration="0ms">
+      <mat-tab label="Segurança">
+        <div class="grid sm:grid-cols-2 grid-cols-1">
+          <!-- <password-change [userIdRoute]="userIdRoute" [userName]="emailUserName()">
+          </password-change> -->
+          <!-- <password-reset-adm [formMain]="formMain" [email]="email"></password-reset-adm> -->
+          <account-status [userName]="emailUserName()" [lastLogin]="lastLogin">
+          </account-status>
+
+          <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute">
+          </password-expires>
+
+          <password-reset-adm [email]="email"></password-reset-adm>
+
+
+            <timed-access-control [usrId]="userIdRoute">
+            </timed-access-control>
+        </div>
+      </mat-tab>
+
       <mat-tab label="Identificação">
 
 
@@ -116,27 +135,7 @@
           <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'" (btn)="contactUpdate()"></btn-g>
         </div>
       </mat-tab>
-      <mat-tab label="Segurança">
-        <div class="grid sm:grid-cols-2 grid-cols-1">
-          <!-- <password-change [userIdRoute]="userIdRoute" [userName]="emailUserName()">
-          </password-change> -->
-          <!-- <password-reset-adm [formMain]="formMain" [email]="email"></password-reset-adm> -->
 
-
-          <account-status [userName]="emailUserName()" [lastLogin]="lastLogin">
-          </account-status>
-          <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute">
-          </password-expires>
-
-          <password-reset-adm [email]="email"></password-reset-adm>
-
-
-            <time-interval-g>
-            </time-interval-g>
-
-
-        </div>
-      </mat-tab>
     </mat-tab-group>
   </div>
 </default-component>

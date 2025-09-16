@@ -29,7 +29,7 @@ export abstract class BackEndService<T> implements IBackEndService<T> {
   private _snackBar = inject(MatSnackBar);
     _router = inject(Router);
 
-  add$<T>(record: T, url: string): Observable<T> {
+  add$<T>(record: any, url: string): Observable<T> {
     return this._http.post<T>(`${url}`, record);
   }
 
@@ -75,7 +75,7 @@ export abstract class BackEndService<T> implements IBackEndService<T> {
   update$<T>(url?: string, record?: any): Observable<T> {
     return this._http.put<T>(`${url}/${record.id}`, record).pipe(take(1));
   }
-  
+
   updateV2$<T>(url?: string, record?: any): Observable<T> {
     return this._http.put<T>(`${url}`, record).pipe(take(1));
   }

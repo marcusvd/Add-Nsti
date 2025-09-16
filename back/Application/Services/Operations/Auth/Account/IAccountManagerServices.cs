@@ -25,6 +25,9 @@ public interface IAccountManagerServices
     Task<IdentityResult> UpdateUserAccountProfileAsync(UserProfileDto userAccount, int id);
     Task<IdentityResult> RequestEmailChangeAsync(RequestEmailChangeDto requestEmailChangeDto);
     Task<IdentityResult> ConfirmYourEmailChangeAsync(ConfirmEmailChangeDto confirmRequestEmailChange);
+    // Task<IdentityResult> TimedAccessControlStartEndPostAsync(TimedAccessControlStartEndPostDto timedAccessControl);
+    Task<IdentityResult> TimedAccessControlStartEndUpdateAsync(TimedAccessControlStartEndPostDto timedAccessControl);
+    Task<TimedAccessControlDto> GetTimedAccessControlAsync(int userId);
     Task<string> UpdateUserRoles(UpdateUserRoleDto role);
     Task<IList<string>> GetRolesAsync(UserAccount userAccount);
     Task<IdentityResult> CreateRoleAsync(RoleDto roleDto);

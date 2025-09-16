@@ -12,8 +12,8 @@ using Repository.Data.Context.Auth;
 namespace Authentication.Migrations
 {
     [DbContext(typeof(IdImDbContext))]
-    [Migration("20250912210733_tradeh")]
-    partial class tradeh
+    [Migration("20250915130702_fix_names-2")]
+    partial class fix_names2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,7 @@ namespace Authentication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BusinessAuth");
+                    b.ToTable("_AU_BusinessesAuth");
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.CompanyAuth", b =>
@@ -85,7 +85,7 @@ namespace Authentication.Migrations
 
                     b.HasIndex("BusinessId");
 
-                    b.ToTable("CompaniesAuth");
+                    b.ToTable("_AU_CompaniesAuth");
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.CompanyUserAccount", b =>
@@ -109,7 +109,7 @@ namespace Authentication.Migrations
 
                     b.HasIndex("UserAccountId");
 
-                    b.ToTable("CompaniesUsersAccounts");
+                    b.ToTable("_AU_CompaniesUsersAccounts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.Role", b =>
@@ -143,7 +143,38 @@ namespace Authentication.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("_Id_Roles", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Authentication.TimedAccessControl", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Deleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Registered")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("WorkBreakEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("WorkBreakStart")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("_AC_TimedAccessControls");
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.UserAccount", b =>
@@ -217,6 +248,9 @@ namespace Authentication.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("TimedAccessControlId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
@@ -242,7 +276,9 @@ namespace Authentication.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("Users", (string)null);
+                    b.HasIndex("TimedAccessControlId");
+
+                    b.ToTable("_Id_Users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.UserRole", b =>
@@ -257,7 +293,7 @@ namespace Authentication.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("_Id_UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -281,7 +317,7 @@ namespace Authentication.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("_Id_RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -305,7 +341,7 @@ namespace Authentication.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("_Id_UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
@@ -326,7 +362,7 @@ namespace Authentication.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("_Id_UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -345,7 +381,7 @@ namespace Authentication.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("_Id_UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.CompanyAuth", b =>
@@ -386,7 +422,13 @@ namespace Authentication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Authentication.TimedAccessControl", "TimedAccessControl")
+                        .WithMany()
+                        .HasForeignKey("TimedAccessControlId");
+
                     b.Navigation("BusinessAuth");
+
+                    b.Navigation("TimedAccessControl");
                 });
 
             modelBuilder.Entity("Domain.Entities.Authentication.UserRole", b =>

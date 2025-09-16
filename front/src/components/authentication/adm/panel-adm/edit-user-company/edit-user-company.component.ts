@@ -31,7 +31,7 @@ import { AddressService } from 'shared/components/address/services/address.servi
 import { ContactComponent } from 'shared/components/contact/component/contact.component';
 import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
 import { ContactService } from 'shared/components/contact/services/contact.service';
-import { TimeIntervaGComponent } from 'shared/components/time-interval-g/time-interval-g.component';
+import { TimedAccessControlComponent } from 'components/authentication/common-components/timed-access-control/timed-access-control.component';
 // import { IgxTimePickerComponent } from 'igniteui-angular';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
@@ -51,7 +51,7 @@ import { TimeIntervaGComponent } from 'shared/components/time-interval-g/time-in
     PasswordExpiresComponent,
     AccountStatusComponent,
     PasswordResetAdmComponent,
-    TimeIntervaGComponent
+    TimedAccessControlComponent,
     // IgxTimePickerComponent
   ],
   providers: [
@@ -91,7 +91,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   userProfile!: UserProfileDto | undefined;
   willExpires!: Date;
 
- horaInicio: string = '08:00';
+  horaInicio: string = '08:00';
   horaFim: string = '18:00';
 
 
@@ -199,7 +199,6 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
 
 
   emailUserName = () => this.formMain?.get('email')?.value as string;
-
 
   back() {
     window.history.back();

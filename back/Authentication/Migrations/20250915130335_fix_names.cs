@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Authentication.Migrations
 {
     /// <inheritdoc />
-    public partial class trade_CompaniesAuth : Migration
+    public partial class fix_names : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,26 @@ namespace Authentication.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "BusinessAuth",
+                name: "_AC_TimedAccessControls",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Start = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    End = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    WorkBreakStart = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    WorkBreakEnd = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__AC_TimedAccessControls", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "_AU_BusinessesAuth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -30,12 +49,12 @@ namespace Authentication.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BusinessAuth", x => x.Id);
+                    table.PrimaryKey("PK__AU_BusinessesAuth", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -51,12 +70,12 @@ namespace Authentication.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "CompaniesAuth",
+                name: "_AU_CompaniesAuth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -73,18 +92,18 @@ namespace Authentication.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CompaniesAuth", x => x.Id);
+                    table.PrimaryKey("PK__AU_CompaniesAuth", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CompaniesAuth_BusinessAuth_BusinessId",
+                        name: "FK__AU_CompaniesAuth__AU_BusinessesAuth_BusinessId",
                         column: x => x.BusinessId,
-                        principalTable: "BusinessAuth",
+                        principalTable: "_AU_BusinessesAuth",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -94,7 +113,9 @@ namespace Authentication.Migrations
                     BusinessAuthId = table.Column<int>(type: "int", nullable: false),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    TimedAccessControlId = table.Column<int>(type: "int", nullable: true),
+                    WillExpire = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     RefreshToken = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DisplayUserName = table.Column<string>(type: "longtext", nullable: false)
@@ -125,11 +146,16 @@ namespace Authentication.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_BusinessAuth_BusinessAuthId",
+                        name: "FK_AspNetUsers__AC_TimedAccessControls_TimedAccessControlId",
+                        column: x => x.TimedAccessControlId,
+                        principalTable: "_AC_TimedAccessControls",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers__AU_BusinessesAuth_BusinessAuthId",
                         column: x => x.BusinessAuthId,
-                        principalTable: "BusinessAuth",
+                        principalTable: "_AU_BusinessesAuth",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -151,9 +177,37 @@ namespace Authentication.Migrations
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_Roles_RoleId",
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Roles",
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "_AU_CompaniesUsersAccounts",
+                columns: table => new
+                {
+                    CompanyAuthId = table.Column<int>(type: "int", nullable: false),
+                    UserAccountId = table.Column<int>(type: "int", nullable: false),
+                    LinkedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__AU_CompaniesUsersAccounts", x => new { x.CompanyAuthId, x.UserAccountId });
+                    table.ForeignKey(
+                        name: "FK__AU_CompaniesUsersAccounts_AspNetUsers_UserAccountId",
+                        column: x => x.UserAccountId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK__AU_CompaniesUsersAccounts__AU_CompaniesAuth_CompanyAuthId",
+                        column: x => x.CompanyAuthId,
+                        principalTable: "_AU_CompaniesAuth",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -175,9 +229,9 @@ namespace Authentication.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_Users_UserId",
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -199,9 +253,34 @@ namespace Authentication.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_Users_UserId",
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -223,71 +302,34 @@ namespace Authentication.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_Users_UserId",
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "CompaniesUsersAccounts",
-                columns: table => new
-                {
-                    CompanyAuthId = table.Column<int>(type: "int", nullable: false),
-                    UserAccountId = table.Column<int>(type: "int", nullable: false),
-                    LinkedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CompaniesUsersAccounts", x => new { x.CompanyAuthId, x.UserAccountId });
-                    table.ForeignKey(
-                        name: "FK_CompaniesUsersAccounts_CompaniesAuth_CompanyAuthId",
-                        column: x => x.CompanyAuthId,
-                        principalTable: "CompaniesAuth",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CompaniesUsersAccounts_Users_UserAccountId",
-                        column: x => x.UserAccountId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "UserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserRoles_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX__AU_CompaniesAuth_BusinessId",
+                table: "_AU_CompaniesAuth",
+                column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX__AU_CompaniesUsersAccounts_UserAccountId",
+                table: "_AU_CompaniesUsersAccounts",
+                column: "UserAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -300,39 +342,28 @@ namespace Authentication.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CompaniesAuth_BusinessId",
-                table: "CompaniesAuth",
-                column: "BusinessId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CompaniesUsersAccounts_UserAccountId",
-                table: "CompaniesUsersAccounts",
-                column: "UserAccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "Roles",
-                column: "NormalizedName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_RoleId",
-                table: "UserRoles",
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                table: "Users",
+                table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_BusinessAuthId",
-                table: "Users",
+                name: "IX_AspNetUsers_BusinessAuthId",
+                table: "AspNetUsers",
                 column: "BusinessAuthId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_TimedAccessControlId",
+                table: "AspNetUsers",
+                column: "TimedAccessControlId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                table: "Users",
+                table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
         }
@@ -340,6 +371,9 @@ namespace Authentication.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "_AU_CompaniesUsersAccounts");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -350,25 +384,25 @@ namespace Authentication.Migrations
                 name: "AspNetUserLogins");
 
             migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CompaniesUsersAccounts");
+                name: "_AU_CompaniesAuth");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "CompaniesAuth");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "_AC_TimedAccessControls");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "BusinessAuth");
+                name: "_AU_BusinessesAuth");
         }
     }
 }

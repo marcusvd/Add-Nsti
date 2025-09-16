@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Application.Services.Operations.Auth.Account.dtos;
 using Microsoft.AspNetCore.Mvc;
 using UnitOfWork.Persistence.Operations;
+using Application.Exceptions;
 
 namespace Application.Services.Operations.Auth;
 
@@ -34,11 +35,11 @@ public class AuthenticationBase
 
     private protected async Task<UserAccount> FindUserAsync(string userNameOrEmail)
     {
-        return await _GENERIC_REPO.UsersManager.FindByEmailAsync(userNameOrEmail) ?? await _GENERIC_REPO.UsersManager.FindByNameAsync(userNameOrEmail) ?? new UserAccount() { Id = -1, UserProfileId = "Invalid", DisplayUserName = "Invalid", Email="User not found" };
+        return await _GENERIC_REPO.UsersManager.FindByEmailAsync(userNameOrEmail) ?? await _GENERIC_REPO.UsersManager.FindByNameAsync(userNameOrEmail) ?? throw new AuthServicesException(GlobalErrorsMessagesException.IsObjNull);
     }
     private protected async Task<UserAccount> FindUserByIdAsync(int id)
     {
-        return await _GENERIC_REPO.UsersManager.FindByIdAsync(id.ToString()) ?? new UserAccount() { UserProfileId = "Invalid", DisplayUserName = "Invalid" };
+        return await _GENERIC_REPO.UsersManager.FindByIdAsync(id.ToString()) ?? throw new AuthServicesException(GlobalErrorsMessagesException.IsObjNull);
     }
     private protected async Task<IdentityResult> IsUserExist(string email)
     {

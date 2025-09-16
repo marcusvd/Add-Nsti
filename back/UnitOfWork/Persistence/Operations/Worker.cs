@@ -69,6 +69,7 @@ namespace UnitOfWork.Persistence.Operations
             }
         }
 
+
         private UserManager<UserAccount> _USER_MANAGER_REPO;
         public UserManager<UserAccount> UsersManager => _USER_MANAGER_REPO;
 
@@ -152,7 +153,16 @@ namespace UnitOfWork.Persistence.Operations
             }
         }
 
-      
+        private TimedAccessControlRepository _TIMED_ACCESS_CONTROL_REPO;
+        public ITimedAccessControlRepository TimedAccessControls
+        {
+            get
+            {
+                return _TIMED_ACCESS_CONTROL_REPO = _TIMED_ACCESS_CONTROL_REPO ?? new TimedAccessControlRepository(_ID_CONTEXT);
+            }
+        }
+
+
         #endregion
 
 

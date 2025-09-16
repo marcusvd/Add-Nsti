@@ -43,7 +43,8 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
 
   @Input('entity') entityBusiness$!: Observable<BusinessAuth>;
 
-
+  private _route = inject(Router);
+  
   address!: FormGroup;
   contact!: FormGroup;
 
@@ -103,7 +104,6 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
   }
 
 
-  _route = inject(Router);
   save() {
     if (this.alertSave(this.formMain))
       this._companyService.save(this.formMain);
