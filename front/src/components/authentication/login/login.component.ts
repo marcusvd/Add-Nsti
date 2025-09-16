@@ -130,6 +130,11 @@ export class LoginComponent extends BaseForm implements OnInit {
                 this.loginErrorMessage = erroCode[1]
                 break;
               }
+              case '1.16': {
+                this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
+                this.loginErrorMessage = erroCode[1]
+                break;
+              }
               default: {
                 this._warningsService.openSnackBar(erroCode[1], 'warnings-error');
                 this.loginErrorMessage = erroCode[1];

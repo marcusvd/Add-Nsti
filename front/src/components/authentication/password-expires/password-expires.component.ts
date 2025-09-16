@@ -25,8 +25,6 @@ export class PasswordExpiresComponent extends BaseForm implements OnInit {
   @Input() userAccountId!: number;
   passwordWillExpires = new PasswordWillExpiresDto();
 
-
-
   _accountService = inject(AccountService);
   _fb = inject(FormBuilder);
 

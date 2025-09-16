@@ -6,5 +6,5 @@ namespace Repository.Data.Operations.AuthRepository.UserAccountRepository;
 
 public interface IUserAccountRepository : IAuthRepository<UserAccount>
 {
-    Task<UserAccount> GetUserAccountFull(string email);
+   Task<UserAccount> GetUserAccountFull(int id);
 }

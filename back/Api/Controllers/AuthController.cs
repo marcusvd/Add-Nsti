@@ -75,6 +75,16 @@ namespace Api.Controllers
             return Ok(await _ServiceLaucherService.AccountManagerServices.UpdateUserAccountProfileAsync(userAccountUpdate, id));
         }
 
+        [HttpPost("twofactorverify")]
+        public async Task<IActionResult> twofactorverify(TwoFactorCheckDto twoFactorCheck)
+        {
+            return Ok(await _ServiceLaucherService.AccountManagerServices.TwoFactorVerifyAsync(twoFactorCheck.Email,twoFactorCheck.Token));
+        }
+        // [HttpPost("twofactorverify")]
+        // public async Task<IActionResult> twofactorverify(TwoFactorCheckDto twoFactorCheck)
+        // {
+        //     return Ok(await _ServiceLaucherService.AccountManagerServices.TwoFactorVerifyAsync(twoFactorCheck.Email,twoFactorCheck.Token));
+        // }
         [HttpPost("ConfirmRequestEmailChange")]
         public async Task<IActionResult> ConfirmRequestEmailChange([FromBody] ConfirmEmailChangeDto confirmRequestEmailChange)
         {

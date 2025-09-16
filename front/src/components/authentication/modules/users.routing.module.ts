@@ -14,10 +14,8 @@ const routes: Routes = [
   { path: 'edit-company/:id', component: PanelAdmComponent },
   { path: 'add-user-company/:id', component: AddUserCompanyComponent },
   { path: 'edit-user/:id', component: EditUserCompanyComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'panel-adm', component: PanelAdmComponent },
-
-
+    { path: 'profile', component: ProfileComponent },
+  { path: 'panel-adm', component: PanelAdmComponent }
 ]
 
 @NgModule({

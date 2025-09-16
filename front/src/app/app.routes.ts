@@ -8,11 +8,13 @@ import { ConfirmEmailComponent } from 'components/authentication/confirm-email/c
 import { ForgotPasswordComponent } from 'components/authentication/forgot-password/forgot-password.component';
 import { PasswordResetComponent } from 'components/authentication/password-reset/password-reset.component';
 import { ConfirmEmailChangedComponent } from 'components/authentication/confirm-email-changed/confirm-email-changed.component';
+import { TwoFactorCheckComponent } from 'components/authentication/two-factor-check/two-factor-check.component';
 
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   // { path: 'login', component: RegisterComponent },
+  { path: 'two-factor-check/:token/:email', component: TwoFactorCheckComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'confirm-email', component: ConfirmEmailComponent },
   { path: 'confirm-request-email-change', component: ConfirmEmailChangedComponent },

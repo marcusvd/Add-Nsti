@@ -179,7 +179,7 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
 
         _GENERIC_REPO._GenericValidatorServices.IsObjNull(timedAccessControl);
 
-         var id = userAccount?.TimedAccessControl?.Id;
+        var id = userAccount?.TimedAccessControl?.Id;
 
         if (userAccount?.TimedAccessControl?.Id > 0)
         {
@@ -190,7 +190,7 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
         }
         else
             userAccount.TimedAccessControl = timedAccessControl.ToPost();
-        
+
         return await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
     }
 
@@ -207,6 +207,25 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
 
         return times.TimedAccessControl.ToDto() ?? new TimedAccessControlDto() { Start = start, End = end };
     }
+
+    public async Task<IdentityResult> ToggleTwoFactorAsync(ToggleTwoFactorDto toggleTwoFactor)
+    {
+        var userAccount = await FindUserByIdAsync(toggleTwoFactor.UserId);
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
+
+        return await _GENERIC_REPO.UsersManager.SetTwoFactorEnabledAsync(userAccount, toggleTwoFactor.Enable);
+    }
+    public async Task<bool> TwoFactorVerifyAsync(string email, string token) => await VerifyTwoFactorTokenAsync(email, token);
+    
+    public async Task<bool> IsEnabledTwoFactorAsync(int userId)
+    {
+        var userAccount = await FindUserByIdAsync(userId);
+
+        return await IsEnabledTwoFactorAsync(userAccount);
+    }
+
+ 
 
     private async Task<UserAccount> GetUserIncluded(int userId)
     {

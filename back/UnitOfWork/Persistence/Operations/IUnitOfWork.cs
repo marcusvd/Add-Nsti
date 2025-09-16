@@ -20,6 +20,7 @@ namespace UnitOfWork.Persistence.Operations
         IUserAccountRepository UsersAccounts { get; }
         ITimedAccessControlRepository TimedAccessControls { get; }
         UserManager<UserAccount> UsersManager { get; }
+        SignInManager<UserAccount> SignInManager { get; }
         RoleManager<Role> RolesManager { get; }
 
         #endregion

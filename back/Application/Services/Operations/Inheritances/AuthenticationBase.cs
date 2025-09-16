@@ -65,25 +65,68 @@ public class AuthenticationBase
         if (!validProviders.Contains("Email"))
             return false;
 
+        // var token = await _GENERIC_REPO.UsersManager.GenerateTwoFactorTokenAsync(userAccount, "Email");
+        // var token = await GenerateTwoFactorTokenAsync(userAccount, "twofactorverify", "auth");
         var token = await _GENERIC_REPO.UsersManager.GenerateTwoFactorTokenAsync(userAccount, "Email");
 
-        await SendTwoFactorTokenAsync(userAccount, token);
+        // 
+
+        string linkToken = $"http://localhost:4200/two-factor-check/{token}/{userAccount.Email}";
+
+        await SendTwoFactorTokenAsync(userAccount, linkToken);
 
         return true;
     }
+    private protected async Task<bool> IsEnabledTwoFactorAsync(UserAccount userAccount) => await _GENERIC_REPO.UsersManager.GetTwoFactorEnabledAsync(userAccount);
+
+    private protected async Task<bool> VerifyTwoFactorTokenAsync(string email, string token)
+    {
+        var userAccount = await FindUserAsync(email);
+
+        _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
+
+        if (!await _GENERIC_REPO.UsersManager.GetTwoFactorEnabledAsync(userAccount)) return false;
+
+        var validProviders = await _GENERIC_REPO.UsersManager.GetValidTwoFactorProvidersAsync(userAccount);
+
+        if (!validProviders.Contains("Email"))
+            return false;
+
+
+        var isValid = await _GENERIC_REPO.UsersManager.VerifyTwoFactorTokenAsync(userAccount, "Email", token);
+
+        if (isValid)
+        {
+            await _GENERIC_REPO.SignInManager.SignInAsync(userAccount, isPersistent: false);
+            return true;
+        }
+
+        return false;
+    }
+
+
+
     private async Task SendTwoFactorTokenAsync(UserAccount userAccount, string token)
     {
         try
         {
-            // await _emailService.SendAsync(To: userAccount.Email,
-            //         Subject: "SONNY: Autenticação de dois fatores",
-            //         Body: $"Código: Autenticação de dois fatores: {token}");
+            await SendAsync(To: userAccount.Email,
+                    Subject: "I.M: Autenticação de dois fatores",
+                    Body: $"Código: Autenticação de dois fatores: {token}");
+            // Body: $"Código: Autenticação de dois fatores: {"http://localhost:4200/two-factor-check"}{token.Replace("api/auth/twofactorverify", "")}");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to send 2FA token to {Email}", userAccount.Email);
             throw new AuthServicesException(AuthErrorsMessagesException.TwoFactorTokenSendFailed);
         }
+    }
+    private protected async Task<UserToken> CreateTwoFactorResponse(UserAccount userAccount)
+    {
+        var claimsList = await BuildUserClaims(userAccount);
+        var token = await _jwtHandler.GenerateUserToken(claimsList, userAccount, []);
+        token.Action = "TwoFactor";
+        return token;
     }
     private protected async Task<IdentityResult> IsPasswordValidAsync(UserAccount userAccount, string password)
     {
@@ -132,13 +175,7 @@ public class AuthenticationBase
 
         return token;
     }
-    private protected async Task<UserToken> CreateTwoFactorResponse(UserAccount userAccount)
-    {
-        var claimsList = await BuildUserClaims(userAccount);
-        var token = await _jwtHandler.GenerateUserToken(claimsList, userAccount, []);
-        token.Action = "TwoFactor";
-        return token;
-    }
+
     private protected RoleDto CreateRole(string role, string DisplayRole)
     {
         return new RoleDto
@@ -180,7 +217,7 @@ public class AuthenticationBase
             throw;
         }
     }
-    public async Task<string> GenerateUrlTokenEmailConfirmation(UserAccount userAccount, string action, string controller)
+    private protected async Task<string> GenerateUrlTokenEmailConfirmation(UserAccount userAccount, string action, string controller)
     {
         var urlConfirmMail = _url.Action(action, controller, new
         {
@@ -191,7 +228,7 @@ public class AuthenticationBase
 
         return urlConfirmMail;
     }
-    public async Task<string> GenerateUrlTokenEmailChange(UserAccount userAccount, string action, string controller, string newEmail)
+    private protected async Task<string> GenerateUrlTokenEmailChange(UserAccount userAccount, string action, string controller, string newEmail)
     {
         var urlConfirmMail = _url.Action(action, controller, new
         {
@@ -203,7 +240,18 @@ public class AuthenticationBase
 
         return urlConfirmMail;
     }
-    public async Task<string> GenerateUrlTokenPasswordReset(UserAccount userAccount, string action, string controller)
+    // private protected async Task<string> GenerateTwoFactorTokenAsync(UserAccount userAccount, string action, string controller)
+    // {
+    //      var urlConfirmMail = _url.Action(action, controller, new
+    //     {
+    //         token = await _GENERIC_REPO.UsersManager.GenerateTwoFactorTokenAsync(userAccount, "Email"),
+    //         email = userAccount.Email
+
+    //     }) ?? throw new InvalidOperationException("Unable to generate email Two Factor token URL.");
+
+    //     return urlConfirmMail;
+    // }
+    private protected async Task<string> GenerateUrlTokenPasswordReset(UserAccount userAccount, string action, string controller)
     {
         var token = await _GENERIC_REPO.UsersManager.GeneratePasswordResetTokenAsync(userAccount);
 
@@ -211,6 +259,9 @@ public class AuthenticationBase
 
         return urlReset;
     }
+
+
+
     public DataConfirmEmail DataConfirmEmailMaker(UserAccount user, string[] dataConfirmation)
     {
         return new DataConfirmEmail()

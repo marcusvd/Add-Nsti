@@ -15,7 +15,7 @@ using Application.Services.Operations.Auth.Dtos;
 
 namespace Application.Services.Operations.Auth.Login;
 
-public class LoginServices : AuthenticationBase, ILoginServices
+public partial class LoginServices : AuthenticationBase, ILoginServices
 {
     // private UserManager<UserAccount> _userManager;
     private readonly ILogger<LoginServices> _logger;
@@ -43,6 +43,10 @@ public class LoginServices : AuthenticationBase, ILoginServices
 
         await IsValidUserAccount(userAccount.Email, userAccount.Id == -1);
 
+        //checking if the hour allow access
+        var timedAccessControl = await GetTimedAccessControl(userAccount.Id);
+        if (!await CheckTimeInterval(timedAccessControl)) throw new AuthServicesException(AuthErrorsMessagesException.TimeIsOutside);
+        //
 
         if (userAccount.WillExpire.Year != DateTime.MinValue.Year)
         {
@@ -122,7 +126,6 @@ public class LoginServices : AuthenticationBase, ILoginServices
         var Update = await _GENERIC_REPO.UsersManager.UpdateAsync(userAccount);
 
         return Update;
-
     }
     public async Task<DateTime> GetLastLogin(string email)
     {
@@ -131,7 +134,6 @@ public class LoginServices : AuthenticationBase, ILoginServices
         _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
 
         return userAccount.LastLogin;
-
     }
 
 }

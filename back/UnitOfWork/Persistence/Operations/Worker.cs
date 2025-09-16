@@ -23,13 +23,22 @@ namespace UnitOfWork.Persistence.Operations
         private readonly ImSystemDbContext _CONTEXT;
         private readonly IdImDbContext _ID_CONTEXT;
         private readonly ILogger<GenericValidatorServices> _LOGGER;
-        public Worker(ImSystemDbContext CONTEXT, IdImDbContext ID_CONTEXT, ILogger<GenericValidatorServices> LOGGER, UserManager<UserAccount> USER_MANAGER, RoleManager<Role> ROLE_MANAGER)
+        public Worker(
+                     ImSystemDbContext CONTEXT,
+                     IdImDbContext ID_CONTEXT,
+                     ILogger<GenericValidatorServices> LOGGER,
+                     UserManager<UserAccount> USER_MANAGER,
+                     SignInManager<UserAccount> SIGN_IN_MANAGER,
+                     RoleManager<Role> ROLE_MANAGER
+
+                     )
         {
             _CONTEXT = CONTEXT;
             _ID_CONTEXT = ID_CONTEXT;
             _LOGGER = LOGGER;
             _USER_MANAGER_REPO = USER_MANAGER;
             _ROLE_MANAGER_REPO = ROLE_MANAGER;
+            _SIGN_IN_MANAGER = SIGN_IN_MANAGER;
 
         }
 
@@ -70,6 +79,8 @@ namespace UnitOfWork.Persistence.Operations
         }
 
 
+        private SignInManager<UserAccount> _SIGN_IN_MANAGER;
+        public SignInManager<UserAccount> SignInManager => _SIGN_IN_MANAGER;
         private UserManager<UserAccount> _USER_MANAGER_REPO;
         public UserManager<UserAccount> UsersManager => _USER_MANAGER_REPO;
 

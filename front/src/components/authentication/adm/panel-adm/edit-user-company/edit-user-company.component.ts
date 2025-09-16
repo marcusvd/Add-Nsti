@@ -32,6 +32,7 @@ import { ContactComponent } from 'shared/components/contact/component/contact.co
 import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
 import { ContactService } from 'shared/components/contact/services/contact.service';
 import { TimedAccessControlComponent } from 'components/authentication/common-components/timed-access-control/timed-access-control.component';
+import { ToggleTwoFactorComponent } from 'components/authentication/common-components/toggle-two-factor/toggle-two-factor.component';
 // import { IgxTimePickerComponent } from 'igniteui-angular';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
@@ -52,6 +53,7 @@ import { TimedAccessControlComponent } from 'components/authentication/common-co
     AccountStatusComponent,
     PasswordResetAdmComponent,
     TimedAccessControlComponent,
+    ToggleTwoFactorComponent
     // IgxTimePickerComponent
   ],
   providers: [

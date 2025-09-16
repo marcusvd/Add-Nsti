@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities.Authentication;
@@ -17,12 +18,14 @@ public class UserAccountRepository : AuthRepository<UserAccount>, IUserAccountRe
     }
 
 
-    public async Task<UserAccount> GetUserAccountFull(string email)
+    public async Task<UserAccount> GetUserAccountFull(int id)
     {
 
         var userAny = await GetByPredicate(
-         x => x.Email.Equals(email),
-         add => add.Include(x => x.CompanyUserAccounts),
+
+         x => x.Id == id && x.Deleted.Year == DateTime.MinValue.Year,
+
+         add => add.Include(x => x.TimedAccessControl),
          selector => selector,
          ordeBy => ordeBy.OrderBy(x => x.Email)
          );

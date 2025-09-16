@@ -21,6 +21,8 @@ import { PasswordWillExpiresDto } from '../dtos/password-will-expires-dto';
 import { ResetStaticPasswordDto } from '../dtos/reset-static-password-dto';
 import { TimedAccessControlStartEndPostDto } from '../dtos/date-time-access-control-start-end-post-dto';
 import { TimedAccessControlDto } from '../dtos/date-time-access-control-dto';
+import { ToggleTwoFactorDto } from '../dtos/toggle-two-factor-dto';
+import { TwoFactorCheckDto } from '../dtos/two-factor-check-dto';
 
 
 @Injectable({
@@ -292,8 +294,16 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
     return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/MarkPasswordExpireAsync`, passwordWillExpires)
   }
 
+  ToggleTwoFactor$(toggleTwoFactor: ToggleTwoFactorDto) {
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ToggleTwoFactorAsync`, toggleTwoFactor)
+  }
+
   isPasswordExpires$(id: number) {
     return this.loadById$<boolean>(`${environment._BACK_END_ROOT_URL}/authadm/IsPasswordExpiresAsync`, id.toString())
+  }
+
+  IsEnabledTwoFactorAsync$(id: number) {
+    return this.loadById$<boolean>(`${environment._BACK_END_ROOT_URL}/authadm/IsEnabledTwoFactorAsync`, id.toString())
   }
 
   staticPasswordDefined$(reset: ResetStaticPasswordDto) {
@@ -306,6 +316,10 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
   getTimedAccessControlAsync$(userId: number) {
     return this.loadById$<TimedAccessControlDto>(`${environment._BACK_END_ROOT_URL}/authadm/getTimedAccessControlAsync`, userId.toString())
+  }
+
+  twoFactorCheckTokenAsync$(twoFactorCheck: TwoFactorCheckDto) {
+    return this.add$<ResponseIdentiyApiDto>(twoFactorCheck, `${environment._BACK_END_ROOT_URL}/auth/twofactorverify`);
   }
 
 

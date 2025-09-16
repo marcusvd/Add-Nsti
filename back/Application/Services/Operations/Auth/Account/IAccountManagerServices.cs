@@ -28,6 +28,9 @@ public interface IAccountManagerServices
     // Task<IdentityResult> TimedAccessControlStartEndPostAsync(TimedAccessControlStartEndPostDto timedAccessControl);
     Task<IdentityResult> TimedAccessControlStartEndUpdateAsync(TimedAccessControlStartEndPostDto timedAccessControl);
     Task<TimedAccessControlDto> GetTimedAccessControlAsync(int userId);
+    Task<IdentityResult> ToggleTwoFactorAsync(ToggleTwoFactorDto toggleTwoFactor);
+    Task<bool> IsEnabledTwoFactorAsync(int userId);
+    Task<bool> TwoFactorVerifyAsync(string email, string token);
     Task<string> UpdateUserRoles(UpdateUserRoleDto role);
     Task<IList<string>> GetRolesAsync(UserAccount userAccount);
     Task<IdentityResult> CreateRoleAsync(RoleDto roleDto);

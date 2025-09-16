@@ -201,6 +201,21 @@ namespace Api.Controllers
             return Ok(result);
         }
 
+        [HttpPut("ToggleTwoFactorAsync")]
+        public async Task<IActionResult> ToggleTwoFactorAsync([FromBody] ToggleTwoFactorDto toggleTwoFactor)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.ToggleTwoFactorAsync(toggleTwoFactor);
+
+            return Ok(result);
+        }
+
+        [HttpGet("IsEnabledTwoFactorAsync/{userId:min(1)}")]
+        public async Task<IActionResult> IsEnabledTwoFactorAsync(int userId)
+        {
+            var result = await _ServiceLaucherService.AccountManagerServices.IsEnabledTwoFactorAsync(userId);
+
+            return Ok(result);
+        }
 
     }
 }

@@ -42,7 +42,6 @@ export class TimedAccessControlComponent extends BaseForm implements OnInit {
 
   formLoad(x: TimedAccessControlDto) {
 
-
     const start = new Date(x.start);
     const end = new Date(x.end);
 
@@ -81,11 +80,9 @@ export class TimedAccessControlComponent extends BaseForm implements OnInit {
     return this.formMain.get('end')?.value;
   }
 
-
-  save() {
+  saveUpDate() {
 
     if (this.alertSave(this.formMain)) {
-
       const toUpdate: TimedAccessControlStartEndPostDto = this.formMain.value;
 
       this._accountService.timedAccessControlStartEndPostAsync$(toUpdate)

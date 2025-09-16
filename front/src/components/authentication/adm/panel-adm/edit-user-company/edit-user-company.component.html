@@ -65,22 +65,41 @@
 
     <mat-tab-group [formGroup]="formMain" class="p-4" animationDuration="0ms">
       <mat-tab label="Segurança">
-        <div class="grid sm:grid-cols-2 grid-cols-1">
-          <!-- <password-change [userIdRoute]="userIdRoute" [userName]="emailUserName()">
-          </password-change> -->
-          <!-- <password-reset-adm [formMain]="formMain" [email]="email"></password-reset-adm> -->
-          <account-status [userName]="emailUserName()" [lastLogin]="lastLogin">
-          </account-status>
 
-          <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute">
-          </password-expires>
+        <div class="flex flex-col sm:flex-row w-full">
+          <div class="flex flex-col flex-1 p-0 m-0">
+           <account-status [userName]="emailUserName()" [lastLogin]="lastLogin"></account-status>
 
-          <password-reset-adm [email]="email"></password-reset-adm>
+            <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute"></password-expires>
 
+            <toggle-two-factor [usrId]="userIdRoute"></toggle-two-factor>
+          </div>
+          <div class="flex flex-col flex-1 p-0 m-0">
+             <password-reset-adm [email]="email"></password-reset-adm>
 
-            <timed-access-control [usrId]="userIdRoute">
-            </timed-access-control>
+            <timed-access-control [usrId]="userIdRoute"></timed-access-control>
+          </div>
         </div>
+
+        <!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-0">
+
+          <div>
+            <account-status [userName]="emailUserName()" [lastLogin]="lastLogin"></account-status>
+
+            <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute"></password-expires>
+
+            <toggle-two-factor [usrId]="userIdRoute"></toggle-two-factor>
+          </div>
+
+          <div>
+            <password-reset-adm [email]="email"></password-reset-adm>
+
+            <timed-access-control [usrId]="userIdRoute"></timed-access-control>
+          </div>
+        </div> -->
+
+
+
       </mat-tab>
 
       <mat-tab label="Identificação">
