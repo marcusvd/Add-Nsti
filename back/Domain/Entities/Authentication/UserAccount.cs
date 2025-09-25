@@ -10,6 +10,7 @@ public class UserAccount : IdentityUser<int>
     public DateTime Deleted { get; set; } = DateTime.MinValue;
     public DateTime Registered { get; set; } = DateTime.Now;
     public DateTime LastLogin { get; set; }
+    public DateTime Code2FaSendEmail { get; set; } = DateTime.MinValue;
     public TimedAccessControl? TimedAccessControl { get; set; } = new TimedAccessControl();
     public DateTime WillExpire { get; set; } = DateTime.MinValue;
     public string? RefreshToken { get; set; }

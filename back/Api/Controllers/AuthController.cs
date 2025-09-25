@@ -1,10 +1,12 @@
-﻿using Application.Services.Helpers.ServicesLauncher;
+﻿using System.Security.Claims;
+using Application.Services.Helpers.ServicesLauncher;
 using Application.Services.Operations.Auth.Account.dtos;
 using Application.Services.Operations.Auth.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
 using Domain.Entities.Authentication;
-
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -36,6 +38,14 @@ namespace Api.Controllers
         public async Task<IActionResult> LoginAsync([FromBody] LoginModelDto user)
         {
             var result = await _ServiceLaucherService.LoginServices.LoginAsync(user);
+
+            var properties = new AuthenticationProperties { IsPersistent = true };
+
+            var getUser = await _ServiceLaucherService.LoginServices.GetUser(user.Email);
+
+            var result2 = await _ServiceLaucherService.LoginServices.BuildUserClaims(getUser);
+
+            await HttpContext.SignInAsync(IdentityConstants.TwoFactorUserIdScheme, result2, properties);
 
             result = result;
 
@@ -75,15 +85,48 @@ namespace Api.Controllers
             return Ok(await _ServiceLaucherService.AccountManagerServices.UpdateUserAccountProfileAsync(userAccountUpdate, id));
         }
 
-        [HttpPost("twofactorverify")]
-        public async Task<IActionResult> twofactorverify(TwoFactorCheckDto twoFactorCheck)
-        {
-            return Ok(await _ServiceLaucherService.AccountManagerServices.TwoFactorVerifyAsync(twoFactorCheck.Email,twoFactorCheck.Token));
-        }
         // [HttpPost("twofactorverify")]
         // public async Task<IActionResult> twofactorverify(TwoFactorCheckDto twoFactorCheck)
         // {
-        //     return Ok(await _ServiceLaucherService.AccountManagerServices.TwoFactorVerifyAsync(twoFactorCheck.Email,twoFactorCheck.Token));
+        //     return Ok(await _ServiceLaucherService.AccountManagerServices.TwoFactorVerifyAsync(twoFactorCheck.Email, twoFactorCheck.Token));
+        // }
+        // [HttpPost("test")]
+        // public async Task<IActionResult> test(TwoFactorCheckDto twoFactorCheck)
+        // {
+        //     //          private protected async Task<bool> HandleTwoFactorAuthenticationAsync(UserAccount userAccount)
+        //     // {
+        //     //     if (!await _GENERIC_REPO.UsersManager.GetTwoFactorEnabledAsync(userAccount))
+        //     //         return false;
+
+        //     //     var validProviders = await _GENERIC_REPO.UsersManager.GetValidTwoFactorProvidersAsync(userAccount);
+
+        //     //     if (!validProviders.Contains("Email"))
+        //     //         return false;
+
+        //     //     // var token = await _GENERIC_REPO.UsersManager.GenerateTwoFactorTokenAsync(userAccount, "Email");
+        //     //     // var token = await GenerateTwoFactorTokenAsync(userAccount, "twofactorverify", "auth");
+        //     //     var token = await _GENERIC_REPO.UsersManager.GenerateTwoFactorTokenAsync(userAccount, "Email");
+
+        //     //     string linkToken = $"http://localhost:4200/two-factor-check/{token}/{userAccount.Email}";
+
+        //     //     await SendTwoFactorTokenAsync(userAccount, linkToken);
+
+        //     await HttpContext.SignInAsync(IdentityConstants.TwoFactorUserIdScheme, Store2FA(userAccount.Id, "Email"));
+
+
+        // }
+
+        // private ClaimsPrincipal Store2FA(int id, string provider)
+        // {
+        //     var identity = new ClaimsIdentity(new List<Claim>
+        // {
+        //     new Claim("sub", id.ToString()),
+        //     new Claim("amr", provider)
+
+        // }, IdentityConstants.TwoFactorUserIdScheme);
+
+
+        //     return new ClaimsPrincipal(identity);
         // }
         [HttpPost("ConfirmRequestEmailChange")]
         public async Task<IActionResult> ConfirmRequestEmailChange([FromBody] ConfirmEmailChangeDto confirmRequestEmailChange)

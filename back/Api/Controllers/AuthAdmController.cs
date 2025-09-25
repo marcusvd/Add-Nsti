@@ -19,25 +19,10 @@ namespace Api.Controllers
     public class AuthAdmController : ControllerBase
     {
         private readonly IServiceLaucherService _ServiceLaucherService;
-        // private readonly IAccountManagerServices _iAccountManagerServices;
-        // private readonly IAuthAdmServices _authAdmServices;
-        // private readonly ICompanyAuthServices _companyAuthServices;
-        // private readonly IRegisterUserAccountServices _registerUserAccountServices;
-
         public AuthAdmController(
             IServiceLaucherService ServiceLaucherService
-            // IAccountManagerServices iAccountManagerServices,
-            // IAuthAdmServices authAdmServices,
-            //  ICompanyAuthServices companyAuthServices,
-            //  IRegisterUserAccountServices registerUserAccountServices
             )
-        {
-            _ServiceLaucherService = ServiceLaucherService;
-            // _iAccountManagerServices = iAccountManagerServices;
-            // _authAdmServices = authAdmServices;
-            // _companyAuthServices = companyAuthServices;
-            // _registerUserAccountServices = registerUserAccountServices;
-        }
+        {_ServiceLaucherService = ServiceLaucherService;}
 
 
         [HttpGet("GetBusinessFullAsync/{id:min(1)}")]
@@ -184,7 +169,7 @@ namespace Api.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpPost("TimedAccessControlStartEndPostAsync")]
         public async Task<IActionResult> AcesseTimeIntervalSimpleAsync(TimedAccessControlStartEndPostDto timedAccessControl)
         {
@@ -197,22 +182,6 @@ namespace Api.Controllers
         public async Task<IActionResult> GetTimedAccessControlAsync(int userId)
         {
             var result = await _ServiceLaucherService.AccountManagerServices.GetTimedAccessControlAsync(userId);
-
-            return Ok(result);
-        }
-
-        [HttpPut("ToggleTwoFactorAsync")]
-        public async Task<IActionResult> ToggleTwoFactorAsync([FromBody] ToggleTwoFactorDto toggleTwoFactor)
-        {
-            var result = await _ServiceLaucherService.AccountManagerServices.ToggleTwoFactorAsync(toggleTwoFactor);
-
-            return Ok(result);
-        }
-
-        [HttpGet("IsEnabledTwoFactorAsync/{userId:min(1)}")]
-        public async Task<IActionResult> IsEnabledTwoFactorAsync(int userId)
-        {
-            var result = await _ServiceLaucherService.AccountManagerServices.IsEnabledTwoFactorAsync(userId);
 
             return Ok(result);
         }

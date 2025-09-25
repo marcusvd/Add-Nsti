@@ -1,0 +1,40 @@
+<mat-card class="border-card-categories-divide-comp">
+  <div class="p-4 w-full grid-cols-1 gap-4">
+    <mat-card-title>Ativar Autenticador</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="formMain" (ngSubmit)="action()">
+        <mat-label>Código do autenticador</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          <input matInput formControlName="code" maxlength="6" autocomplete="one-time-code">
+          <mat-error *ngIf="formMain.get('code')?.invalid">Insira um código de 6 dígitos</mat-error>
+        </mat-form-field>
+
+        <!-- <button mat-button mat-raised-button color="primary" type="submit" [disabled]="loading || formMain.invalid">
+          Ativar
+        </button> -->
+        <div *ngIf="setupData">
+          <div  class="pb-4 grid justify-center">
+            <!-- [isDisabled]="loading || formMain.invalid" -->
+            <btn-g mat-dialog-close [btnType]="btnType" [name]="setupData.isTwoFactorEnabled ? 'Desabilitar' : 'Habilitar'" [icon]="lockIcon"  (btn)="action()"></btn-g>
+          </div>
+        </div>
+      </form>
+      <!-- <div>{{formMain.value | json}}</div> -->
+      <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
+
+      <mat-error *ngIf="error">{{ error }}</mat-error>
+
+      <div *ngIf="response">
+        <h3>2FA ativado com sucesso!</h3>
+        <p><strong>Códigos de recuperação:</strong></p>
+
+        <!-- <div *ngFor="let code of response.data.recoveryCodes">
+          {{ code }}
+        </div> -->
+        <mat-list>
+          <mat-list-item *ngFor="let code of response.data.recoveryCodes">{{ code }}</mat-list-item>
+        </mat-list>
+      </div>
+    </mat-card-content>
+  </div>
+</mat-card>

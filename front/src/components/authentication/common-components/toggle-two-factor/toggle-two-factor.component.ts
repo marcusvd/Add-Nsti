@@ -1,10 +1,11 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ImportsToogleTwoFactor } from './imports/imports-toogle-two-factor';
 import { BaseForm } from 'shared/inheritance/forms/base-form';
-import { ToggleTwoFactorDto } from 'components/authentication/dtos/toggle-two-factor-dto';
 import { AccountService } from 'components/authentication/services/account.service';
 import { FormBuilder } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+
+import { TwoFactorStatusViewModel, TwoFactorToggleDto } from 'components/authentication/dtos/t2-factor';
 
 @Component({
   selector: 'toggle-two-factor',
@@ -18,7 +19,6 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class ToggleTwoFactorComponent extends BaseForm implements OnInit {
 
   @Input() usrId!: number;
-  passwordtwoFactor = new ToggleTwoFactorDto();
 
   _accountService = inject(AccountService);
   _fb = inject(FormBuilder);
@@ -30,10 +30,10 @@ export class ToggleTwoFactorComponent extends BaseForm implements OnInit {
   ngOnInit(): void {
     this._accountService.IsEnabledTwoFactorAsync$(this.usrId)
       .subscribe({
-        next: (x => {
-          // console.log(x)
-          this.formLoad(x);
-          this.twoFactorOnChage(x);
+        next: ((x:TwoFactorStatusViewModel) => {
+          console.log(x)
+          this.formLoad(x.isEnabled);
+          this.twoFactorOnChage(x.isEnabled);
           // this.passwordWillExpires.willExpires = x;
           // this.passwordWillExpires.userId = this.userAccountId
           // this.formLoad(this.passwordWillExpires);
@@ -68,12 +68,12 @@ export class ToggleTwoFactorComponent extends BaseForm implements OnInit {
 
   toggle(x: MatCheckboxChange) {
 
-    const update: ToggleTwoFactorDto = this.formMain.value;
+    const update: TwoFactorToggleDto = this.formMain.value;
 
     const enabled: string = "Autenticação de dois fatores ativada.";
     const disabled: string = "Autenticação de dois fatores Desativadas.";
 
-    this._accountService.ToggleTwoFactor$(update).subscribe(
+    this._accountService.TwoFactorToggle$(update).subscribe(
       {
         next: (x => {
           if (x.succeeded && update.enable)

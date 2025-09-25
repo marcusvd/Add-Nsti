@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+// using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -10,6 +10,8 @@ using Authentication.Helpers;
 using Repository.Data.Context.Auth;
 using Domain.Entities.Authentication;
 using Authentication.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 
@@ -41,8 +43,12 @@ public static class IdentityConfiguration
         services.AddIdentity<UserAccount, Role>(opt =>
          {
              opt.SignIn.RequireConfirmedEmail = true;
+             //add TEST TWOFACTOR   
+             opt.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+
              //
              opt.User.RequireUniqueEmail = true;
+             //  opt.SignIn.RequireConfirmedAccount = true;
              //
              opt.Password.RequireDigit = false;
              opt.Password.RequireNonAlphanumeric = false;
@@ -53,19 +59,42 @@ public static class IdentityConfiguration
              opt.Lockout.AllowedForNewUsers = true;
              opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(3);
              opt.Lockout.MaxFailedAccessAttempts = 3;
+
+             // Configurações específicas do 2FA
+             opt.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+             opt.Tokens.ChangeEmailTokenProvider = TokenOptions.DefaultProvider;
+             opt.Tokens.ChangePhoneNumberTokenProvider = TokenOptions.DefaultPhoneProvider;
+             opt.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultProvider;
+             opt.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
+
+             //allow 2FA
+             opt.Tokens.ProviderMap.Add("Authenticator", new TokenProviderDescriptor(typeof(AuthenticatorTokenProvider<UserAccount>)));
+
          })
             .AddEntityFrameworkStores<IdImDbContext>()
            .AddDefaultTokenProviders()
+           .AddTokenProvider<AuthenticatorTokenProvider<UserAccount>>(TokenOptions.DefaultAuthenticatorProvider)
+
             .AddRoles<Role>()
            .AddRoleManager<RoleManager<Role>>()
 
             .AddPasswordValidator<PasswordValidatorPolicies<UserAccount>>()
            .AddRoleValidator<RoleValidator<Role>>()
-           .AddUserManager<UserManager<UserAccount>>()
-           .AddSignInManager<SignInManager<UserAccount>>()
+        //    .AddClaimsPrincipalFactory<UserAccount>()
+                .AddSignInManager<SignInManager<UserAccount>>()
 
            .AddUserStore<UserStore<UserAccount, Role, IdImDbContext, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>, IdentityUserToken<int>, IdentityRoleClaim<int>>>()
             .AddRoleStore<RoleStore<Role, IdImDbContext, int, UserRole, IdentityRoleClaim<int>>>();
+
+        // services.ConfigureApplicationCookie(options =>
+        // {
+        //     options.Cookie.Name = "YourAppCookie";
+        //     options.ExpireTimeSpan = TimeSpan.FromDays(30);
+        //     options.SlidingExpiration = true;
+        //     // options.LoginPath = "/Account/Login";
+        //     // options.AccessDeniedPath = "/Account/AccessDenied";
+        // });
+
 
         // services.AddScoped<IUserClaimsPrincipalFactory<UserAccount>, UserAccountClaimsPrincipalFactory>();
     }
@@ -74,11 +103,34 @@ public static class IdentityConfiguration
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         //
         services.AddScoped<JwtHandler>();
-    
-      
-        //  services.AddScoped<IRegisterUserAccountServices, UserAccountRepository>();
-        // services.AddScoped<IBusinessRepository, BusinessRepository>();
-        //
+
+        services.AddScoped<UserClaimsPrincipalFactory<UserAccount>>();
+
+        services.ConfigureApplicationCookie(options =>
+   {
+       options.LoginPath = "/Account/Login";
+       options.AccessDeniedPath = "/Account/AccessDenied";
+       options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+   });
+        //services.AddScoped<IUserClaimsPrincipalFactory<UserAccount>, UserClaimsPrincipalFactory<UserAccount>>();
+
+        services.Configure<CookieAuthenticationOptions>(
+              IdentityConstants.TwoFactorUserIdScheme,
+              options =>
+              {
+                  options.Cookie.Name = IdentityConstants.TwoFactorUserIdScheme;
+                  options.ExpireTimeSpan = TimeSpan.FromMinutes(15); // Tempo curto para segurança
+              });
+
+        services.AddHttpContextAccessor();
+
+        // services.AddAuthentication(options =>
+        // {
+        //     options.DefaultScheme = IdentityConstants.ApplicationScheme;
+        //     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+        // });
+
+
         services.AddScoped<IUrlHelper>(x =>
       {
           var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
@@ -90,9 +142,20 @@ public static class IdentityConfiguration
 
     public static void AddAuthorizationSettings(this IServiceCollection services)
     {
-        services.AddAuthorization(options =>
-            options.AddPolicy("TwoFactorEnabled",
-                x => x.RequireClaim("amr", "sub")));
+        // services.AddAuthorization(options =>
+        //     options.AddPolicy("TwoFactorEnabled",
+        //         x => x.RequireClaim("amr", "sub")));
+
+
+        services.AddAuthorization(auth =>
+        {
+            auth.AddPolicy("TwoFactorEnable", policy =>
+            {
+                policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == "amr" && c.Value == "sub"));
+            });
+        });
+
+
     }
 
 

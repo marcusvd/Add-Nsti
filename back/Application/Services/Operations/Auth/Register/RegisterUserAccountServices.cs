@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+
 using Domain.Entities.Authentication;
 using Authentication.Exceptions;
-using Microsoft.Extensions.Logging;
 using Application.Services.Operations.Auth.Dtos;
-using Authentication.Jwt;
 using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
 using Application.Exceptions;
@@ -12,23 +9,22 @@ using UnitOfWork.Persistence.Operations;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.System.BusinessesCompanies;
 using Application.Services.Shared.Dtos;
-
 namespace Application.Services.Operations.Auth.Register;
 
 public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAccountServices
 {
-    private readonly ILogger<RegisterUserAccountServices> _logger;
+
     private readonly IUnitOfWork _GENERIC_REPO;
+    private readonly IAuthServicesInjection _AUTH_SERVICES_INJECTION;
 
     public RegisterUserAccountServices(
-          JwtHandler jwtHandler,
-          IUrlHelper url,
           IUnitOfWork GENERIC_REPO,
-          ILogger<RegisterUserAccountServices> logger
-      ) : base(jwtHandler, logger, url, GENERIC_REPO)
+          IAuthServicesInjection AUTH_SERVICES_INJECTION
+      ) : base(GENERIC_REPO, AUTH_SERVICES_INJECTION)
     {
         _GENERIC_REPO = GENERIC_REPO;
-        _logger = logger;
+        _AUTH_SERVICES_INJECTION = AUTH_SERVICES_INJECTION;
+        // _logger = logger;
     }
 
     public async Task<UserToken> AddUserExistingCompanyAsync(AddUserExistingCompanyDto user, int companyId)
@@ -45,7 +41,7 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         var userAccount = CreateUserAccount(user, companyAuth.BusinessId, userProfileId).ToEntity() ?? (UserAccount)_GENERIC_REPO._GenericValidatorServices.ReplaceNullObj<UserAccount>();
 
-        var creationResult = await _GENERIC_REPO.UsersManager.CreateAsync(userAccount, user.Password);
+        var creationResult = await _AUTH_SERVICES_INJECTION.UsersManager.CreateAsync(userAccount, user.Password);
 
         companyAuth.CompanyUserAccounts.Add(new CompanyUserAccount { CompanyAuth = companyAuth, UserAccount = userAccount });
 
@@ -80,8 +76,12 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
 
         await UpdateUserRoles(updateRole);
 
+        var claims = await BuildUserClaims(userAccount);
+
         return await CreateAuthenticationResponseAsync(userAccount);
     }
+
+
     private async Task<CompanyAuth> GetCompanyAuthAsync(int companyAuthId)
     {
         return await _GENERIC_REPO.CompaniesAuth.GetByPredicate(
@@ -115,13 +115,13 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
     {
         if (await IsUserNameDuplicate(register.UserName))
         {
-            _logger.LogWarning("Duplicate username attempt: {UserName}", register.UserName);
+            // _logger.LogWarning("Duplicate username attempt: {UserName}", register.UserName);
             throw new AuthServicesException(AuthErrorsMessagesException.UserNameAlreadyRegisterd);
         }
 
         if (await IsEmailDuplicate(register.Email))
         {
-            _logger.LogWarning("Duplicate email attempt: {Email}", register.Email);
+            // _logger.LogWarning("Duplicate email attempt: {Email}", register.Email);
             throw new AuthServicesException(AuthErrorsMessagesException.EmailAlreadyRegisterd);
         }
     }
@@ -153,13 +153,13 @@ public class RegisterUserAccountServices : AuthenticationBase, IRegisterUserAcco
     }
     private async Task<bool> IsUserNameDuplicate(string userName)
     {
-        var userAccount = await _GENERIC_REPO.UsersManager.FindByNameAsync(userName);
+        var userAccount = await _AUTH_SERVICES_INJECTION.UsersManager.FindByNameAsync(userName);
 
         return userAccount != null;
     }
     private async Task<bool> IsEmailDuplicate(string email)
     {
-        var userAccount = await _GENERIC_REPO.UsersManager.FindByEmailAsync(email);
+        var userAccount = await _AUTH_SERVICES_INJECTION.UsersManager.FindByEmailAsync(email);
 
         return userAccount != null;
     }

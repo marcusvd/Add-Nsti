@@ -3,49 +3,39 @@ using Application.Services.Operations.Auth.CompanyAuthServices;
 using Application.Services.Operations.Auth.Login;
 using Application.Services.Operations.Auth.Register;
 using Application.Services.Shared.Operations;
-using Authentication.Jwt;
 using Authentication.Operations.AuthAdm;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Authentication.Operations.TwoFactorAuthentication;
 using UnitOfWork.Persistence.Operations;
 
 namespace Application.Services.Helpers.ServicesLauncher;
 
 public class ServiceLaucherService : IServiceLaucherService
 {
-    private readonly ILogger<AccountManagerServices> _LOGGER_AccountManagerServices;
-    private readonly ILogger<RegisterUserAccountServices> _LOGGER_RegisterUserAccountServices;
-    private readonly ILogger<LoginServices> _LOGGER_LoginServices;
-    private readonly ILogger<FirstRegisterBusinessServices> _LOGGER_FirstRegisterBusinessServices;
-
     private readonly IUnitOfWork _GENERIC_REPO;
-    private readonly IUrlHelper _URL;
-    private readonly JwtHandler _JWTHANDLER;
+    private readonly IAuthServicesInjection _AUTH_SERVICES_INJECTION;
     public ServiceLaucherService(
-        ILogger<AccountManagerServices> LOGGER_AccountManagerServices,
-        ILogger<RegisterUserAccountServices> LOGGER_RegisterUserAccountServices,
-        ILogger<LoginServices> LOGGER_LoginServices,
-        ILogger<FirstRegisterBusinessServices> LOGGER_FirstRegisterBusinessServices,
         IUnitOfWork GENERIC_REPO,
-        IUrlHelper URL,
-        JwtHandler JWTHANDLER
+        IAuthServicesInjection AUTH_SERVICES_INJECTION
     )
     {
-        _LOGGER_AccountManagerServices = LOGGER_AccountManagerServices;
-        _LOGGER_RegisterUserAccountServices = LOGGER_RegisterUserAccountServices;
-        _LOGGER_LoginServices = LOGGER_LoginServices;
-        _LOGGER_FirstRegisterBusinessServices = LOGGER_FirstRegisterBusinessServices;
         _GENERIC_REPO = GENERIC_REPO;
-        _URL = URL;
-        _JWTHANDLER = JWTHANDLER;
+        _AUTH_SERVICES_INJECTION = AUTH_SERVICES_INJECTION;
     }
 
+    private TwoFactorAuthenticationServices TWO_FACTOR_AUTHENTICATION_SERVICES;
+    public ITwoFactorAuthenticationServices TwoFactorAuthenticationServices
+    {
+        get
+        {
+            return TWO_FACTOR_AUTHENTICATION_SERVICES = TWO_FACTOR_AUTHENTICATION_SERVICES ?? new TwoFactorAuthenticationServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
+        }
+    }
     private AccountManagerServices _ACCOUNT_MANAGER_SERVICES;
     public IAccountManagerServices AccountManagerServices
     {
         get
         {
-            return _ACCOUNT_MANAGER_SERVICES = _ACCOUNT_MANAGER_SERVICES ?? new AccountManagerServices(_JWTHANDLER, _URL, _LOGGER_AccountManagerServices, _GENERIC_REPO);
+            return _ACCOUNT_MANAGER_SERVICES = _ACCOUNT_MANAGER_SERVICES ?? new AccountManagerServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
         }
     }
     private AuthAdmServices _AUTH_ADM_SERVICES;
@@ -61,7 +51,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _COMPANY_AUTH_SERVICES = _COMPANY_AUTH_SERVICES ?? new CompanyAuthServices(_GENERIC_REPO);
+            return _COMPANY_AUTH_SERVICES = _COMPANY_AUTH_SERVICES ?? new CompanyAuthServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
         }
     }
     private RegisterUserAccountServices _REGISTER_USER_ACCOUNT_SERVICES;
@@ -69,7 +59,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _REGISTER_USER_ACCOUNT_SERVICES = _REGISTER_USER_ACCOUNT_SERVICES ?? new RegisterUserAccountServices(_JWTHANDLER, _URL, _GENERIC_REPO, _LOGGER_RegisterUserAccountServices);
+            return _REGISTER_USER_ACCOUNT_SERVICES = _REGISTER_USER_ACCOUNT_SERVICES ?? new RegisterUserAccountServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
         }
     }
     private LoginServices LOGIN_SERVICES;
@@ -77,7 +67,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return LOGIN_SERVICES = LOGIN_SERVICES ?? new LoginServices(_LOGGER_LoginServices, _GENERIC_REPO, _JWTHANDLER, _URL);
+            return LOGIN_SERVICES = LOGIN_SERVICES ?? new LoginServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
         }
     }
     private FirstRegisterBusinessServices FIRST_REGISTER_BUSINESS_SERVICES;
@@ -85,7 +75,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return FIRST_REGISTER_BUSINESS_SERVICES = FIRST_REGISTER_BUSINESS_SERVICES ?? new FirstRegisterBusinessServices(_JWTHANDLER, _URL, _GENERIC_REPO, _LOGGER_FirstRegisterBusinessServices);
+            return FIRST_REGISTER_BUSINESS_SERVICES = FIRST_REGISTER_BUSINESS_SERVICES ?? new FirstRegisterBusinessServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
         }
     }
     private AddressServices ADDRESS_SERVICES;
@@ -104,4 +94,14 @@ public class ServiceLaucherService : IServiceLaucherService
             return CONTACT_SERVICES = CONTACT_SERVICES ?? new ContactServices(_GENERIC_REPO);
         }
     }
+
+
+    // private readonly ITwoFactorAuthenticationServices _TWO_FACTOR_AUTHENTICATION_SERVICES;
+    // ITwoFactorAuthenticationServices TwoFactorAuthenticationServices
+    // {
+    //     get
+    //     {
+    //         return _TWO_FACTOR_AUTHENTICATION_SERVICES = _TWO_FACTOR_AUTHENTICATION_SERVICES ?? new TwoFactorAuthenticationServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
+    //     }
+    // }
 }

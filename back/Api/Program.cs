@@ -3,6 +3,8 @@ using Application.Services.Helpers.Extensions;
 using Application.Services.Shared.Mappers.BaseMappers;
 using Authentication.Jwt;
 using Authentication.Settings;
+using Microsoft.AspNetCore.Identity;
+
 
 // using Authentication.Settings;
 using Repository.Data.Context;
@@ -15,8 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddNewtonsoftJsonControllers();
+
 builder.Services.AddIdentitySettings();
+
 builder.Services.AddDiIdentity();
+
 builder.Services.AddDiAuthentication();
 builder.Services.DiMappers();
 builder.Services.AddDiServicesRepositories();
@@ -36,6 +41,20 @@ builder.Services.AddAuthorizationSettings();
 //         x => x.RequireClaim("amr", "sub")));
 
 builder.Services.AddJwt(builder.Configuration);
+
+
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+{
+    opt.TokenLifespan = TimeSpan.FromMinutes(15);
+});
+
+// builder.Services.Configure<AuthenticatorTokenProviderOptions>(opt =>
+// {
+//     opt.TokenLifespan = TimeSpan.FromMinutes(15);
+// });
+
+
 
 builder.Services.AddAuthorizeAllControllers();
 

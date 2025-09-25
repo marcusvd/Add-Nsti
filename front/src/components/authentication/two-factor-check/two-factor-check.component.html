@@ -1,0 +1,14 @@
+<div class="grid grid-cols-1 justify-center p-4">
+  <two-factor-check-field [formMain]="formMain"></two-factor-check-field>
+
+  <div class="p-4 flex justify-center">
+    <btn-g mat-dialog-close [name]="'Autenticar'" [icon]="'lock_open'" (btn)="authenticate()"></btn-g>
+  </div>
+</div>
+
+<div>{{formMain.value | json}}</div>
+<!--
+<div class="p-4 flex justify-center">
+  <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Cadastrar'" [icon]="'lock_open'"
+    (btn)="register(token.sendForm())"></btn-g>
+</div> -->

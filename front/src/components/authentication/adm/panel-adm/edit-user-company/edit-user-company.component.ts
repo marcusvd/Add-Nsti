@@ -33,6 +33,9 @@ import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
 import { ContactService } from 'shared/components/contact/services/contact.service';
 import { TimedAccessControlComponent } from 'components/authentication/common-components/timed-access-control/timed-access-control.component';
 import { ToggleTwoFactorComponent } from 'components/authentication/common-components/toggle-two-factor/toggle-two-factor.component';
+import { TwoFactorSetupComponent } from 'components/authentication/two-factor-setup/two-factor-setup.component';
+import { TwoFactorEnableComponent } from 'components/authentication/two-factor-enable/two-factor-enable.component';
+import { Email2faTokenSendComponent } from 'components/authentication/email-2fa-token-send/email-2fa-token-send.component';
 // import { IgxTimePickerComponent } from 'igniteui-angular';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
@@ -53,7 +56,10 @@ import { ToggleTwoFactorComponent } from 'components/authentication/common-compo
     AccountStatusComponent,
     PasswordResetAdmComponent,
     TimedAccessControlComponent,
-    ToggleTwoFactorComponent
+    ToggleTwoFactorComponent,
+    TwoFactorEnableComponent,
+    TwoFactorSetupComponent,
+    Email2faTokenSendComponent
     // IgxTimePickerComponent
   ],
   providers: [
@@ -71,6 +77,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
     private _isUserRegisteredValidator: IsUserRegisteredValidator,
     private _router: Router,
     private _actRouter: ActivatedRoute,
+
     // private _warningsService: WarningsService,
     // private _snackBar: MatSnackBar
   ) { super() }
@@ -89,9 +96,11 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   email: string | undefined = '';
   userIdRoute!: number;
   lastLogin!: Date;
+  code2FaSendEmail!: Date | undefined;
   userAuth!: UserAccountAuthDto | undefined;
   userProfile!: UserProfileDto | undefined;
   willExpires!: Date;
+  toggleRefresh!: boolean;
 
   horaInicio: string = '08:00';
   horaFim: string = '18:00';
@@ -112,6 +121,10 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
       this._registerService.RequestEmailChange(changeEmail, this.backendEmailUpdate);
     }
 
+  }
+
+  toggleBtn(toggle: boolean) {
+    this.toggleRefresh = toggle;
   }
 
 
@@ -183,6 +196,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
     this.lastLogin = x?.userAccountAuth.lastLogin ?? this.minDate;
     this.userProfile = x?.userAccountProfile;
     this.email = x?.userAccountAuth.email;
+    this.code2FaSendEmail = x?.userAccountAuth.code2FaSendEmail;
 
     return this.formMain = this._fb.group({
       id: [x?.id, [Validators.required]],

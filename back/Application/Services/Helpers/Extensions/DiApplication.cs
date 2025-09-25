@@ -62,6 +62,7 @@ public static class DiApplication
         #endregion
         #region UnitOfWork
         services.AddScoped<IUnitOfWork, Worker>();
+        services.AddScoped<IAuthServicesInjection, AuthServicesInjection>();
         #endregion
         #region MailServers
         services.AddScoped<EmailServer>();

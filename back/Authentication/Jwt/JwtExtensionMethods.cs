@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 namespace Authentication.Jwt;
 
@@ -13,10 +14,20 @@ public static class JwtExtensionMethods
     {
         var jwtSettings = Configuration.GetSection("JwtSettings");
 
+
+
+
+
+
+
+
         services.AddAuthentication(x =>
              {
                  x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                  x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                 //
+                 x.DefaultScheme = IdentityConstants.ApplicationScheme;
+                 x.DefaultSignInScheme = IdentityConstants.ExternalScheme;
              }).AddJwtBearer(x =>
              {
                  x.RequireHttpsMetadata = false;
@@ -34,4 +45,7 @@ public static class JwtExtensionMethods
                  };
              });
     }
+
+
+
 }

@@ -11,21 +11,25 @@ using Application.Services.Operations.Companies.Dtos;
 using Application.Services.Operations.Profiles.Dtos;
 using Application.Services.Shared.Dtos;
 using UnitOfWork.Persistence.Operations;
+using Application.Services.Helpers.ServicesLauncher;
 
 
 namespace Application.Services.Operations.Auth.Register;
 
 public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterBusinessServices
 {
+    private readonly IAuthServicesInjection _AUTH_SERVICES_INJECTION;
     private readonly IUnitOfWork _GENERIC_REPO;
     public FirstRegisterBusinessServices(
-          JwtHandler jwtHandler,
-          IUrlHelper url,
+          //   JwtHandler jwtHandler,
+          //   IUrlHelper url,
           IUnitOfWork GENERIC_REPO,
-          ILogger<FirstRegisterBusinessServices> logger
-      ) : base(jwtHandler, logger, url, GENERIC_REPO)
+          IAuthServicesInjection AUTH_SERVICES_INJECTION
+        //   ILogger<FirstRegisterBusinessServices> logger
+      ) : base(GENERIC_REPO, AUTH_SERVICES_INJECTION)
     {
-        _GENERIC_REPO = GENERIC_REPO;
+                _GENERIC_REPO = GENERIC_REPO;
+                _AUTH_SERVICES_INJECTION = AUTH_SERVICES_INJECTION;
     }
 
     public async Task<UserToken> RegisterAsync(RegisterModelDto user)
@@ -54,7 +58,7 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
         //TODO: Remove this in production - only for testing
         // userAccount.EmailConfirmed = true;
 
-        var creationResult = await _GENERIC_REPO.UsersManager.CreateAsync(userAccount, user.Password);
+        var creationResult = await _AUTH_SERVICES_INJECTION.UsersManager.CreateAsync(userAccount, user.Password);
 
 
         _GENERIC_REPO.BusinessesProfiles.Add(businessProfile.ToEntity());
@@ -66,7 +70,7 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
             var genToken = GenerateUrlTokenEmailConfirmation(userAccount, "ConfirmEmailAddress", "auth");
 
             var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", "api/auth/ConfirmEmailAddress", "I.M - Link para confirmação de e-mail"]);
-           
+
             await SendEmailConfirmationAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
 
             var admRole = CreateRole("SYSADMIN", "Administrador");
@@ -81,12 +85,13 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
         else
             ResultUserCreation(creationResult.Succeeded, resultProfile, userAccount.Email, creationResult.Errors.ToString() ?? ($"User creation failed for {userAccount.Email}."));
 
+        // var claims = await BuildUserClaims(userAccount);
 
         return await CreateAuthenticationResponseAsync(userAccount);
 
     }
 
-    
+
     private UserAccount CreateUserAccount(RegisterModelDto user, BusinessAuth business, string userProfileId)
     {
 
@@ -167,6 +172,6 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
 
         return businessProfileDto;
     }
-   
+
 
 }

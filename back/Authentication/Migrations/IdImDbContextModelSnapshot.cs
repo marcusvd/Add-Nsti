@@ -188,6 +188,9 @@ namespace Authentication.Migrations
                     b.Property<int>("BusinessAuthId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Code2FaSendEmail")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");

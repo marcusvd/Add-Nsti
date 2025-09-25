@@ -10,6 +10,7 @@ public class UserAccountDto : RootBaseDto
     public required string UserProfileId { get; set; }
     public BusinessAuthDto BusinessAuth { get; set; } = BusinessAuthMapper.Incomplete();
     public DateTime LastLogin { get; set; }
+    public DateTime Code2FaSendEmail { get; set; }
     public TimedAccessControlDto TimedAccessControl { get; set; } = new TimedAccessControlDto();
     public DateTime WillExpire { get; set; }
     public string? RefreshToken { get; set; }
@@ -33,6 +34,7 @@ public static class UserAccountMapper
             UserName = dto.UserName,
             UserProfileId = dto.UserProfileId,
             LastLogin = dto.LastLogin,
+            Code2FaSendEmail = dto.Code2FaSendEmail,
             TimedAccessControl = dto.TimedAccessControl.ToEntity(),
             WillExpire = dto.WillExpire,
             RefreshToken = dto.RefreshToken,
@@ -58,6 +60,7 @@ public static class UserAccountMapper
             UserName = entity.UserName ?? "Cadastro Incompleto",
             UserProfileId = entity.UserProfileId,
             LastLogin = entity.LastLogin,
+            Code2FaSendEmail = entity.Code2FaSendEmail,
             TimedAccessControl = entity.TimedAccessControl.ToDto(),
             RefreshToken = entity.RefreshToken,
             DisplayUserName = entity.DisplayUserName,
@@ -76,6 +79,7 @@ public static class UserAccountMapper
             Id = 0,
             Deleted = DateTime.MinValue,
             Registered = DateTime.Now,
+            Code2FaSendEmail = DateTime.Now,
             BusinessAuthId = 0,
             UserName = "Cadastro Incompleto",
             UserProfileId = "Cadastro Incompleto",

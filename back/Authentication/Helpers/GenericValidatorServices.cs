@@ -9,10 +9,14 @@ namespace Authentication.Helpers;
 
 public class GenericValidatorServices : IGenericValidatorServices
 {
-    private readonly ILogger<GenericValidatorServices> _logger;
-    public GenericValidatorServices(ILogger<GenericValidatorServices> logger)
+    // private readonly ILogger _logger;
+    // private readonly ILogger<GenericValidatorServices> _logger;
+    public GenericValidatorServices(
+        // ILogger logger
+        // ILogger<GenericValidatorServices> logger
+        )
     {
-        _logger = logger;
+        // _logger = logger;
     }
 
     public void IsObjNull<T>(T obj) where T : class
@@ -22,8 +26,7 @@ public class GenericValidatorServices : IGenericValidatorServices
 
         if (!result.IsValid)
         {
-            _logger.LogError("Validation failed for {type}: {Errors}",
-            typeof(T).Name, string.Join(", ", result.Errors));
+            // _logger.LogError("Validation failed for {type}: {Errors}", typeof(T).Name, string.Join(", ", result.Errors));
             throw new ArgumentException(string.Join(", ", result.Errors));
         }
         // if (!result.IsValid)

@@ -5,6 +5,7 @@ export class UserAccountAuthDto {
   email!:string;
   emailConfirmed!:boolean;
   lastLogin!:Date;
+  code2FaSendEmail!:Date;
   willExpires!:Date;
   registered!:Date;
 }

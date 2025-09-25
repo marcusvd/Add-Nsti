@@ -39,8 +39,6 @@ namespace Authentication.Jwt;
                 claims: claims,
                 issuer: _jwtSettings["validIssuer"],
                 audience: _jwtSettings["validAudience"],
-                // issuer: _jwtSettings["im_Issuer"],
-                // audience: _jwtSettings["im_Audience"],
                 expires: DateTime.Now.AddHours(Double.Parse(_jwtSettings["expiresHours"]!)),
                 signingCredentials: GetSigningCredentials()
             );
@@ -55,7 +53,6 @@ namespace Authentication.Jwt;
                 Id = user.Id,
                 BusinessId = user.BusinessAuthId,
                 Roles = roles,
-                // CompanyUserAccounts = user.CompanyUserAccounts,
                 Action = ""
             };
 

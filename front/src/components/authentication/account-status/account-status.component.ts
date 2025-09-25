@@ -6,7 +6,6 @@ import { AccountStatusDto } from '../dtos/account-status-dto';
 import { FormBuilder } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { EmailConfirmManualDto } from '../dtos/email-confirm-manual-dto';
-import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
 import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto';
 
 @Component({
@@ -18,10 +17,10 @@ import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto
 })
 
 export class AccountStatusComponent extends BaseForm implements OnInit, AfterViewInit {
+
   ngAfterViewInit(): void {
     this.neverLoggedIn();
   }
-
 
   ngOnInit(): void {
     this.startInitial();
@@ -96,11 +95,11 @@ export class AccountStatusComponent extends BaseForm implements OnInit, AfterVie
       this.dateString = false;
     }
 
-
   }
 
 
   emailConfirmedOnChage(x: boolean) {
+
     if (x) {
       this.emailConfirmedLabel = 'Confirmado';
       this.emailConfirmedIcon = 'check';

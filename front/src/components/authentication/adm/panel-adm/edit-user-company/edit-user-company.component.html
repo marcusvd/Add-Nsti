@@ -68,16 +68,32 @@
 
         <div class="flex flex-col sm:flex-row w-full">
           <div class="flex flex-col flex-1 p-0 m-0">
-           <account-status [userName]="emailUserName()" [lastLogin]="lastLogin"></account-status>
+            <account-status [userName]="emailUserName()" [lastLogin]="lastLogin"></account-status>
+            <div class="p-4">
+              <two-factor-setup [toggleRefresh]="toggleRefresh">
+              </two-factor-setup>
+            </div>
+
+            <div class="p-4">
+              <two-factor-enable (toggleBtn)="toggleBtn($event)">
+              </two-factor-enable>
+            </div>
+            <div class="p-4">
+              <email-2fa-token-send [code2FaSendEmail]="code2FaSendEmail">
+              </email-2fa-token-send>
+            </div>
+
+            <!-- <toggle-two-factor [usrId]="userIdRoute"></toggle-two-factor> -->
+          </div>
+          <div class="flex flex-col flex-1 p-0 m-0">
+            <password-reset-adm [email]="email"></password-reset-adm>
+
+            <timed-access-control [usrId]="userIdRoute"></timed-access-control>
 
             <password-expires [willExpires]="willExpires" [userAccountId]="userIdRoute"></password-expires>
 
-            <toggle-two-factor [usrId]="userIdRoute"></toggle-two-factor>
-          </div>
-          <div class="flex flex-col flex-1 p-0 m-0">
-             <password-reset-adm [email]="email"></password-reset-adm>
 
-            <timed-access-control [usrId]="userIdRoute"></timed-access-control>
+
           </div>
         </div>
 

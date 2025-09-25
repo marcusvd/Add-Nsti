@@ -10,6 +10,10 @@ using Repository.Data.Operations.AuthRepository.UserAccountRepository;
 using Repository.Data.Operations.AuthRepository.BusinessRepository;
 using Repository.Data.Operations.Customers;
 using Repository.Data.Operations.AddressRepository;
+using Microsoft.AspNetCore.Http;
+using Authentication.Jwt;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace UnitOfWork.Persistence.Operations
 {
@@ -17,12 +21,16 @@ namespace UnitOfWork.Persistence.Operations
     {
         #region USER
         IUserProfileRepository UsersProfiles { get; }
-        IUserAccountRepository UsersAccounts { get; }
-        ITimedAccessControlRepository TimedAccessControls { get; }
-        UserManager<UserAccount> UsersManager { get; }
-        SignInManager<UserAccount> SignInManager { get; }
-        RoleManager<Role> RolesManager { get; }
-
+        // IUserAccountRepository UsersAccounts { get; }
+        // ITimedAccessControlRepository TimedAccessControls { get; }
+        // UserManager<UserAccount> UsersManager { get; }
+        // SignInManager<UserAccount> SignInManager { get; }
+        // RoleManager<Role> RolesManager { get; }
+        // IHttpContextAccessor HttpContextAccessor { get; }
+        // IUserClaimsPrincipalFactory<UserAccount> UserClaimsPrincipalFactory { get; }
+        // JwtHandler JwtHandler { get; }
+        // IUrlHelper UrlHelper { get; }
+        // ILogger Logger { get; }
         #endregion
 
         #region BUSINESS

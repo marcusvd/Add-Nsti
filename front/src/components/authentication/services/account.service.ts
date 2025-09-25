@@ -1,28 +1,28 @@
 
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 
 import { WarningsService } from 'components/warnings/services/warnings.service';
-import { take } from 'rxjs';
-import { BackEndService } from '../../../shared/services/back-end/backend.service';
-import { ConfirmEmail } from '../dtos/confirm-email';
-import { UserAccountAuthDto } from "../../authentication/dtos/user-account-auth-dto";
 import { environment } from 'environments/environment';
-import { Router } from '@angular/router';
-import { ForgotPassword } from '../dtos/forgot-password';
-import { ResetPassword } from '../dtos/reset-password';
-import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
-import { ConfirmEmailChangeDto } from '../dtos/confirm-email-change-dto';
-import { PasswordChangeDto } from '../dtos/password-change-dto';
-import { AccountStatusDto } from '../dtos/account-status-dto';
-import { EmailConfirmManualDto } from '../dtos/email-confirm-manual-dto';
+import { Observable, take } from 'rxjs';
+import { BackEndService } from '../../../shared/services/back-end/backend.service';
+import { UserAccountAuthDto } from "../../authentication/dtos/user-account-auth-dto";
 import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto';
-import { PasswordWillExpiresDto } from '../dtos/password-will-expires-dto';
-import { ResetStaticPasswordDto } from '../dtos/reset-static-password-dto';
-import { TimedAccessControlStartEndPostDto } from '../dtos/date-time-access-control-start-end-post-dto';
+import { AccountStatusDto } from '../dtos/account-status-dto';
+import { ConfirmEmail } from '../dtos/confirm-email';
+import { ConfirmEmailChangeDto } from '../dtos/confirm-email-change-dto';
 import { TimedAccessControlDto } from '../dtos/date-time-access-control-dto';
-import { ToggleTwoFactorDto } from '../dtos/toggle-two-factor-dto';
-import { TwoFactorCheckDto } from '../dtos/two-factor-check-dto';
+import { TimedAccessControlStartEndPostDto } from '../dtos/date-time-access-control-start-end-post-dto';
+import { EmailConfirmManualDto } from '../dtos/email-confirm-manual-dto';
+import { ForgotPassword } from '../dtos/forgot-password';
+import { PasswordChangeDto } from '../dtos/password-change-dto';
+import { PasswordWillExpiresDto } from '../dtos/password-will-expires-dto';
+import { ResetPassword } from '../dtos/reset-password';
+import { ResetStaticPasswordDto } from '../dtos/reset-static-password-dto';
+import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
+import {  ToggleAuthenticatorRequestViewModel, TwoFactorStatusViewModel, TwoFactorToggleDto, VerifyTwoFactorRequest } from '../dtos/t2-factor';
+import { ApiResponse } from '../two-factor-enable/dtos/authenticator-setup-response';
+import { AuthenticatorSetupResponse } from '../two-factor-setup/interfaces/authenticator-setup-response';
 
 
 @Injectable({
@@ -294,8 +294,8 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
     return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/MarkPasswordExpireAsync`, passwordWillExpires)
   }
 
-  ToggleTwoFactor$(toggleTwoFactor: ToggleTwoFactorDto) {
-    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ToggleTwoFactorAsync`, toggleTwoFactor)
+  TwoFactorToggle$(toggleTwoFactor: TwoFactorToggleDto) {
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/TwoFactorToggleAsync`, toggleTwoFactor)
   }
 
   isPasswordExpires$(id: number) {
@@ -303,7 +303,7 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   }
 
   IsEnabledTwoFactorAsync$(id: number) {
-    return this.loadById$<boolean>(`${environment._BACK_END_ROOT_URL}/authadm/IsEnabledTwoFactorAsync`, id.toString())
+    return this.loadById$<TwoFactorStatusViewModel>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/GetTwoFactorStatus`, id.toString())
   }
 
   staticPasswordDefined$(reset: ResetStaticPasswordDto) {
@@ -318,8 +318,16 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
     return this.loadById$<TimedAccessControlDto>(`${environment._BACK_END_ROOT_URL}/authadm/getTimedAccessControlAsync`, userId.toString())
   }
 
-  twoFactorCheckTokenAsync$(twoFactorCheck: TwoFactorCheckDto) {
-    return this.add$<ResponseIdentiyApiDto>(twoFactorCheck, `${environment._BACK_END_ROOT_URL}/auth/twofactorverify`);
+  twofactorverifyAsync$(twoFactorCheck: VerifyTwoFactorRequest) {
+    return this.add$<ApiResponse<any>>(twoFactorCheck, `${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/twofactorverify`);
+  }
+
+  GetAuthenticatorSetup(): Observable<AuthenticatorSetupResponse> {
+    return this.load$<AuthenticatorSetupResponse>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/GetAuthenticatorSetup`);
+  }
+
+  enableAuthenticator(request: ToggleAuthenticatorRequestViewModel): Observable<ApiResponse<any>> {
+    return this.add$<ApiResponse<any>>(request, `${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/EnableAuthenticator`);
   }
 
 

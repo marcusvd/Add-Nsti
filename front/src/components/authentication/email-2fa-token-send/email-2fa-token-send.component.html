@@ -1,0 +1,22 @@
+<div [formGroup]="formMain" *ngIf="formMain">
+  <mat-card class="border-card-categories-divide-comp">
+    <div class="p-4 w-full grid-cols-1 gap-4">
+      <div>
+        <h3 class="title-categories-divide-comp">Receber código 2FA via Email?</h3>
+      </div>
+            <div class="w-full grid grid-cols-[30px_120px_30px] items-center">
+        <div>
+          <mat-icon [class]="code2FaSendEmailLabelCssClass">{{code2FaSendEmailIcon}}</mat-icon>
+        </div>
+        <div>
+          <mat-label [class]="code2FaSendEmailLabelCssClass"><b>{{code2FaSendEmailLabel}}</b> </mat-label>
+          <!-- <mat-divider></mat-divider>
+          <mat-label *ngIf="passwordCode2FaSendEmail.Code2FaSendEmail" [class]="Code2FaSendEmailLabelCssClass"><b>{{Code2FaSendEmailLabelPassword}}</b> </mat-label> -->
+        </div>
+        <div>
+          <mat-checkbox  *ngIf="true" class="w-full" #confirmed (change)="this.actionExpire($event)" (change)="code2FaSendEmailOnChage(confirmed.checked)" formControlName="code2FaSendEmail"> </mat-checkbox>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

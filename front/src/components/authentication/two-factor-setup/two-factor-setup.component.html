@@ -1,0 +1,24 @@
+<mat-card *ngIf="!loading && setupData" class="border-card-categories-divide-comp">
+  <div class="p-4 w-full grid-cols-1 gap-4">
+    <mat-card>
+      <mat-card-title>Configurar Autenticador</mat-card-title>
+      <mat-card-content>
+        <p><strong>2FA ativado:</strong> {{ setupData?.isTwoFactorEnabled ? 'Sim' : 'Não' }}</p>
+
+        <div class="qr-container">
+          <img
+            [src]="'https://api.qrserver.com/v1/create-qr-code/?data=' + setupData?.authenticatorUri + '&size=200x200'"
+            alt="QR Code">
+        </div>
+
+        <!-- <div>{{setupData?.authenticatorUri + 'TESTE'}}</div> -->
+
+        <p>Escaneie o QR Code com seu aplicativo autenticador.</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
+
+    <mat-error *ngIf="error != ''">{{ error }}</mat-error>
+  </div>
+</mat-card>

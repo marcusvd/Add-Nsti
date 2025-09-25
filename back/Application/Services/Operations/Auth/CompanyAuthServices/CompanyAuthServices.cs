@@ -12,18 +12,23 @@ using Application.Services.Operations.Profiles.Dtos;
 
 namespace Application.Services.Operations.Auth.CompanyAuthServices;
 
-
 public class CompanyAuthServices : ICompanyAuthServices
 {
     private readonly IUnitOfWork _GENERIC_REPO;
+    private readonly IAuthServicesInjection _AUTH_SERVICES_INJECTION;
+
     // private readonly IObjectMapper _objectMapper;
 
     public CompanyAuthServices(
-          IUnitOfWork GENERIC_REPO
-        // //   IObjectMapper objectMapper
+          IUnitOfWork GENERIC_REPO,
+          IAuthServicesInjection AUTH_SERVICES_INJECTION
+
+      // //   IObjectMapper objectMapper
       )
     {
         _GENERIC_REPO = GENERIC_REPO;
+        _AUTH_SERVICES_INJECTION = AUTH_SERVICES_INJECTION;
+
         // _objectMapper = objectMapper;
     }
 
@@ -105,7 +110,7 @@ public class CompanyAuthServices : ICompanyAuthServices
     }
     private async Task<UserAccount> GetUserAccountByIdAsync(int id)
     {
-        return await _GENERIC_REPO.UsersAccounts.GetByPredicate(
+        return await _AUTH_SERVICES_INJECTION.UsersAccounts.GetByPredicate(
                 x => x.Id == id,
                 null,
                 selector => selector,
