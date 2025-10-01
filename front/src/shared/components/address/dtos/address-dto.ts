@@ -1,12 +1,12 @@
 export class AddressDto {
-  id!: number;
-  zipCode!: string;
-  street!: string;
-  number!: string;
-  district!: string;
-  city!: string;
-  state!: string;
-  complement!: string;
+  id: number = 0;
+  zipCode: string = '';
+  street: string = '';
+  number: string = '';
+  district: string = '';
+  city: string = '';
+  state: string = '';
+  complement: string = '';
 }
 export class ViaCepDto {
   id!: number;
@@ -30,4 +30,7 @@ export class ViaCepDto {
   siafi!: string;
 
   uf!: string;
+
+
+
 }

@@ -7,11 +7,13 @@ import { DefaultMessages } from 'shared/components/validators/default-messages';
 import { ValidatorMessages } from 'shared/components/validators/validators-messages';
 import { DatePipe } from '@angular/common';
 import { pipe } from 'rxjs';
+import { NavigationExtras, Router } from '@angular/router';
 
 
 export class BaseForm {
 
   private _snackBar = inject(MatSnackBar);
+  private _router = inject(Router);
 
   companyId = localStorage.getItem('companyId')
     ? JSON.parse(localStorage.getItem('companyId')!)
@@ -105,6 +107,21 @@ export class BaseForm {
     });
   }
 
+    callRouter(url: string, entity?: any) {
+
+      const objectRoute: NavigationExtras = {
+        state: {
+          entity
+        }
+      };
+
+      if (entity)
+        this._router?.navigate([url], objectRoute);
+      else
+        this._router?.navigateByUrl(url);
+
+    }
+
   alertSave(form: FormGroup) {
     if (!form?.valid) {
       alert('Todos os campos com (*) e em vermelho, são de preenchimento obrigatório. Preencha corretamente e tente novamente.')
@@ -113,7 +130,7 @@ export class BaseForm {
     }
     else
       return true;
-    
+
 
   }
 }

@@ -41,13 +41,13 @@ public class FirstRegisterBusinessServices : AuthenticationBase, IFirstRegisterB
 
         var companyId = Guid.NewGuid().ToString();
         var businessProfileId = Guid.NewGuid().ToString();
+        var userProfileId = Guid.NewGuid().ToString();
 
         var companyAuth = CreateCompanyAuth(user.CompanyName, companyId);
         var companyProfile = CreateCompany(companyId, user);
 
         var businessAuth = CreateBusinessAuth(companyAuth, businessProfileId);
 
-        var userProfileId = Guid.NewGuid().ToString();
         var userAccount = CreateUserAccount(user, businessAuth, userProfileId);
         var userProfile = CreateUserProfile(userProfileId);
 

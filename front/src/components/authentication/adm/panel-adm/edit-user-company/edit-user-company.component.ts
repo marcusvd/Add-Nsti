@@ -75,7 +75,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
     // private _addUserCompanyService: AddUserCompanyService,
     private _fb: FormBuilder,
     private _isUserRegisteredValidator: IsUserRegisteredValidator,
-    private _router: Router,
+    // private _router: Router,
     private _actRouter: ActivatedRoute,
 
     // private _warningsService: WarningsService,
@@ -93,10 +93,10 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   address!: FormGroup;
   contact!: FormGroup;
   oldEmail: string | undefined = '';
-  email: string | undefined = '';
+  email: string = '';
   userIdRoute!: number;
   lastLogin!: Date;
-  code2FaSendEmail!: Date | undefined;
+  onOffCode2FaSendEmail!: Date;
   userAuth!: UserAccountAuthDto | undefined;
   userProfile!: UserProfileDto | undefined;
   willExpires!: Date;
@@ -195,8 +195,8 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
     this.userAuth = x?.userAccountAuth
     this.lastLogin = x?.userAccountAuth.lastLogin ?? this.minDate;
     this.userProfile = x?.userAccountProfile;
-    this.email = x?.userAccountAuth.email;
-    this.code2FaSendEmail = x?.userAccountAuth.code2FaSendEmail;
+    this.email = x?.userAccountAuth.email ?? 'Inválido.';
+    this.onOffCode2FaSendEmail = x?.userAccountAuth.code2FaSendEmail ?? new Date();
 
     return this.formMain = this._fb.group({
       id: [x?.id, [Validators.required]],

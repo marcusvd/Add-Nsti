@@ -7,7 +7,8 @@ namespace Application.Services.Operations.Auth.Login;
 
 public interface ILoginServices
 {
-    Task<UserToken> LoginAsync(LoginModelDto user);
+    Task<ApiResponse<UserToken>> LoginAsync(LoginModelDto user);
+    Task<ApiResponse<string>> LogoutAsync();
     Task<DateTime> GetLastLogin(string email);
     Task<ClaimsPrincipal> BuildUserClaims(UserAccount userAccount);
     Task<UserAccount> GetUser(string email);

@@ -89,6 +89,25 @@ public class AccountManagerServices : AuthenticationBase, IAccountManagerService
 
         return await _AUTH_SERVICES_INJECTION.UsersManager.UpdateAsync(userAccount);
     }
+
+    public async Task<IdentityResult> ResendConfirmEmailAsync(string email)
+    {
+        var userAccount = await FindUserAsync(email);
+
+        if (!await IsAccountLockedOutAsync(userAccount) && !await IsEmailConfirmedAsync(userAccount))
+        {
+
+            var genToken = GenerateUrlTokenEmailConfirmation(userAccount, "ConfirmEmailAddress", "auth");
+
+            var dataConfirmEmail = DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", "api/auth/ConfirmEmailAddress", "I.M - Link para confirmação de e-mail"]);
+
+            await SendEmailConfirmationAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
+
+            return IdentityResult.Success;
+        }
+        return IdentityResult.Failed(new IdentityError() { Description = "Usuário bloqueado ou email ja confirmado." });
+    }
+
     public async Task<IdentityResult> ManualAccountLockedOut(AccountLockedOutManualDto emailConfirmManual)
     {
         var userAccount = await FindUserAsync(emailConfirmManual.Email);

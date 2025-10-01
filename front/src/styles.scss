@@ -42,6 +42,8 @@ mat-form-field {
     /* Cor do texto */
     --mdc-outlined-text-field-focus-input-text-color: #333;
     /* Cor do texto quando focado */
+
+
     //MAT-SELECT
     // Configurações específicas do mat-select
     --mdc-filled-text-field-container-color: #f0f0f0;
@@ -93,6 +95,29 @@ mat-form-field {
     --mat-radio-label-text-color: #333 !important;
 }
 
+
+.mat-mdc-checkbox {
+  /* Cor da borda do checkbox quando não selecionado */
+  --mdc-checkbox-unselected-icon-color: rgb(0, 156, 222) !important;
+
+  /* Cor do checkbox quando selecionado */
+  --mdc-checkbox-selected-icon-color: rgb(0, 156, 222) !important;
+
+  /* Cor do fundo do checkbox quando pressionado */
+  --mdc-checkbox-selected-pressed-icon-color: rgb(0, 156, 222) !important;
+
+  /* Cor do fundo do checkbox quando em foco */
+  --mdc-checkbox-selected-focus-icon-color: rgb(0, 156, 222) !important;
+
+  /* Cor do fundo do checkbox quando em hover */
+  --mdc-checkbox-selected-hover-icon-color: rgb(0, 156, 222) !important;
+
+  /* Cor do ripple (efeito de clique) */
+  --mat-checkbox-ripple-color: rgb(0, 156, 222) !important;
+
+  /* Cor do texto do label */
+  --mat-checkbox-label-text-color: #333 !important;
+}
 
 /* Opcional: Mudar cor do hover */
 

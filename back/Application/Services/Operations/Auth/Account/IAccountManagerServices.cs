@@ -11,6 +11,7 @@ public interface IAccountManagerServices
 {
     Task<IdentityResult> IsUserExistCheckByEmailAsync(string email);
     Task<IdentityResult> ConfirmEmailAddressAsync(ConfirmEmailDto confirmEmail);
+    Task<IdentityResult> ResendConfirmEmailAsync(string email);
     Task<IdentityResult> ForgotPasswordAsync(ForgotPasswordDto forgotPassword);
     Task<IdentityResult> ResetPasswordAsync(ResetPasswordDto resetPassword);
     Task<IdentityResult> PasswordChangeAsync(PasswordChangeDto passwordChange);

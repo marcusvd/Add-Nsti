@@ -1,19 +1,11 @@
 using Domain.Entities.Authentication;
-using Application.Exceptions;
 using Application.Services.Operations.Auth.Dtos;
-using Application.Services.Operations.Companies.Dtos;
-using Microsoft.EntityFrameworkCore;
-using Domain.Entities.System.BusinessesCompanies;
-using Application.Services.Shared.Dtos;
 using UnitOfWork.Persistence.Operations;
 using Application.Services.Operations.Auth;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication;
-using Authentication.Jwt;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Http;
 using Application.Services.Operations.Auth.Account.dtos;
+using System.Reflection.Metadata;
 
 namespace Authentication.Operations.TwoFactorAuthentication;
 
@@ -49,15 +41,20 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
             HasAuthenticator = hasAuthenticator,
             RecoveryCodesLeft = recoveryCodesLeft,
         };
-
     }
-    public async Task<IdentityResult> TwoFactorToggleAsync(TwoFactorToggleViewModel toggleTwoFactor)
+    public async Task<IdentityResult> OnOff2FaCodeViaEmailAsync(OnOff2FaCodeViaEmailViewModel request)
     {
-        var userAccount = await FindUserByIdAsync(toggleTwoFactor.UserId);
+        var userAccount = await FindUserAsync(request.Email);
 
         _GENERIC_REPO._GenericValidatorServices.IsObjNull(userAccount);
 
-        return await _AUTH_SERVICES_INJECTION.UsersManager.SetTwoFactorEnabledAsync(userAccount, toggleTwoFactor.Enable);
+        if (request.OnOff)
+            userAccount.Code2FaSendEmail = DateTime.MinValue;
+        else
+            userAccount.Code2FaSendEmail = DateTime.Now;
+
+        return await _AUTH_SERVICES_INJECTION.UsersManager.UpdateAsync(userAccount);
+
     }
 
     public async Task<bool> HandleTwoFactorAuthenticationAsync(UserAccount userAccount)
@@ -84,10 +81,15 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
 
         var token = await _AUTH_SERVICES_INJECTION.UsersManager.GenerateTwoFactorTokenAsync(userAccount, "Email");
 
-        string linkToken = $"http://localhost:4200/two-factor-check/{token}/{userAccount.Email}";
+        string linkToken = $"http://localhost:4200/two-factor-check/{token}" ;
+        // string linkToken = $"http://localhost:4200/two-factor-check/{token}/{userAccount.Email}";
+
+
 
         if (userAccount.Code2FaSendEmail == DateTime.MinValue)
-            await SendTwoFactorTokenAsync(userAccount, linkToken);
+            await SendTwoFactorTokenAsync(userAccount, token);
+        // if (userAccount.Code2FaSendEmail == DateTime.MinValue)
+        //     await SendTwoFactorTokenAsync(userAccount, linkToken);
 
         return true;
     }
@@ -95,17 +97,156 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
 
     private async Task SendTwoFactorTokenAsync(UserAccount userAccount, string token)
     {
+       string styleCss = @"
+          body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e1e1;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eeeeee;
+            padding-bottom: 20px;
+        }
+        .logo {
+            color: #0556cb;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 15px 0;
+            color: #1a1a1a;
+        }
+        .code-container {
+            background-color: #f0f7ff;
+            border: 1px dashed #0556cb;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            margin: 25px 0;
+        }
+        .verification-code {
+            font-size: 42px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #0556cb;
+            margin: 15px 0;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0556cb;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .detail-item {
+            display: flex;
+        }
+        .detail-label {
+            font-weight: 600;
+            min-width: 120px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+        .warning {
+            color: #d32f2f;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+        .support-link {
+            color: #0556cb;
+            text-decoration: none;
+        }
+        .support-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px 15px;
+            }
+            .verification-code {
+                font-size: 36px;
+                letter-spacing: 3px;
+            }
+        }
+       ";
+       
+        string htmlString = @$"
+<!DOCTYPE html>
+<html lang=""pt-BR"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <style>
+     {styleCss}
+    </style>
+</head>
+<body>
+    <div class=""container"">
+        <div class=""header"">
+            <div class=""logo"">I.M Integrações</div>
+            <h1 class=""title"">Autenticação de Login 2FA</h1>
+        </div>
+        
+        <p>Use o código abaixo para autenticar sua tentativa de login.</p>
+  
+
+        <div class=""code-container"">
+            <div class=""verification-code"">{token}</div>
+            <p>O código permanecerá válido pelos próximos 10 minutos.</p>
+        </div>
+        
+        <div class="" warning"">⚠️ Não compartilhe este código com ninguém.</div>
+        
+        <p>Se você não reconhece esta tentativa de login, ignore este e-mail e verifique a segurança de sua conta.</p>
+        
+        <div class=""footer"">
+            <p><strong>I.M Integrações</strong><br>
+            Caso tenha fechado a tela apos o login.  <a href=""http://localhost:4200/two-factor-check"" class=""support-link"">Clique aqui</a>.</p>
+        </div>
+    </div>
+</body>
+</html>";
         try
         {
             await SendAsync(To: userAccount.Email,
                     Subject: "I.M: Autenticação de dois fatores",
-                    Body: $"Código: Autenticação de dois fatores: {token}");
+                    Body: htmlString);
             // Body: $"Código: Autenticação de dois fatores: {"http://localhost:4200/two-factor-check"}{token.Replace("api/auth/twofactorverify", "")}");
         }
         catch (Exception ex)
         {
-            // 
-            // 
+            throw new Exception(ex.Message);
         }
     }
 
@@ -197,63 +338,6 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
     // public async Task<bool> TwoFactorVerifyAsync(string email, string token) => await VerifyTwoFactorTokenAsync(email, token);
 
 
-
-    public async Task<bool> VerifyTwoFactor(TwoFactorCheckViewModel model)
-    {
-
-        // ⭐⭐ ALTERNATIVA PRINCIPAL AO AuthenticateAsync ⭐⭐
-        // Recupera o usuário usando SignInManager (em vez de HttpContext.AuthenticateAsync)
-        var user = await _AUTH_SERVICES_INJECTION.SignInManager.GetTwoFactorAuthenticationUserAsync();
-
-        if (user == null)
-        {
-            // Se não encontrou o usuário, a sessão 2FA pode ter expirado
-
-            // Recarrega os provedores para a view
-            var tempUser = await _AUTH_SERVICES_INJECTION.UsersManager.FindByEmailAsync(model.Email);
-            if (tempUser != null)
-            {
-
-                model.Providers = await _AUTH_SERVICES_INJECTION.UsersManager.GetValidTwoFactorProvidersAsync(tempUser);
-            }
-
-            return false;
-
-
-        }
-
-        // Verifica o token 2FA
-        var isValidToken = await _AUTH_SERVICES_INJECTION.UsersManager.VerifyTwoFactorTokenAsync(
-            user, model.SelectedProvider, model.Token);
-
-        if (!isValidToken)
-        {
-            model.Providers = await _AUTH_SERVICES_INJECTION.UsersManager.GetValidTwoFactorProvidersAsync(user);
-            return false;
-        }
-
-        // Login bem-sucedido com 2FA
-        var result = await _AUTH_SERVICES_INJECTION.SignInManager.TwoFactorSignInAsync(
-            model.SelectedProvider, model.Token, model.RememberMe, rememberClient: false);
-
-        if (result.Succeeded)
-        {
-
-            return result.Succeeded;
-        }
-        else if (result.IsLockedOut)
-        {
-
-            return false;
-        }
-        else
-        {
-            model.Providers = await _AUTH_SERVICES_INJECTION.UsersManager.GetValidTwoFactorProvidersAsync(user);
-            return false;
-        }
-
-
-    }
 
 
 

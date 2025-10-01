@@ -8,7 +8,7 @@ import { RECAPTCHA_SETTINGS, RecaptchaFormsModule, RecaptchaModule, RecaptchaSet
    <div >
         <form #form="ngForm" >
             <div >
-                <re-captcha  id="recaptcha" name="recaptcha" #recaptcha="ngModel" [(ngModel)]="token" required [class.is-invalid]="recaptcha.invalid && (recaptcha.dirty || recaptcha.touched)"></re-captcha>
+                <re-captcha id="recaptcha" name="recaptcha" #recaptcha="ngModel" [(ngModel)]="token" required [class.is-invalid]="recaptcha.invalid && (recaptcha.dirty || recaptcha.touched)"></re-captcha>
             </div>
             <br>
             <div  class="error-message">
@@ -81,6 +81,7 @@ export class CaptchaComponent {
     else {
       return this.token
     }
+
   }
 
   resetCaptcha() {

@@ -9,3 +9,20 @@ mat-card {
   margin: 0 auto;
 }
 
+h3 {
+    font-weight: bolder;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // Centraliza verticalmente na tela
+}
+
+input{
+
+  justify-content: center;
+  align-items: center;
+  align-items: center;
+}

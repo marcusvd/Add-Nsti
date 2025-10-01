@@ -197,7 +197,7 @@ export class PanelAdmComponent extends ListPanelControlAdm implements OnInit{
       (companyAuth: CompanyAuth) => {
 
 
-        this.startSupply(`${environment._BACK_END_ROOT_URL}/AuthAdm/GetUsersByCompanyIdAsync`, companyAuth.id)
+        this.startSupply(`${environment._BACK_END_ROOT_URL}/AuthAdm/GetUsersByCompanyIdAsync`, companyAuth?.id ?? 0)
 
 
         // this.getUsersByCompanyIdAsync(companyAuth.id.toString()).subscribe(

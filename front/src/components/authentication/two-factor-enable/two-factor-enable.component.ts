@@ -12,6 +12,7 @@ import { AccountService } from '../services/account.service';
 import { ApiResponse, AuthenticatorSetupResponse, EnableAuthenticatorResponse } from './dtos/authenticator-setup-response';
 import { BtnGComponent } from 'shared/components/btn-g/btn-g.component';
 import { ToggleAuthenticatorRequestViewModel } from '../dtos/t2-factor';
+import { NgxMaskModule } from "ngx-mask";
 
 @Component({
   selector: 'two-factor-enable',
@@ -25,6 +26,7 @@ import { ToggleAuthenticatorRequestViewModel } from '../dtos/t2-factor';
     ReactiveFormsModule,
     MatListModule,
     MatProgressSpinnerModule,
+    NgxMaskModule
   ],
   templateUrl: './two-factor-enable.component.html',
   styleUrl: './two-factor-enable.component.scss'
@@ -90,8 +92,6 @@ export class TwoFactorEnableComponent extends BaseForm implements AfterViewInit 
 
     this.btnType = request.enabled ? 'green' : 'red';
     this.lockIcon = request.enabled ? 'lock_close' : 'lock_open';
-
-
     this._accountService.enableAuthenticator(request).subscribe({
       next: (res) => {
         this.response = res;

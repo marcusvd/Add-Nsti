@@ -1,7 +1,10 @@
 <mat-card *ngIf="!loading && setupData" class="border-card-categories-divide-comp">
   <div class="p-4 w-full grid-cols-1 gap-4">
     <mat-card>
-      <mat-card-title>Configurar Autenticador</mat-card-title>
+       <div>
+        <h3 class="title-categories-divide-comp">Configurar Autenticador</h3>
+      </div>
+
       <mat-card-content>
         <p><strong>2FA ativado:</strong> {{ setupData?.isTwoFactorEnabled ? 'Sim' : 'Não' }}</p>
 

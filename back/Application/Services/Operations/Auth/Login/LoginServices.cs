@@ -30,7 +30,7 @@ public partial class LoginServices : AuthenticationBase, ILoginServices
         // _SERVICE_LAUCHER_SERVICE = SERVICE_LAUCHER_SERVICE;
     }
 
-    public async Task<UserToken> LoginAsync(LoginModelDto user)
+    public async Task<ApiResponse<UserToken>> LoginAsync(LoginModelDto user)
     {
         _GENERIC_REPO._GenericValidatorServices.IsObjNull(user);
 
@@ -54,61 +54,65 @@ public partial class LoginServices : AuthenticationBase, ILoginServices
         await ValidateAccountStatusAsync(userAccount);
 
         // var result = await IsPasswordValidAsync(userAccount, user.Password);
-        var result = await LoginAction(userAccount, user.Password);
-
-        // await IsValidUserAccount(userAccount.Email, !result.Succeeded);
-
-        var twoFactor = new TwoFactorAuthenticationServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
-
-        if (await twoFactor.HandleTwoFactorAuthenticationAsync(userAccount))
-        {
-
-
-            //     _logger.LogInformation("2FA required for user: {UserId}", userAccount.Id);
-            return await CreateTwoFactorResponse(userAccount);
-        }
-
-        // _logger.LogInformation("Successful login for user: {UserId}", userAccount.Id);
-
-        await WriteLastLogin(userAccount.Email);
-
-        return await CreateAuthenticationResponseAsync(userAccount);
-
-        // return new UserToken();
-    }
-
-
-
-
-    private async Task<SignInResult> LoginAction(UserAccount userAccount, string pwd)
-    {
-        var result = await _AUTH_SERVICES_INJECTION.SignInManager.PasswordSignInAsync(userAccount, pwd, true, true);
+        
+        var result = await PasswordSignInAsync(userAccount, user.Password, true, true);
 
         if (result.Succeeded)
         {
-            // _logger.LogInformation("Usuário logado.");
-            // return RedirectToLocal(returnUrl);
+           
+
+            var twoFactor = new TwoFactorAuthenticationServices(_GENERIC_REPO, _AUTH_SERVICES_INJECTION);
+
+            if (await twoFactor.HandleTwoFactorAuthenticationAsync(userAccount))
+            {
+
+                var resultRequestWith2Fa = new ApiResponse<UserToken>()
+                {
+                    Success = true,
+                    Message = $"Successful login for user: {userAccount.Email}",
+                    Data = await CreateTwoFactorResponse(userAccount),
+                };
+
+                //     _logger.LogInformation("2FA required for user: {UserId}", userAccount.Id);
+                return resultRequestWith2Fa;
+            }
+
+            // _logger.LogInformation("Successful login for user: {UserId}", userAccount.Id);
+
+            await WriteLastLogin(userAccount.Email);
+
+            var resultRequest = new ApiResponse<UserToken>()
+            {
+                Success = true,
+                Message = $"Successful login for user: {userAccount.Email}",
+                Data = await CreateAuthenticationResponseAsync(userAccount),
+            };
+
+            return resultRequest;
         }
-        if (result.RequiresTwoFactor)
+
+
+
+
+        return new ApiResponse<UserToken>()
         {
-            return result;
-            // Redireciona para página de verificação 2FA
-            // return RedirectToAction(nameof(VerifyTwoFactor), new { returnUrl, model.RememberMe });
-        }
-        if (result.IsLockedOut)
-        {
-            return result;
-            // _logger.LogWarning("Conta bloqueada.");
-            // return RedirectToAction(nameof(Lockout));
-        }
-        else
-        {
-            return result;
-            // ModelState.AddModelError(string.Empty, "Tentativa de login inválida.");
-            // return View(model);
-        }
+            Success = false,
+            Message = $"login fail for user: {userAccount.Email}",
+            Data = new UserToken(),
+        };
     }
 
+    public async Task<ApiResponse<string>> LogoutAsync()
+    {
+        await _AUTH_SERVICES_INJECTION.SignInManager.SignOutAsync();
+        
+
+        return new ApiResponse<string>()
+        {
+            Success = true,
+            Message = "Logout realizado com sucesso"
+        };
+    }
 
     public async Task<UserAccount> GetUser(string email)
     {
@@ -160,17 +164,17 @@ public partial class LoginServices : AuthenticationBase, ILoginServices
     // }
 
 
-    private async Task<bool> IsValidUserAccount(string userEmail, bool result)
-    {
-        if (result)
-        {
+    // private async Task<bool> IsValidUserAccount(string userEmail, bool result)
+    // {
+    //     if (result)
+    //     {
 
-            // _logger.LogWarning("Invalid password attempt for user: {Email}", userEmail);
-            throw new AuthServicesException(AuthErrorsMessagesException.InvalidUserNameOrPassword);
-        }
+    //         // _logger.LogWarning("Invalid password attempt for user: {Email}", userEmail);
+    //         throw new AuthServicesException(AuthErrorsMessagesException.InvalidUserNameOrPassword);
+    //     }
 
-        return await Task.FromResult(result);
-    }
+    //     return await Task.FromResult(result);
+    // }
 
     private async Task ValidateAccountStatusAsync(UserAccount userAccount)
     {

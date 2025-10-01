@@ -1,16 +1,15 @@
-<div class="w-full" [formGroup]="formMain">
 
-  <div>
-    <mat-label class="text-slate-900"> <b>2F Código</b></mat-label>
-    <mat-form-field class="w-full" appearance="outline">
-      <input #recoveryCode matInput type="text" formControlName="token" aria-label="token">
-      <mat-error>
-        <span *ngIf="formErrorAndTouched(formMain, 'token','required')">{{defaultMessages.requiredMsg}}</span>
-        <!-- <span *ngIf="formErrorAndTouched(formMain, 'recoveryCode','recoveryCode')">{{defaultMessages.emailMsg}}</span> -->
-        <!-- <span *ngIf="formErrorAndTouched(formMain, 'recoveryCode','inUse')">{{defaultMessages.emailDuplicateMsg}}</span> -->
-      </mat-error>
-      <!-- <mat-icon class="main-color-scss" matPrefix>recoveryCode</mat-icon> -->
-    </mat-form-field>
+  <div class="w-full" [formGroup]="formMain">
+    <div>
+      <div class="p-4">
+        <mat-label class="text-slate-900"> <b>Insira código 2FA e clique no botão.</b></mat-label>
+      </div>
+      <mat-form-field class="w-full" appearance="outline">
+        <input #recoveryCode matInput type="text" formControlName="code" aria-label="code">
+        <mat-error>
+          <span *ngIf="formErrorAndTouched(formMain, 'code','required')">{{defaultMessages.requiredMsg}}</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
-</div>

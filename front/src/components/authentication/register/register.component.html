@@ -97,8 +97,7 @@
                 <mat-error>
                   <span
                     *ngIf="formErrorAndTouched(formMain, 'confirmPassword','required')">{{defaultMessages.requiredMsg}}</span>
-                  <span *ngIf="formErrorAndTouched(formMain, 'confirmPassword','invalidPasswordConfirmation')">{{'As
-                    senhas não coincidem.'}}</span>
+                  <span *ngIf="formErrorAndTouched(formMain, 'confirmPassword','invalidPasswordConfirmation')">{{'As senhas não coincidem.'}}</span>
                 </mat-error>
                 <mat-icon class="main-color-scss" matPrefix>https</mat-icon>
                 <mat-icon class="main-color-scss cursor-pointer" matSuffix

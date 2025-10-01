@@ -30,5 +30,10 @@ export class VerifyTwoFactorRequest {
   email!: string;
   provider!: string;
   token!: string;
-  rememberMe!: string;
+  rememberMe!: boolean;
+}
+export class OnOff2FaCodeViaEmail {
+
+  email!: string;
+  onOff!: boolean;
 }

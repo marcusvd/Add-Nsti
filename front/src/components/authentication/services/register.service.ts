@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { BackEndService } from "shared/services/back-end/backend.service";
 import { take } from "rxjs";
 import { FormGroup } from "@angular/forms";
-import { RegisterDto } from "../dtos/register-dto";
+import { Register } from "../dtos/register";
 import { AddUserExistingCompanyDto } from "../dtos/add-user-existing-company-dto";
 import { UserTokenDto } from "../dtos/user-token-dto";
 import { UpdateUserAccountEmailDto } from "../dtos/update-user-account-email-dto";
@@ -12,15 +12,15 @@ import { WarningsService } from "components/warnings/services/warnings.service";
 @Injectable({ providedIn: 'root' })
 
 
-export class RegisterService extends BackEndService<RegisterDto> {
+export class RegisterService extends BackEndService<Register> {
 
   private _warningsService  = inject(WarningsService);
 
   constructor(
   ) { super() }
 
-  AddUser(user: RegisterDto, form: FormGroup, url: string) {
-    return this.add$<RegisterDto>(user, url).pipe(take(1));
+  AddUser(user: Register, form: FormGroup, url: string) {
+    return this.add$<Register>(user, url).pipe(take(1));
   }
 
 

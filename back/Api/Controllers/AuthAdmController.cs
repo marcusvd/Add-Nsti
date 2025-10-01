@@ -113,6 +113,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("PasswordChangeAsync")]
+        [AllowAnonymous]
         public async Task<IActionResult> PasswordChangeAsync([FromBody] PasswordChangeDto passwordChange)
         {
             return Ok(await _ServiceLaucherService.AccountManagerServices.PasswordChangeAsync(passwordChange));
@@ -137,6 +138,9 @@ namespace Api.Controllers
 
             return Ok(result);
         }
+
+       
+
 
         [HttpPut("ManualAccountLockedOut")]
         public async Task<IActionResult> ManualAccountLockedOut([FromBody] AccountLockedOutManualDto AccountLockedOutManual)

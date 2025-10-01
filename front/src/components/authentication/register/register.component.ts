@@ -18,6 +18,7 @@ import { PasswordConfirmationValidator } from '../validators/password-confirmati
 import { PasswordValidator } from '../validators/password-validator';
 import { RegisterHelper } from './helper/register-helper';
 import { ImportsRegister } from './imports/imports-register';
+import { Register } from '../dtos/register';
 
 
 @Component({
@@ -41,13 +42,10 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
   constructor(
     private _registerService: RegisterService,
-    private _fb: FormBuilder,
-    private _isUserRegisteredValidator: IsUserRegisteredValidator,
-    private _router: Router,
+    // private _router: Router,
     private _warningsService: WarningsService,
-    private _contactService: ContactService,
-    override _addressService: AddressService,
-  ) { super(_addressService) }
+
+  ) { super() }
 
 
   loginErrorMessage: string = '';
@@ -57,7 +55,7 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
   register(tokenCaptcha: string | undefined) {
 
-    const user: any = this.formMain.value;
+    const user: Register = this.formMain.value;
 
     if (this.alertSave(this.formMain)) {
       if (this.formMain.valid && tokenCaptcha) {
@@ -71,7 +69,8 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
                   btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
                   body: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
                 }).subscribe(result => {
-                  this._router.navigateByUrl('login');
+                  this.callRouter('login');
+                  // this._router.navigateByUrl('login');
                 })
 
               }, 5000);
@@ -79,7 +78,7 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
             }, error: (err: any) => {
               this.reCaptcha.resetCaptcha();
               const erroCode: string = err?.error?.Message?.split('|');
-              console.log(erroCode)
+              console.log(err)
 
             }
           })
@@ -88,18 +87,21 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
     }
   }
 
-  formLoad() {
-    return this.formMain = this._fb.group({
-      userName: ['', [Validators.required, Validators.minLength(3)]],
-      companyName: ['', [Validators.required, Validators.minLength(3)]],
-      email: new FormControl('', { validators: [Validators.required, Validators.maxLength(50), Validators.email], asyncValidators: [this._isUserRegisteredValidator.validate.bind(this._isUserRegisteredValidator)] }),
-      password: ['', [Validators.required, Validators.minLength(3)]],
-      cnpj: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]],
-      address: this.address = this._addressService.formLoad(),
-      contact: this.contact = this._contactService.formLoad()
-    }, { validators: [PasswordConfirmationValidator(), PasswordValidator()] })
-  }
+
+//  get checkStatus() {
+//     if(this.formMain.get('userName')?.valid &&
+//       this.formMain.get('companyName')?.valid &&
+//       this.formMain.get('email')?.valid &&
+//       this.formMain.get('password')?.valid &&
+//       this.formMain.get('cnpj')?.valid &&
+//       this.formMain.get('confirmPassword')?.valid) {
+//       return true;
+//     }
+//     else
+//       return false;
+//   }
+
+
 
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
@@ -124,7 +126,7 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
   }
 
   ngOnInit(): void {
-    this.formLoad();
+    this.formLoadCnpj();
   }
 
 }

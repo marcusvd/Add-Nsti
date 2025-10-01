@@ -20,7 +20,7 @@ import { PasswordWillExpiresDto } from '../dtos/password-will-expires-dto';
 import { ResetPassword } from '../dtos/reset-password';
 import { ResetStaticPasswordDto } from '../dtos/reset-static-password-dto';
 import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
-import {  ToggleAuthenticatorRequestViewModel, TwoFactorStatusViewModel, TwoFactorToggleDto, VerifyTwoFactorRequest } from '../dtos/t2-factor';
+import { OnOff2FaCodeViaEmail, ToggleAuthenticatorRequestViewModel, TwoFactorStatusViewModel, TwoFactorToggleDto, VerifyTwoFactorRequest } from '../dtos/t2-factor';
 import { ApiResponse } from '../two-factor-enable/dtos/authenticator-setup-response';
 import { AuthenticatorSetupResponse } from '../two-factor-setup/interfaces/authenticator-setup-response';
 
@@ -328,6 +328,10 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
   enableAuthenticator(request: ToggleAuthenticatorRequestViewModel): Observable<ApiResponse<any>> {
     return this.add$<ApiResponse<any>>(request, `${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/EnableAuthenticator`);
+  }
+
+  OnOff2FaCodeViaEmailAsync$(request: OnOff2FaCodeViaEmail): Observable<ResponseIdentiyApiDto> {
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/OnOff2FaCodeViaEmailAsync`, request);
   }
 
 

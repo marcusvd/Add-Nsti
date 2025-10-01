@@ -8,9 +8,9 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   const router = inject(Router);
 
-  const userToken: UserTokenDto = JSON.parse(localStorage.getItem("myUser") ?? '{}');
+  const userToken: UserTokenDto = JSON.parse(localStorage.getItem("userToken") ?? '{}');
 
-return userToken.authenticated ? true : router.createUrlTree(['/login']);
+  return userToken.authenticated ? true : router.createUrlTree(['/login']);
 
   // if (userToken.companyUserAccounts.length > 0)
 

@@ -4,7 +4,7 @@ import { UserTokenDto } from '../dtos/user-token-dto';
 
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
-  const token = (JSON.parse(localStorage.getItem("myUser") ?? '{}') as UserTokenDto).token;
+  const token = (JSON.parse(localStorage.getItem("userToken") ?? '{}') as UserTokenDto).token;
 
   if (token) {
     const cloned = req.clone({
@@ -14,6 +14,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
     });
     return next(cloned);
   }
-  
+
   return next(req);
 };

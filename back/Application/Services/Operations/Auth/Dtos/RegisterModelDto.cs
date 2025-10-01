@@ -10,8 +10,8 @@ public class RegisterModelDto
     public required string UserName { get; set; }
     public required string CompanyName { get; set; }
     public required string CNPJ { get; set; }
-    public string? Password { get; set; }
+    public required string Password { get; set; }
     public string? ConfirmPassword { get; set; }
-    public AddressDto? Address { get; set; }
-    public ContactDto? Contact { get; set; }
+    public AddressDto? Address { get; set; } = AddressMapper.Incomplete();
+    public ContactDto? Contact { get; set; } = ContactMapper.Incomplete();
 }

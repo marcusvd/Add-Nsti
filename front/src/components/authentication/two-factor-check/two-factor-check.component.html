@@ -1,14 +1,21 @@
-<div class="grid grid-cols-1 justify-center p-4">
-  <two-factor-check-field [formMain]="formMain"></two-factor-check-field>
+<div class="w-full flex sm:justify-center">
+<mat-card class="p-4 w-[500px] border-card-categories-divide-comp">
 
-  <div class="p-4 flex justify-center">
-    <btn-g mat-dialog-close [name]="'Autenticar'" [icon]="'lock_open'" (btn)="authenticate()"></btn-g>
+  <div>
+    <p class="text-color-main font-bold">
+      I.M Sistemas / verificação em duas etapas
+    </p>
+
   </div>
+<div class="grid grid-cols-1  justify-center p-4">
+     <div>
+      <div class="pl-4 pr-4 flex justify-center">
+        <two-factor-check-field [formMain]="formMain"></two-factor-check-field>
+      </div>
+      <div class="pl-4 pr-4 pb-4 flex justify-center">
+        <btn-g mat-dialog-close [name]="'Autenticar'" [icon]="'lock_open'" (btn)="authenticate()"></btn-g>
+      </div>
+    </div>
 </div>
-
-<div>{{formMain.value | json}}</div>
-<!--
-<div class="p-4 flex justify-center">
-  <btn-g mat-dialog-close [isDisabled]="token.token == undefined" [name]="'Cadastrar'" [icon]="'lock_open'"
-    (btn)="register(token.sendForm())"></btn-g>
-</div> -->
+</mat-card>
+</div>

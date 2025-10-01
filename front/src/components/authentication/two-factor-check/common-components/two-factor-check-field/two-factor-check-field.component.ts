@@ -16,7 +16,7 @@ import { BaseForm } from 'shared/inheritance/forms/base-form';
     MatIconModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
   ],
   templateUrl: './two-factor-check-field.component.html',
   styleUrl: './two-factor-check-field.component.scss'

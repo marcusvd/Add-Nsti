@@ -8,9 +8,9 @@ public class LoginRequest
 
 public class VerifyTwoFactorRequestViewModel
 {
-    public string Email { get; set; }
+    public required string Email { get; set; }
     public string Provider { get; set; } = "Email";
-    public string Token { get; set; }
+    public required string Code { get; set; }
     public bool RememberMe { get; set; } = true;
 }
 
@@ -34,13 +34,7 @@ public class RegisterRequest
     public string ConfirmPassword { get; set; }
 }
 
-public class ApiResponse<T>
-{
-    public bool Success { get; set; }
-    public string Message { get; set; }
-    public T Data { get; set; }
-    public IEnumerable<string> Errors { get; set; }
-}
+
 
 public class LoginResponse
 {

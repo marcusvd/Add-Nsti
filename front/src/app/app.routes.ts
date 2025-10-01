@@ -14,7 +14,7 @@ import { TwoFactorCheckComponent } from 'components/authentication/two-factor-ch
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   // { path: 'login', component: RegisterComponent },
-  { path: 'two-factor-check/:token/:email', component: TwoFactorCheckComponent },
+  { path: 'two-factor-check', component: TwoFactorCheckComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'confirm-email', component: ConfirmEmailComponent },
   { path: 'confirm-request-email-change', component: ConfirmEmailChangedComponent },

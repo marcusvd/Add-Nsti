@@ -53,7 +53,7 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
     private _addUserCompanyService: CompanyService,
     private _fb: FormBuilder,
     private _isUserRegisteredValidator: IsUserRegisteredValidator,
-    private _router: Router,
+    // private _router: Router,
     private _actRouter: ActivatedRoute,
     private _warningsService: WarningsService,
     // private _snackBar = inject(MatSnackBar);
@@ -105,7 +105,8 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
           next: (user) => {
             this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
 
-            this._router.navigateByUrl(`users/adm-list/${this.businessId}`);
+           this.callRouter(`users/adm-list/${this.businessId}`);
+            // this._router.navigateByUrl(`users/adm-list/${this.businessId}`);
 
           }, error: (err: any) => {
             console.log(err)

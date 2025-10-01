@@ -4,13 +4,13 @@ namespace Application.Services.Shared.Dtos;
 
 public class AddressDto : RootBase
 {
-    public required string ZipCode { get; set; }
-    public required string Street { get; set; }
-    public required string Number { get; set; }
-    public required string District { get; set; }
-    public required string City { get; set; }
-    public required string State { get; set; }
-    public string? Complement { get; set; }
+    public required string ZipCode { get; set; } = string.Empty;
+    public required string Street { get; set; } = string.Empty;
+    public required string Number { get; set; } = string.Empty;
+    public required string District { get; set; } = string.Empty;
+    public required string City { get; set; } = string.Empty;
+    public required string State { get; set; } = string.Empty;
+    public string Complement { get; set; } = string.Empty;
 }
 
 public static class AddressMapper

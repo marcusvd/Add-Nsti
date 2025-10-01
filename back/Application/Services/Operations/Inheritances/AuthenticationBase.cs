@@ -15,14 +15,14 @@ namespace Application.Services.Operations.Auth;
 
 public class AuthenticationBase
 {
-        private readonly IAuthServicesInjection _AUTH_SERVICES_INJECTION;
+    private readonly IAuthServicesInjection _AUTH_SERVICES_INJECTION;
 
     public AuthenticationBase(
          IUnitOfWork GENERIC_REPO,
          IAuthServicesInjection AUTH_SERVICES_INJECTION
         )
     {
-                _AUTH_SERVICES_INJECTION = AUTH_SERVICES_INJECTION;
+        _AUTH_SERVICES_INJECTION = AUTH_SERVICES_INJECTION;
     }
 
     private protected async Task<UserAccount> FindUserAsync(string userNameOrEmail)
@@ -48,11 +48,23 @@ public class AuthenticationBase
         return await _AUTH_SERVICES_INJECTION.UsersManager.IsEmailConfirmedAsync(userAccount);
     }
 
-    private protected async Task<IdentityResult> IsPasswordValidAsync(UserAccount userAccount, string password)
+    private protected async Task<IdentityResult> CheckPasswordAsync(UserAccount userAccount, string password)
     {
         var isValid = await _AUTH_SERVICES_INJECTION.UsersManager.CheckPasswordAsync(userAccount, password);
 
         if (isValid)
+            return await _AUTH_SERVICES_INJECTION.UsersManager.ResetAccessFailedCountAsync(userAccount);
+        else
+        {
+            await _AUTH_SERVICES_INJECTION.UsersManager.AccessFailedAsync(userAccount);
+            return IdentityResult.Failed(new IdentityError() { Description = "User or password is invalid." });
+        }
+    }
+    private protected async Task<IdentityResult> PasswordSignInAsync(UserAccount userAccount, string password, bool isPersistent = true, bool lockoutOnFailure = true)
+    {
+        var isValid = await _AUTH_SERVICES_INJECTION.SignInManager.PasswordSignInAsync(userAccount, password, isPersistent, lockoutOnFailure);
+
+        if (isValid.Succeeded || isValid.RequiresTwoFactor)
             return await _AUTH_SERVICES_INJECTION.UsersManager.ResetAccessFailedCountAsync(userAccount);
         else
         {
@@ -241,42 +253,24 @@ public class AuthenticationBase
             SubjectEmail = dataConfirmation[3]
         };
     }
-   
-       private protected async Task<UserToken> CreateAuthenticationResponseAsync(UserAccount userAccount)
+
+    private protected async Task<UserToken> CreateAuthenticationResponseAsync(UserAccount userAccount)
     {
         var claimsList = await BuildUserClaims(userAccount);
         var roles = await _AUTH_SERVICES_INJECTION.UsersManager.GetRolesAsync(userAccount);
-        var token = await _AUTH_SERVICES_INJECTION.JwtHandler.GenerateUserToken(claimsList.Claims.ToList(), userAccount, roles);
+        var token = await _AUTH_SERVICES_INJECTION.JwtHandler.GenerateUserToken(claimsList.Claims.ToList(), userAccount, roles, "login");
         return token;
     }
     private protected async Task<UserToken> CreateTwoFactorResponse(UserAccount userAccount)
     {
         var claimsList = await BuildUserClaims(userAccount);
-        var roles = await _AUTH_SERVICES_INJECTION.UsersManager.GetRolesAsync(userAccount);
-        var token = await _AUTH_SERVICES_INJECTION.JwtHandler.GenerateUserToken(claimsList.Claims.ToList(), userAccount, roles);
+        // var roles = await _AUTH_SERVICES_INJECTION.UsersManager.GetRolesAsync(userAccount);
+        // var roles = new List<string>() {"PENDING_AUTH_2FA"};
+        var token = await _AUTH_SERVICES_INJECTION.JwtHandler.GenerateUserToken(claimsList.Claims.ToList(), userAccount, new List<string>() { "PENDING_AUTH_2FA" }, "2fa");
         token.Action = "TwoFactor";
         return token;
     }
-    // private protected async Task<List<Claim>> BuildUserClaims(UserAccount userAccount)
-    // {
-    //     var getRoles = await _AUTH_SERVICES_INJECTION.UsersManager.GetRolesAsync(userAccount);
 
-    //     var claims = new List<Claim>
-    //     {
-
-    //         new Claim("sub", userAccount.Id.ToString()),
-    //         new Claim("amr", "Email")
-    //         //  new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
-    //         //   new Claim(ClaimTypes.Name, userAccount.UserName!),
-    //         // new Claim(ClaimTypes.Name, userAccount.Email!),
-    //     };
-
-    //     foreach (var role in getRoles)
-    //         claims.Add(new Claim(ClaimTypes.Role, role));
-
-
-    //     return claims;
-    // }
     public async Task<ClaimsPrincipal> BuildUserClaims(UserAccount userAccount)
     {
         var getRoles = await _AUTH_SERVICES_INJECTION.UsersManager.GetRolesAsync(userAccount);
@@ -287,12 +281,6 @@ public class AuthenticationBase
 
         claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()));
         claims.AddClaim(new Claim("amr", "Email"));
-            // identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
-            //  new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
-        //   new Claim(ClaimTypes.Name, userAccount.UserName!),
-        // new Claim(ClaimTypes.Name, userAccount.Email!),
-
-
         foreach (var role in getRoles)
             claims.AddClaim(new Claim(ClaimTypes.Role, role));
 
@@ -300,17 +288,9 @@ public class AuthenticationBase
         return new ClaimsPrincipal(claims);
     }
 
-   
-//    private ClaimsPrincipal StoreTwoFactorInfo(string userId, string provider)
-// {
-//     var identity = new ClaimsIdentity(IdentityConstants.TwoFactorUserIdScheme);
-//     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
-//     identity.AddClaim(new Claim("amr", provider)); // authentication method reference
-    
-//     return new ClaimsPrincipal(identity);
-// }
-   
-   
+
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -361,6 +341,7 @@ public class AuthenticationBase
 
         if (identityResult.Succeeded)
         {
+            await _AUTH_SERVICES_INJECTION.UsersManager.ResetAccessFailedCountAsync(userAccount);
             userAccount.WillExpire = DateTime.MinValue;
             userAccount.LockoutEnd = DateTimeOffset.MinValue;
             userAccount.EmailConfirmed = true;
@@ -403,15 +384,18 @@ public class AuthenticationBase
     }
 
 
-    private protected static async Task SendAsync(string To = "register@nostopti.com.br", string From = "register@nostopti.com.br", string DisplayName = "Sonny System",
+    private protected static async Task SendAsync(string To = "register@nostopti.com.br", string From = "register@nostopti.com.br",
     string Subject = "Test Subject", string Body = "Test", string MailServer = "smtp.nostopti.com.br",
      int Port = 587, bool IsUseSsl = false, string UserName = "register@nostopti.com.br", string Password = "Nsti$2024")
     {
-        var message = new MailMessage("register@nostopti.com.br", To, Subject, Body);
+        var message = new MailMessage(From, To, Subject, Body);
+        message.IsBodyHtml = true;
+
         SmtpClient SmtpClient = new SmtpClient(MailServer)
         {
-            Port = 587,
+            Port = Port,
             Credentials = new NetworkCredential(UserName, Password),
+            EnableSsl = IsUseSsl
         };
         SmtpClient.SendCompleted += (s, e) =>
        {
@@ -421,14 +405,11 @@ public class AuthenticationBase
         try
         {
             SmtpClient.SendAsync(message, null);
-
             await Task.CompletedTask;
-
         }
         catch (SmtpFailedRecipientException ex)
         {
             throw new Exception($"{ex}");
-            // throw new EmailException($"{EmailErrosMessagesException.InvalidDomain} - {ex}");
         }
     }
 

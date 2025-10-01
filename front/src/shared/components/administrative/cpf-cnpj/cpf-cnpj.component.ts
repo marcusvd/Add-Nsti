@@ -46,9 +46,11 @@ export class CpfCnpjComponent extends BaseForm implements OnInit {
           this.cpfCnpjBusinessData.emit(businessData as BusinessData);
         })
 
+    if (result.entity && result.result)
+      this.isValidCpf.emit(result);
     // if (result.entity == 'cpf' && result.result)
-    if (result.entity == 'cpf')
-      this.isValidCpf.emit(result)
+    // if (result.entity == 'cpf')
+    //   this.isValidCpf.emit(result)
 
   }
 
