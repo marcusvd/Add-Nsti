@@ -1,17 +1,16 @@
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
 
 import { AddImportsGShared } from 'shared/components/imports/default-g-shared-imports';
-import { BaseForm } from '../../../../shared/inheritance/forms/base-form';
-
+import { BaseForm } from '../../../../shared/extends/forms/base-form';
 import { QueryCnpjService } from '../services/queryCnpj.service';
 import { BusinessData } from './dto/business-data';
+import { DocType } from './dto/doc-type';
 import { CpfCnpjImports } from './imports/cpf-cnpj-imports';
 import { CpfCnpjValidator } from './validators/cpf-cnpj.validator';
-import { DocType } from './dto/doc-type';
 
 
 @Component({
@@ -24,7 +23,7 @@ import { DocType } from './dto/doc-type';
     CpfCnpjImports
   ]
 })
-export class CpfCnpjComponent extends BaseForm implements OnInit {
+export class CpfCnpjComponent extends BaseForm {
 
   constructor(
     private _queryCnpjService: QueryCnpjService,
@@ -48,17 +47,6 @@ export class CpfCnpjComponent extends BaseForm implements OnInit {
 
     if (result.entity && result.result)
       this.isValidCpf.emit(result);
-    // if (result.entity == 'cpf' && result.result)
-    // if (result.entity == 'cpf')
-    //   this.isValidCpf.emit(result)
-
   }
 
-  ngOnInit(): void {
-    //   this.formMain = this._fb.group({
-    //     cnpj: ['',[]]
-    //   })
-    // }
-
-  }
 }

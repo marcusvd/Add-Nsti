@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, inject, Input, OnInit } from '@angular/core';
 import { ImportsAccountStatus } from './imports/imports-account-status';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { AccountService } from '../services/account.service';
 import { AccountStatusDto } from '../dtos/account-status-dto';
 import { FormBuilder } from '@angular/forms';
@@ -28,6 +28,10 @@ export class AccountStatusComponent extends BaseForm implements OnInit, AfterVie
 
   @Input() userName!: string;
   @Input() lastLogin!: Date | string;
+  @Input() isLockOutShow: boolean = true;
+  @Input() isEmailConfirmedShow: boolean = true;
+  @Input() isLastLoginShow: boolean = true;
+
   _accountService = inject(AccountService);
   _fb = inject(FormBuilder);
   emailConfirmManual = new EmailConfirmManualDto();

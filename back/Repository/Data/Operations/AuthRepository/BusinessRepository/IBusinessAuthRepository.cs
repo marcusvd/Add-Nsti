@@ -1,5 +1,5 @@
 
-using Domain.Entities.Authentication;
+using Domain.Entities.System.Businesses;
 
 namespace Repository.Data.Operations.AuthRepository.BusinessRepository;
 

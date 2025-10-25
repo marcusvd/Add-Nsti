@@ -1,11 +1,8 @@
 using System.Threading.Tasks;
 using Repository.Data.Context;
-
-
 using Repository.Data.PersonalData.Contracts;
 using Repository.Data.Operations.Companies;
 using Repository.Data.Operations.BusinessesProfiles;
-using Authentication.Helpers;
 using Repository.Data.Operations.AuthRepository.UserAccountRepository;
 using Repository.Data.Context.Auth;
 using Repository.Data.Operations.AuthRepository.BusinessRepository;
@@ -17,217 +14,140 @@ namespace UnitOfWork.Persistence.Operations
 {
   public class Worker : IUnitOfWork
   {
-    private readonly ImSystemDbContext _CONTEXT;
-    private readonly IdImDbContext _ID_CONTEXT;
-    // private readonly ILogger<GenericValidatorServices> _LOGGER;
-    // private readonly ILogger _LOGGER;
-    // private readonly IHttpContextAccessor _httpContextAccessor;
-    // private readonly IUserClaimsPrincipalFactory<UserAccount> _userClaimsPrincipalFactory;
-    // private readonly SignInManager<UserAccount> _SIGN_IN_MANAGER;
-    // private readonly UserManager<UserAccount> _USER_MANAGER_REPO;
-    // private readonly RoleManager<Role> _ROLE_MANAGER_REPO;
-    // private readonly JwtHandler _JWT_HANDLER;
-    // private readonly IUrlHelper _URL;
+    private readonly ImSystemDbContext _context;
+    private readonly IdImDbContext _id_Context;
+
+    public Worker() { }
+
 
     public Worker(
-                 ImSystemDbContext CONTEXT,
-                 IdImDbContext ID_CONTEXT
-                   //  ILogger<GenericValidatorServices> LOGGER,
-                  //  ILogger LOGGER,
-                //  UserManager<UserAccount> USER_MANAGER,
-                //  SignInManager<UserAccount> SIGN_IN_MANAGER,
-                //  RoleManager<Role> ROLE_MANAGER,
-                //  IHttpContextAccessor httpContextAccessor,
-                //  IUserClaimsPrincipalFactory<UserAccount> userClaimsPrincipalFactory,
-                //  JwtHandler JWT_HANDLER,
-                //  IUrlHelper URL
+                 ImSystemDbContext context,
+                 IdImDbContext id_Context
                  )
     {
-      _CONTEXT = CONTEXT;
-      _ID_CONTEXT = ID_CONTEXT;
-      // _LOGGER = LOGGER;
-      // _LOGGER = LOGGER;
-      // _USER_MANAGER_REPO = USER_MANAGER;
-      // _ROLE_MANAGER_REPO = ROLE_MANAGER;
-      // _SIGN_IN_MANAGER = SIGN_IN_MANAGER;
-      // _httpContextAccessor = httpContextAccessor;
-      // _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-      // _JWT_HANDLER = JWT_HANDLER;
-      // _URL = URL;
-
+      _context = context;
+      _id_Context = id_Context;
     }
 
+ 
+
     #region BUSINESSES
-    private BusinessesProfilesRepository _BUSINESS_PROFILE_REPO;
+    private BusinessesProfilesRepository _business_ProfileRepo;
     public IBusinessesProfilesRepository BusinessesProfiles
     {
       get
       {
-        return _BUSINESS_PROFILE_REPO = _BUSINESS_PROFILE_REPO ?? new BusinessesProfilesRepository(_CONTEXT);
+        return _business_ProfileRepo = _business_ProfileRepo ?? new BusinessesProfilesRepository(_context);
       }
     }
-    private BusinessAuthRepository _BUSINESS_AUTH;
+    private BusinessAuthRepository _business_Auth;
     public IBusinessAuthRepository BusinessesAuth
     {
       get
       {
-        return _BUSINESS_AUTH = _BUSINESS_AUTH ?? new BusinessAuthRepository(_ID_CONTEXT);
+        return _business_Auth = _business_Auth ?? new BusinessAuthRepository(_id_Context);
       }
     }
     #endregion
     #region USER
-    private UserProfileRepository _USER_PROFILE_REPO;
+    private UserProfileRepository _userProfileRepo;
     public IUserProfileRepository UsersProfiles
     {
       get
       {
-        return _USER_PROFILE_REPO = _USER_PROFILE_REPO ?? new UserProfileRepository(_CONTEXT);
+        return _userProfileRepo = _userProfileRepo ?? new UserProfileRepository(_context);
       }
     }
-    private UserAccountRepository _USER_ACCOUNT_REPO;
+    private UserAccountRepository _userAccountRepo;
     public IUserAccountRepository UsersAccounts
     {
       get
       {
-        return _USER_ACCOUNT_REPO = _USER_ACCOUNT_REPO ?? new UserAccountRepository(_ID_CONTEXT);
+        return _userAccountRepo = _userAccountRepo ?? new UserAccountRepository(_id_Context);
       }
     }
-    
-    // public JwtHandler JwtHandler
-    // {
-    //   get
-    //   {
-    //     return _JWT_HANDLER;
-    //   }
-    // }
-    // public IUrlHelper UrlHelper
-    // {
-    //   get
-    //   {
-    //     return _URL;
-    //   }
-    // }
-    // public ILogger Logger
-    // {
-    //   get
-    //   {
-    //     return _LOGGER;
-    //   }
-    // }
-
-
-    // public SignInManager<UserAccount> SignInManager => _SIGN_IN_MANAGER;
-
-    // public UserManager<UserAccount> UsersManager => _USER_MANAGER_REPO;
-
-    // public RoleManager<Role> RolesManager => _ROLE_MANAGER_REPO;
-
-
-
 
     #endregion
+
+
     #region CUSTOMER
-    private CustomerRepository _CUSTOMER_REPO;
+    private CustomerRepository _customerRepo;
     public ICustomerRepository Customers
     {
       get
       {
-        return _CUSTOMER_REPO = _CUSTOMER_REPO ?? new CustomerRepository(_CONTEXT);
+        return _customerRepo = _customerRepo ?? new CustomerRepository(_context);
       }
     }
     #endregion
     #region COMPANIES
-    private CompanyProfileRepository _COMPANIES_REPO;
+    private CompanyProfileRepository _companiesRepo;
     public ICompanyProfileRepository CompaniesProfile
     {
       get
       {
-        return _COMPANIES_REPO = _COMPANIES_REPO ?? new CompanyProfileRepository(_CONTEXT);
+        return _companiesRepo = _companiesRepo ?? new CompanyProfileRepository(_context);
       }
     }
-    private CompanyAuthRepository _COMPANIES_AUTH;
+    private CompanyAuthRepository _companiesAuth;
     public ICompanyAuthRepository CompaniesAuth
     {
       get
       {
-        return _COMPANIES_AUTH = _COMPANIES_AUTH ?? new CompanyAuthRepository(_ID_CONTEXT);
+        return _companiesAuth = _companiesAuth ?? new CompanyAuthRepository(_id_Context);
       }
     }
     #endregion
     #region COMPANY_USERACCOUNT
 
-    private CompanyAuthUserAccountRepository _COMPANIES_USERACCOUNTS_REPO;
+    private CompanyAuthUserAccountRepository _companiesUseraccountsRepo;
     public ICompanyAuthUserAccountRepository CompaniesUserAccounts
     {
       get
       {
-        return _COMPANIES_USERACCOUNTS_REPO = _COMPANIES_USERACCOUNTS_REPO ?? new CompanyAuthUserAccountRepository(_ID_CONTEXT);
+        return _companiesUseraccountsRepo = _companiesUseraccountsRepo ?? new CompanyAuthUserAccountRepository(_id_Context);
       }
     }
     #endregion
     #region ADDRESSES
-    private AddressRepository _ADDRESSES_REPO;
+    private AddressRepository _addressesRepo;
     public IAddressRepository Addresses
     {
       get
       {
-        return _ADDRESSES_REPO = _ADDRESSES_REPO ?? new AddressRepository(_CONTEXT);
+        return _addressesRepo = _addressesRepo ?? new AddressRepository(_context);
       }
     }
     #endregion
     #region CONTACTS
-    private ContactsRepository _CONTACTS_REPO;
+    private ContactsRepository _contactsRepo;
     public IContactsRepository Contacts
     {
       get
       {
-        return _CONTACTS_REPO = _CONTACTS_REPO ?? new ContactsRepository(_CONTEXT);
+        return _contactsRepo = _contactsRepo ?? new ContactsRepository(_context);
       }
     }
     #endregion
 
-    #region 
-    private GenericValidatorServices GENERIC_VALIDATOR_SERVICES;
-    public IGenericValidatorServices _GenericValidatorServices
-    {
-      get
-      {
-        return GENERIC_VALIDATOR_SERVICES = GENERIC_VALIDATOR_SERVICES ?? new GenericValidatorServices();
-      }
-    }
 
-    private TimedAccessControlRepository _TIMED_ACCESS_CONTROL_REPO;
+
+    private TimedAccessControlRepository _timedAccessControlRepo;
     public ITimedAccessControlRepository TimedAccessControls
     {
       get
       {
-        return _TIMED_ACCESS_CONTROL_REPO = _TIMED_ACCESS_CONTROL_REPO ?? new TimedAccessControlRepository(_ID_CONTEXT);
+        return _timedAccessControlRepo = _timedAccessControlRepo ?? new TimedAccessControlRepository(_id_Context);
       }
     }
 
-    // public IHttpContextAccessor HttpContextAccessor
-    // {
-    //   get
-    //   {
-    //     return _httpContextAccessor;
-    //   }
-    // }
-
-    // public IUserClaimsPrincipalFactory<UserAccount> UserClaimsPrincipalFactory
-    // {
-    //   get
-    //   {
-    //     return _userClaimsPrincipalFactory;
-    //   }
-    // }
-    #endregion
     public async Task<bool> Save()
     {
-      return await _CONTEXT.SaveChangesAsync() > 0;
+      return await _context.SaveChangesAsync() > 0;
     }
     public async Task<bool> SaveID()
     {
-      return await _ID_CONTEXT.SaveChangesAsync() > 0;
+      return await _id_Context.SaveChangesAsync() > 0;
     }
   }
 }

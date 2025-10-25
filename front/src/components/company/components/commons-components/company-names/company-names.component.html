@@ -1,8 +1,10 @@
+<div>
+    <h3 class="title-categories-divide-comp">Identificação</h3>
+</div>
 <div [formGroup]="formMain">
           <div class="w-full grid sm:grid-cols-2 grid-cols-1 gap-4">
-
             <div class="w-full">
-                <mat-label>Nome</mat-label>
+                <mat-label class="font-bold">{{legalNameLbl}}</mat-label>
                 <mat-form-field class="w-full" appearance="outline">
                     <input matInput type="text" formControlName="name" aria-label="Nome">
                     <mat-error>
@@ -11,9 +13,8 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-
             <div class="w-full">
-                <mat-label>Nome Fantasia</mat-label>
+                <mat-label class="font-bold">{{tradeNameLbl}}</mat-label>
                 <mat-form-field class="w-full" appearance="outline">
                     <input matInput type="text" formControlName="tradeName" aria-label="Nome">
                     <mat-error>
@@ -22,6 +23,5 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-
         </div>
 </div>

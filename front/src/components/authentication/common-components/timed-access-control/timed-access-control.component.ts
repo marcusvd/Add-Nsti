@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { ImportsTimedAccessControl } from './imports/imports-timed-access-control';
 import { AccountService } from 'components/authentication/services/account.service';
 import { TimedAccessControlDto } from 'components/authentication/dtos/date-time-access-control-dto';

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { PasswordChangeDto } from '../dtos/password-change-dto';
 import { AccountService } from '../services/account.service';
 import { RegisterService } from '../services/register.service';

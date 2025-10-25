@@ -2,7 +2,7 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { BaseForm } from '../../../../shared/inheritance/forms/base-form';
+import { BaseForm } from '../../../../shared/extends/forms/base-form';
 import { AddressDto, ViaCepDto } from "../dtos/address-dto";
 
 

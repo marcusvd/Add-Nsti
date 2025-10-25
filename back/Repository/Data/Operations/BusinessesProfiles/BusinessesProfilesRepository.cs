@@ -1,5 +1,6 @@
 
-using Domain.Entities.System.BusinessesCompanies;
+
+using Domain.Entities.System.Businesses;
 using Domain.Entities.System.Profiles;
 using Repository.Data.Context;
 using Repository.Data.Operations.BusinessesProfiles;

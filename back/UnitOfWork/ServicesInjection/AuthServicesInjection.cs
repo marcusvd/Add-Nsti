@@ -1,64 +1,56 @@
-using Authentication.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Domain.Entities.Authentication;
 using Repository.Data.Operations.AuthRepository.UserAccountRepository;
 using Repository.Data.Context.Auth;
 using Repository.Data.Operations.AuthRepository.BusinessRepository;
 using Microsoft.AspNetCore.Http;
-using Authentication.Jwt;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UnitOfWork.Persistence.Operations;
 
 public class AuthServicesInjection : IAuthServicesInjection
 {
-  private readonly IdImDbContext _ID_CONTEXT; //context
+  private readonly IdImDbContext _IdContext; //context
   private readonly IHttpContextAccessor _httpContextAccessor;
   private readonly IUserClaimsPrincipalFactory<UserAccount> _userClaimsPrincipalFactory;
-  private readonly SignInManager<UserAccount> _SIGN_IN_MANAGER;
-  private readonly UserManager<UserAccount> _USER_MANAGER_REPO;
-  private readonly RoleManager<Role> _ROLE_MANAGER_REPO;
-  private readonly JwtHandler _JWT_HANDLER;
-  private readonly IUrlHelper _URL;
-  private UserAccountRepository _USER_ACCOUNT_REPO;
-  // private GenericValidatorServices GENERIC_VALIDATOR_SERVICES;
-  private TimedAccessControlRepository _TIMED_ACCESS_CONTROL_REPO;
+  private readonly SignInManager<UserAccount> _signInManager;
+  private readonly UserManager<UserAccount> _userManagerRepo;
+  private readonly RoleManager<Role> _roleManagerRepo;
+  private readonly IUrlHelper _url;
+  private UserAccountRepository _userAccountRepo;
+  private TimedAccessControlRepository _timedAccessControlRepo;
+
+
+  public AuthServicesInjection() { }
+
+
   public AuthServicesInjection(
-               IdImDbContext ID_CONTEXT,
-               UserManager<UserAccount> USER_MANAGER,
-               SignInManager<UserAccount> SIGN_IN_MANAGER,
-               RoleManager<Role> ROLE_MANAGER,
+               IdImDbContext IdContext,
+               UserManager<UserAccount> userManagerRepo,
+               SignInManager<UserAccount> signInManager,
+               RoleManager<Role> roleManagerRepo,
                IHttpContextAccessor httpContextAccessor,
                IUserClaimsPrincipalFactory<UserAccount> userClaimsPrincipalFactory,
-               JwtHandler JWT_HANDLER,
-               IUrlHelper URL
+               IUrlHelper url
                )
   {
-    _ID_CONTEXT = ID_CONTEXT;
-    _USER_MANAGER_REPO = USER_MANAGER;
-    _SIGN_IN_MANAGER = SIGN_IN_MANAGER;
-    _ROLE_MANAGER_REPO = ROLE_MANAGER;
+    _IdContext = IdContext;
+    _userManagerRepo = userManagerRepo;
+    _signInManager = signInManager;
+    _roleManagerRepo = roleManagerRepo;
     _httpContextAccessor = httpContextAccessor;
     _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-    _JWT_HANDLER = JWT_HANDLER;
-    _URL = URL;
-
+    _url = url;
   }
-  #region AUTh
+
+
+  #region AUTH
 
   public IUserAccountRepository UsersAccounts
   {
     get
     {
-      return _USER_ACCOUNT_REPO = _USER_ACCOUNT_REPO ?? new UserAccountRepository(_ID_CONTEXT);
-    }
-  }
-
-  public JwtHandler JwtHandler
-  {
-    get
-    {
-      return _JWT_HANDLER;
+      return _userAccountRepo ??= new UserAccountRepository(_IdContext);
     }
   }
 
@@ -66,28 +58,21 @@ public class AuthServicesInjection : IAuthServicesInjection
   {
     get
     {
-      return _URL;
+      return _url;
     }
   }
 
-  public SignInManager<UserAccount> SignInManager => _SIGN_IN_MANAGER;
+  public SignInManager<UserAccount> SignInManager => _signInManager;
 
-  public UserManager<UserAccount> UsersManager => _USER_MANAGER_REPO;
+  public UserManager<UserAccount> UsersManager => _userManagerRepo;
 
-  public RoleManager<Role> RolesManager => _ROLE_MANAGER_REPO;
+  public RoleManager<Role> RolesManager => _roleManagerRepo;
 
-  // public IGenericValidatorServices GenericValidatorServices
-  // {
-  //   get
-  //   {
-  //     return GENERIC_VALIDATOR_SERVICES = GENERIC_VALIDATOR_SERVICES ?? new GenericValidatorServices();
-  //   }
-  // }
   public ITimedAccessControlRepository TimedAccessControls
   {
     get
     {
-      return _TIMED_ACCESS_CONTROL_REPO = _TIMED_ACCESS_CONTROL_REPO ?? new TimedAccessControlRepository(_ID_CONTEXT);
+      return _timedAccessControlRepo ??= new TimedAccessControlRepository(_IdContext);
     }
   }
   public IHttpContextAccessor HttpContextAccessor
@@ -104,5 +89,7 @@ public class AuthServicesInjection : IAuthServicesInjection
       return _userClaimsPrincipalFactory;
     }
   }
+
+
   #endregion
 }

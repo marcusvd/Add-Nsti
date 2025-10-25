@@ -4,12 +4,17 @@
       <div class="p-4">
         <mat-label class="text-slate-900"> <b>Insira código 2FA e clique no botão.</b></mat-label>
       </div>
-      <mat-form-field class="w-full" appearance="outline">
+      <mat-form-field  appearance="outline" class="w-full flex justify-center">
+          <input style="text-align: center;" mask="000-000" matInput formControlName="code" maxlength="7" autocomplete="one-time-code">
+          <mat-error *ngIf="formMain.get('code')?.invalid">Insira um código de 6 dígitos</mat-error>
+        </mat-form-field>
+
+      <!-- <mat-form-field class="w-full" appearance="outline">
         <input #recoveryCode matInput type="text" formControlName="code" aria-label="code">
         <mat-error>
           <span *ngIf="formErrorAndTouched(formMain, 'code','required')">{{defaultMessages.requiredMsg}}</span>
         </mat-error>
-      </mat-form-field>
+      </mat-form-field> -->
     </div>
   </div>
 

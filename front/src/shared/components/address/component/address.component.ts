@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { FormGroup } from '@angular/forms';
 
 
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { AddImportsGShared } from '../../../../shared/components/imports/default-g-shared-imports';
 import { AddressService } from '../services/address.service';
 import { AddressAddImports } from './imports/address-imports';

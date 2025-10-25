@@ -1,6 +1,6 @@
 <div  [formGroup]="formMain">
   <div class="w-full">
-    <mat-label style="font-weight: bold;" class="text-slate-900">CNPJ / CPF</mat-label>
+    <mat-label class="text-slate-900 font-bold">CNPJ / CPF</mat-label>
     <mat-form-field class="w-full" appearance="outline">
       <input type="text" #cpf (input)="getCnpjData(cpf.value,formMain, 'cnpj')" (input)="cpfCnpjValidator.isValid(cpf.value,formMain, 'cnpj')" matInput [mask]="'000.000.000-00||00.000.000/0000-00'" [placeholder]="'00.000.000/0000-00'" formControlName="cnpj" aria-label="CPF">
       <mat-error>

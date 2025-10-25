@@ -302,9 +302,7 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
     return this.loadById$<boolean>(`${environment._BACK_END_ROOT_URL}/authadm/IsPasswordExpiresAsync`, id.toString())
   }
 
-  IsEnabledTwoFactorAsync$(id: number) {
-    return this.loadById$<TwoFactorStatusViewModel>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/GetTwoFactorStatus`, id.toString())
-  }
+
 
   staticPasswordDefined$(reset: ResetStaticPasswordDto) {
     return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/staticPasswordDefined`, reset)
@@ -318,8 +316,12 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
     return this.loadById$<TimedAccessControlDto>(`${environment._BACK_END_ROOT_URL}/authadm/getTimedAccessControlAsync`, userId.toString())
   }
 
-  twofactorverifyAsync$(twoFactorCheck: VerifyTwoFactorRequest) {
-    return this.add$<ApiResponse<any>>(twoFactorCheck, `${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/twofactorverify`);
+  twoFactorVerifyAsync$(twoFactorCheck: VerifyTwoFactorRequest) {
+    return this.add$<ApiResponse<any>>(twoFactorCheck, `${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/TwoFactorVerifyAsync`);
+  }
+
+  IsEnabledTwoFactorAsync$(id: number) {
+    return this.loadById$<TwoFactorStatusViewModel>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/GetTwoFactorStatus`, id.toString())
   }
 
   GetAuthenticatorSetup(): Observable<AuthenticatorSetupResponse> {
@@ -333,9 +335,6 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   OnOff2FaCodeViaEmailAsync$(request: OnOff2FaCodeViaEmail): Observable<ResponseIdentiyApiDto> {
     return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/OnOff2FaCodeViaEmailAsync`, request);
   }
-
-
-
 
 }
 

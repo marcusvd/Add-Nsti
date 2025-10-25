@@ -1,9 +1,9 @@
 import { Component, inject, ViewChild } from '@angular/core';
-import { MatPaginator as MatPaginator, PageEvent as PageEvent } from '@angular/material/paginator';
-import { NavigationExtras, Router } from "@angular/router";
-import * as diacritics from 'diacritics';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { Base } from 'shared/extends/forms/base';
 import { ListGDataService } from "../list/data/list-g-data.service";
 import { FieldsInterface } from '../list/interfaces/fields-interface';
 import { OrderbyInterface } from '../list/interfaces/orderby-interface';
@@ -14,21 +14,10 @@ import { OrderbyInterface } from '../list/interfaces/orderby-interface';
   `
 })
 
-export class BaseList {
+export class BaseList extends Base {
 
-  companyId = localStorage.getItem('companyId')
-    ? JSON.parse(localStorage.getItem('companyId')!)
-    : '';
-
-  userId = localStorage.getItem('userId')
-    ? JSON.parse(localStorage.getItem('userId')!)
-    : '';
-
-
-  // minValue = new Date('0001-01-01T00:00:00.000Z');
-  minDate = new Date('0001-01-01T00:00:00');
-  currentDate = new Date();
-  currentDateWithoutHours = this.currentDate.setHours(0, 0, 0, 0)
+  _listGDataService = inject(ListGDataService);
+  _router = inject(Router);
   screenWidth: number = window.innerWidth;
   fields: FieldsInterface[] = []
   pageSize: number = 20;
@@ -36,16 +25,7 @@ export class BaseList {
   @ViewChild('paginatorBelow') paginatorBelow!: MatPaginator
 
 
-  constructor() { }
-
-
-  _listGDataService = inject(ListGDataService);
-  _router = inject(Router);
-
   pageChange(entities: any[], $event: PageEvent) {
-
-    // this.paginatorAbove.pageIndex = $event.pageIndex;
-    // this.paginatorBelow.pageIndex = $event.pageIndex;
 
     const pageSize = $event.pageSize;
     const startIndex = $event.pageIndex * pageSize;
@@ -125,35 +105,6 @@ export class BaseList {
     }
     return null;
   }
-
-  removeNonNumericAndConvertToNumber(str: string): number {
-    return +str.replace(/\D/g, '');
-  }
-
-  removeAccentsSpecialCharacters(value: string): string {
-    if (typeof value !== 'string') {
-      return '';
-    }
-    const noAccents = diacritics.remove(value);//remove accents
-    return noAccents.replace(/[^\w\s]/gi, ''); //remove special characters
-  }
-
-  callRouter(url: string, entity?: any) {
-
-    const objectRoute: NavigationExtras = {
-      state: {
-        entity
-      }
-    };
-
-    if (entity)
-      this._router?.navigate([url], objectRoute);
-    else
-      this._router?.navigateByUrl(url);
-
-  }
-
-
 
 }
 

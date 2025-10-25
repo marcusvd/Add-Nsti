@@ -1,338 +1,48 @@
-﻿using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using Application.Services.Helpers.ServicesLauncher;
-using Application.Services.Operations.Auth.Dtos;
-using Domain.Entities.Authentication;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// namespace Api.Controllers;
-
-// [ApiController]
-// [Route("api/{controller}")]
-// public class _TwoFactorAuthenticationController : ControllerBase
-// {
-//     private readonly IServiceLaucherService _ServiceLaucherService;
-//     private readonly UserManager<UserAccount> _userManager;
-//     private readonly UserClaimsPrincipalFactory<UserAccount> _userClaimsPrincipalFactory;
-//     public _TwoFactorAuthenticationController(
-//         IServiceLaucherService ServiceLaucherService, UserManager<UserAccount> userManager,
-//         UserClaimsPrincipalFactory<UserAccount> userClaimsPrincipalFactory
-//         )
-//     {
-//         _ServiceLaucherService = ServiceLaucherService;
-//         _userManager = userManager;
-//         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
-//     }
-
-
-
-///test
-// [HttpPut("TwoFactorToggleAsync")]
-// public async Task<IActionResult> TwoFactorToggleAsync([FromBody] TwoFactorToggleViewModel toggleTwoFactor)
-// {
-//     var result = await _ServiceLaucherService.TwoFactorAuthenticationServices.TwoFactorToggleAsync(toggleTwoFactor);
-
-//     return Ok(result);
-// }
-
-// [HttpGet("GetTwoFactorStatus/{userId:min(1)}")]
-// public async Task<IActionResult> GetTwoFactorStatus(int userId)
-// {
-//     var result = await _ServiceLaucherService.TwoFactorAuthenticationServices.GetTwoFactorStatus(userId);
-
-//     return Ok(result);
-// }
-
-//test
-
-
-// using Microsoft.AspNetCore.Identity;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.AspNetCore.WebUtilities;
-// using System.Text;
-// using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Authorization;
-using UnitOfWork.Persistence.Operations;
-using Application.Services.Operations.Auth.Account.dtos;
-using Microsoft.AspNetCore.Mvc.Routing;
+using Application.Helpers.ServicesLauncher;
+using Application.Auth.TwoFactorAuthentication.Dtos;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(Roles = "SYSADMIN, PENDING_AUTH_2FA")]
-// [Authorize(Roles = "pendingAuth2FA")]
 public class _TwoFactorAuthenticationController : ControllerBase
 {
-    private readonly UserManager<UserAccount> _userManager;
-    private readonly SignInManager<UserAccount> _signInManager;
-    private readonly ILogger<_TwoFactorAuthenticationController> _logger;
-    private readonly IAuthServicesInjection _AUTH_SERVICES_INJECTION;
-    private readonly IServiceLaucherService _SERVICE_LAUCHER_SERVICE;
-    public _TwoFactorAuthenticationController(
-        UserManager<UserAccount> userManager,
-        SignInManager<UserAccount> signInManager,
-        ILogger<_TwoFactorAuthenticationController> logger,
-        IAuthServicesInjection AUTH_SERVICES_INJECTION,
-        IServiceLaucherService SERVICE_LAUCHER_SERVICE
-        )
+
+    private readonly IServiceLaucherService _serviceLaucherService;
+    public _TwoFactorAuthenticationController(IServiceLaucherService serviceLaucherService)
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _logger = logger;
-        _AUTH_SERVICES_INJECTION = AUTH_SERVICES_INJECTION;
-        _SERVICE_LAUCHER_SERVICE = SERVICE_LAUCHER_SERVICE;
+        _serviceLaucherService = serviceLaucherService;
     }
 
-
-    //todo
-
-
-    // POST: api/Account/verify-two-factor
-    [HttpPost("twofactorverify")]
-    
-    public async Task<IActionResult> twofactorverify([FromBody] VerifyTwoFactorRequestViewModel request)
+    [HttpPost("TwoFactorVerifyAsync")]
+    public async Task<IActionResult> TwoFactorVerifyAsync([FromBody] VerifyTwoFactorRequestDto request)
     {
-        var userAccount = await _userManager.FindByEmailAsync(request.Email);
-        if (userAccount == null)
-        {
-            return BadRequest(new ApiResponse<string>
-            {
-                Success = false,
-                Message = "Usuário não encontrado"
-            });
-        }
-
-        var appAuthToken = await _userManager.VerifyTwoFactorTokenAsync(
-           userAccount, _userManager.Options.Tokens.AuthenticatorTokenProvider, request.Code);
-
-        var emailAuthToken = await _userManager.VerifyTwoFactorTokenAsync(
-            userAccount, request.Provider, request.Code);
-
-
-        if (!emailAuthToken && !appAuthToken)
-        {
-            return BadRequest(new ApiResponse<string>
-            {
-                Success = false,
-                Message = "Token inválido"
-            });
-        }
-
-        // Realiza o login com 2FA
-        // var result = await _signInManager.TwoFactorSignInAsync(
-        //     request.Provider, request.Token, request.RememberMe, rememberClient: false);
-
-        if (await _userManager.IsLockedOutAsync(userAccount))
-        {
-            return Unauthorized(new ApiResponse<string>
-            {
-                Success = false,
-                Message = "Conta bloqueada"
-            });
-        }
-
-        await _signInManager.SignInAsync(userAccount, request.RememberMe);
-        _logger.LogInformation("Login com 2FA realizado: {Email}", userAccount.Email);
-
-              return Ok(new ApiResponse<UserToken>
-        {
-            Success = true,
-            Message = "Login realizado com sucesso",
-            Data = await CreateAuthenticationResponseAsync(userAccount)
-        });
-
+        return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.TwoFactorVerifyAsync(request));
     }
 
-    private protected async Task<UserToken> CreateAuthenticationResponseAsync(UserAccount userAccount)
-    {
-        var claimsList = await BClaims(userAccount);
-        var roles = await _userManager.GetRolesAsync(userAccount);
-        var token = await _AUTH_SERVICES_INJECTION.JwtHandler.GenerateUserToken(claimsList.Claims.ToList(), userAccount, roles, "login");
-        return token;
-    }
-
-    private async Task<ClaimsPrincipal> BClaims(UserAccount userAccount)
-    {
-        var getRoles = await _userManager.GetRolesAsync(userAccount);
-
-        var claims = new ClaimsIdentity(IdentityConstants.TwoFactorUserIdScheme);
-
-
-
-        claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()));
-        claims.AddClaim(new Claim("amr", "Email"));
-        // identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
-        //  new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
-        //   new Claim(ClaimTypes.Name, userAccount.UserName!),
-        // new Claim(ClaimTypes.Name, userAccount.Email!),
-
-
-        foreach (var role in getRoles)
-            claims.AddClaim(new Claim(ClaimTypes.Role, role));
-
-
-        return new ClaimsPrincipal(claims);
-    }
-
-    // POST: api/Account/enable-authenticator
     [HttpPost("EnableAuthenticator")]
-    [Authorize] // Requer autenticação
-    public async Task<IActionResult> EnableAuthenticator([FromBody] ToggleAuthenticatorRequestViewModel request)
+    [Authorize]
+    public async Task<IActionResult> EnableAuthenticator([FromBody] ToggleAuthenticatorRequestDto request)
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return Unauthorized(new ApiResponse<string>
-            {
-                Success = false,
-                Message = "Usuário não autenticado"
-            });
-        }
-
-        var verificationCode = request.Code.Replace(" ", "").Replace("-", "");
-        var isValid = await _userManager.VerifyTwoFactorTokenAsync(
-            user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
-
-        if (!isValid)
-        {
-            return BadRequest(new ApiResponse<string>
-            {
-                Success = false,
-                Message = "Código inválido"
-            });
-        }
-
-
-        await _userManager.SetTwoFactorEnabledAsync(user, request.Enabled);
-        _logger.LogInformation("2FA habilitado para usuário: {UserId}", user.Id);
-
-        // Gera códigos de recuperação
-        var recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-
-        return Ok(new ApiResponse<EnableAuthenticatorResponse>
-        {
-            Success = true,
-            Message = "Autenticador habilitado com sucesso",
-            Data = new EnableAuthenticatorResponse
-            {
-                RecoveryCodes = recoveryCodes.ToArray(),
-                IsTwoFactorEnabled = true
-            }
-        });
+        return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.EnableAuthenticatorAsync(request));
     }
 
-    // GET: api/Account/authenticator-setup
     [HttpGet("GetAuthenticatorSetup")]
     [Authorize]
     public async Task<IActionResult> GetAuthenticatorSetup()
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
-        var authenticatorKey = await _userManager.GetAuthenticatorKeyAsync(user);
-        if (string.IsNullOrEmpty(authenticatorKey))
-        {
-            await _userManager.ResetAuthenticatorKeyAsync(user);
-            authenticatorKey = await _userManager.GetAuthenticatorKeyAsync(user);
-        }
-
-        var model = new AuthenticatorSetupResponse
-        {
-            SharedKey = FormatKey(authenticatorKey),
-            AuthenticatorUri = GenerateQrCodeUri(user.Email, authenticatorKey),
-            IsTwoFactorEnabled = await _userManager.GetTwoFactorEnabledAsync(user)
-        };
-
-        return Ok(new ApiResponse<AuthenticatorSetupResponse>
-        {
-            Success = true,
-            Data = model
-        });
+        return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.GetAuthenticatorSetup());
     }
 
-    //todo
-    // POST: api/Account/logout
- 
     [HttpPut("OnOff2FaCodeViaEmailAsync")]
-    public async Task<IActionResult> OnOff2FaCodeViaEmailAsync([FromBody] OnOff2FaCodeViaEmailViewModel request)
+    public async Task<IActionResult> OnOff2FaCodeViaEmailAsync([FromBody] OnOff2FaCodeViaEmailDto request)
     {
-        return Ok(await _SERVICE_LAUCHER_SERVICE.TwoFactorAuthenticationServices.OnOff2FaCodeViaEmailAsync(request));
+        return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.OnOff2FaCodeViaEmailAsync(request));
     }
-
-
-    // POST: api/Account/register
-    [HttpPost("register")]
-    // public async Task<IActionResult> Register([FromBody] RegisterRequest request)
-    // {
-    //     if (!ModelState.IsValid)
-    //     {
-    //         return BadRequest(new ApiResponse<string>
-    //         {
-    //             Success = false,
-    //             Message = "Dados inválidos"
-    //         });
-    //     }
-
-    //     var user = new UserAccount { UserName = request.Email, Email = request.Email };
-    //     var result = await _userManager.CreateAsync(user, request.Password);
-
-    //     if (result.Succeeded)
-    //     {
-    //         _logger.LogInformation("Novo usuário registrado: {Email}", request.Email);
-
-    //         // Opcional: enviar email de confirmação
-    //         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-    //         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-    //         // await _emailSender.SendConfirmationEmailAsync(user.Email, code);
-
-    //         return Ok(new ApiResponse<string>
-    //         {
-    //             Success = true,
-    //             Message = "Usuário registrado com sucesso"
-    //         });
-    //     }
-
-    //     return BadRequest(new ApiResponse<string>
-    //     {
-    //         Success = false,
-    //         Message = "Erro ao registrar usuário",
-    //         Errors = result.Errors.Select(e => e.Description)
-    //     });
-    // }
-
-    private string FormatKey(string unformattedKey)
-    {
-        var result = new StringBuilder();
-        int currentPosition = 0;
-        while (currentPosition + 4 < unformattedKey.Length)
-        {
-            result.Append(unformattedKey.Substring(currentPosition, 4)).Append(" ");
-            currentPosition += 4;
-        }
-        if (currentPosition < unformattedKey.Length)
-        {
-            result.Append(unformattedKey.Substring(currentPosition));
-        }
-        return result.ToString().ToLowerInvariant();
-    }
-
-    private string GenerateQrCodeUri(string email, string unformattedKey)
-    {
-        return string.Format(
-            "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6",
-            UrlEncoder.Default.Encode("SuaAplicacao"),
-            UrlEncoder.Default.Encode(email),
-            unformattedKey);
-    }
-
 
 }
 

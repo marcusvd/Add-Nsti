@@ -1,6 +1,6 @@
 namespace Domain.Entities.Shared
 {
-    public class SocialNetwork: RootBase
+    public class SocialNetwork: RootBaseDb
     {
         public SocialNetwork()
         {

@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 
 import { environment } from 'environments/environment';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 
 
 import { ImportsaddUserCompany } from './imports/imports-add-user-company';
@@ -12,7 +12,7 @@ import { ImportsaddUserCompany } from './imports/imports-add-user-company';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AddUserExistingCompanyDto } from 'components/authentication/dtos/add-user-existing-company-dto';
-import { CompanyAuth } from 'components/authentication/dtos/company-auth';
+import { CompanyAuth } from "components/company/dtos/company-auth";
 import { RegisterService } from 'components/authentication/services/register.service';
 import { IsUserRegisteredValidator } from 'components/authentication/validators/is-user-registered-validator';
 import { PasswordConfirmationValidator } from 'components/authentication/validators/password-confirmation-validator';
@@ -22,8 +22,8 @@ import { AddressComponent } from 'shared/components/address/component/address.co
 import { AddressService } from 'shared/components/address/services/address.service';
 import { ContactComponent } from 'shared/components/contact/component/contact.component';
 import { ContactService } from 'shared/components/contact/services/contact.service';
-import { CompanyService } from '../../../authentication/services/company.service';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { CompanyService } from 'components/company/services/company.service';
 
 
 @Component({
@@ -47,6 +47,11 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
 
   private _addressService = inject(AddressService);
   private _contactService = inject(ContactService);
+  backend = `${environment._BACK_END_ROOT_URL}/userAccounts/AddUserAccountAsync`
+  businessId!: number;
+  formFull!: boolean;
+  address!: FormGroup;
+  contact!: FormGroup;
 
   constructor(
     private _registerService: RegisterService,
@@ -59,13 +64,20 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
     // private _snackBar = inject(MatSnackBar);
   ) { super() }
 
+  ngOnInit(): void {
+    const id = this._actRouter.snapshot.params['id'] as number;
+    const backend = `${environment._BACK_END_ROOT_URL}/_companies/GetCompanyAuthAsync`
+
+    this._addUserCompanyService.loadById$<CompanyAuth>(backend, id.toString()).subscribe((x: CompanyAuth) => {
+      this.formLoad(x);
+      this.businessId = x.businessId;
+    })
+
+    this.address = this._addressService.formLoad();
+    this.contact = this._contactService.formLoad();
+  }
 
 
-  backend = `${environment._BACK_END_ROOT_URL}/AuthAdm/AddUserAccountAsync`
-  businessId!: number;
-  formFull!: boolean;
-  address!: FormGroup;
-  contact!: FormGroup;
 
   registerFull(full: MatCheckboxChange) {
     this.formFull = full.checked;
@@ -74,8 +86,6 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
 
 
   register() {
-
-
 
     if (this.formFull) {
       if (this.alertSave(this.formMain) && this.alertSave(this.address) && this.alertSave(this.contact)) {
@@ -105,7 +115,7 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
           next: (user) => {
             this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
 
-           this.callRouter(`users/adm-list/${this.businessId}`);
+            this.callRouter(`users/adm-list/${this.businessId}`);
             // this._router.navigateByUrl(`users/adm-list/${this.businessId}`);
 
           }, error: (err: any) => {
@@ -167,17 +177,6 @@ export class AddUserCompanyComponent extends BaseForm implements OnInit {
     window.history.back();
   }
 
-  ngOnInit(): void {
-    const id = this._actRouter.snapshot.params['id'] as number;
-    const backend = `${environment._BACK_END_ROOT_URL}/authadm/GetCompanyAuthAsync`
 
-    this._addUserCompanyService.loadById$<CompanyAuth>(backend, id.toString()).subscribe((x: CompanyAuth) => {
-      this.formLoad(x);
-      this.businessId = x.businessId;
-    })
-
-    this.address = this._addressService.formLoad();
-    this.contact = this._contactService.formLoad();
-  }
 
 }

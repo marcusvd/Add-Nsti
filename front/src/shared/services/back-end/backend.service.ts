@@ -107,7 +107,7 @@ export abstract class BackEndService<T> implements IBackEndService<T> {
 
 
 
-  openSnackBar(message: string, style: string, action: string = 'Fechar', duration: number = 5000, horizontalPosition: any = 'center', verticalPosition: any = 'top') {
+  openSnackBar(message: string, style: string, action: string = 'Fechar', duration: number = 5000, horizontalPosition: any = 'center', verticalPosition: any = 'bottom') {
     this._snackBar?.open(message, action, {
       duration: duration, // Tempo em milissegundos (5 segundos)
       panelClass: [style], // Aplica a classe personalizada

@@ -9,7 +9,7 @@ import { IsMobileNumberPipe } from "shared/pipes/is-mobile-number.pipe";
 import { AddressService } from "../../../../shared/components/address/services/address.service";
 import { BusinessData } from "../../../../shared/components/administrative/name-cpf-cnpj/dto/business-data";
 import { ContactService } from "../../../../shared/components/contact/services/contact.service";
-import { BaseForm } from '../../../../shared/inheritance/forms/base-form';
+import { BaseForm } from '../../../../shared/extends/forms/base-form';
 import { CustomerEditProviders } from "../../../customer/imports/providers-customer";
 import { EditImports } from "../../../imports/crud-customer-equipment-employees-imports";
 import { DefaultCompImports } from "../../../imports/default-comp-imports";

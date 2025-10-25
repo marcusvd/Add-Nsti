@@ -1,4 +1,4 @@
-using Domain.Entities.Authentication;
+using Domain.Entities.System.Businesses;
 using Repository.Data.Context.Auth;
 
 namespace Repository.Data.Operations.AuthRepository.BusinessRepository;

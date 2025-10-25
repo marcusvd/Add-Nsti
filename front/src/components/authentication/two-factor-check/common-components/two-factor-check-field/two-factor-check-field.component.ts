@@ -4,9 +4,10 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { NgxMaskModule } from 'ngx-mask';
 
 
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 
 @Component({
   selector: 'two-factor-check-field',
@@ -17,6 +18,7 @@ import { BaseForm } from 'shared/inheritance/forms/base-form';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
+    NgxMaskModule
   ],
   templateUrl: './two-factor-check-field.component.html',
   styleUrl: './two-factor-check-field.component.scss'

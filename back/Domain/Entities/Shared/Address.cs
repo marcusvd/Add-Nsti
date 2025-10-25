@@ -1,7 +1,7 @@
 
 namespace Domain.Entities.Shared
 {
-    public class Address: RootBase
+    public class Address: RootBaseDb
     {
         public required string ZipCode { get; set; } = string.Empty;
         public required string Street { get; set; } = string.Empty;

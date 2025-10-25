@@ -4,18 +4,22 @@ import { AddCompanyComponent } from "components/company/components/add/add-compa
 import { AddUserCompanyComponent } from "../adm/add-user-company/add-user-company.component";
 import { ListAdmComponent } from "../adm/list/list-adm.component";
 import { PanelAdmComponent } from "../adm/panel-adm/panel-adm.component";
-import { ProfileComponent } from "../profile/profile.component";
+
 import { EditUserCompanyComponent } from "../adm/panel-adm/edit-user-company/edit-user-company.component";
+import { UserAccountProfileSettingsComponent } from "../user-account-profile-settings/user-account-profile-settings.component";
+import { SelectCompanyComponent } from "../select-company/select-company.component";
 
 
 const routes: Routes = [
+
   { path: 'adm-list/:id', component: ListAdmComponent },
   { path: 'add-company/:id', component: AddCompanyComponent },
   { path: 'edit-company/:id', component: PanelAdmComponent },
   { path: 'add-user-company/:id', component: AddUserCompanyComponent },
   { path: 'edit-user/:id', component: EditUserCompanyComponent },
-    { path: 'profile', component: ProfileComponent },
-  { path: 'panel-adm', component: PanelAdmComponent }
+  { path: 'user-account-profile-settings/:id', component: UserAccountProfileSettingsComponent },
+  { path: 'panel-adm', component: PanelAdmComponent },
+
 ]
 
 @NgModule({

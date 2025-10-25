@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { AccountService } from '../services/account.service';
 import { ActivatedRoute } from '@angular/router';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { AuthenticatorSetupResponse } from './interfaces/authenticator-setup-response';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -49,7 +49,6 @@ export class TwoFactorSetupComponent extends BaseForm implements AfterViewInit {
         next: (data: any) => {
 
           this.setupData = data.data;
-          console.log(this.setupData);
           this.loading = false;
         },
         error: () => {

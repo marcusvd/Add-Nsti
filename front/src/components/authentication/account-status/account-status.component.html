@@ -1,10 +1,10 @@
-<div [formGroup]="formMain" *ngIf="formMain">
-  <mat-card class="border-card-categories-divide-comp">
+
+  <mat-card [formGroup]="formMain" *ngIf="formMain" class="border-card-categories-divide-comp">
     <div class="p-4 w-full grid-cols-1 gap-4">
       <div>
         <h3 class="title-categories-divide-comp">STATUS DA CONTA</h3>
       </div>
-      <div class="w-full grid grid-cols-[30px_120px_30px] items-center">
+      <div *ngIf="isLockOutShow" class="w-full grid grid-cols-[30px_120px_30px] items-center">
         <div>
           <mat-icon [class]="lockedOutLabelCssClass">{{lockedOutIcon}}</mat-icon>
         </div>
@@ -16,7 +16,7 @@
             (change)="lockedOutOnChage(locked.checked)" formControlName="isAccountLockedOut"> </mat-checkbox>
         </div>
       </div>
-      <div class="w-full grid grid-cols-[30px_120px_30px] items-center">
+      <div *ngIf="isEmailConfirmedShow" class="w-full grid grid-cols-[30px_120px_30px] items-center">
         <div>
           <mat-icon [class]="emailConfirmedLabelCssClass">{{emailConfirmedIcon}}</mat-icon>
         </div>
@@ -28,7 +28,7 @@
             (change)="emailConfirmedOnChage(confirmed.checked)" formControlName="isEmailConfirmed"> </mat-checkbox>
         </div>
       </div>
-      <div class="w-full grid grid-cols-[30px_120px_1fr] items-center">
+      <div *ngIf="isLastLoginShow" class="w-full grid grid-cols-[30px_120px_1fr] items-center">
         <div>
           <mat-icon [class]="neverLoggedInLabelCssClass">{{neverLoggedInIcon}}</mat-icon>
         </div>
@@ -42,4 +42,4 @@
       </div>
     </div>
   </mat-card>
-</div>
+

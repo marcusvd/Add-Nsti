@@ -4,12 +4,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 
 import { environment } from 'environments/environment';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 
 
 import { ImportsEditUserCompany } from './imports/imports-edit-user-company';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { RegisterService } from 'components/authentication/services/register.service';
 import { IsUserRegisteredValidator } from 'components/authentication/validators/is-user-registered-validator';
 // import { AddUserCompanyService } from 'components/authentication/services/edit-user-company.service';
@@ -18,24 +18,24 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AccountStatusComponent } from 'components/authentication/account-status/account-status.component';
 import { EmailComponent } from 'components/authentication/common-components/email/email.component';
+import { TimedAccessControlComponent } from 'components/authentication/common-components/timed-access-control/timed-access-control.component';
+import { ToggleTwoFactorComponent } from 'components/authentication/common-components/toggle-two-factor/toggle-two-factor.component';
 import { UpdateUserAccountEmailDto } from 'components/authentication/dtos/update-user-account-email-dto';
 import { UserAccountAuthDto } from 'components/authentication/dtos/user-account-auth-dto';
 import { UserAuthProfileDto } from 'components/authentication/dtos/user-auth-profile-dto';
 import { UserProfileDto } from 'components/authentication/dtos/user-profile-dto';
+import { Email2faTokenSendComponent } from 'components/authentication/email-2fa-token-send/email-2fa-token-send.component';
 import { PasswordExpiresComponent } from 'components/authentication/password-expires/password-expires.component';
 import { PasswordResetAdmComponent } from 'components/authentication/password-reset-adm/password-reset-adm.component';
 import { ProfileService } from 'components/authentication/services/profile.service';
+import { TwoFactorEnableComponent } from 'components/authentication/two-factor-enable/two-factor-enable.component';
+import { TwoFactorSetupComponent } from 'components/authentication/two-factor-setup/two-factor-setup.component';
 import { AddressComponent } from 'shared/components/address/component/address.component';
 import { AddressDto } from 'shared/components/address/dtos/address-dto';
 import { AddressService } from 'shared/components/address/services/address.service';
 import { ContactComponent } from 'shared/components/contact/component/contact.component';
 import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
 import { ContactService } from 'shared/components/contact/services/contact.service';
-import { TimedAccessControlComponent } from 'components/authentication/common-components/timed-access-control/timed-access-control.component';
-import { ToggleTwoFactorComponent } from 'components/authentication/common-components/toggle-two-factor/toggle-two-factor.component';
-import { TwoFactorSetupComponent } from 'components/authentication/two-factor-setup/two-factor-setup.component';
-import { TwoFactorEnableComponent } from 'components/authentication/two-factor-enable/two-factor-enable.component';
-import { Email2faTokenSendComponent } from 'components/authentication/email-2fa-token-send/email-2fa-token-send.component';
 // import { IgxTimePickerComponent } from 'igniteui-angular';
 // import { AddUserExistingCompanyDto } from 'components/authentication/dtos/edit-user-existing-company-dto';
 
@@ -109,8 +109,8 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
 
   backend = `${environment._BACK_END_ROOT_URL}/AuthAdm/AddUserAccountAsync`
   backendEmailUpdate = `${environment._BACK_END_ROOT_URL}/auth/RequestEmailChange`
-  backendAddress = `${environment._BACK_END_ROOT_URL}/Address/UpdateAddressAsync`
-  backendContact = `${environment._BACK_END_ROOT_URL}/contact/UpdateContactAsync`
+  backendAddress = `${environment._BACK_END_ROOT_URL}/_Address/UpdateAddressAsync`
+  backendContact = `${environment._BACK_END_ROOT_URL}/_contact/UpdateContactAsync`
 
   emailChange(newEmail: string) {
 
@@ -223,7 +223,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   ngOnInit(): void {
     const id = this._actRouter.snapshot.params['id'] as number;
     this.userIdRoute = id;
-    const backend = `${environment._BACK_END_ROOT_URL}/authadm/GetUserByIdFullAsync`
+    const backend = `${environment._BACK_END_ROOT_URL}/useraccounts/GetUserByIdFullAsync`
 
     this._registerService.loadById$<UserAuthProfileDto>(backend, id.toString()).subscribe((x: UserAuthProfileDto) => {
       this.formLoad(x);

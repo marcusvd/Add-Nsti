@@ -1,6 +1,6 @@
 
 import { Component, Input, OnInit } from '@angular/core';
-import { BaseForm } from '../../../../../shared/inheritance/forms/base-form';
+import { BaseForm } from '../../../../../shared/extends/forms/base-form';
 import { ValidatorsCustomer } from '../../../validators/customer/validators-customer';
 import { ValidatorMessagesCustomer } from '../../../validators/customer/validators-messages-customer';
 import { ValidatorMessages } from '../../../../../shared/components/validators/validators-messages';

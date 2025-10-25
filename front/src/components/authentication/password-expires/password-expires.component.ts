@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { AccountService } from '../services/account.service';
 import { FormBuilder } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';

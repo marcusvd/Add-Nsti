@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { RegisterService } from '../services/register.service';
 import { ResetPassword } from '../dtos/reset-password';
 import { AccountService } from '../services/account.service';

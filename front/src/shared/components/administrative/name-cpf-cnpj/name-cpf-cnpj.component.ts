@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 
 import { AddImportsGShared } from 'shared/components/imports/default-g-shared-imports';
-import { BaseForm } from '../../../../shared/inheritance/forms/base-form';
+import { BaseForm } from '../../../../shared/extends/forms/base-form';
 import { CpfCnpjValidator } from '../../validators/cpf-cnpj.validator';
 import { QueryCnpjService } from '../services/queryCnpj.service';
 import { BusinessData } from './dto/business-data';

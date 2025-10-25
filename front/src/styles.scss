@@ -125,3 +125,29 @@ mat-form-field {
     border-color: #2ba1a8 !important;
 }
 
+/*abaixo é teste pode ser removido se não for organizado*/
+.full-screen-dialog {
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0 !important;
+}
+  .mat-mdc-dialog-container {
+    border-radius: 0 !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+  }
+
+
+  // Backdrop personalizado
+.backdrop-dialog {
+  background-color: rgba(0, 0, 0, 0.788) !important;
+}
+
+// Override para garantir que o painel do overlay ocupe toda a tela
+.cdk-overlay-pane.full-screen-dialog {
+  max-width: 100vw !important;
+  width: 100vw;
+  height: 100vh;
+}

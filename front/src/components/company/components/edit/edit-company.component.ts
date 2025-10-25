@@ -1,23 +1,21 @@
 import { Component, inject, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 
 import { IsMobileNumberPipe } from "shared/pipes/is-mobile-number.pipe";
 
 import { BusinessData } from "../../../../shared/components/administrative/name-cpf-cnpj/dto/business-data";
 import { ContactService } from "../../../../shared/components/contact/services/contact.service";
-import { BaseForm } from '../../../../shared/inheritance/forms/base-form';
+import { BaseForm } from '../../../../shared/extends/forms/base-form';
 
 import { DefaultCompImports } from "../../../imports/default-comp-imports";
 
-import { CompanyEditProviders } from "components/company/imports/providers-customer";
-import { ImportsCompany } from "components/company/imports/imports-company";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { BusinessAuth } from "components/authentication/dtos/business-auth";
-import { map, Observable } from "rxjs";
-import { DefaultComponent } from "shared/components/default-component/default-component";
-import { AddressService } from "shared/components/address/services/address.service";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CompanyAuth } from "components/authentication/dtos/company-auth";
+import { ImportsCompany } from "components/company/imports/imports-company";
+import { CompanyEditProviders } from "components/company/imports/providers-customer";
+import { Observable } from "rxjs";
+import { AddressService } from "shared/components/address/services/address.service";
 
 @Component({
   selector: 'edit-company',
@@ -27,11 +25,9 @@ import { CompanyAuth } from "components/authentication/dtos/company-auth";
   imports: [
     DefaultCompImports,
     ImportsCompany,
-    DefaultComponent
   ],
   providers: [
     CompanyEditProviders,
-    // CompanyEditService
   ]
 })
 
@@ -54,8 +50,6 @@ export class EditCompanyComponent extends BaseForm implements OnInit {
     private _actRoute: ActivatedRoute,
     private _fb: FormBuilder
   ) { super() }
-
-
 
   cpfCnpjBusinessData(data: BusinessData) {
 
@@ -93,18 +87,6 @@ export class EditCompanyComponent extends BaseForm implements OnInit {
       this.contact.get('landline')?.setValue(isMobile.phoneNum);
   }
 
-  // sanitizeFormFields(form: FormGroup): void {
-  //   Object.keys(form.controls).forEach(field => {
-  //     const control = form.get(field);
-  //     if (control instanceof FormGroup) {
-  //       this.sanitizeFormFields(control);
-  //     } else if (control && (control.value === null || control.value === undefined)) {
-  //       control.setValue('');
-  //     }
-  //   })
-  // }
-
-
   _route = inject(Router);
   save() {
     if (this.alertSave(this.formMain)) {
@@ -118,15 +100,8 @@ export class EditCompanyComponent extends BaseForm implements OnInit {
     return this.formMain = this._fb.group({
       id: [x?.id ?? 0, [Validators.required]],
       name: [x?.name ?? '', [Validators.required, Validators.maxLength(100)]],
-      // tradeName: [x?.tradeName ??'', [Validators.required, Validators.maxLength(100)]],
       companyProfileId: ['back-end'],
       entityType: [],
-      // companyId: [0, [Validators.required]],
-      // companyId: [localStorage.getItem("companyId"), [Validators.required]],
-      // cnpj: [x?.cnpj ??'', []],
-      // description: ['', [Validators.maxLength(500)]],
-      // entityType: [true, []],
-      // registered: [new Date(), [Validators.required]],
       address: this.address = this._addressService.formLoad(),
       contact: this.contact = this._contactService.formLoad()
     })

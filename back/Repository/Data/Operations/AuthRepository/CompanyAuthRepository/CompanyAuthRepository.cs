@@ -1,4 +1,5 @@
 using Domain.Entities.Authentication;
+using Domain.Entities.System.Companies;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data.Context.Auth;
 

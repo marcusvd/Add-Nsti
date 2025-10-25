@@ -10,37 +10,12 @@ import { UserAccountAuthDto } from "../../../../authentication/dtos/user-account
 
 export class ListPanelControlAdm extends BaseList {
 
-
   usersAccounts: UserAccountAuthDto[] =[];
   formMain!: FormGroup;
   entityUserAccounts$!: Observable<UserAccountAuthDto[]>;
   entities$!: Observable<ListUserAccountDto[]>;
   entities: ListUserAccountDto[] = [];
   entitiesFiltered$!: Observable<ListUserAccountDto[] | undefined>;
-  // entitiesFiltered: ListAdmDto[] = [];
-  // length = 0;
-  // showHideFilter = false;
-  // term!: string;
-  // controllerUrl: string = "environment._CUSTOMERS.split('/')[4]";
-  // backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
-
-
-  // private _admService = inject(AdmService);
-  // private _fb = inject(FormBuilder);
-  // private _warningsService = inject(WarningsService);
-  // private _snackBar = inject(MatSnackBar)
-
-  constructor(
-    // override _router: Router,
-    // public _http: HttpClient,
-    // protected _phoneNumberPipe: PhoneNumberPipe,
-    // protected _deleteServices: DeleteServices,
-  ) {
-    super(
-      //
-      //
-    )
-  }
 
   sanitizeFormFields(form: FormGroup): void {
     Object.keys(form.controls).forEach(field => {
@@ -58,8 +33,7 @@ export class ListPanelControlAdm extends BaseList {
       { key: '', style: 'cursor: pointer;max-width:30px;' },
       { key: 'Usuário', style: 'cursor: pointer;' },
       { key: 'E-mail', style: 'cursor: pointer;' },
-      { key: 'Email confirmado', style: 'cursor: pointer;' },
-      // { key: 'Cel', style: 'cursor: pointer;' }
+      { key: 'Email confirmado', style: 'cursor: pointer;' }
     ]
   }
 
@@ -71,40 +45,6 @@ export class ListPanelControlAdm extends BaseList {
       { key: 'emailConfirm', style: '' },
     ]
   }
-
-  // onPageChange($event: PageEvent) {
-
-  //   if ($event.previousPageIndex ?? 0 < $event.pageIndex)
-  //     this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
-
-  //   else if ($event.previousPageIndex ?? 0 > $event.pageIndex)
-  //     this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
-
-  //   if (this.term) {
-  //     this.entitiesFiltered$ = of(this.pageChange(this.searchListEntities(this.entitiesFiltered, this.term), $event)?.filter(x => x != null))
-  //     this.length = this.searchListEntities(this.entitiesFiltered, this.term).length
-  //   }
-
-  // }
-
-  // onClickOrderByFields(field: string, entities$: Observable<ListAdmDto[] | undefined>) {
-
-  //   switch (field) {
-  //     case 'name':
-
-  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
-  //       break;
-
-  //     case 'assured':
-  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
-  //       break;
-
-  //     case 'responsible':
-  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: 0 }) as Observable<ListAdmDto[]>;
-  //       break;
-  //   }
-
-  // }
 
   onClickButton(field: string) {
   }
@@ -157,10 +97,7 @@ export class ListPanelControlAdm extends BaseList {
         display: 'icons',
         icons: ['edit|-|Alterar'],
         styleInsideCell: `max-width:30px; color:rgb(11, 112, 155); cursor: pointer; font-size:20px;`,
-        styleCell: 'max-width:30px; display:flex; justify-content: center;',
-        route: ''
-        // styleInsideCell: `max-width:30px; color:rgb(43, 161, 168); cursor: pointer; font-size:20px;`,
-        // styleCell: 'max-width:30px; display:flex; justify-content: center;',
+        styleCell: 'max-width:30px; display:flex; justify-content: center;'
       },
 
       userName: {

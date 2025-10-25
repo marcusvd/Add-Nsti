@@ -1,3 +1,5 @@
+using Domain.Entities.Authentication.extends;
+using Domain.Entities.System.Businesses;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities.Authentication;
@@ -5,10 +7,10 @@ namespace Domain.Entities.Authentication;
 public class UserAccount : IdentityUser<int>
 {
     public required string UserProfileId { get; set; }
+    public DateTime Deleted { get; set; } = DateTime.MinValue;
+    public DateTime Registered { get; set; } = DateTime.UtcNow;
     public int BusinessAuthId { get; set; }
     public BusinessAuth? BusinessAuth { get; set; }
-    public DateTime Deleted { get; set; } = DateTime.MinValue;
-    public DateTime Registered { get; set; } = DateTime.Now;
     public DateTime LastLogin { get; set; }
     public DateTime Code2FaSendEmail { get; set; } = DateTime.MinValue;
     public TimedAccessControl? TimedAccessControl { get; set; } = new TimedAccessControl();

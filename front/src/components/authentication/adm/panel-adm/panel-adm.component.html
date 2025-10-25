@@ -1,37 +1,53 @@
-<!-- <default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'mudar-aqui'"  [textSubTitleComp]="'Cadastro de empresa'" [iconSubTitleComp]="'add'" [hideDivider]="true"> -->
 <default-component *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="this.formMain.get('tradeName')?.value"
-  [textSubTitleComp]="'Cadastro de empresa'" [iconSubTitleComp]="'add'" [hideDivider]="true">
+  [textSubTitleComp]="labelTitleBar" [iconSubTitleComp]="'corporate_fare'" [hideDivider]="true">
   <div btns>
 
   </div>
   <div body>
     <mat-tab-group [formGroup]="formMain" class="p-4" animationDuration="0ms">
       <mat-tab label="Identificação">
-        <div class="p-4">
-          <company-names [formMain]="this.formMain">
+        <div>
+          <!-- {{this.formMain.value | json}} -->
+        </div>
+        <mat-card class="border-card-categories-divide-comp p-4">
+          <company-names [formMain]="this.formMain" [legalNameLbl]="'Razão social'" [tradeNameLbl]="'Nome fantasia'">
           </company-names>
           <cpf-cnpj [formMain]="formMain" (cpfCnpjBusinessData)="cpfCnpjBusinessData($event)"
             (isValidCpf)="isValidCpf($event)">
           </cpf-cnpj>
-        </div>
+          <mat-divider class="divider-line"></mat-divider>
+          <div class="pt-4 flex justify-center">
+            <btn-g [name]="'Atualizar'" [icon]="'badge'" (btn)="updateFull()"></btn-g>
+          </div>
+        </mat-card>
+
       </mat-tab>
       <mat-tab label="Endereço">
         <mat-card class="border-card-categories-divide-comp">
           <address [formMain]="address"></address>
+          <mat-divider class="divider-line"></mat-divider>
+          <div class="p-4 flex justify-center">
+            <btn-g [name]="'Atualizar'" [icon]="'location_on'" (btn)="updateAddress(this.address)"></btn-g>
+          </div>
         </mat-card>
       </mat-tab>
       <mat-tab label="Contatos">
         <mat-card class="border-card-categories-divide-comp">
           <contact [formMain]="this.contact"></contact>
+          <mat-divider class="divider-line"></mat-divider>
+          <div class="p-4 flex justify-center">
+            <btn-g [name]="'Atualizar'" [icon]="'contacts'" (btn)="updateContact(this.contact)"></btn-g>
+          </div>
         </mat-card>
       </mat-tab>
       <mat-tab label="Usuários">
-
-        <list-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$" (outOnClickIcons)="onClickIcons($event)">
-          <!-- <list-g  (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)"
+        <mat-card class="border-card-categories-divide-comp p-4">
+          <list-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$"
+            (outOnClickIcons)="onClickIcons($event)">
+            <!-- <list-g  (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)"
             (outonPageChange)="onPageChange($event)"> -->
-        </list-g>
-
+          </list-g>
+        </mat-card>Q
       </mat-tab>
     </mat-tab-group>
   </div>

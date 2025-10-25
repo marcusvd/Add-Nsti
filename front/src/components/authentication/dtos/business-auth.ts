@@ -1,7 +1,8 @@
 
 import { RootBase } from "shared/entities-dtos/root-base";
-import { CompanyAuth } from "./company-auth";
+
 import { UserAccountAuthDto } from "../../authentication/dtos/user-account-auth-dto";
+import { CompanyAuth } from "components/company/dtos/company-auth";
 
 export class BusinessAuth extends RootBase {
   name!: string;

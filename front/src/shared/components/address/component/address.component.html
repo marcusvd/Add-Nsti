@@ -1,9 +1,9 @@
-<div class="p-4">
+<div class="pt-4 pl-4 pr-4">
     <h3 class="title-categories-divide-comp">Endereço</h3>
 </div>
-<div class="p-4 w-full grid grid-col-1 gap-4" [formGroup]="formMain" *ngIf="formMain">
+<div class="pr-4 pl-4 w-full grid grid-col-1 gap-4" [formGroup]="formMain" *ngIf="formMain">
     <div class="w-full">
-        <mat-label>CEP</mat-label>
+        <mat-label class="font-bold">CEP</mat-label>
         <mat-form-field class="w-full" appearance="outline">
             <input mask="00.000-000" #cep (blur)="query(cep.value)" matInput formControlName="zipcode" placeholder="00.000-000">
             <mat-error>
@@ -15,7 +15,7 @@
 
     <div class="w-full grid grid-cols-1 sm:grid-cols-[84%_15%] gap-4">
         <div class="w-full">
-            <mat-label>Logradouro</mat-label>
+            <mat-label class="font-bold">Logradouro</mat-label>
             <mat-form-field class="w-full" appearance="outline">
                 <input matInput formControlName="street" aria-label="Logradouro">
                 <mat-error>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="w-full">
-            <mat-label>Número</mat-label>
+            <mat-label class="font-bold">Número</mat-label>
             <mat-form-field class="w-full" appearance="outline">
                 <input type="number" min="1" matInput formControlName="number" aria-label="Número">
                 <mat-error>
@@ -40,7 +40,7 @@
 
     <div class="w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="w-full">
-            <mat-label>Bairro</mat-label>
+            <mat-label class="font-bold">Bairro</mat-label>
             <mat-form-field class="w-full" appearance="outline">
                 <input matInput formControlName="district" aria-label="Bairro">
                 <mat-error>
@@ -50,7 +50,7 @@
             </mat-form-field>
         </div>
         <div class="w-full">
-            <mat-label>Cidade</mat-label>
+            <mat-label class="font-bold">Cidade</mat-label>
             <mat-form-field class="w-full" appearance="outline">
                 <input matInput formControlName="city" aria-label="Cidade">
                 <mat-error>
@@ -61,7 +61,7 @@
         </div>
 
         <div class="w-full">
-            <mat-label>Estado</mat-label>
+            <mat-label class="font-bold">Estado</mat-label>
             <mat-form-field class="w-full" appearance="outline">
                 <input matInput formControlName="state" aria-label="Estado">
                 <mat-error>
@@ -73,7 +73,7 @@
     </div>
 
     <div class="w-full">
-        <mat-label>Complemento</mat-label>
+        <mat-label class="font-bold">Complemento</mat-label>
         <mat-form-field class="w-full">
             <input matInput formControlName="complement" aria-label="Complemento">
             <mat-error>

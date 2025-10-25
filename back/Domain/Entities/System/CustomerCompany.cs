@@ -1,6 +1,6 @@
 
 using Domain.Entities.Shared;
-using Domain.Entities.System.BusinessesCompanies;
+using Domain.Entities.System.Companies;
 using Domain.Entities.System.Customers;
 
 namespace Domain.Entities.System;

@@ -1,27 +1,34 @@
 import { Injectable } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { BaseForm } from '../../../inheritance/forms/base-form';
+import { BaseForm } from '../../../extends/forms/base-form';
 import { ContactDto } from "../dtos/contact-dto";
 import { SocialMediasDto } from "../dtos/social-medias-dto";
 import { atLeastOneContactValidator } from "../validators/at-least-one-contact.validator";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ContactService extends BaseForm {
 
   constructor(
     private _fb: FormBuilder,
 
-  ) { super() }
+  ) {
+    super()
+
+  }
 
 
   formLoad(contact?: ContactDto) {
 
+    let cel = '0'.repeat(11);
+    let zap = '0'.repeat(11);
+    let landline = '0'.repeat(10);
+
     return this.formMain = this._fb.group({
       id: [contact?.id ?? 0, [Validators.required]],
       email: [contact?.email ?? '', [Validators.required, Validators.email, Validators.maxLength(150)]],
-      cel: [contact?.cel ?? '', [Validators.minLength(11)]],
-      zap: [contact?.zap ?? '', [Validators.minLength(11)]],
+      cel: [contact?.cel ?? cel ?? '', [Validators.minLength(11)]],
+      zap: [contact?.zap ?? zap ?? '', [Validators.minLength(10), Validators.maxLength(11)]],
       landline: [contact?.landline ?? '', [Validators.minLength(10)]],
       site: [contact?.site ?? '', [Validators.maxLength(150)]],
       socialMedias: this._fb.array([])
@@ -29,17 +36,7 @@ export class ContactService extends BaseForm {
 
   }
 
-  objContactNoRegister() {
-    return {
-       id:0,
-      email:"Não Cadastrado",
-      cel: "Não Cadastrado",
-      zap:"Não Cadastrado",
-      landline: "Não Cadastrado",
-      site: "Não Cadastrado",
-      socialMedias: this._fb.array([])
-    }
-  }
+
 
   seedingSocialnetworks(socialMedias?: SocialMediasDto[]) {
 

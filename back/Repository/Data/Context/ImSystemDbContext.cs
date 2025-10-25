@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.Shared;
-using Repository.Data.RelationshipEntities;
-
 using Microsoft.Extensions.Configuration;
+
+
+using Repository.Data.RelationshipEntities;
 using Domain.Entities.System.Customers;
-using Domain.Entities.System.BusinessesCompanies;
 using Domain.Entities.System.Profiles;
 using Domain.Entities.Authentication;
+using Domain.Entities.System.Businesses;
+using Domain.Entities.System.Companies;
 
 namespace Repository.Data.Context;
 

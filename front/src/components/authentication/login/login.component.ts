@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 import { DefaultCompImports } from 'components/imports/default-comp-imports';
+import { WarningsService } from 'components/warnings/services/warnings.service';
 import { CaptchaComponent } from 'shared/components/captcha/captcha.component';
 import { LoginDto } from '../dtos/login-dto';
 import { UserTokenDto } from '../dtos/user-token-dto';
@@ -20,6 +21,9 @@ import { LoginHelper } from './login-helper';
   imports: [
     DefaultCompImports,
     AuthLoginImports,
+  ],
+  providers:[
+    WarningsService
   ]
 })
 export class LoginComponent extends LoginHelper implements OnInit {
@@ -27,6 +31,7 @@ export class LoginComponent extends LoginHelper implements OnInit {
   @ViewChild('token') reCaptcha!: CaptchaComponent;
 
   private _fb = inject(FormBuilder);
+
   override formMain!: FormGroup;
 
 
@@ -43,6 +48,7 @@ export class LoginComponent extends LoginHelper implements OnInit {
     if (pwd.length == 0)
       this.loginErrorMessage = '';
   }
+
 
   login(tokenCaptcha?: string) {
 
@@ -66,9 +72,11 @@ export class LoginComponent extends LoginHelper implements OnInit {
     }
   }
 
+
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
 
+  
   pwdHideShow() {
     if (this.pwdType === 'password') {
       this.pwdType = 'text';

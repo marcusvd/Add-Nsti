@@ -1,35 +1,23 @@
-
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
-
-import { environment } from 'environments/environment';
-// import {  ProfileService } from '../services/profile.service';
-
-// import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
-// import { PasswordValidator } from '../validators/password-validator';
-// import { IsUserRegisteredValidator } from '../validators/is-user-registered-validator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTabsModule } from '@angular/material/tabs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CompanyAuth } from 'components/authentication/dtos/company-auth';
-import { UserAccountAuthDto } from "../../../authentication/dtos/user-account-auth-dto";
-import { CompanyProfileService, CompanyService } from 'components/authentication/services/company.service';
-import { CompanyNamesComponent } from 'components/company/components/commons-components/company-names/company-names.component';
 import { CompanyProfile } from 'components/company/dtos/company-profile';
-import { WarningsService } from 'components/warnings/services/warnings.service';
-import { AddressComponent } from 'shared/components/address/component/address.component';
+import { environment } from 'environments/environment';
 import { AddressService } from 'shared/components/address/services/address.service';
-import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
 import { DocType } from 'shared/components/administrative/cpf-cnpj/dto/doc-type';
 import { BusinessData } from 'shared/components/administrative/name-cpf-cnpj/dto/business-data';
-import { ContactComponent } from 'shared/components/contact/component/contact.component';
+import { ContactDto } from 'shared/components/contact/dtos/contact-dto';
 import { ContactService } from 'shared/components/contact/services/contact.service';
-import { DefaultComponent } from 'shared/components/default-component/default-component';
-import { ListGComponent } from 'shared/components/list-g/list/list-g.component';
 import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
+import { TruncatePipe } from 'shared/pipes/truncate.pipe';
+import { UserAccountAuthDto } from "../../../authentication/dtos/user-account-auth-dto";
 import { ListPanelControlAdm } from './helpers/list-panel-control-adm';
-import { ImportsPanelAdm } from './imports/imports-panel-adm';
+import { ImportsPanelAdm, ProvidersPanelAdm } from './imports/imports-panel-adm';
+import { CompanyAuth } from '../../../company/dtos/company-auth';
+import { Update_Auth_ProfileDto } from '../../../company/dtos/update-auth_profile-dto';
+import { CompanyService } from 'components/company/services/company.service';
+import { AddressDto } from 'shared/components/address/dtos/address-dto';
 
 
 @Component({
@@ -39,51 +27,68 @@ import { ImportsPanelAdm } from './imports/imports-panel-adm';
   standalone: true,
   imports: [
     ImportsPanelAdm,
-    DefaultComponent,
-    CompanyNamesComponent,
-    CpfCnpjComponent,
-    ListGComponent,
-    AddressComponent,
-    ContactComponent,
-    MatTabsModule
   ],
   providers: [
-    ContactService,
-    AddressService,
-    IsMobileNumberPipe
+    ProvidersPanelAdm,
+    TruncatePipe
   ]
 })
-export class PanelAdmComponent extends ListPanelControlAdm implements OnInit{
+export class PanelAdmComponent extends ListPanelControlAdm implements OnInit {
 
-  constructor(
-    private _companyService: CompanyService,
-    private _companyProfileService: CompanyProfileService,
-    private _fb: FormBuilder,
-    // private _isUserRegisteredValidator: IsUserRegisteredValidator,
-    override _router: Router,
-    private _actRoute: ActivatedRoute,
-    private _warningsService: WarningsService,
-    private _snackBar: MatSnackBar,
-    private _isMobileNumberPipe: IsMobileNumberPipe,
-    private _contactService: ContactService,
-    private _addressService: AddressService,
-  ) { super() }
+  private _companyService = inject(CompanyService);
+  private _actRoute = inject(ActivatedRoute);
+  private _isMobileNumberPipe = inject(IsMobileNumberPipe);
+  private _contactService = inject(ContactService);
+  private _addressService = inject(AddressService);
+  private _fb = inject(FormBuilder);
+  private _truncate = inject(TruncatePipe);
+  backendAddress = `${environment._BACK_END_ROOT_URL}/_address/UpdateAddressAsync`
+  backendContact = `${environment._BACK_END_ROOT_URL}/_contact/UpdateContactAsync`
 
-  companyName = '';
-
+  // companyName = '';
   backend = `${environment._BACK_END_ROOT_URL}/auth/ProfileAsync`
-
-  // entitiesFiltered$: any;
+  labelTitleBar!: string;
   address!: FormGroup;
   contact!: FormGroup;
 
-  cpfCnpjBusinessData(data: BusinessData) {
+  ngOnInit(): void {
+    const id = this._actRoute.snapshot.params['id'];
 
+    this.getCompanyAuth(id).subscribe(
+
+      (companyAuth: CompanyAuth) => {
+
+        this.startSupply(`${environment._BACK_END_ROOT_URL}/UserAccounts/GetUsersByCompanyIdAsync`, companyAuth?.id ?? 0)
+
+        this.getCompanProfile(companyAuth.cnpj).subscribe(
+          (companyProfile: CompanyProfile) => {
+            this.formLoad(companyAuth, companyProfile);
+
+            const contact: ContactDto = this.formMain.get('contact')?.value;
+
+            this.objContactNoRegister(contact?.cel ?? 'cadastro incompleto', 'cel', '0');
+            this.objContactNoRegister(contact?.zap ?? 'cadastro incompleto', 'zap', '0');
+            this.objContactNoRegister(contact?.landline ?? 'cadastro incompleto', 'landline', '0');
+          }
+        )
+      }
+    )
+
+  }
+
+  objContactNoRegister(value: string, field: string, characters: string) {
+    const val = value.toLocaleLowerCase();
+    const compare = 'cadastro incompleto'
+    if (val === compare && field != 'landline')
+      this.contact.get(field)?.patchValue(characters.repeat(10))
+    else
+      this.contact.get(field)?.patchValue(characters.repeat(11))
+  }
+
+  cpfCnpjBusinessData(data: BusinessData) {
     this.setFormMain(data);
     this.setEditressForm(data);
     this.setContactForm(data);
-
-
     this.sanitizeFormFields(this.formMain);
   }
 
@@ -119,10 +124,8 @@ export class PanelAdmComponent extends ListPanelControlAdm implements OnInit{
     this.contact?.reset({ id: 0 });
   }
 
-
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
-
 
   pwdHideShow() {
     if (this.pwdType === 'password') {
@@ -134,89 +137,149 @@ export class PanelAdmComponent extends ListPanelControlAdm implements OnInit{
     }
   }
 
-
-
-  back() {
-    window.history.back();
-  }
-
   formLoad(auth?: CompanyAuth, profile?: CompanyProfile): FormGroup {
-
+    this.labelTitleBar = this._truncate.transform(`Dados da empresa ${auth?.tradeName}`, 33);
     return this.formMain = this._fb.group({
       id: [auth?.id ?? 0, [Validators.required]],
+      idProfile: [profile?.id ?? 0, [Validators.required]],
       name: [auth?.name ?? '', [Validators.required, Validators.maxLength(100)]],
       tradeName: [auth?.tradeName ?? '', [Validators.required, Validators.maxLength(100)]],
-      companyProfileId: [auth?.companyProfileId],
-      businessId: [auth?.businessId],
-
-      // companyId: [0, [Validators.required]],
-      // companyId: [localStorage.getItem("companyId"), [Validators.required]],
-      cnpj: [profile?.cnpj ?? '', []],
-      // description: ['', [Validators.maxLength(500)]],
+      // companyProfileId: [auth?.companyProfileId],
+      businessId: [auth?.businessId, Validators.required],
+      businessProfileId: [profile?.businessProfileId, Validators.required],
+      cnpj: [(auth?.cnpj ?? profile?.cnpj) ?? '0000000000', []],
       entityType: [true, []],
-      // registered: [new Date(), [Validators.required]],
-      address: this.address = this._addressService.formLoad(profile?.address),
-      contact: this.contact = this._contactService.formLoad(profile?.contact)
+      address: this.address = this._addressService.formLoad(profile?.address) ?? new FormGroup({}),
+      contact: this.contact = this._contactService.formLoad(profile?.contact) ?? new FormGroup({})
     })
 
   }
 
-  // deleted
-  // Registered
+  updateFull() {
+
+    const update_Auth_Profile: Update_Auth_ProfileDto = this.objHandler(this.formMain);
+
+    console.log(this.formMain)
+    console.log(update_Auth_Profile)
+
+
+    if (this.alertSave(this.formMain)) {
+      this._companyService.update_Auth_Profile$(update_Auth_Profile).subscribe({
+        next: (result: boolean) => {
+
+          if (result)
+            this.openSnackBar('Atualizado, com sucesso, ' + update_Auth_Profile.companyAuth.name + '!', 'warnings-success');
+
+          // this.callRouter(`/users/adm-list/${toSave.id}`);
+
+
+        },
+        error: (err) => {
+          console.log(err)
+          const erroCode: string = err.error.Message
+        }
+      })
+    }
+  }
+
+  objHandler(form: FormGroup): Update_Auth_ProfileDto {
+
+    const update_Auth_ProfileDto: Update_Auth_ProfileDto = new Update_Auth_ProfileDto();
+
+    const companyAuth: CompanyAuth = this.companyAuthMakeFormUpdate(form)
+    const companyProfile: CompanyProfile = this.companyProfileMakeFormUpdate(form)
+
+    update_Auth_ProfileDto.companyAuth = companyAuth;
+    update_Auth_ProfileDto.companyProfile = companyProfile;
+
+
+    update_Auth_ProfileDto.companyAuthId = companyAuth.id;
+    update_Auth_ProfileDto.companyProfileId = companyProfile.id;
+
+    return update_Auth_ProfileDto;
+  }
+
+
+  companyAuthMakeFormUpdate(form: FormGroup) {
+
+    const companyAuth: CompanyAuth = new CompanyAuth();
+
+    companyAuth.id = form.get('id')?.value;
+    companyAuth.businessId = form.get('businessId')?.value;
+    companyAuth.name = form.get('name')?.value;
+    companyAuth.tradeName = form.get('tradeName')?.value;
+    companyAuth.cnpj = form.get('cnpj')?.value;
+
+    return companyAuth;
+  }
+
+  companyProfileMakeFormUpdate(form: FormGroup) {
+
+    const companyProfile: CompanyProfile = new CompanyProfile();
+
+    companyProfile.id = form.get('idProfile')?.value;
+    companyProfile.cnpj = form.get('cnpj')?.value;
+    companyProfile.businessProfileId = form.get('businessProfileId')?.value;
+    companyProfile.address = form.get('address')?.value;
+    companyProfile.contact = form.get('contact')?.value;
+
+    return companyProfile;
+  }
+
+
+
+
+
+  updateAddress(form: FormGroup) {
+    const address: AddressDto = { ...form.value }
+    if (this.alertSave(this.address))
+      this._companyService.update$<AddressDto>(this.backendAddress, address).subscribe({
+        next: (result: any) => {
+
+          if (result)
+            this.openSnackBar('Endereço atualizado, com sucesso! ' + '!', 'warnings-success');
+
+          // this.callRouter(`/users/adm-list/${toSave.id}`)
+
+        },
+        error: (err) => {
+          console.log(err)
+          const erroCode: string = err.error.Message
+        }
+      })
+  }
+  updateContact(form: FormGroup) {
+    const contact: ContactDto = { ...form.value }
+    if (this.alertSave(this.contact))
+      this._companyService.update$<ContactDto>(this.backendContact, contact).subscribe({
+        next: (result: any) => {
+
+          if (result)
+            this.openSnackBar('Contato atualizado, com sucesso! ' + '!', 'warnings-success');
+
+          // this.callRouter(`/users/adm-list/${toSave.id}`)
+
+        },
+        error: (err) => {
+          console.log(err)
+          const erroCode: string = err.error.Message
+        }
+      })
+  }
+
 
 
   getCompanyAuth(id: string) {
-    return this._companyService.loadById$<CompanyAuth>(`${environment._BACK_END_ROOT_URL}/AuthAdm/GetCompanyAuthFullAsync`, id);
+    return this._companyService.loadById$<CompanyAuth>(`${environment._BACK_END_ROOT_URL}/_Companies/GetCompanyAuthFullAsync`, id);
   }
 
-  getCompanProfile(companyProfileId: string) {
-    return this._companyService.loadById$<CompanyProfile>(`${environment._BACK_END_ROOT_URL}/AuthAdm/GetCompanyProfileAsync`, companyProfileId);
+  getCompanProfile(cnpj: string) {
+    return this._companyService.loadById$<CompanyProfile>(`${environment._BACK_END_ROOT_URL}/_Companies/GetCompanyProfileAsync`, cnpj);
   }
 
   getUsersByCompanyIdAsync(companyAuthId: string) {
-    return this._companyService.loadById$<UserAccountAuthDto[]>(`${environment._BACK_END_ROOT_URL}/AuthAdm/GetUsersByCompanyIdAsync`, companyAuthId);
+    return this._companyService.loadById$<UserAccountAuthDto[]>(`${environment._BACK_END_ROOT_URL}/UserAccounts/GetUsersByCompanyIdAsync`, companyAuthId);
   }
 
-
-
-
-  ngOnInit(): void {
-    const id = this._actRoute.snapshot.params['id'];
-
-
-    // this._companyService.loadById$<CompanyProfile>('http://localhost:5156/api/AuthAdm/GetCompanyProfileAsync', companyAuth.companyProfileId).subscribe(
-    //   (companyProfile: CompanyProfile) => {
-
-    //     console.log(companyAuth.id)
-    //     this.formLoad(companyAuth, companyProfile);
-    //   }
-    // )
-
-    this.getCompanyAuth(id).subscribe(
-
-      (companyAuth: CompanyAuth) => {
-
-
-        this.startSupply(`${environment._BACK_END_ROOT_URL}/AuthAdm/GetUsersByCompanyIdAsync`, companyAuth?.id ?? 0)
-
-
-        // this.getUsersByCompanyIdAsync(companyAuth.id.toString()).subscribe(
-        //   (users: UserAccount[]) => {
-        //     console.log(users)
-        //   }
-        // )
-
-
-
-        this.getCompanProfile(companyAuth.companyProfileId).subscribe(
-          (companyProfile: CompanyProfile) => {
-            this.formLoad(companyAuth, companyProfile);
-          }
-        )
-
-
-      }
-    )
-  }
 
 }

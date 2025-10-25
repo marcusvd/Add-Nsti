@@ -134,7 +134,7 @@ namespace Repository.Migrations
                     b.ToTable("SD_socialnetworks");
                 });
 
-            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.BusinessProfile", b =>
+            modelBuilder.Entity("Domain.Entities.System.Businesses.BusinessProfile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,7 +157,7 @@ namespace Repository.Migrations
                     b.ToTable("MN_businesses_profiles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.CompanyProfile", b =>
+            modelBuilder.Entity("Domain.Entities.System.Companies.CompanyProfile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,11 +173,7 @@ namespace Repository.Migrations
 
                     b.Property<string>("CNPJ")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CompanyAuthId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int?>("ContactId")
                         .HasColumnType("int");
@@ -193,6 +189,9 @@ namespace Repository.Migrations
                     b.HasIndex("AddressId");
 
                     b.HasIndex("BusinessProfileId");
+
+                    b.HasIndex("CNPJ")
+                        .IsUnique();
 
                     b.HasIndex("ContactId");
 
@@ -319,13 +318,13 @@ namespace Repository.Migrations
                     b.Navigation("Contact");
                 });
 
-            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.CompanyProfile", b =>
+            modelBuilder.Entity("Domain.Entities.System.Companies.CompanyProfile", b =>
                 {
                     b.HasOne("Domain.Entities.Shared.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", "BusinessProfile")
+                    b.HasOne("Domain.Entities.System.Businesses.BusinessProfile", "BusinessProfile")
                         .WithMany("Companies")
                         .HasForeignKey("BusinessProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -344,7 +343,7 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Domain.Entities.System.CustomerCompany", b =>
                 {
-                    b.HasOne("Domain.Entities.System.BusinessesCompanies.CompanyProfile", "Company")
+                    b.HasOne("Domain.Entities.System.Companies.CompanyProfile", "Company")
                         .WithMany("CustomersCompanies")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -382,7 +381,7 @@ namespace Repository.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("Domain.Entities.System.BusinessesCompanies.BusinessProfile", "BusinessProfile")
+                    b.HasOne("Domain.Entities.System.Businesses.BusinessProfile", "BusinessProfile")
                         .WithMany("UsersAccounts")
                         .HasForeignKey("BusinessProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -404,14 +403,14 @@ namespace Repository.Migrations
                     b.Navigation("SocialMedias");
                 });
 
-            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.BusinessProfile", b =>
+            modelBuilder.Entity("Domain.Entities.System.Businesses.BusinessProfile", b =>
                 {
                     b.Navigation("Companies");
 
                     b.Navigation("UsersAccounts");
                 });
 
-            modelBuilder.Entity("Domain.Entities.System.BusinessesCompanies.CompanyProfile", b =>
+            modelBuilder.Entity("Domain.Entities.System.Companies.CompanyProfile", b =>
                 {
                     b.Navigation("CustomersCompanies");
                 });

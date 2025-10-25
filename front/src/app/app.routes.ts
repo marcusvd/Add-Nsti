@@ -9,17 +9,18 @@ import { ForgotPasswordComponent } from 'components/authentication/forgot-passwo
 import { PasswordResetComponent } from 'components/authentication/password-reset/password-reset.component';
 import { ConfirmEmailChangedComponent } from 'components/authentication/confirm-email-changed/confirm-email-changed.component';
 import { TwoFactorCheckComponent } from 'components/authentication/two-factor-check/two-factor-check.component';
+import { SelectCompanyComponent } from 'components/authentication/select-company/select-company.component';
 
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  // { path: 'login', component: RegisterComponent },
   { path: 'two-factor-check', component: TwoFactorCheckComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'confirm-email', component: ConfirmEmailComponent },
   { path: 'confirm-request-email-change', component: ConfirmEmailChangedComponent },
   { path: 'forgot', component: ForgotPasswordComponent },
   { path: 'password-reset', component: PasswordResetComponent },
+    { path: 'select-company-to-start/:id', component: SelectCompanyComponent },
   { path: 'unknown-route', component: UnknownRouteComponent },
   {
     path: '', component: SideNavComponent,

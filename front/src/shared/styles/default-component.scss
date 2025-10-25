@@ -60,6 +60,14 @@
     margin: 0.5rem 0;
 }
 
+.divider-line {
+    display: flex;
+    justify-items: center;
+    border: 1px dashed #0478c5;
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
 .sub-title-mat-card {
     border-top-left-radius: 20px !important;
     border-top-right-radius: 20px !important;

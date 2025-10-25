@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 
 
 import { Observable, Subscription } from 'rxjs';
@@ -20,7 +20,10 @@ import { FormControl } from '@angular/forms';
   ],
   styleUrls: ['./list-card-g.component.scss']
 })
-export class ListCardGComponent implements OnChanges, OnInit, OnDestroy {
+export class ListCardGComponent implements OnChanges, OnInit,AfterViewInit,OnDestroy {
+  ngAfterViewInit(): void {
+   this.lassItensCard = `flex flex-col justify-start items-start py-1 border-color-main last:border-0 h-${this.spaceMenuItens}`
+  }
 
   @ViewChild('paginatorAbove') paginatorAbove!: MatPaginator
   @ViewChild('paginatorBelow') paginatorBelow!: MatPaginator
@@ -30,6 +33,7 @@ export class ListCardGComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() headersLabel: FieldsInterface[] = [];
   @Input() headersFields: FieldsInterface[] = [];
+  @Input() spaceMenuItens:number = 20;
   @Output() outOnClickIcons = new EventEmitter<OnClickInterface>();
   @Output() outOnClickButton = new EventEmitter<string>();
   @Output() outOnClickHeaderField = new EventEmitter<string>();
@@ -40,6 +44,7 @@ export class ListCardGComponent implements OnChanges, OnInit, OnDestroy {
   pageSize: number = 20;
   pageIndex = 0
   pageEvent!: PageEvent;
+  lassItensCard:string = '';
 
   destroy!: Subscription;
 

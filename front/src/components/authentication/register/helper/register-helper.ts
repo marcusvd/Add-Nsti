@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 
 import { AddressService } from 'shared/components/address/services/address.service';
 import { BusinessData } from 'shared/components/administrative/cpf-cnpj/dto/business-data';

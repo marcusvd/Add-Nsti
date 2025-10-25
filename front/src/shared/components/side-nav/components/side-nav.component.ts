@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-// import { BaseForm } from '../../inheritance/forms/base-form';
+// import { BaseForm } from '../../extends/forms/base-form';
 import { SideMenuLargeComponent } from './common-components/side-menu-large/side-menu-large.component';
 import { SideMenuTopLargeComponent } from './common-components/side-menu-large/top-large/top-large.component';
 import { SideMenuSlimComponent } from './common-components/side-menu-slim/side-menu-slim.component';

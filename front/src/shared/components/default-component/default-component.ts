@@ -15,7 +15,7 @@ export class DefaultComponent {
   @Input({ required: true }) digitTitleComp!: string;
   @Input({ required: true }) textTitleComp!: string;
 
-  @Input() main_container: string = 'space-around mb-14';
+  @Input() main_container: string = 'space-around mt-2 mb-2 mr-12';
   @Input() hideDivider: boolean = false;
 
   @Input({ required: true }) textSubTitleComp!: string;

@@ -3,7 +3,7 @@ using Domain.Entities.Shared;
 
 namespace Domain.Entities.System.Customers;
 
-public class Customer : RootBase
+public class Customer : RootBaseDb
 {
   public required string Name { get; set; }
   public required string TradeName { get; set; }

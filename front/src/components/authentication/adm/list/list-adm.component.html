@@ -1,13 +1,5 @@
-<default-component [digitTitleComp]="'|'" [textTitleComp]="'Empresas'" [textSubTitleComp]="'Cadastro'"
-  [iconSubTitleComp]="'add'" [hideDivider]="true">
-
-
-
-
-
-
-
-  <!-- <default-component [formGroup]="formMain" *ngIf="formMain" [digitTitleComp]="'|'" [textTitleComp]="'Despesas Anuais'" [textSubTitleComp]="'Cadastro'" [iconSubTitleComp]="'add'"> -->
+<default-component [digitTitleComp]="'|'" [textTitleComp]="'Empresas'" [textSubTitleComp]="'Empresas do grupo'"
+  [iconSubTitleComp]="'list'" [hideDivider]="true">
   <div btns>
     <div class="p-4">
       <h3>{{this.business.name}}</h3>
@@ -15,39 +7,10 @@
         <btn-g btn-1 [name]="'Adicionar'" [icon]="'add'" (btn)="callRouter(addRoute)"></btn-g>
       </div>
     </div>
-    <!-- <div class="p-4">
-      <div class="grid grid-cols-[60px_60px_60px] gap-10">
-        <div>
-          <mat-label>Usuários</mat-label>
-        </div>
-        <div>
-        </div>
-        <div>
-          <mat-label>Empresas</mat-label>
-        </div>
-      </div>
-    </div> -->
   </div>
   <div body>
-    <!-- <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-      <mat-tab label="Usuários">
-
-      </mat-tab>
-
-
-      <mat-tab label="Empresas" *ngIf="this.entityBusiness$">
-        <add-company [entity]="this.entityBusiness$"></add-company>
-      </mat-tab>
-    </mat-tab-group> -->
-
-
-
-    <list-card-g (outOnClickIcons)="onClickIcons($event)" [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$">
+    <list-card-g (outOnClickIcons)="onClickIcons($event)" [headersLabel]="labelHeaders()"
+      [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$" [spaceMenuItens]="20">
     </list-card-g>
-
-
-
-    <!-- <list-card-g [headersLabel]="labelHeaders()" [headersFields]="fieldsHeaders()" [entities]="this.entitiesFiltered$" (outOnClickHeaderField)="onClickOrderByFields($event, this.entitiesFiltered$)" (outOnClickButton)="onClickButton($event)" (outOnClickIcons)="onClickIcons($event)"> -->
   </div>
-
 </default-component>

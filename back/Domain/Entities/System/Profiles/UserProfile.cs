@@ -1,9 +1,11 @@
+using Domain.Entities.Authentication.extends;
 using Domain.Entities.Shared;
-using Domain.Entities.System.BusinessesCompanies;
+using Domain.Entities.System.Businesses;
+
 
 namespace Domain.Entities.System.Profiles;
 
-public class UserProfile : RootBase
+public class UserProfile : UserAccountBaseDb
 {
     public int BusinessProfileId { get; set; }
     public BusinessProfile? BusinessProfile { get; set; }

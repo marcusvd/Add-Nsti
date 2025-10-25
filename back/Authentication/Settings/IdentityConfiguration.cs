@@ -5,12 +5,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Authentication.Helpers;
 using Repository.Data.Context.Auth;
 using Domain.Entities.Authentication;
-using Authentication.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Authentication.Validators;
 
 namespace Authentication.Settings;
 
@@ -88,9 +87,8 @@ public static class IdentityConfiguration
     {
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
         //
-        services.AddScoped<JwtHandler>();
-
         services.AddScoped<UserClaimsPrincipalFactory<UserAccount>>();
+ 
 
         services.ConfigureApplicationCookie(options =>
    {

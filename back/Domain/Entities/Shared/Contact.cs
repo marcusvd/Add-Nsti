@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Entities.Shared
 {
-    public class Contact: RootBase
+    public class Contact: RootBaseDb
     {
         public string? Email { get; set; } = string.Empty;
         public string? Site { get; set; } = string.Empty;

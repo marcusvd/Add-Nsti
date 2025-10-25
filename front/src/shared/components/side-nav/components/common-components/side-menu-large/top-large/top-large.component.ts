@@ -29,13 +29,14 @@ import { WarningsService } from 'components/warnings/services/warnings.service';
 })
 export class SideMenuTopLargeComponent implements OnInit {
 
-_warningsService = inject(WarningsService);
+  private _warningsService = inject(WarningsService);
+  private _auth = inject(LoginService);
+  private _router = inject(Router);
+  public isAuthenticated: UserTokenDto = JSON.parse(localStorage.getItem("userToken") ?? '{}');
 
-  constructor(
-    private _auth: LoginService,
-    private _router: Router
-  ) { }
-
+  userAccountPSDefault: string = `/users/user-account-profile-settings/${this.isAuthenticated.id}`;
+  test: string = `/users/select-company-to-start/${this.isAuthenticated.id}`;
+  
   firstLetter!: string;
   userName!: string;
   businessId!: number;
@@ -48,25 +49,25 @@ _warningsService = inject(WarningsService);
   logOut() {
     this._auth.logOut().subscribe(
       (x: ApiResponse<string>) => {
-        if (x.success)
+        if (x.success) {
           this._warningsService.openSnackBar('Até mais...', 'warnings-success');
+          localStorage.clear();
+          this._router.navigateByUrl('login');
+        }
       }
     );
-
-    localStorage.clear();
-    this._router.navigateByUrl('login');
   }
+
+
 
   ngOnInit(): void {
 
-    const isAuthenticated: UserTokenDto = JSON.parse(localStorage.getItem("userToken") ?? '{}');
+    this.sysadm = this.isAuthenticated.roles.includes("SYSADMIN");
 
-    this.sysadm = isAuthenticated.roles.includes("SYSADMIN");
+    this.route = `/users/adm-list/${this.isAuthenticated.businessId}`
 
-    this.route = `/users/adm-list/${isAuthenticated.businessId}`
+    this.firstLetter = this.isAuthenticated.userName.substring(0, 1) ?? '';
 
-    this.firstLetter = isAuthenticated.userName.substring(0, 1) ?? '';
-
-    this.userName = isAuthenticated.userName?.split('@')[0] ?? '';
+    this.userName = this.isAuthenticated.userName?.split('@')[0] ?? '';
   }
 }

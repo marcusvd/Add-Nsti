@@ -6,7 +6,7 @@ import { IsMobileNumberPipe } from "shared/pipes/is-mobile-number.pipe";
 import { AddressService } from "../../../../shared/components/address/services/address.service";
 import { BusinessData } from "../../../../shared/components/administrative/name-cpf-cnpj/dto/business-data";
 import { ContactService } from "../../../../shared/components/contact/services/contact.service";
-import { BaseForm } from '../../../../shared/inheritance/forms/base-form';
+import { BaseForm } from '../../../../shared/extends/forms/base-form';
 
 import { DefaultCompImports } from "../../../imports/default-comp-imports";
 import { CompanyAddService } from "../../services/company-add.service";
@@ -44,7 +44,7 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
   @Input('entity') entityBusiness$!: Observable<BusinessAuth>;
 
   private _route = inject(Router);
-  
+
   address!: FormGroup;
   contact!: FormGroup;
 
@@ -78,8 +78,8 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
 
   isValidCpf(isCpfValid: DocType) {
     this.formMain?.get('companyName')?.setValue('');
-    this.address?.reset({id:0});
-    this.contact?.reset({id:0});
+    this.address?.reset({ id: 0 });
+    this.contact?.reset({ id: 0 });
   }
 
   setAddressForm(data: BusinessData) {
@@ -115,6 +115,7 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
 
     return this.formMain = this._fb.group({
       id: [x?.id, [Validators.required]],
+      businessId: [x?.id, [Validators.required]],
       businessProfileId: [x?.businessProfileId, [Validators.required]],
       name: [x?.name, [Validators.required, Validators.maxLength(100)]],
       company: this.subForm = this._fb.group({
@@ -122,6 +123,7 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
         name: ['', [Validators.required, Validators.maxLength(100)]],
         tradeName: ['', [Validators.required, Validators.maxLength(100)]],
         companyProfileId: ['back-end'],
+        businessId: [x?.id, [Validators.required]],
 
       }),
       cnpj: [''],
@@ -133,7 +135,7 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
   ngOnInit(): void {
 
     const id = this._actRoute.snapshot.params['id'];
-    this._companyService.loadById$<BusinessAuth>('http://localhost:5156/api/AuthAdm/GetBusinessAsync', id).subscribe(
+    this._companyService.loadById$<BusinessAuth>('http://localhost:5156/api/_Businesses/GetBusinessAsync', id).subscribe(
       (x: BusinessAuth) => {
         this.formLoad(x)
       }

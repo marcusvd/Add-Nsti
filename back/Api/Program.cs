@@ -1,6 +1,7 @@
 using Api.Configuration;
-using Application.Services.Helpers.Extensions;
-using Application.Services.Shared.Mappers.BaseMappers;
+using Application.EmailServices.ExtensionMethods;
+using Application.Helpers.Extensions;
+
 using Authentication.Jwt;
 using Authentication.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+
 builder.Services.AddNewtonsoftJsonControllers();
 
 builder.Services.AddIdentitySettings();
@@ -23,7 +25,6 @@ builder.Services.AddIdentitySettings();
 builder.Services.AddDiIdentity();
 
 builder.Services.AddDiAuthentication();
-builder.Services.DiMappers();
 builder.Services.AddDiServicesRepositories();
 
 builder.Services.DataProtectionTokenProviderOptions();
@@ -41,6 +42,7 @@ builder.Services.AddAuthorizationSettings();
 //         x => x.RequireClaim("amr", "sub")));
 
 builder.Services.AddJwt(builder.Configuration);
+builder.Services.AddEmailService(builder.Configuration);
 
 // builder.Services.Configure<AuthenticatorTokenProviderOptions>(opt =>
 // {

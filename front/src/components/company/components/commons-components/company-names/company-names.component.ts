@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 
 
 import { AddImportsGShared } from 'shared/components/imports/default-g-shared-imports';
-import { BaseForm } from '../../../../../shared/inheritance/forms/base-form';
+import { BaseForm } from '../../../../../shared/extends/forms/base-form';
 
 
 @Component({
@@ -19,6 +19,8 @@ import { BaseForm } from '../../../../../shared/inheritance/forms/base-form';
 export class CompanyNamesComponent extends BaseForm  {
 
   @Input() override  formMain!: FormGroup;
+  @Input() legalNameLbl: string = 'Nome';
+  @Input() tradeNameLbl: string = 'Nome Fantasia';
 
   constructor() { super() }
 

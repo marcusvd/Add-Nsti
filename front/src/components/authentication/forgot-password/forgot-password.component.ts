@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AccountService } from '../services/account.service';
 import { ImportsForgot } from './imports/imports-forgot';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { ForgotPassword } from '../dtos/forgot-password';
 
 @Component({

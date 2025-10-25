@@ -2,7 +2,8 @@ import { AddressDto } from "shared/components/address/dtos/address-dto";
 import { ContactDto } from "shared/components/contact/dtos/contact-dto";
 
 export class CompanyProfile {
-  companyAuthId!: number;
+  // companyAuthId!: number;
+  id!:number;
   cnpj!: string;
   businessProfileId!: number;
   businessProfile!: number;

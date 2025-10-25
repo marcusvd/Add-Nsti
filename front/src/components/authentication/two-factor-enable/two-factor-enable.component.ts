@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { AccountService } from '../services/account.service';
 import { ApiResponse, AuthenticatorSetupResponse, EnableAuthenticatorResponse } from './dtos/authenticator-setup-response';
 import { BtnGComponent } from 'shared/components/btn-g/btn-g.component';

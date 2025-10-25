@@ -5,8 +5,4 @@ export class ListAdmDto {
   name!: ItemsInterface;
   usersAmount!: ItemsInterface;
   iconsLabels!:ItemsInterface;
-
-  // entityType!: ItemsInterface;
-  // entityTypeToView!: ItemsInterface;
-  // contact!: ItemsInterface;
 }

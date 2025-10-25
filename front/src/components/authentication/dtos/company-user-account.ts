@@ -1,4 +1,5 @@
-import { CompanyAuth } from "./company-auth";
+
+import { CompanyAuth } from "components/company/dtos/company-auth";
 import { UserAccountAuthDto } from "../../authentication/dtos/user-account-auth-dto";
 
 export class CompanyUserAccount

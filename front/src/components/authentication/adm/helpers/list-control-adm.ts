@@ -1,69 +1,29 @@
 
-import { PageEvent } from '@angular/material/paginator';
 import { map, Observable, of } from 'rxjs';
 import { BaseList } from '../../../../shared/components/list-g/extends/base-list';
 import { OnClickInterface } from '../../../../shared/components/list-g/list/interfaces/on-click-interface';
 
-import { BusinessAuth } from 'components/authentication/dtos/business-auth';
-import { ListAdmDto } from '../list/dtos/list-adm.dto';
 import { inject } from '@angular/core';
-import { CompanyAuth } from 'components/authentication/dtos/company-auth';
+import { BusinessAuth } from 'components/authentication/dtos/business-auth';
+import { CompanyAuth } from "components/company/dtos/company-auth";
+import { TruncatePipe } from 'shared/pipes/truncate.pipe';
+import { ListAdmDto } from '../list/dtos/list-adm.dto';
 
 
 export class ListControlAdm extends BaseList {
 
-
-  business: BusinessAuth = new BusinessAuth();
-
+  private _truncate = inject(TruncatePipe);
   entityBusiness$!: Observable<BusinessAuth>;
-
   entities$!: Observable<ListAdmDto[]>;
-  entities: ListAdmDto[] = [];
   entitiesFiltered$!: Observable<ListAdmDto[] | undefined>;
-  // entitiesFiltered: ListAdmDto[] = [];
-  // length = 0;
-  // showHideFilter = false;
-  // term!: string;
-  // controllerUrl: string = "environment._CUSTOMERS.split('/')[4]";
-  // backEndUrl: string = `${this.controllerUrl}/GetAllCustomersPagedAsync`;
-
-
-  // private _admService = inject(AdmService);
-  // private _fb = inject(FormBuilder);
-  // private _warningsService = inject(WarningsService);
-  // private _snackBar = inject(MatSnackBar)
-
-  constructor(
-    // override _router: Router,
-    // public _http: HttpClient,
-    // protected _phoneNumberPipe: PhoneNumberPipe,
-    // protected _deleteServices: DeleteServices,
-  ) {
-    super(
-      //
-      //
-    )
-  }
-  // constructor(
-  //   override _router: Router,
-  //   public _http: HttpClient,
-  //   protected _entityTypePipe: EntityTypePipe,
-  //   protected _phoneNumberPipe: PhoneNumberPipe,
-  //   protected _customerServices: CustomerListService,
-  //   protected _deleteServices: DeleteServices,
-  // ) {
-  //   super(
-  //
-  //
-  //   )
-  // }
+  business: BusinessAuth = new BusinessAuth();
+  entities: ListAdmDto[] = [];
 
   labelHeaders = () => {
     return [
       { key: '', style: 'cursor: pointer;' },
       { key: 'Empresa', style: 'cursor: pointer;' },
       { key: 'Usuários', style: 'cursor: pointer;' },
-      // { key: 'Cel', style: 'cursor: pointer;' }
     ]
   }
 
@@ -72,43 +32,8 @@ export class ListControlAdm extends BaseList {
       { key: 'id', style: '' },
       { key: 'name', style: '' },
       { key: 'usersAmount', style: '' },
-      // { key: 'contact', style: '' }
     ]
   }
-
-  // onPageChange($event: PageEvent) {
-
-  //   if ($event.previousPageIndex ?? 0 < $event.pageIndex)
-  //     this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
-
-  //   else if ($event.previousPageIndex ?? 0 > $event.pageIndex)
-  //     this.entitiesFiltered$ = of(this.pageChange(this.entitiesFiltered, $event)?.filter(x => x != null))
-
-  //   if (this.term) {
-  //     this.entitiesFiltered$ = of(this.pageChange(this.searchListEntities(this.entitiesFiltered, this.term), $event)?.filter(x => x != null))
-  //     this.length = this.searchListEntities(this.entitiesFiltered, this.term).length
-  //   }
-
-  // }
-
-  // onClickOrderByFields(field: string, entities$: Observable<ListAdmDto[] | undefined>) {
-
-  //   switch (field) {
-  //     case 'name':
-
-  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
-  //       break;
-
-  //     case 'assured':
-  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: '' }) as Observable<ListAdmDto[]>;
-  //       break;
-
-  //     case 'responsible':
-  //       this.entities$ = this.orderByFrontEnd(entities$, { key: field, value: 0 }) as Observable<ListAdmDto[]>;
-  //       break;
-  //   }
-
-  // }
 
   onClickButton(field: string) {
   }
@@ -117,9 +42,9 @@ export class ListControlAdm extends BaseList {
 
     console.log(obj.action.split('|')[0])
 
-    if (obj.action.split('|')[0] == 'edit'){
+    if (obj.action.split('|')[0] == 'edit') {
       this.callRouter(`users/edit-company/${obj.entityId}`);
-}
+    }
     if (obj.action.split('|')[0] == 'delete')
       this.deleteFake(obj.entityId);
 
@@ -149,7 +74,6 @@ export class ListControlAdm extends BaseList {
     // })
   }
 
-
   supplyItemsGrid = (companyList: ListAdmDto[], company: CompanyAuth) => {
 
     const items: ListAdmDto = new ListAdmDto();
@@ -167,7 +91,7 @@ export class ListControlAdm extends BaseList {
       },
 
       name: {
-        key: company.name,
+        key: this._truncate.transform(company.name, 33),
         styleCell: 'width:100%;',
       },
       usersAmount: {

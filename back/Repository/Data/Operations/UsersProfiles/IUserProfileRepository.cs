@@ -1,4 +1,4 @@
-using Domain.Entities.System.BusinessesCompanies;
+
 using Domain.Entities.System.Profiles;
 using Repository.Data.Operations.Repository;
 

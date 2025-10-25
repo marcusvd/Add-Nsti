@@ -2,11 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
-
-using Domain.Entities.System.Customers;
-using Domain.Entities.System.BusinessesCompanies;
 using Domain.Entities.System;
-using Domain.Entities.Authentication;
+using Domain.Entities.System.Companies;
+using Domain.Entities.System.Businesses;
 
 
 namespace Repository.Data.RelationshipEntities;
@@ -18,9 +16,7 @@ public class CompanyFluentApi : IEntityTypeConfiguration<CompanyProfile>
     {
         builder.HasKey(x => x.Id);
 
-
-        // builder.HasMany<UserAccount>(x => x.UserAccounts).WithOne(x => x.Company)
-        // .HasForeignKey(x => x.CompanyId).IsRequired(true);
+        builder.HasIndex(x => x.CNPJ).IsUnique(true);
 
     }
 }
@@ -60,7 +56,7 @@ public class BusinessProfileFluentApi : IEntityTypeConfiguration<BusinessProfile
 
         //Many to maany
         builder.HasMany(x => x.UsersAccounts).WithOne(x => x.BusinessProfile).HasForeignKey(fk => fk.BusinessProfileId);
-        
+
     }
 }
 

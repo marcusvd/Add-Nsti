@@ -6,7 +6,6 @@ using System;
 using Repository.Data.Context;
 using Microsoft.EntityFrameworkCore.Query;
 using Pagination.Models;
-using System.Collections.Generic;
 
 namespace Repository.Data.Operations.Repository;
     public class Repository<T> : IRepository<T> where T : class

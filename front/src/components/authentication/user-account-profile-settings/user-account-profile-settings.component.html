@@ -1,0 +1,84 @@
+<default-component [main_container]="'sm:w-[800px] space-around'" [formGroup]="formMain" *ngIf="formMain"
+  [digitTitleComp]="'|'" [textTitleComp]="formMain.get('email')?.value" [textSubTitleComp]="'Perfil'"
+  [iconSubTitleComp]="'list'" [hideDivider]="true">
+  <div btns>
+
+  </div>
+  <div body>
+
+    <mat-tab-group class="p-4" animationDuration="0ms">
+      <mat-tab label="Segurança">
+
+        <div class="grid grid-cols-2 gap-4 p-4">
+
+          <div class="pt-5">
+            <two-factor-setup [toggleRefresh]="toggleRefresh">
+            </two-factor-setup>
+             <div class="p-5"></div>
+            <two-factor-enable (toggleBtn)="toggleBtn($event)"></two-factor-enable>
+          </div>
+
+
+
+         <div>
+            <account-status [isLockOutShow]="false" [isEmailConfirmedShow]="false" [isLastLoginShow]="true" [userName]="emailUserName()" [lastLogin]="lastLogin"></account-status>
+            <email-2fa-token-send [onOff]="onOffCode2FaSendEmail" [email]="this.email"></email-2fa-token-send>
+            <password-change [userIdRoute]="userIdRoute" [userName]="userAuth?.userName ?? ''">
+            </password-change>
+          </div>
+        </div>
+
+      </mat-tab>
+
+      <mat-tab label="Identificação">
+
+        <mat-card class="border-card-categories-divide-comp">
+          <div class="p-4">
+            <h3 class="title-categories-divide-comp">Identificação</h3>
+          </div>
+          <div class="p-4 w-full grid-cols-1 gap-4">
+            <email-field [formMain]="formMain">
+
+
+            </email-field>
+            <div class="w-full">
+              <mat-label class="text-slate-900"> <b>Nome de exibição</b></mat-label>
+              <mat-form-field class="w-full" appearance="outline">
+                <input matInput type="text" formControlName="displayUserName" aria-label="displayUserName">
+                <mat-error>
+                  <span
+                    *ngIf="formErrorAndTouched(formMain, 'displayUserName','required')">{{defaultMessages.requiredMsg}}</span>
+                </mat-error>
+                <mat-icon class="main-color-scss" matPrefix>person</mat-icon>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </mat-card>
+
+        <div class="p-4 flex justify-center">
+          <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'"
+            (btn)="emailChange(formMain.get('email')?.value)"></btn-g>
+        </div>
+
+      </mat-tab>
+      <mat-tab label="Endereço">
+        <mat-card class="border-card-categories-divide-comp">
+          <address [formMain]="address"></address>
+        </mat-card>
+        <div class="pb-4 pr-4 pl-4 grid justify-center">
+          <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'" (btn)="addressUpdate()"></btn-g>
+        </div>
+      </mat-tab>
+      <mat-tab label="Contatos">
+        <mat-card class="border-card-categories-divide-comp">
+          <contact [formMain]="this.contact"></contact>
+        </mat-card>
+        <div class="pb-4 pr-4 pl-4 grid justify-center">
+          <btn-g mat-dialog-close [name]="'Atualizar'" [icon]="'email'" (btn)="contactUpdate()"></btn-g>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</default-component>

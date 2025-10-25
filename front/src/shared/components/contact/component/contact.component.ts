@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 
 import { FormGroup } from '@angular/forms';
 import { AddImportsGShared } from 'shared/components/imports/default-g-shared-imports';
-import { BaseForm } from 'shared/inheritance/forms/base-form';
+import { BaseForm } from 'shared/extends/forms/base-form';
 import { ContactAddImports } from '../imports/contact-imports';
 import { ContactService } from '../services/contact.service';
 @Component({

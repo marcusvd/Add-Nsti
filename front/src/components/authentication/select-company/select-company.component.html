@@ -1,0 +1,43 @@
+<div class="pt-[10%]"
+  style="height: 100%; background-color: rgba(0, 0, 0, 0.849); display: flex; justify-content: center;">
+  <div class="p-4 sm:w-[800px]">
+    <mat-card style="max-height: 500px;" class="title border-card-categories-divide-comp">
+      <div class="title-conf back-ground-main-color-scss">
+
+        <div class="title-box">
+          <div class="title-text p-4">
+            <span>{{'I.M Integrações' | uppercase}}</span>
+          </div>
+        </div>
+      </div>
+<div class="p-1">
+<mat-card class="border-card-categories-divide-comp">
+<div class="pr-2 pl-2 pt-2">
+        <h4>Selecione a empresa no menu abaixo:</h4>
+      </div>
+
+      <mat-form-field>
+        <mat-label>Empresa</mat-label>
+        <mat-select>
+          @for (company of _companiesAuth; track company) {
+          <mat-option (onSelectionChange)="onSelectionChange($event)" [value]="company">{{company.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="flex justify-center pb-4">
+
+        <btn-g [name]="'Entrar'" [icon]="'login'" (click)="clickedYes(this.selectedId, 'yes')"></btn-g>
+
+
+      </div>
+</mat-card>
+</div>
+    </mat-card>
+  </div>
+</div>
+<!-- <div style="background-color: blue; height: 100%;">
+<div>
+  <p>text</p>
+</div>
+</div> -->

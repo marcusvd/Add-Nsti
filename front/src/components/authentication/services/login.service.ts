@@ -15,17 +15,12 @@ import { ResendConfirmEmail } from "../dtos/resend-confirm-email";
 
 export class LoginService extends BackEndService<UserTokenDto> {
 
-  constructor(
-    // private _router: Router
-  ) { super() }
-
-
   login$(user: LoginDto) {
-    return this.add$<ApiResponse<any>>(user, `${environment._BACK_END_ROOT_URL}/auth/LoginAsync`);
+    return this.add$<ApiResponse<any>>(user, `${environment._BACK_END_ROOT_URL}/_login/LoginAsync`);
   }
 
   logOut() {
-     return this.add$<ApiResponse<any>>(null, `${environment._BACK_END_ROOT_URL}/auth/LogoutAsync`);
+     return this.add$<ApiResponse<any>>(null, `${environment._BACK_END_ROOT_URL}/_login/LogoutAsync`);
   }
 
   resendConfirmEmailAsync(emailConfirm:ResendConfirmEmail) {
