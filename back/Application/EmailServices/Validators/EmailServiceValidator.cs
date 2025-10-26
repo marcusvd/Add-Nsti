@@ -9,18 +9,6 @@ namespace Application.EmailServices.Validators;
 
 public partial class EmailServiceValidator : IEmailServiceValidator
 {
-    private readonly IUnitOfWork _genericRepo;
-    private readonly IValidatorsInject _validatorsInject;
-
-    public EmailServiceValidator(
-                    IUnitOfWork genericRepo,
-                    IValidatorsInject validatorsInject
-      )
-    {
-        _genericRepo = genericRepo;
-        _validatorsInject = validatorsInject;
-    }
-
     public bool IsValidEmail(string email)
     {
         if (string.IsNullOrEmpty(email))
@@ -45,7 +33,7 @@ public partial class EmailServiceValidator : IEmailServiceValidator
         if (string.IsNullOrWhiteSpace(message.Body))
             throw new EmailServicesValidationException("Corpo da mensagem não pode ser vazio");
     }
-    
+
     [GeneratedRegex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]
     private static partial Regex EmailRegex();
 }

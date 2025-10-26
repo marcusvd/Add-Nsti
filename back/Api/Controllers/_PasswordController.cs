@@ -22,8 +22,18 @@ public class PasswordController : ControllerBase
 
     public async Task<IActionResult> StaticPasswordDefined([FromBody] ResetStaticPasswordDto reset) =>
     Ok(await _ServiceLaucherService.PasswordServices.SetStaticPassword(reset));
-    
+
     public async Task<IActionResult> IsPasswordExpiresAsync(int userId) =>
     Ok(await _ServiceLaucherService.PasswordServices.IsPasswordExpiresAsync(userId));
+
+    [HttpPost("ForgotPassword")]
+    public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPasswordDto forgotPassword) =>
+       Ok(await _ServiceLaucherService.PasswordServices.ForgotPasswordAsync(forgotPassword));
+
+    [HttpPost("ResetPasswordAsync")]
+    public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordDto resetPassword) => Ok(await _ServiceLaucherService.PasswordServices.ResetPasswordAsync(resetPassword));
+
+
+
 
 }

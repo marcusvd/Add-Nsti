@@ -1,22 +1,22 @@
-using Application.Shared.Dtos;
-using Domain.Entities.Authentication;
+// using Application.Shared.Dtos;
+// using Domain.Entities.Authentication;
 
-namespace Application.Auth.Dtos;
+// namespace Application.Auth.Dtos;
 
-public class UserAccountAuthUpdateDto : RootBaseDto
-{
-    public int BusinessAuthId { get; set; }
-    public required string UserName { get; set; }
-    public required string UserProfileId { get; set; }
-    public DateTime LastLogin { get; set; }
-    public DateTime WillExpire { get; set; }
-    public string? RefreshToken { get; set; }
-    public required string DisplayUserName { get; set; }
-    public required string Email { get; set; }
-    public bool EmailConfirmed { get; set; }
-    public DateTime RefreshTokenExpiryTime { get; set; }   
-    public ICollection<CompanyUserAccountDto> CompanyUserAccounts { get; set; } = new List<CompanyUserAccountDto>();
-}
+// public class UserAccountAuthUpdateDto : RootBaseDto
+// {
+//     public int BusinessAuthId { get; set; }
+//     public required string UserName { get; set; }
+//     public required string UserProfileId { get; set; }
+//     public DateTime LastLogin { get; set; }
+//     public DateTime WillExpire { get; set; }
+//     public string? RefreshToken { get; set; }
+//     public required string DisplayUserName { get; set; }
+//     public required string Email { get; set; }
+//     public bool EmailConfirmed { get; set; }
+//     public DateTime RefreshTokenExpiryTime { get; set; }   
+//     public ICollection<CompanyUserAccountDto> CompanyUserAccounts { get; set; } = new List<CompanyUserAccountDto>();
+// }
 
 // public static class UserAccountAuthUpdateDtoMapper
 // {

@@ -14,20 +14,20 @@ namespace Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Service
 public class TimedAccessControlServices : UserAccountServicesBase, ITimedAccessControlServices
 {
   private readonly IUnitOfWork _genericRepo;
-  private readonly IAuthServicesInjection _authServicesInjection;
+   private readonly UserManager<UserAccount> _userManager;
   private readonly IValidatorsInject _validatorsInject;
   private readonly IUserAccountAuthServices _userAccountAuthServices;
   private static DateTime Start { get; set; }
   private static DateTime End { get; set; }
   public TimedAccessControlServices(
         IUnitOfWork genericRepo,
-        IAuthServicesInjection authServicesInjection,
+        UserManager<UserAccount> userManager,
         IValidatorsInject validatorsInject,
         IUserAccountAuthServices userAccountAuthServices
     )
   {
     _genericRepo = genericRepo;
-    _authServicesInjection = authServicesInjection;
+     _userManager = userManager;
     _validatorsInject = validatorsInject;
     _userAccountAuthServices = userAccountAuthServices;
   }
@@ -45,7 +45,7 @@ public class TimedAccessControlServices : UserAccountServicesBase, ITimedAccessC
 
     if (userAccount?.TimedAccessControl?.Id > 0)
     {
-      _authServicesInjection.TimedAccessControls.Update(timedAccessControl.ToUpdate(id ?? throw new AuthServicesException(GlobalErrorsMessagesException.IdIsNull)));
+      _genericRepo.TimedAccessControls.Update(timedAccessControl.ToUpdate(id ?? throw new AuthServicesException(GlobalErrorsMessagesException.IdIsNull)));
 
       if (await _genericRepo.SaveID())
         return IdentityResult.Success;
@@ -53,7 +53,7 @@ public class TimedAccessControlServices : UserAccountServicesBase, ITimedAccessC
     else
       userAccount = AssignValue(userAccount, timedAccessControl);
 
-    return await _authServicesInjection.UsersManager.UpdateAsync(userAccount);
+    return await _userManager.UpdateAsync(userAccount);
   }
 
   private UserAccount AssignValue(UserAccount userAccount, TimedAccessControlStartEndPostDto tac)

@@ -41,8 +41,8 @@ public class ServiceLaucherService : IServiceLaucherService
     private readonly UserManager<UserAccount> _userManager;
     private readonly SignInManager<UserAccount> _signInManager;
     private RoleManager<Role> _rolesManager;
-    private readonly ITimedAccessControlServices _timedAccessControlServices;
-    private readonly IEmailUserAccountServices _emailUserAccountServices;
+    // private readonly ITimedAccessControlServices _timedAccessControlServices;
+    // private readonly IEmailUserAccountServices _emailUserAccountServices;
 
     public ServiceLaucherService(
         IUnitOfWork genericRepo,
@@ -51,8 +51,8 @@ public class ServiceLaucherService : IServiceLaucherService
         IConfiguration configuration,
         ISmtpServices emailServices,
         IUrlHelper urlHelper,
-        ITimedAccessControlServices timedAccessControlServices,
-        IEmailUserAccountServices emailUserAccountServices,
+        // // ITimedAccessControlServices timedAccessControlServices,
+        // // IEmailUserAccountServices emailUserAccountServices,
         UserManager<UserAccount> userManager,
         SignInManager<UserAccount> signInManager,
         RoleManager<Role> rolesManager
@@ -64,11 +64,11 @@ public class ServiceLaucherService : IServiceLaucherService
         _configuration = configuration;
         _emailServices = emailServices;
         _urlHelper = urlHelper;
-        _timedAccessControlServices = timedAccessControlServices;
+        // _timedAccessControlServices = timedAccessControlServices;
         _userManager = userManager;
         _signInManager = signInManager;
         _rolesManager = rolesManager;
-        _emailUserAccountServices = emailUserAccountServices;
+        // _emailUserAccountServices = emailUserAccountServices;
     }
 
     private JwtServices? _jwtServices;
@@ -77,6 +77,22 @@ public class ServiceLaucherService : IServiceLaucherService
         get
         {
             return _jwtServices ??= new JwtServices(_configuration, _rolesServices);
+        }
+    }
+    private TimedAccessControlServices _timedAccessControlServices;
+    public  ITimedAccessControlServices UserAccountTimedAccessControlServices
+    {
+        get
+        {
+            return _timedAccessControlServices ??= new TimedAccessControlServices(_genericRepo,_userManager,_validatorsInject, _userAccountAuthServices);
+        }
+    }
+    private EmailUserAccountServices? _emailUserAccountServices;
+    public  IEmailUserAccountServices EmailUserAccountServices
+    {
+        get
+        {
+            return _emailUserAccountServices ??= new EmailUserAccountServices(_userAccountAuthServices,_userManager,_identityTokensServices,_emailServices);
         }
     }
     private TwoFactorAuthenticationServices? _twoFactorAuthenticationServices;
@@ -137,7 +153,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _passwordServices ??= new PasswordServices(_identityTokensServices, _emailServices, _userAccountAuthServices, _userManager, _signInManager);
+            return _passwordServices ??= new PasswordServices(_identityTokensServices, _emailServices, _userAccountAuthServices, _userManager, _signInManager,_validatorsInject);
         }
     }
 
@@ -164,7 +180,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _userAccountAuthServices ??= new UserAccountAuthServices(_genericRepo, _userManager, _emailUserAccountServices);
+            return _userAccountAuthServices ??= new UserAccountAuthServices(_genericRepo, _userManager, _emailUserAccountServices, _validatorsInject);
         }
     }
 

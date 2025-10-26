@@ -15,6 +15,6 @@ public interface IPasswordServices
     Task<ApiResponse<IdentityResult>> PasswordChangeAsync(PasswordChangeDto passwordChange);
     Task<ApiResponse<bool>> IsPasswordExpiresAsync(int userId);
     Task<ApiResponse<IdentityResult>> MarkPasswordExpireAsync(PasswordWillExpiresDto passwordWillExpires);
-    Task<ApiResponse<IdentityResult>> ManualAccountLockedOut(AccountLockedOutManualDto emailConfirmManual);
+    
     Task<ApiResponse<IdentityResult>> SetStaticPassword(ResetStaticPasswordDto reset);
 }

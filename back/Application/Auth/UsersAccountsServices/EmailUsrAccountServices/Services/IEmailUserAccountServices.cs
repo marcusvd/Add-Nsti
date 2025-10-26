@@ -14,5 +14,6 @@ public interface IEmailUserAccountServices
     Task<ApiResponse<IdentityResult>> ConfirmYourEmailChangeAsync(ConfirmEmailChangeDto dto);
     Task<ApiResponse<string>> ResendConfirmEmailAsync(string emailParam);
     Task NotifyAccountLockedAsync(UserAccount userAccount);
+    Task<bool> IsEmailConfirmedAsync(string email);
    
 }

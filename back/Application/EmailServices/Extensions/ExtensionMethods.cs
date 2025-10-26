@@ -7,7 +7,7 @@ using Application.EmailServices.Services;
 
 namespace Application.EmailServices.ExtensionMethods;
 
-public static class ExtensionMethods
+public static class EmailServiceExtension
 {
     public static void AddEmailService(this IServiceCollection services, IConfiguration configuration)
     {

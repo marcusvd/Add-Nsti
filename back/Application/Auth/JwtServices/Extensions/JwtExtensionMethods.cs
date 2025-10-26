@@ -12,7 +12,7 @@ namespace Application.Auth.JwtServices.Extensions;
 
 public static class JwtExtensionMethods
 {
-    public static void AddJwt(this IServiceCollection services, IConfiguration Configuration)
+    public static void AddJwtSettings(this IServiceCollection services, IConfiguration Configuration)
     {
         var jwtSettings = Configuration.GetSection("JwtSettings");
 

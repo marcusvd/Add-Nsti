@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 
 using Application.Helpers.ServicesLauncher;
-using Application.Auth.Account.dtos;
 using Application.Auth.Login.Dtos;
 
 namespace Api.Controllers;

@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Helpers.ServicesLauncher;
 
 using Application.CompaniesServices.Dtos;
-using  Application.Shared.Dtos;
-using Application.Auth.Account.dtos;
-using Application.Auth.Dtos;
 using Application.BusinessesServices.Dtos.UpdateBusinessAddNewCompany;
 using Application.Auth.Login.Dtos;
 

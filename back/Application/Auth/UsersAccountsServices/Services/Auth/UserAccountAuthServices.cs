@@ -3,6 +3,9 @@ using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
 using Application.Auth.UsersAccountsServices.Exceptions;
 using Application.Auth.UsersAccountsServices.Extends;
 using Application.Exceptions;
+using Application.Helpers.Inject;
+using Application.Shared.Dtos;
+using Application.UsersAccountsServices.Dtos;
 using Domain.Entities.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +16,23 @@ namespace Application.Auth.UsersAccountsServices.Auth;
 public class UserAccountAuthServices : UserAccountServicesBase, IUserAccountAuthServices
 {
     private readonly IUnitOfWork _genericRepo;
-    private UserManager<UserAccount> _usersManager { get; }
+    private UserManager<UserAccount> _userManager { get; }
+    private IValidatorsInject _validatorsInject { get; }
     private readonly IEmailUserAccountServices _emailUserAccountServices;
+
 
     public UserAccountAuthServices(
                            IUnitOfWork genericRepo,
                            UserManager<UserAccount> usersManager,
-                           IEmailUserAccountServices emailUserAccountServices
+                           IEmailUserAccountServices emailUserAccountServices,
+                           IValidatorsInject validatorsInject
+
                            )
     {
         _genericRepo = genericRepo;
-        _usersManager = usersManager;
+        _userManager = usersManager;
         _emailUserAccountServices = emailUserAccountServices;
+        _validatorsInject = validatorsInject;
     }
 
     public async Task<List<CompanyUserAccount>> GetCompanyUserAccountByCompanyId(int companyAuthId)
@@ -35,16 +43,14 @@ public class UserAccountAuthServices : UserAccountServicesBase, IUserAccountAuth
             selector => selector
             ).ToListAsync() ?? new List<CompanyUserAccount>();
     }
+    public async Task<ApiResponse<bool>> IsUserExistCheckByEmailAsync(string emailParam)
+    {
+        string email = IsValidEmail(emailParam);
 
-    // public async Task<ApiResponse<IdentityResult>> IsUserExistCheckByEmailAsync(string emailParam)
-    // {
-    //     string email = IsValidEmail(emailParam);
+        var userAccount = await GetUserAccountByEmailAsync(email);
 
-    //     var userAccount = await GetUserAccountByEmailAsync(email);
-
-    //     return ApiResponse<IdentityResult>.Response([@$"Usuário não encontrado. {emailParam}"], userAccount != null, "IsUserExistCheckByEmailAsync", IdentityResult.Success);
-    // }
-
+        return ApiResponse<bool>.Response([@$"Usuário não encontrado. {emailParam}"], userAccount != null, "IsUserExistCheckByEmailAsync", userAccount != null);
+    }
     public async Task<UserAccount> GetUserIncluded(int userId)
     {
         return await _genericRepo.UsersAccounts.GetByPredicate(x =>
@@ -53,28 +59,82 @@ public class UserAccountAuthServices : UserAccountServicesBase, IUserAccountAuth
                        selector => selector,
                        null);
     }
-
     public async Task<UserAccount> GetUserAsync(string userNameOrEmail)
     {
-        return await _usersManager.FindByEmailAsync(userNameOrEmail) ?? await _usersManager.FindByNameAsync(userNameOrEmail) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
+        return await _userManager.FindByEmailAsync(userNameOrEmail) ?? await _userManager.FindByNameAsync(userNameOrEmail) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
     }
-
-    public async Task<UserAccount> GetUserAccountByEmailAsync(string email) => await _usersManager.FindByEmailAsync(email) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
-    public async Task<UserAccount> GetUserAccountByUserIdAsync(int id) => await _usersManager.FindByIdAsync(id.ToString()) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
-
+    public async Task<UserAccount> GetUserAccountByEmailAsync(string email) => await _userManager.FindByEmailAsync(email) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
+    public async Task<UserAccount> GetUserAccountByUserIdAsync(int id) => await _userManager.FindByIdAsync(id.ToString()) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
     public async Task ValidateUserAccountAsync(UserAccount userAccount)
     {
-        if (await _usersManager.IsLockedOutAsync(userAccount))
+        if (await _userManager.IsLockedOutAsync(userAccount))
         {
             await _emailUserAccountServices.NotifyAccountLockedAsync(userAccount);
             throw new UserAccountException(UserAccountMessagesException.UserIsLocked);
         }
 
-        if (!await _usersManager.IsEmailConfirmedAsync(userAccount))
+        if (!await _userManager.IsEmailConfirmedAsync(userAccount))
         {
             await _emailUserAccountServices.ResendConfirmEmailAsync(userAccount.Email);
             throw new UserAccountException(UserAccountMessagesException.EmailIsNotConfirmed);
         }
     }
+    public async Task<bool> IsAccountLockedOut(string email)
+    {
+        string validated = IsValidEmail(email);
+
+        var user = await GetUserAsync(validated);
+
+        return await _userManager.IsLockedOutAsync(user);
+    }
+    public async Task<ApiResponse<bool>> UpdateUserAccountAuthAsync(UserAccountDto userAccount, int id)
+    {
+        int idValidated = ValidateUserId(id);
+
+        _validatorsInject.GenericValidators.Validate(userAccount.Id, id, GlobalErrorsMessagesException.EntityFromIdIsNull);
+
+        var userAccountFromDb = await GetUserAccountByUserIdAsync(idValidated);
+
+        var toUpdate = userAccount.ToUpdate(userAccountFromDb);
+
+        _genericRepo.UsersAccounts.Update(toUpdate);
+
+        return await ResponseUpdateUserAccountAuthAsync(userAccount.Id);
+
+    }
+    private async Task<ApiResponse<bool>> ResponseUpdateUserAccountAuthAsync(int id)
+    {
+        if (await _genericRepo.Save())
+            return ApiResponse<bool>.Response([""], true, $@"{"User Account successfully updated. UserId: "} - {id}", true);
+        else
+            return ApiResponse<bool>.Response([$@"{"Faild update Auth user. UserId: "} - {id}"], true, "ResponseUpdateUserAccountAuthAsync", true);
+    }
+
+      public async Task<ApiResponse<IdentityResult>> ManualAccountLockedOut(AccountLockedOutManualDto emailConfirmManual)
+    {
+
+        string emailValidated = IsValidEmail(emailConfirmManual.Email);
+
+        var userAccount = await GetUserAccountByEmailAsync(emailValidated);
+
+        userAccount = AssignValuesManualAccountLockedOut(userAccount, emailConfirmManual.AccountLockedOut);
+
+        var identityResult = await _userManager.UpdateAsync(userAccount);
+
+        return ApiResponse<IdentityResult>.Response([""], identityResult.Succeeded, "WillExpireAsync", identityResult);
+    }
+
+    private UserAccount AssignValuesManualAccountLockedOut(UserAccount userAccount, bool isAccountLockedOut)
+    {
+        if (isAccountLockedOut)
+            userAccount.LockoutEnd = DateTime.Now.AddYears(10);
+        else
+            userAccount.LockoutEnd = DateTime.MinValue;
+
+        return userAccount;
+    }
+
+
+
 
 }

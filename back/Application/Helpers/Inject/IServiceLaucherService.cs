@@ -14,6 +14,8 @@ using Application.Auth.Login.Extends;
 using Application.BusinessesServices.Services.Profile;
 using Application.Auth.UsersAccountsServices.PasswordServices.Services;
 using Application.Auth.UsersAccountsServices.Profile;
+using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
+using Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Services;
 
 
 namespace Application.Helpers.ServicesLauncher;
@@ -28,6 +30,7 @@ public interface IServiceLaucherService
     ICompanyAuthServices CompanyAuthServices { get; }
     ICompanyProfileServices CompanyProfileServices { get; }
     IPasswordServices PasswordServices { get; }
+    IEmailUserAccountServices EmailUserAccountServices { get; }
     IUserAccountServices UserAccountServices { get; }
     IUserAccountProfileServices UserAccountProfileServices { get; }
     IUserAccountAuthServices UserAccountAuthServices { get; }
@@ -36,6 +39,7 @@ public interface IServiceLaucherService
     IRegisterUserAccountServices RegisterUserAccountServices { get; }
     ILoginServices LoginServices { get; }
     IFirstRegisterBusinessServices RegisterServices { get; }
+    ITimedAccessControlServices UserAccountTimedAccessControlServices { get; }
     IAddressServices AddressServices { get; }
     IContactServices ContactServices { get; }
 }

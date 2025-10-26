@@ -72,3 +72,24 @@ public class UserAccountDto : UserAccountBaseDto
 
 
 }
+
+public static class UserAccountAuthExtensions
+{
+    public static UserAccount ToUpdate(this UserAccountDto dto, UserAccount db)
+    {
+
+        db.Id = dto.Id;
+        db.Deleted = dto.Deleted;
+        db.Registered = dto.Registered;
+        db.BusinessAuthId = dto.BusinessAuthId;
+        db.UserName = dto.UserName;
+        db.UserProfileId = dto.UserProfileId;
+        db.LastLogin = dto.LastLogin;
+        db.WillExpire = dto.WillExpire;
+        db.RefreshToken = dto.RefreshToken;
+        db.DisplayUserName = dto.DisplayUserName;
+        db.RefreshTokenExpiryTime = dto.RefreshTokenExpiryTime;
+
+        return db;
+    }
+}

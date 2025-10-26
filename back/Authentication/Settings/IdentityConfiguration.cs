@@ -117,7 +117,6 @@ public static class IdentityConfiguration
 
     public static void AddAuthorizationSettings(this IServiceCollection services)
     {
-
         services.AddAuthorization(auth =>
         {
             auth.AddPolicy("TwoFactorEnable", policy =>
@@ -125,8 +124,6 @@ public static class IdentityConfiguration
                 policy.RequireAssertion(context => context.User.HasClaim(c => c.Type == "amr" && c.Value == "sub"));
             });
         });
-
-
     }
 
 

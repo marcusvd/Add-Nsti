@@ -172,31 +172,7 @@ public class PasswordServices : PasswordServicesBase, IPasswordServices
         return userAccount;
     }
 
-    public async Task<ApiResponse<IdentityResult>> ManualAccountLockedOut(AccountLockedOutManualDto emailConfirmManual)
-    {
-
-        string emailValidated = IsValidEmail(emailConfirmManual.Email);
-
-        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(emailValidated);
-
-        userAccount = AssignValuesManualAccountLockedOut(userAccount, emailConfirmManual.AccountLockedOut);
-
-        var identityResult = await _userManager.UpdateAsync(userAccount);
-
-        return ApiResponse<IdentityResult>.Response([""], identityResult.Succeeded, "WillExpireAsync", identityResult);
-    }
-
-    private UserAccount AssignValuesManualAccountLockedOut(UserAccount userAccount, bool isAccountLockedOut)
-    {
-        if (isAccountLockedOut)
-            userAccount.LockoutEnd = DateTime.Now.AddYears(10);
-        else
-            userAccount.LockoutEnd = DateTime.MinValue;
-
-        return userAccount;
-    }
-
-
+  
     public async Task<ApiResponse<IdentityResult>> SetStaticPassword(ResetStaticPasswordDto reset)
     {
         string emailValidated = IsValidEmail(reset.Email);

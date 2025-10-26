@@ -1,14 +1,8 @@
 using Api.Configuration;
+using Application.Auth.JwtServices.Extensions;
 using Application.EmailServices.ExtensionMethods;
 using Application.Helpers.Extensions;
-
-using Authentication.Jwt;
 using Authentication.Settings;
-using Microsoft.AspNetCore.Identity;
-
-
-// using Authentication.Settings;
-using Repository.Data.Context;
 using Repository.Data.Context.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,8 +18,9 @@ builder.Services.AddIdentitySettings();
 
 builder.Services.AddDiIdentity();
 
-builder.Services.AddDiAuthentication();
-builder.Services.AddDiServicesRepositories();
+builder.Services.AddEmailService(builder.Configuration);
+builder.Services.AddDiRepositories();
+builder.Services.AddDiServices();
 
 builder.Services.DataProtectionTokenProviderOptions();
 
@@ -41,8 +36,8 @@ builder.Services.AddAuthorizationSettings();
 //     options.AddPolicy("TwoFactorEnabled",
 //         x => x.RequireClaim("amr", "sub")));
 
-builder.Services.AddJwt(builder.Configuration);
-builder.Services.AddEmailService(builder.Configuration);
+builder.Services.AddJwtSettings(builder.Configuration);
+
 
 // builder.Services.Configure<AuthenticatorTokenProviderOptions>(opt =>
 // {

@@ -26,7 +26,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
            UserManager<UserAccount> userManager,
            IIdentityTokensServices identityTokensServices,
            ISmtpServices emailService
-      ) 
+      )
     {
         _userAccountAuthServices = userAccountAuthServices;
         _identityTokensServices = identityTokensServices;
@@ -38,7 +38,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     {
         string email = IsValidEmail(dto.Email);
 
-        var userAccount = await  _userAccountAuthServices.GetUserAccountByEmailAsync(email);
+        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(email);
 
         var result = await _userManager.ConfirmEmailAsync(userAccount, dto.Token);
 
@@ -94,6 +94,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     }
     private async Task<ApiResponse<IdentityResult>> EmailChangeResponse(UserAccount userAccount, string email)
     {
+
         userAccount.UserName = email;
         userAccount.Email = email;
 
@@ -117,7 +118,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
 
         return ApiResponse<string>.Response([$@"Error when trying to change user email: {email}"], true, "ResendConfirmEmailAsync", email);
     }
-      public async Task NotifyAccountLockedAsync(UserAccount userAccount)
+    public async Task NotifyAccountLockedAsync(UserAccount userAccount)
     {
         try
         {
@@ -130,6 +131,15 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
             // _logger.LogError(ex, "Failed to send account locked notification to {Email}", userAccount.Email);
         }
     }
+    public async Task<bool> IsEmailConfirmedAsync(string email)
+    {
+        string emailValidated = IsValidEmail(email);
+
+        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(emailValidated);
+
+        return await _userManager.IsEmailConfirmedAsync(userAccount);
+    }
+
 
 
 

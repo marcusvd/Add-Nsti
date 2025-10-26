@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 
 using Application.Helpers.ServicesLauncher;
-using  Application.Shared.Dtos;
+using Application.Shared.Dtos;
 using Application.Auth.Dtos;
 using Application.Auth.Register.Dtos;
+using Application.UsersAccountsServices.Dtos;
+using Application.Auth.UsersAccountsServices.Dtos;
 
 
 namespace Api.Controllers;
@@ -23,7 +25,29 @@ public class _UserAccountsController : ControllerBase
     [HttpGet("GetUserByIdFullAsync/{id:min(1)}")]
     public async Task<IActionResult> GetUserByIdFullAsync(int id) => Ok(await _ServiceLaucherService.UserAccountServices.GetUserByIdFullAsync(id));
 
-    [HttpPut("AddUserAccountAsync/{companyId:min(1)}")]
-    public async Task<IActionResult> AddUserAccountAsync([FromBody] AddUserExistingCompanyDto user, int companyId) => Ok(await _ServiceLaucherService.RegisterUserAccountServices.AddUserExistingCompanyAsync(user, companyId));
+    [HttpGet("GetAccountStatus/{email}")]
+    public async Task<IActionResult> GetAccountStatus(string email)
+    {
+        var emailConfirmed = await _ServiceLaucherService.EmailUserAccountServices.IsEmailConfirmedAsync(email);
+
+        var accountLockedOut = await _ServiceLaucherService.UserAccountAuthServices.IsAccountLockedOut(email);
+
+        AccountStatusDto result = new() { IsEmailConfirmed = emailConfirmed, IsAccountLockedOut = accountLockedOut };
+
+        return Ok(result);
+    }
+
+    [HttpGet("IsUserExistCheckByEmailAsync/{email}")]
+    public async Task<IActionResult> IsUserExistCheckByEmailAsync(string email) => Ok(await _ServiceLaucherService.UserAccountAuthServices.IsUserExistCheckByEmailAsync(email));
+
+    [HttpPut("UpdateUserAccountAuthAsync/{id:min(1)}")]
+    public async Task<IActionResult> UpdateUserAccountAuthAsync([FromBody] UserAccountDto userAccountUpdate, int id) => Ok(await _ServiceLaucherService.UserAccountAuthServices.UpdateUserAccountAuthAsync(userAccountUpdate, id));
+
+    [HttpPut("UpdateUserAccountProfileAsync/{id:min(1)}")]
+    public async Task<IActionResult> UpdateUserAccountProfileAsync([FromBody] UserProfileDto userAccountUpdate, int id) => Ok(await _ServiceLaucherService.UserAccountProfileServices.UpdateUserAccountProfileAsync(userAccountUpdate, id));
+
+    [HttpPut("ManualAccountLockedOut")]
+    public async Task<IActionResult> ManualAccountLockedOut([FromBody] AccountLockedOutManualDto AccountLockedOutManual) => Ok(await _ServiceLaucherService.UserAccountAuthServices.ManualAccountLockedOut(AccountLockedOutManual));
+
 
 }
