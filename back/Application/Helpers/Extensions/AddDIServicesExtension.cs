@@ -60,6 +60,8 @@ public static class AddDIServicesExtension
         services.AddScoped<IGenericValidators, GenericValidators>();
         services.AddScoped<IServiceLaucherService, ServiceLaucherService>();
 
+        // ILoginServices -> ITimedAccessControlServices -> IUserAccountAuthServices -> IEmailUserAccountServices -> IUserAccountAuthServices
+
         services.AddScoped<SeedFirstDbServices>();
     }
     public static void AddDiFluentValidationAutoValidation(this IServiceCollection services)
