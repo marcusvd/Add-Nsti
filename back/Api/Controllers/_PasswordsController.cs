@@ -10,23 +10,25 @@ namespace Api.Controllers;
 [ApiController]
 [Route("api/{controller}")]
 [Authorize(Roles = "SYSADMIN")]
-public class PasswordController : ControllerBase
+public class _PasswordsController : ControllerBase
 {
     private readonly IServiceLaucherService _ServiceLaucherService;
-    public PasswordController(IServiceLaucherService ServiceLaucherService) { _ServiceLaucherService = ServiceLaucherService; }
+    public _PasswordsController(IServiceLaucherService ServiceLaucherService) { _ServiceLaucherService = ServiceLaucherService; }
+    [HttpPost("PasswordChangeAsync")]
     public async Task<IActionResult> PasswordChangeAsync([FromBody] PasswordChangeDto passwordChange) =>
     Ok(await _ServiceLaucherService.PasswordServices.PasswordChangeAsync(passwordChange));
-
+    [HttpPost("MarkPasswordExpireAsync")]
     public async Task<IActionResult> MarkPasswordExpireAsync([FromBody] PasswordWillExpiresDto passwordWillExpires) =>
-     Ok(await _ServiceLaucherService.PasswordServices.MarkPasswordExpireAsync(passwordWillExpires));
-
+         Ok(await _ServiceLaucherService.PasswordServices.MarkPasswordExpireAsync(passwordWillExpires));
+    [HttpPost("StaticPasswordDefined")]
     public async Task<IActionResult> StaticPasswordDefined([FromBody] ResetStaticPasswordDto reset) =>
-    Ok(await _ServiceLaucherService.PasswordServices.SetStaticPassword(reset));
-
+        Ok(await _ServiceLaucherService.PasswordServices.SetStaticPassword(reset));
+    [HttpPost("IsPasswordExpiresAsync")]
     public async Task<IActionResult> IsPasswordExpiresAsync(int userId) =>
-    Ok(await _ServiceLaucherService.PasswordServices.IsPasswordExpiresAsync(userId));
+        Ok(await _ServiceLaucherService.PasswordServices.IsPasswordExpiresAsync(userId));
 
     [HttpPost("ForgotPassword")]
+    [AllowAnonymous]
     public async Task<IActionResult> ForgotPasswordAsync([FromBody] ForgotPasswordDto forgotPassword) =>
        Ok(await _ServiceLaucherService.PasswordServices.ForgotPasswordAsync(forgotPassword));
 

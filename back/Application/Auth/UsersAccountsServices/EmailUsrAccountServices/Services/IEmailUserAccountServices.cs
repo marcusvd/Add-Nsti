@@ -12,8 +12,13 @@ public interface IEmailUserAccountServices
     Task<ApiResponse<IdentityResult>> ManualConfirmEmailAddress(EmailConfirmManualDto dto);
     Task<ApiResponse<string>> RequestEmailChangeAsync(RequestEmailChangeDto dto);
     Task<ApiResponse<IdentityResult>> ConfirmYourEmailChangeAsync(ConfirmEmailChangeDto dto);
-    Task<ApiResponse<string>> ResendConfirmEmailAsync(string emailParam);
-    Task NotifyAccountLockedAsync(UserAccount userAccount);
+    // Task<ApiResponse<string>> ResendConfirmEmailAsync(string emailParam);
+    Task<ApiResponse<string>> SendConfirmEmailAsync(bool registerResult, UserAccount userAccount);
+
+    Task<ApiResponse<UserToken>> FirstEmailConfirmationAsync(UserToken userToken);
+
+    Task<ApiResponse<UserToken>> FirstEmailConfirmationCheckTokenAsync(ConfirmEmailDto dto);
     Task<bool> IsEmailConfirmedAsync(string email);
+    Task ValidateUserAccountAsync(UserAccount userAccount);
    
 }

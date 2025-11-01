@@ -7,12 +7,13 @@ using Application.Helpers.Inject;
 using Application.Auth.TwoFactorAuthentication;
 using Application.Auth.Login.Extends;
 using Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Services;
-using Application.Auth.UsersAccountsServices;
 using Application.Auth.UsersAccountsServices.PasswordServices.Services;
 using AApplication.Auth.UsersAccountsServices.PasswordServices.Dtos;
 using Application.Auth.UsersAccountsServices.PasswordServices.Exceptions;
 using Application.Auth.JwtServices;
 using Application.Auth.Login.Dtos;
+using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
+using Application.Auth.UsersAccountsServices.Services.Auth;
 
 namespace Application.Auth.Login.Services;
 
@@ -24,8 +25,9 @@ public partial class LoginServices : LoginBase, ILoginServices
     private readonly IUserAccountAuthServices _userAccountAuthServices;
     private readonly ITimedAccessControlServices _timedAccessControlServices;
     private readonly IPasswordServices _passwordServices;
-    private readonly TwoFactorAuthenticationServices _twoFactorAuthenticationServices;
+    private readonly ITwoFactorAuthenticationServices _twoFactorAuthenticationServices;
     private readonly IJwtServices _jwtServices;
+    private readonly IEmailUserAccountServices _emailUserAccountServices;
 
     public LoginServices(
                         UserManager<UserAccount> userManager,
@@ -35,8 +37,9 @@ public partial class LoginServices : LoginBase, ILoginServices
                         ITimedAccessControlServices timedAccessControlServices,
                         IUserAccountAuthServices userAccountAuthServices,
                         IPasswordServices passwordServices,
-                        TwoFactorAuthenticationServices twoFactorAuthenticationServices,
-                        IJwtServices jwtServices
+                        ITwoFactorAuthenticationServices twoFactorAuthenticationServices,
+                        IJwtServices jwtServices,
+                        IEmailUserAccountServices emailUserAccountServices
 
       )
     {
@@ -48,17 +51,18 @@ public partial class LoginServices : LoginBase, ILoginServices
         _passwordServices = passwordServices;
         _twoFactorAuthenticationServices = twoFactorAuthenticationServices;
         _jwtServices = jwtServices;
+        _emailUserAccountServices = emailUserAccountServices;
     }
 
     public async Task<ApiResponse<UserToken>> LoginAsync(LoginModelDto user)
     {
         _validatorsInject.GenericValidators.IsObjNull(user);
 
-        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(user.Email);
+        var userAccount = await _userAccountAuthServices.GetUserAsync(user.Email);
 
         _validatorsInject.GenericValidators.IsObjNull(userAccount);
 
-        await _userAccountAuthServices.ValidateUserAccountAsync(userAccount);
+        await _emailUserAccountServices.ValidateUserAccountAsync(userAccount);
 
         await GetTimedAccessControlAsync(userAccount.Id);
 

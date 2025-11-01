@@ -7,6 +7,7 @@ import { AddUserExistingCompanyDto } from "../dtos/add-user-existing-company-dto
 import { UserTokenDto } from "../dtos/user-token-dto";
 import { UpdateUserAccountEmailDto } from "../dtos/update-user-account-email-dto";
 import { WarningsService } from "components/warnings/services/warnings.service";
+import { FirstConfirmEmailRegisterDto } from "../confirm-email-before-register/dtos/first-confirm-email-register-dto";
 
 
 @Injectable({ providedIn: 'root' })
@@ -21,6 +22,10 @@ export class RegisterService extends BackEndService<Register> {
 
   AddUser(user: Register, form: FormGroup, url: string) {
     return this.add$<Register>(user, url).pipe(take(1));
+  }
+
+  FirstEmailComfirm(user: FirstConfirmEmailRegisterDto, form: FormGroup, url: string) {
+    return this.add$<FirstConfirmEmailRegisterDto>(user, url).pipe(take(1));
   }
 
 

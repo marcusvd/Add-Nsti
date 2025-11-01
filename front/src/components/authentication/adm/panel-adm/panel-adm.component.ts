@@ -278,7 +278,7 @@ export class PanelAdmComponent extends ListPanelControlAdm implements OnInit {
   }
 
   getUsersByCompanyIdAsync(companyAuthId: string) {
-    return this._companyService.loadById$<UserAccountAuthDto[]>(`${environment._BACK_END_ROOT_URL}/UserAccounts/GetUsersByCompanyIdAsync`, companyAuthId);
+    return this._companyService.loadById$<UserAccountAuthDto[]>(`${environment._BACK_END_ROOT_URL}/_UserAccounts/GetUsersByCompanyIdAsync`, companyAuthId);
   }
 
 

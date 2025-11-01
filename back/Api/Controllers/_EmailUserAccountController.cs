@@ -15,11 +15,14 @@ public class _EmailUserAccountController : ControllerBase
     public _EmailUserAccountController(IServiceLaucherService ServiceLaucherService) { _ServiceLaucherService = ServiceLaucherService; }
 
 
+    [HttpPost("FirstEmailConfirmationCheckTokenAsync")]
+    public async Task<IActionResult> FirstEmailConfirmationCheckTokenAsync([FromBody] ConfirmEmailDto confirmEmail) => Ok(await _ServiceLaucherService.EmailUserAccountServices.FirstEmailConfirmationCheckTokenAsync(confirmEmail));
+
     [HttpPost("ConfirmEmailAddress")]
     public async Task<IActionResult> ConfirmEmailAddressAsync([FromBody] ConfirmEmailDto confirmEmail) => Ok(await _ServiceLaucherService.EmailUserAccountServices.ConfirmEmailAddressAsync(confirmEmail));
 
-    [HttpPost("ResendConfirmEmailAsync")]
-    public async Task<IActionResult> ResendConfirmEmailAsync([FromBody] ResendConfirmEmailViewModel request) => Ok(await _ServiceLaucherService.EmailUserAccountServices.ResendConfirmEmailAsync(request.Email));
+    // [HttpPost("ResendConfirmEmailAsync")]
+    // public async Task<IActionResult> ResendConfirmEmailAsync([FromBody] ResendConfirmEmailViewModel request) => Ok(await _ServiceLaucherService.EmailUserAccountServices.SendConfirmEmailAsync(request.Email));
 
     [HttpPost("RequestEmailChange")]
     public async Task<IActionResult> RequestEmailChangeAsync([FromBody] RequestEmailChangeDto requestEmailChangeDto) => Ok(await _ServiceLaucherService.EmailUserAccountServices.RequestEmailChangeAsync(requestEmailChangeDto));

@@ -28,7 +28,7 @@ public class CompanyProfileDto : CompanyBaseDto
     }
     public static implicit operator CompanyProfileDto(CompanyProfile dto)
     {
-        return new CompanyProfile
+        return new CompanyProfileDto
         {
             Id = dto.Id,
             Deleted = dto.Deleted,

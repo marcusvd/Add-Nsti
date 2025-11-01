@@ -41,6 +41,7 @@ export class ListAdmComponent extends ListControlAdm implements OnInit {
   ngOnInit(): void {
     const id = this._actRouter.snapshot.params['id'] as number;
     this.addRoute = '/users/add-company/' + id
+    // console.log(this.addRoute)
     this.startSupply(this.backend, id)
   }
 

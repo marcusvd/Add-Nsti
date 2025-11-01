@@ -16,6 +16,7 @@ using Application.Auth.Register.Dtos;
 using Application.Auth.Roles.Services;
 using Application.Auth.JwtServices;
 using Microsoft.AspNetCore.Identity;
+using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
 
 
 namespace Application.Auth.Register.Services;
@@ -30,6 +31,7 @@ public class RegisterUserAccountServices : RegisterServicesBase, IRegisterUserAc
     private readonly IBusinessAuthServices _businessAuthServices;
     private readonly IRolesServices _rolesServices;
     private readonly IJwtServices _jwtServices;
+    private readonly IEmailUserAccountServices _emailUserAccountServices;
 
 
     public RegisterUserAccountServices(
@@ -42,7 +44,8 @@ public class RegisterUserAccountServices : RegisterServicesBase, IRegisterUserAc
           IBusinessAuthServices businessAuthServices,
           ISmtpServices emailServices,
           IRolesServices rolesServicer,
-          IJwtServices jwtServices
+          IJwtServices jwtServices,
+          IEmailUserAccountServices emailUserAccountServices
 
       ) : base(userManager, identityTokensServices, emailServices)
     {
@@ -54,6 +57,7 @@ public class RegisterUserAccountServices : RegisterServicesBase, IRegisterUserAc
         _businessAuthServices = businessAuthServices;
         _rolesServices = rolesServicer;
         _jwtServices = jwtServices;
+        _emailUserAccountServices = emailUserAccountServices;
     }
 
     public async Task<UserToken> AddUserExistingCompanyAsync(AddUserExistingCompanyDto request, int companyAuthId)
@@ -68,9 +72,9 @@ public class RegisterUserAccountServices : RegisterServicesBase, IRegisterUserAc
 
         var registerResult = await _genericRepo.Save();
 
-        var emailResult = await SendUrlTokenEmailConfirmation(registerResult, userAccount);
+        var emailResult = await _emailUserAccountServices.SendConfirmEmailAsync(registerResult, userAccount);
 
-        if (emailResult)
+        if (emailResult.Success)
         {
             var subscriberRules = await _rolesServices.AddSubscriberRules(userAccount.Email);
 

@@ -3,21 +3,21 @@ using Microsoft.AspNetCore.Identity;
 
 using Application.Auth.Extends;
 using Application.Auth.Roles.Dtos;
-using Application.Auth.UsersAccountsServices.Auth;
 using Domain.Entities.Authentication;
+using Application.Auth.UsersAccountsServices.Services.Auth;
 
 namespace Application.Auth.Roles.Services;
 
 public class RolesServices : AuthenticationBase, IRolesServices
 {
-    private readonly UserAccountAuthServices _userAccountAuthServices;
+    private readonly IUserAccountAuthServices _userAccountAuthServices;
     private UserManager<UserAccount> _usersManager { get; }
     private RoleManager<Role> _rolesManager { get; }
 
     public RolesServices(
      UserManager<UserAccount> usersManager,
      RoleManager<Role> rolesManager,
-     UserAccountAuthServices userAccountAuthServices
+     IUserAccountAuthServices userAccountAuthServices
     )
     {
         _usersManager = usersManager;

@@ -1,13 +1,9 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
-using Application.Shared.Dtos;
-using Domain.Entities.Authentication;
-
 namespace Application.Auth.JwtServices.Extensions;
 
 public static class JwtExtensionMethods

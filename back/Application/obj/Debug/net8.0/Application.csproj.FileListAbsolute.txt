@@ -1,9 +1,3 @@
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.csproj.AssemblyReference.cache
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.GeneratedMSBuildEditorConfig.editorconfig
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.AssemblyInfoInputs.cache
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.AssemblyInfo.cs
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.csproj.CoreCompileInputs.cache
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.sourcelink.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\bin\Debug\net8.0\Application.deps.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\bin\Debug\net8.0\Application.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\bin\Debug\net8.0\Application.pdb
@@ -17,6 +11,12 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\bin\Debug\net8.0\Authentica
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\bin\Debug\net8.0\Repository.pdb
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\bin\Debug\net8.0\UnitOfWork.pdb
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\bin\Debug\net8.0\Pagination.pdb
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.csproj.AssemblyReference.cache
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.AssemblyInfoInputs.cache
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.AssemblyInfo.cs
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.csproj.CoreCompileInputs.cache
+D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.sourcelink.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Applicat.44B5EDA2.Up2Date
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\Application.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Application\obj\Debug\net8.0\refint\Application.dll

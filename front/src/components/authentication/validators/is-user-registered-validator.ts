@@ -21,7 +21,7 @@ export class IsUserRegisteredValidator extends  BackEndService<UserAccountAuthDt
 
     if (control.value.includes('@') && control.value.includes('.')) {
 
-      return this.loadByName$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/auth/IsUserExistCheckByEmailAsync`, control.value)
+      return this.loadByName$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/_userAccounts/IsUserExistCheckByEmailAsync`, control.value)
         .pipe(map(x => {
           return x.succeeded ? { inUse: true } : null;
         }))

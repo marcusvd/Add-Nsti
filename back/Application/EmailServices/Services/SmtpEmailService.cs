@@ -106,8 +106,8 @@ public sealed class SmtpServices : ISmtpServices, IDisposable
         }
         catch (SmtpFailedRecipientException ex) when (ex.StatusCode == SmtpStatusCode.MailboxBusy)
         {
-            _logger.LogWarning("Caixa postal ocupada para {To}", message.To);
-            throw new EmailServicesException($"Caixa postal ocupada: {message.To} Exception: {ex}");
+            _logger.LogWarning(@$"{EmailServicesMessagesException.MailAddressDoesNotExist} {message.To}", message.To);
+            throw new EmailServicesException(@$"{EmailServicesMessagesException.MailAddressDoesNotExist} {message.To}Exception: {ex}");
         }
         catch (SmtpFailedRecipientException ex)
         {

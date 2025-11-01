@@ -2,10 +2,10 @@ using Domain.Entities.Authentication;
 
 using Domain.Entities.System.Profiles;
 using Application.Auth.UsersAccountsServices.Dtos;
-using Application.Auth.Dtos;
 using Application.UsersAccountsServices.Dtos;
 using Application.Auth.UsersAccountsServices.Profile;
 using Application.Auth.UsersAccountsServices.Extends;
+using Application.Auth.UsersAccountsServices.Services.Auth;
 
 
 namespace Application.Auth.UsersAccountsServices.Services.Gateway;

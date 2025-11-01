@@ -23,3 +23,4 @@ public class UserAccount : IdentityUser<int>
     public ICollection<CompanyUserAccount> CompanyUserAccounts { get; set; } = new List<CompanyUserAccount>();
 
 }
+

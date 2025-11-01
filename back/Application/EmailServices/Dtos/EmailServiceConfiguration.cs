@@ -36,25 +36,5 @@ public sealed class EmailServiceConfiguration
 
     [Range(1, 300)]
     public int TimeoutSeconds { get; set; } = 30;
-    // public const string SectionName = "Email";
-
-    // [Required]
-    // public required string SmtpServer { get; init; }
-
-    // [Range(1, 65535)]
-    // public int Port { get; init; } = 587;
-
-    // public bool UseSsl { get; init; } = false;
-
-    // [Required]
-    // public required string UserName { get; init; }
-
-    // [Required]
-    // public required string Password { get; init; }
-
-    // [Required]
-    // public required string DefaultFrom { get; init; }
-
-    // [Range(1, 300)]
-    // public int TimeoutSeconds { get; init; } = 30;
+   
 }

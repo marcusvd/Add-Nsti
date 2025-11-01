@@ -4,7 +4,7 @@ using Application.UsersAccountsServices.Dtos;
 using Domain.Entities.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Auth.UsersAccountsServices;
+namespace Application.Auth.UsersAccountsServices.Services.Auth;
 
 public interface IUserAccountAuthServices
 {
@@ -16,7 +16,7 @@ public interface IUserAccountAuthServices
     Task<ApiResponse<bool>> IsUserExistCheckByEmailAsync(string emailParam);
     Task<bool> IsAccountLockedOut(string email);
     Task<ApiResponse<IdentityResult>> ManualAccountLockedOut(AccountLockedOutManualDto emailConfirmManual);
-    Task ValidateUserAccountAsync(UserAccount userAccount);
+    // Task ValidateUserAccountAsync(UserAccount userAccount);
     Task<ApiResponse<bool>> UpdateUserAccountAuthAsync(UserAccountDto userAccount, int id);
 
 }

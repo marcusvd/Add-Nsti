@@ -1,6 +1,4 @@
 using Application.EmailServices.Dtos;
-using Application.Helpers.Inject;
-using UnitOfWork.Persistence.Operations;
 using System.Text.RegularExpressions;
 using Application.EmailServices.Exceptions;
 

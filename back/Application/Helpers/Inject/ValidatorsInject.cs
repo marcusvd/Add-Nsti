@@ -1,7 +1,7 @@
 using Application.Helpers.Inject;
 using Application.Shared.Validators;
 
-namespace Application.Helpers.ServicesLauncher;
+namespace Application.Helpers.Inject.ServicesLauncher;
 
 public class ValidatorsInject : IValidatorsInject
 {

@@ -5,7 +5,6 @@ using Domain.Entities.System.Companies;
 using UnitOfWork.Persistence.Operations;
 using Microsoft.EntityFrameworkCore;
 using Application.CompaniesServices.Exceptions;
-using Application.Helpers.Inject;
 using Application.CompaniesServices.Extends;
 using Application.CompaniesServices.Dtos.Mappers;
 using Application.BusinessesServices.Dtos.UpdateBusinessAddNewCompany;
@@ -16,15 +15,14 @@ namespace Application.CompaniesServices.Services.Profile;
 public class CompanyProfileServices : CompanyServicesBase, ICompanyProfileServices
 {
     private readonly IUnitOfWork _genericRepo;
-    private readonly IValidatorsInject _validatorsInject;
+    // private readonly IValidatorsInject _validatorsInject;
     public CompanyProfileServices(
-                           IUnitOfWork genericRepo,
-                           IAuthServicesInjection authServices,
-                           IValidatorsInject validatorsInject
+                           IUnitOfWork genericRepo
+                        //    IValidatorsInject validatorsInject
                            ) 
     {
         _genericRepo = genericRepo;
-        _validatorsInject = validatorsInject;
+        // _validatorsInject = validatorsInject;
     }
     
     public CompanyProfile CompanyProfileEntityBuilder(PushCompanyDto dto)

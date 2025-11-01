@@ -6,6 +6,8 @@ using Application.Auth.Register.Services;
 using Application.CompaniesServices.Dtos.Profile;
 using Application.Auth.Register.Dtos;
 using Application.Auth.Register.Dtos.FirstRegister;
+using Application.Helpers.Tools.CpfCnpj;
+using Application.Helpers.Tools.Cnpj;
 
 namespace Application.Shared.Seed.EntitiesSeed
 {
@@ -28,7 +30,7 @@ namespace Application.Shared.Seed.EntitiesSeed
             {
                 Id = 1,
                 // Name = "No Stop Ti",
-                 CNPJ = "invalid",
+                CNPJ = "invalid",
                 Address = new()
                 {
                     ZipCode = "30285100",
@@ -56,7 +58,7 @@ namespace Application.Shared.Seed.EntitiesSeed
             return company;
         }
 
-        public async Task<HttpStatusCode> AddUser()
+        public async Task<HttpStatusCode> AddUser(ICpfCnpjGetDataServices cpfCnpjGetDataServices)
         {
 
             var user = new RegisterModelDto()
@@ -66,15 +68,17 @@ namespace Application.Shared.Seed.EntitiesSeed
                 CompanyName = "ADD-NSTI",
                 Password = "123",
                 ConfirmPassword = "123",
-                 CNPJ = "invalid" 
+                CNPJ = "invalid"
             };
 
-            var result = await _iFirstRegisterBusinessServices.RegisterAsync(user);
+            // var result = await _iFirstRegisterBusinessServices.RegisterAsync(user, cpfCnpjGetDataServices);
+            // var result = await _iFirstRegisterBusinessServices.RegisterAsync(user, new());
 
-            if (result.Authenticated)
+            if (true)
+            // if (result.Authenticated)
                 return HttpStatusCode.Created;
-            else
-                return HttpStatusCode.BadRequest;
+            // else
+            //     return HttpStatusCode.BadRequest;
 
         }
 

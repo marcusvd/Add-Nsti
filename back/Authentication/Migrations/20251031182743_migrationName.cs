@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Authentication.Migrations
 {
     /// <inheritdoc />
-    public partial class aaabbb : Migration
+    public partial class migrationName : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -91,9 +91,9 @@ namespace Authentication.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserProfileId = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    BusinessAuthId = table.Column<int>(type: "int", nullable: false),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    BusinessAuthId = table.Column<int>(type: "int", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Code2FaSendEmail = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TimedAccessControlId = table.Column<int>(type: "int", nullable: true),
@@ -176,9 +176,9 @@ namespace Authentication.Migrations
                 {
                     CompanyAuthId = table.Column<int>(type: "int", nullable: false),
                     UserAccountId = table.Column<int>(type: "int", nullable: false),
-                    LinkedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Deleted = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    Registered = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LinkedOn = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -324,9 +324,9 @@ namespace Authentication.Migrations
                 columns: new[] { "Id", "CompanyAuthId", "ConcurrencyStamp", "DisplayRole", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "3a62176a-50dc-4601-8733-d9603097b559", "Acesso Total", "HOLDER", "HOLDER" },
-                    { 2, null, "a24d75f8-f195-42d7-87be-73318fb13a2b", "Administrador", "SYSADMIN", "SYSADMIN" },
-                    { 3, null, "10b933b3-44f9-4856-95be-2f8954a5c158", "Usuário", "USERS", "USERS" }
+                    { 1, null, "db34d3c6-f777-436e-a21e-f618fa207f8d", "Acesso Total", "HOLDER", "HOLDER" },
+                    { 2, null, "a2af29ee-affb-4780-a3dd-07ffd5aceb4a", "Administrador", "SYSADMIN", "SYSADMIN" },
+                    { 3, null, "c175e600-d790-46aa-b150-f7cf6eff5c8f", "Usuário", "USERS", "USERS" }
                 });
 
             migrationBuilder.CreateIndex(

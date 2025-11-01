@@ -115,7 +115,7 @@ export class ListControlAdm extends BaseList {
 
     business.pipe(map(x => {
       this.business = x;
-
+console.log(x)
       x?.companies.forEach(y => {
 
         this.entities = this.supplyItemsGrid(entities, y)

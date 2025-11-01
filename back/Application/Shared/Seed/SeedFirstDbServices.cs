@@ -19,7 +19,7 @@ public class SeedFirstDbServices
         AuthenticationSeed auth = new(_iFirstRegisterBusinessServices);
         CustomerSeed_NSTI customers = new();
 
-        await auth.AddUser();
+       // await auth.AddUser();
 
         // _genericRepo.Customers.AddRangeAsync(customers.CustomerAdd());
 

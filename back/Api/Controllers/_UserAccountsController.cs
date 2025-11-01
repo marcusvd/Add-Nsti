@@ -36,7 +36,7 @@ public class _UserAccountsController : ControllerBase
 
         return Ok(result);
     }
-
+    [AllowAnonymous]
     [HttpGet("IsUserExistCheckByEmailAsync/{email}")]
     public async Task<IActionResult> IsUserExistCheckByEmailAsync(string email) => Ok(await _ServiceLaucherService.UserAccountAuthServices.IsUserExistCheckByEmailAsync(email));
 

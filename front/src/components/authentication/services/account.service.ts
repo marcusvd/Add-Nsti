@@ -37,7 +37,7 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   result: boolean = false;
 
   confirmEmail(confirmEmail: ConfirmEmail) {
-    return this.add$<ConfirmEmail>(confirmEmail, `${environment._BACK_END_ROOT_URL}/auth/confirmEmailAddress`).pipe(take(1)).subscribe({
+    return this.add$<ConfirmEmail>(confirmEmail, `${environment._BACK_END_ROOT_URL}/_EmailUserAccount/ConfirmEmailAddress`).pipe(take(1)).subscribe({
       next: () => {
 
         this.openSnackBar('E-mail Confirmado com sucesso.', 'warnings-success');
@@ -74,7 +74,7 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
   confirmEmailChange(confirmEmail: ConfirmEmailChangeDto) {
 
-    return this.add$<ConfirmEmailChangeDto>(confirmEmail, `${environment._BACK_END_ROOT_URL}/auth/ConfirmRequestEmailChange`).pipe(take(1)).subscribe({
+    return this.add$<ConfirmEmailChangeDto>(confirmEmail, `${environment._BACK_END_ROOT_URL}/_EmailUserAccount/ConfirmRequestEmailChange`).pipe(take(1)).subscribe({
       next: (x) => {
 
         let result: any = x;
@@ -130,7 +130,7 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   }
 
   forgotMyPassword(forgotPassword: ForgotPassword) {
-    return this.add$<ForgotPassword>(forgotPassword, `${environment._BACK_END_ROOT_URL}/auth/ForgotPassword`).pipe(take(1)).subscribe({
+    return this.add$<ForgotPassword>(forgotPassword, `${environment._BACK_END_ROOT_URL}/_Passwords/ForgotPassword`).pipe(take(1)).subscribe({
       next: () => {
 
         this.openSnackBar('E-mail recuperação de senha enviado com sucesso.', 'warnings-success');

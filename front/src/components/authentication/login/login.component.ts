@@ -22,7 +22,7 @@ import { LoginHelper } from './login-helper';
     DefaultCompImports,
     AuthLoginImports,
   ],
-  providers:[
+  providers: [
     WarningsService
   ]
 })
@@ -50,20 +50,20 @@ export class LoginComponent extends LoginHelper implements OnInit {
   }
 
 
-  login(tokenCaptcha?: string) {
-
+  login() {
     if (this.alertSave(this.formMain)) {
-      if (this.formMain.valid && tokenCaptcha) {
+      if (this.formMain.valid) {
 
         const login: LoginDto = { ...this.formMain.value }
 
         this._loginService?.login$(login)?.subscribe({
           next: (request: ApiResponse<UserTokenDto>) => {
-
+            // console.log(login)
+            // console.log(request)
             this.loginCalls(request);
 
           }, error: (err: any) => {
-
+            console.log(err);
             this.loginsErrorHandler(err, login.email);
 
           }
@@ -76,7 +76,7 @@ export class LoginComponent extends LoginHelper implements OnInit {
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
 
-  
+
   pwdHideShow() {
     if (this.pwdType === 'password') {
       this.pwdType = 'text';

@@ -25,7 +25,7 @@ public class TimedAccessControlDto : RootBaseDto
     }
     public static implicit operator TimedAccessControlDto(TimedAccessControl dto)
     {
-         return new TimedAccessControl
+         return new TimedAccessControlDto
          {
             Id = dto.Id,
             Start = dto.Start,

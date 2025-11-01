@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wmP5shyQkFM=",
+  "dgSpecHash": "IsPTuUxMoeQ=",
   "success": true,
-  "projectFilePath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\api\\ImApi.csproj",
+  "projectFilePath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Api\\ImApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\fluentvalidation\\11.2.1\\fluentvalidation.11.2.1.nupkg.sha512",

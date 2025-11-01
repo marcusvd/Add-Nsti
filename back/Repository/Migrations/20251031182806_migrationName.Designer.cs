@@ -12,8 +12,8 @@ using Repository.Data.Context;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ImSystemDbContext))]
-    [Migration("20251016201253_b-aaa")]
-    partial class baaa
+    [Migration("20251031182806_migrationName")]
+    partial class migrationName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

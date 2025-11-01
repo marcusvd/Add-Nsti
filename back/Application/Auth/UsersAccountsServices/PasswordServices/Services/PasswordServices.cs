@@ -8,11 +8,11 @@ using Authentication.Exceptions;
 using Application.Shared.Dtos;
 using Application.Auth.UsersAccountsServices.PasswordServices.Exceptions;
 using Application.EmailServices.Services;
-using Application.Auth.UsersAccountsServices.Auth;
 using Application.Helpers.Inject;
 using Application.Exceptions;
 using Application.Auth.Dtos;
 using System.Reflection.Metadata;
+using Application.Auth.UsersAccountsServices.Services.Auth;
 
 namespace Application.Auth.UsersAccountsServices.PasswordServices.Services;
 
@@ -20,7 +20,7 @@ public class PasswordServices : PasswordServicesBase, IPasswordServices
 {
     private readonly IIdentityTokensServices _identityTokensServices;
     private readonly ISmtpServices _emailService;
-    private readonly UserAccountAuthServices _userAccountAuthServices;
+    private readonly IUserAccountAuthServices _userAccountAuthServices;
     private readonly UserManager<UserAccount> _userManager;
     private readonly SignInManager<UserAccount> _signInManager;
     private readonly IValidatorsInject _validatorsInject;
@@ -28,7 +28,7 @@ public class PasswordServices : PasswordServicesBase, IPasswordServices
     public PasswordServices(
           IIdentityTokensServices identityTokensServices,
           ISmtpServices emailService,
-          UserAccountAuthServices userAccountAuthServices,
+          IUserAccountAuthServices userAccountAuthServices,
           UserManager<UserAccount> userManager,
           SignInManager<UserAccount> signInManager,
           IValidatorsInject validatorsInject

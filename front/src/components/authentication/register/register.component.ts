@@ -50,7 +50,7 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
   loginErrorMessage: string = '';
 
-  backend = `${environment._BACK_END_ROOT_URL}/auth/RegisterAsync`;
+  backend = `${environment._BACK_END_ROOT_URL}/_Register/RegisterAsync`;
 
 
   register(tokenCaptcha: string | undefined) {

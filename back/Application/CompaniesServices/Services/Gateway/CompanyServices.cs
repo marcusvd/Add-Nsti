@@ -20,7 +20,7 @@ public class CompanyServices : ICompanyServices
     // private readonly IAuthServicesInjection _authServices;
     private readonly ICompanyAuthServices _companyAuthServices;
     private readonly ICompanyProfileServices _companyProfileServices;
-    private readonly BusinessAuthServices _businessAuthServices;
+    private readonly IBusinessAuthServices _businessAuthServices;
     private readonly IValidatorsInject _validatorsInject;
 
     public CompanyServices(
@@ -29,7 +29,7 @@ public class CompanyServices : ICompanyServices
                             ICompanyAuthServices companyAuthServices,
                             ICompanyProfileServices companyProfileServices,
                             IValidatorsInject validatorsInject,
-                            BusinessAuthServices businessAuthServices
+                            IBusinessAuthServices businessAuthServices
                             )
     {
         _genericRepo = genericRepo;

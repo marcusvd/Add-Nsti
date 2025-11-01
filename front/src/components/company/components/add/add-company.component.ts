@@ -58,7 +58,7 @@ export class AddCompanyComponent extends BaseForm implements OnInit {
   ) { super() }
 
   cpfCnpjBusinessData(data: BusinessData) {
-
+console.log(data)
     this.setFormMain(data);
     this.setAddressForm(data);
     this.setContactForm(data);

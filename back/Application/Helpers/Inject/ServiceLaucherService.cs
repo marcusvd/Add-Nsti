@@ -7,7 +7,7 @@ using Domain.Entities.Authentication;
 
 using Application.Helpers.ServicesLauncher;
 using Application.Auth.TwoFactorAuthentication;
-using Application.Auth.UsersAccountsServices;
+
 using Application.Shared.Operations;
 using Application.Auth.Register.Services;
 using Application.Auth.JwtServices;
@@ -22,11 +22,13 @@ using Application.Auth.UsersAccountsServices.PasswordServices.Services;
 using Application.EmailServices.Services;
 using Application.BusinessesServices.Services.Profile;
 using Application.BusinessesServices.Services.Auth;
-using Application.Auth.UsersAccountsServices.Auth;
 using Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Services;
 using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
 using Application.Auth.Login.Services;
 using Application.Auth.UsersAccountsServices.Profile;
+using Application.Auth.UsersAccountsServices.Services.Auth;
+using Application.Helpers.Tools.CpfCnpj;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Helpers.Inject;
 
@@ -76,23 +78,23 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _jwtServices ??= new JwtServices(_configuration, _rolesServices);
+            return _jwtServices ??= new JwtServices(_configuration, RolesServices);
         }
     }
     private TimedAccessControlServices _timedAccessControlServices;
-    public  ITimedAccessControlServices UserAccountTimedAccessControlServices
+    public ITimedAccessControlServices UserAccountTimedAccessControlServices
     {
         get
         {
-            return _timedAccessControlServices ??= new TimedAccessControlServices(_genericRepo,_userManager,_validatorsInject, _userAccountAuthServices);
+            return _timedAccessControlServices ??= new TimedAccessControlServices(_genericRepo, _userManager, _validatorsInject, UserAccountAuthServices);
         }
     }
     private EmailUserAccountServices? _emailUserAccountServices;
-    public  IEmailUserAccountServices EmailUserAccountServices
+    public IEmailUserAccountServices EmailUserAccountServices
     {
         get
         {
-            return _emailUserAccountServices ??= new EmailUserAccountServices(_userAccountAuthServices,_userManager,_identityTokensServices,_emailServices);
+            return _emailUserAccountServices ??= new EmailUserAccountServices(_userManager, IdentityTokensServices, _emailServices);
         }
     }
     private TwoFactorAuthenticationServices? _twoFactorAuthenticationServices;
@@ -101,8 +103,8 @@ public class ServiceLaucherService : IServiceLaucherService
         get
         {
             return _twoFactorAuthenticationServices ??= new TwoFactorAuthenticationServices(
-                _userAccountAuthServices, _identityTokensServices,
-                _userManager, _signInManager, _validatorsInject, _emailServices, _jwtServices,_authServicesInjection.HttpContextAccessor
+                UserAccountAuthServices, IdentityTokensServices,
+                _userManager, _signInManager, _validatorsInject, _emailServices, JwtServices, _authServicesInjection.HttpContextAccessor, EmailUserAccountServices
                 );
         }
     }
@@ -127,7 +129,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _companyServices ??= new CompanyServices(_genericRepo, CompanyAuthServices, CompanyProfileServices, _validatorsInject, _businessesAuthServices);
+            return _companyServices ??= new CompanyServices(_genericRepo, CompanyAuthServices, CompanyProfileServices, _validatorsInject, BusinessesAuthServices);
         }
     }
 
@@ -144,7 +146,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _companyProfileServices ??= new CompanyProfileServices(_genericRepo, _authServicesInjection, _validatorsInject);
+            return _companyProfileServices ??= new CompanyProfileServices(_genericRepo);
         }
     }
 
@@ -153,7 +155,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _passwordServices ??= new PasswordServices(_identityTokensServices, _emailServices, _userAccountAuthServices, _userManager, _signInManager,_validatorsInject);
+            return _passwordServices ??= new PasswordServices(IdentityTokensServices, _emailServices, UserAccountAuthServices, _userManager, _signInManager, _validatorsInject);
         }
     }
 
@@ -163,11 +165,11 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _userAccountServices ??= new UserAccountServices(_userAccountAuthServices, _userAccountProfileServices);
+            return _userAccountServices ??= new UserAccountServices(UserAccountAuthServices, UserAccountProfileServices);
         }
     }
     private UserAccountProfileServices? _userAccountProfileServices;
-    public IUserAccountProfileServices? UserAccountProfileServices
+    public IUserAccountProfileServices UserAccountProfileServices
     {
         get
         {
@@ -180,7 +182,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _userAccountAuthServices ??= new UserAccountAuthServices(_genericRepo, _userManager, _emailUserAccountServices, _validatorsInject);
+            return _userAccountAuthServices ??= new UserAccountAuthServices(_genericRepo, _userManager, _validatorsInject);
         }
     }
 
@@ -198,7 +200,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _rolesServices ??= new RolesServices(_userManager, _rolesManager, _userAccountAuthServices);
+            return _rolesServices ??= new RolesServices(_userManager, _rolesManager, UserAccountAuthServices);
         }
     }
     private RegisterUserAccountServices? _registerUserAccountServices;
@@ -207,9 +209,9 @@ public class ServiceLaucherService : IServiceLaucherService
         get
         {
             return _registerUserAccountServices ??= new RegisterUserAccountServices(
-                _genericRepo, _userManager, _validatorsInject, _identityTokensServices,
-                _companyAuthServices, _businessProfileServices, _businessesAuthServices,
-                _emailServices, _rolesServices, _jwtServices
+                _genericRepo, _userManager, _validatorsInject, IdentityTokensServices,
+                CompanyAuthServices, BusinessProfileServices, BusinessesAuthServices,
+                _emailServices, RolesServices, JwtServices, EmailUserAccountServices
                 );
         }
     }
@@ -222,11 +224,12 @@ public class ServiceLaucherService : IServiceLaucherService
                                                     _userManager,
                                                     _signInManager,
                                                     _validatorsInject,
-                                                    _timedAccessControlServices,
-                                                    _userAccountAuthServices,
-                                                    _passwordServices,
-                                                    _twoFactorAuthenticationServices,
-                                                    _jwtServices
+                                                    UserAccountTimedAccessControlServices,
+                                                    UserAccountAuthServices,
+                                                    PasswordServices,
+                                                    TwoFactorAuthenticationServices,
+                                                    JwtServices,
+                                                    EmailUserAccountServices
                                                     );
         }
     }
@@ -238,11 +241,12 @@ public class ServiceLaucherService : IServiceLaucherService
             return _first_Register_Business_Services ??= new FirstRegisterBusinessServices(
                                                                                             _genericRepo,
                                                                                             _validatorsInject,
-                                                                                            _identityTokensServices,
+                                                                                            IdentityTokensServices,
                                                                                             _emailServices,
                                                                                             _userManager,
-                                                                                            _rolesServices,
-                                                                                            _jwtServices
+                                                                                            RolesServices,
+                                                                                            JwtServices,
+                                                                                            EmailUserAccountServices
                                                                                             );
         }
     }

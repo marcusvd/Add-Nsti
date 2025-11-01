@@ -3,23 +3,23 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Application.Helpers.Inject;
 using Application.Auth.Extends;
-using Application.Auth.UsersAccountsServices.Auth;
 using Application.EmailServices.Services;
 using Application.Auth.JwtServices;
 using Application.Auth.IdentityTokensServices;
 using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.dtos;
 using Application.Shared.Dtos;
 using Application.Auth.TwoFactorAuthentication.Dtos;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.Text.Encodings.Web;
+using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
+using Application.Auth.UsersAccountsServices.Services.Auth;
 
 namespace Application.Auth.TwoFactorAuthentication;
 
 public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAuthenticationServices
 {
-    private readonly UserAccountAuthServices _userAccountAuthServices;
+    private readonly IUserAccountAuthServices _userAccountAuthServices;
     private readonly IIdentityTokensServices _identityTokensServices;
     private readonly UserManager<UserAccount> _userManager;
     private readonly SignInManager<UserAccount> _signInManager;
@@ -27,16 +27,18 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
     private readonly ISmtpServices _smtpServices;
     private readonly IJwtServices _jwtServices;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IEmailUserAccountServices _emailUserAccountServices;
 
     public TwoFactorAuthenticationServices(
-                      UserAccountAuthServices userAccountAuthServices,
+                      IUserAccountAuthServices userAccountAuthServices,
                       IIdentityTokensServices identityTokensServices,
                       UserManager<UserAccount> userManager,
                       SignInManager<UserAccount> signInManager,
                       IValidatorsInject validatorsInject,
                       ISmtpServices smtpServices,
                       IJwtServices jwtServices,
-                      IHttpContextAccessor httpContextAccessor
+                      IHttpContextAccessor httpContextAccessor,
+                      IEmailUserAccountServices emailUserAccountServices
 
       )
     {
@@ -48,6 +50,7 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
         _jwtServices = jwtServices;
         _identityTokensServices = identityTokensServices;
         _httpContextAccessor = httpContextAccessor;
+        _emailUserAccountServices = emailUserAccountServices;
 
     }
     public async Task<ApiResponse<UserToken>> TwoFactorVerifyAsync(VerifyTwoFactorRequestDto request)
@@ -56,7 +59,7 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
 
         var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(request.Email);
 
-        await _userAccountAuthServices.ValidateUserAccountAsync(userAccount);
+        await _emailUserAccountServices.ValidateUserAccountAsync(userAccount);
 
         var appAuthToken = await _userManager.VerifyTwoFactorTokenAsync(userAccount, _userManager.Options.Tokens.AuthenticatorTokenProvider, request.Code);//app Authenticator
 
@@ -192,7 +195,7 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
 
         var user = await _userManager.GetUserAsync(userPrincipalClims);
 
-        await _userAccountAuthServices.ValidateUserAccountAsync(user);
+        await _emailUserAccountServices.ValidateUserAccountAsync(user);
 
         string authenticatorKey = await AuthenticatorKey(user);
 
@@ -262,7 +265,7 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
 
         _validatorsInject.GenericValidators.IsObjNull(userAccount);
 
-        await _userAccountAuthServices.ValidateUserAccountAsync(userAccount);
+        await _emailUserAccountServices.ValidateUserAccountAsync(userAccount);
 
         userAccount = AssignValues(request.OnOff, userAccount);
 

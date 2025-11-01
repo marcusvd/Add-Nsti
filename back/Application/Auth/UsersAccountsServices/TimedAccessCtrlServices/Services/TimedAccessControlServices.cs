@@ -7,6 +7,7 @@ using Application.Exceptions;
 using Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Dtos;
 using Domain.Entities.Authentication;
 using Application.Auth.UsersAccountsServices.Extends;
+using Application.Auth.UsersAccountsServices.Services.Auth;
 
 
 namespace Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Services;

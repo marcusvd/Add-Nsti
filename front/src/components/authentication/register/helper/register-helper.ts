@@ -68,17 +68,17 @@ export class RegisterHelper extends BaseForm {
     }
 
     this.setFormFieldValue(this.formMain, 'email', this.resetFormEmailNoLoss);
-    // console.log(isCpfValid);
+
+    //console.log(isCpfValid);
   }
 
   private keepEmailFieldForm(form: FormGroup) {
+
     const result: boolean = (form.get('email')?.value as string).length > 0;
+
     if (result)
       this.resetFormEmailNoLoss = form.get('email')?.value;
   }
-
-
-
 
   setFormMain(data: BusinessData) {
     if (data.nome.length > 0)

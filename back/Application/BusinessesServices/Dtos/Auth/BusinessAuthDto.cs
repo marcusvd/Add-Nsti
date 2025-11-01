@@ -1,7 +1,9 @@
 using Application.BusinessesServices.Extends;
 using Application.CompaniesServices.Dtos.Auth;
 using Application.UsersAccountsServices.Dtos;
+using Domain.Entities.Authentication;
 using Domain.Entities.System.Businesses;
+using Domain.Entities.System.Companies;
 
 
 namespace Application.BusinessesServices.Dtos.Auth;
@@ -13,16 +15,19 @@ public class BusinessAuthDto : BusinessBaseDto
     public required string BusinessProfileId { get; set; }
     public ICollection<UserAccountDto> UsersAccounts { get; set; } = new List<UserAccountDto>();
     public ICollection<CompanyAuthDto> Companies { get; set; } = new List<CompanyAuthDto>();
- 
+
     public static implicit operator BusinessAuth(BusinessAuthDto dto)
     {
         return new()
         {
+
             Id = dto.Id,
             Deleted = dto.Deleted,
             Registered = dto.Registered,
             Name = dto.Name,
-            BusinessProfileId = dto.BusinessProfileId
+            BusinessProfileId = dto.BusinessProfileId,
+            // UsersAccounts = dto.UsersAccounts.Select(x => (UserAccount)x).ToList(),
+            Companies = dto.Companies.Select(x => (CompanyAuth)x).ToList()
         };
     }
     public static implicit operator BusinessAuthDto(BusinessAuth db)
@@ -33,7 +38,9 @@ public class BusinessAuthDto : BusinessBaseDto
             Deleted = db.Deleted,
             Registered = db.Registered,
             Name = db.Name,
-            BusinessProfileId = db.BusinessProfileId
+            BusinessProfileId = db.BusinessProfileId,
+            //UsersAccounts = db.UsersAccounts.Select(x => (UserAccountDto)x).ToList(),
+            Companies = db.Companies.Select(x => (CompanyAuthDto)x).ToList(),
         };
     }
 

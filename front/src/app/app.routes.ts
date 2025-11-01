@@ -10,12 +10,14 @@ import { PasswordResetComponent } from 'components/authentication/password-reset
 import { ConfirmEmailChangedComponent } from 'components/authentication/confirm-email-changed/confirm-email-changed.component';
 import { TwoFactorCheckComponent } from 'components/authentication/two-factor-check/two-factor-check.component';
 import { SelectCompanyComponent } from 'components/authentication/select-company/select-company.component';
+import { ConfirmEmailBeforeRegisterComponent } from 'components/authentication/confirm-email-before-register/confirm-email-before-register.component';
 
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'two-factor-check', component: TwoFactorCheckComponent },
-  { path: 'register', component: RegisterComponent },
+  // { path: 'register', component: RegisterComponent },
+  { path: 'register', component: ConfirmEmailBeforeRegisterComponent },
   { path: 'confirm-email', component: ConfirmEmailComponent },
   { path: 'confirm-request-email-change', component: ConfirmEmailChangedComponent },
   { path: 'forgot', component: ForgotPasswordComponent },

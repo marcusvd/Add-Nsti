@@ -1,5 +1,4 @@
 using Application.Auth.TwoFactorAuthentication;
-using Application.Auth.UsersAccountsServices;
 using Application.Shared.Operations;
 using Application.Auth.JwtServices;
 using Application.Auth.Register.Services;
@@ -16,6 +15,7 @@ using Application.Auth.UsersAccountsServices.PasswordServices.Services;
 using Application.Auth.UsersAccountsServices.Profile;
 using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
 using Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Services;
+using Application.Auth.UsersAccountsServices.Services.Auth;
 
 
 namespace Application.Helpers.ServicesLauncher;

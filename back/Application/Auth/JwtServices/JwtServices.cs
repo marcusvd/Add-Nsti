@@ -6,6 +6,9 @@ using System.IdentityModel.Tokens.Jwt;
 using Domain.Entities.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Application.Auth.Roles.Services;
+using System.Threading.Tasks;
+using Application.Shared.Dtos;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace Application.Auth.JwtServices;
 
@@ -25,6 +28,86 @@ public class JwtServices : IJwtServices
         _rolesServices = rolesServices;
     }
 
+    private async Task<string> FirstRegisterGenerateToken(List<Claim> claims, DateTime expires)
+    {
+        var tokenOptions = new JwtSecurityToken(
+                    claims: claims,
+                    issuer: _jwtSettings["validIssuer"],
+                    audience: _jwtSettings["validAudience"],
+                    expires: expires,
+                    signingCredentials: GetSigningCredentials()
+                );
+        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+    }
+    public async Task<UserToken> FirstRegisterEmailValidation(string email)
+    {
+        DateTime expires = DateTime.Now.AddMinutes(30);
+        var claims = await FirstRegisterBuildClaims(email);
+
+        return new UserToken()
+        {
+            Authenticated = true,
+            Expiration = expires,
+            Token = await FirstRegisterGenerateToken(claims.Claims.ToList(), expires),
+            UserName = "",
+            Email = email,
+            Id = 0,
+            BusinessId = 0,
+            Roles = new List<string>(),
+            Action = ""
+        };
+
+    }
+    private async Task<ClaimsPrincipal> FirstRegisterBuildClaims(string email)
+    {
+        var claims = new ClaimsIdentity(IdentityConstants.TwoFactorUserIdScheme);
+
+        claims.AddClaim(new Claim("email", email));
+
+        return new ClaimsPrincipal(claims);
+    }
+
+
+    public ClaimsPrincipal ValidateJwtToken(string token)
+    {
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        var jwtSettings = _configuration.GetSection("JwtSettings");
+
+        var validationParameters = new TokenValidationParameters
+        {
+            // ValidateIssuerSigningKey = true,
+            // IssuerSigningKey = new SymmetricSecurityKey(key),
+            // ValidateIssuer = true,
+            // ValidateAudience = true,
+            // ValidAudience = "",
+            // ValidateLifetime = true,
+            // ClockSkew = TimeSpan.Zero
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["validIssuer"],
+            ValidAudience = jwtSettings["validAudience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"])),
+        };
+        try
+        {
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+            return principal;
+        }
+        catch
+        {
+            // token inválido
+            return null;
+        }
+
+    }
+
+
+
+
     public async Task<UserToken> GenerateUserToken(List<Claim> claims, UserAccount user, IList<string> roles, string time)
     {
 
@@ -41,9 +124,9 @@ public class JwtServices : IJwtServices
             signingCredentials: GetSigningCredentials()
         );
         var result = await Task.FromResult(userToken(user, roles, tokenOptions, timeToExpire));
+
         return result;
     }
-
     private SigningCredentials GetSigningCredentials()
     {
 
@@ -69,7 +152,6 @@ public class JwtServices : IJwtServices
         };
 
     }
-
     public UserToken InvalidUserToken() => new UserToken()
     {
         Authenticated = false,
@@ -77,7 +159,6 @@ public class JwtServices : IJwtServices
         Token = "Invalid token",
 
     };
-
     public async Task<UserToken> CreateAuthenticationResponseAsync(UserAccount userAccount)
     {
         var claimsList = await BuildUserClaims(userAccount);
@@ -85,7 +166,6 @@ public class JwtServices : IJwtServices
         var token = await GenerateUserToken(claimsList.Claims.ToList(), userAccount, roles, "login");
         return token;
     }
-
     public async Task<UserToken> CreateTwoFactorResponse(UserAccount userAccount)
     {
         var claimsList = await BuildUserClaims(userAccount);
@@ -93,7 +173,6 @@ public class JwtServices : IJwtServices
         token.Action = "TwoFactor";
         return token;
     }
-
     private protected async Task<ClaimsPrincipal> BuildUserClaims(UserAccount userAccount)
     {
         var getRoles = await _rolesServices.GetRolesAsync(userAccount);
@@ -102,11 +181,11 @@ public class JwtServices : IJwtServices
 
         claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()));
         claims.AddClaim(new Claim("amr", "Email"));
+
         foreach (var role in getRoles)
             claims.AddClaim(new Claim(ClaimTypes.Role, role));
 
         return new ClaimsPrincipal(claims);
     }
-
 
 }

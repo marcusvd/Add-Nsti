@@ -20,7 +20,7 @@ public class BusinessProfileDto : BusinessBaseDto
         {
             Id = map.Id,
             BusinessAuthId = map.BusinessAuthId,
-            UsersAccounts = map.UsersAccounts.Select(x => (UserProfileDto)x).ToList(),
+            // UsersAccounts = map.UsersAccounts.Select(x => (UserProfileDto)x).ToList(),
             Companies = map.Companies.Select(x=> (CompanyProfileDto)x).ToList()
         };
     }
@@ -30,7 +30,7 @@ public class BusinessProfileDto : BusinessBaseDto
         {
             Id = map.Id,
             BusinessAuthId = map.BusinessAuthId,
-            UsersAccounts = map.UsersAccounts.Select(x => (UserProfile)x).ToList(),
+            // UsersAccounts = map.UsersAccounts.Select(x => (UserProfile)x).ToList(),
             Companies = map.Companies.Select(x => (CompanyProfile)x).ToList()
         };
     }

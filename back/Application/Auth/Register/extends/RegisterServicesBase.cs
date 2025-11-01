@@ -1,4 +1,3 @@
-using UnitOfWork.Persistence.Operations;
 using Application.Auth.Extends;
 using Application.Auth.Register.Exceptions;
 using Domain.Entities.Authentication;
@@ -6,6 +5,7 @@ using Application.Auth.IdentityTokensServices;
 using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.dtos;
 using Application.EmailServices.Services;
 using Microsoft.AspNetCore.Identity;
+using Application.Auth.JwtServices;
 
 
 namespace Application.Auth.Register.Extends;
@@ -59,20 +59,20 @@ public abstract class RegisterServicesBase : AuthenticationBase, IRegisterServic
         return userAccount != null;
     }
 
-    public async Task<bool> SendUrlTokenEmailConfirmation(bool registerResult, UserAccount userAccount)
-    {
-        if (registerResult)
-        {
-            var genToken = _identityTokensServices.GenerateUrlTokenEmailConfirmation(userAccount, "ConfirmEmailAddress", "auth");
+    // public async Task<bool> SendUrlTokenEmailConfirmation(bool registerResult, UserAccount userAccount)
+    // {
+    //     if (registerResult)
+    //     {
+    //         var genToken = _identityTokensServices.GenerateUrlTokenEmailConfirmation(userAccount, JwtSettings.ActionConfirmEmailAddress, JwtSettings.EmailUserAccountController);
 
-            var dataConfirmEmail = DataConfirmEmail.DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", "api/auth/ConfirmEmailAddress", "I.M - Link para confirmação de e-mail"]);
+    //         var dataConfirmEmail = DataConfirmEmail.DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", @$"api/{JwtSettings.EmailUserAccountController}/{JwtSettings.ActionConfirmEmailAddress}", "I.M - Link para confirmação de e-mail"]);
 
-            await _emailServices.SendTokensEmailAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
+    //         await _emailServices.SendTokensEmailAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
 
-            return true;
-        }
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
 }

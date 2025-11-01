@@ -25,6 +25,7 @@ public class ContactDto : RootBaseDto
             Cel = dto.Cel,
             Zap = dto.Zap,
             Landline = dto.Landline,
+            SocialMedias = null
 
         };
     }
@@ -40,6 +41,7 @@ public class ContactDto : RootBaseDto
             Cel = dto.Cel,
             Zap = dto.Zap,
             Landline = dto.Landline,
+            SocialMedias = null
 
         };
     }

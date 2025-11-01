@@ -1,20 +1,46 @@
 using Domain.Entities.Authentication;
 using Authentication.Exceptions;
-using UnitOfWork.Persistence.Operations;
-using Application.Exceptions;
 using Application.Shared.Validators;
-using Application.Auth.Roles.Dtos;
+using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
+using Microsoft.AspNetCore.Identity;
+using Application.EmailServices.Exceptions;
 
 namespace Application.Auth.Extends;
 
 public abstract class AuthenticationBase : IAuthenticationBase
 {
-    public string IsValidEmail(string email) => !GenericValidators.IsValidEmail(email) ? email : throw new AuthServicesException("Invalid email");
+
+    // private readonly UserManager<UserAccount> _userManager;
+    // private readonly EmailUserAccountServices _emailUserAccountServices;
+
+    public AuthenticationBase(
+            // UserManager<UserAccount> userManager,
+            // EmailUserAccountServices emailUserAccountServices
+    )
+    {
+        // _userManager = userManager;
+        // _emailUserAccountServices = emailUserAccountServices;
+    }
+
+    public string IsValidEmail(string email) => GenericValidators.IsValidEmail(email) ? email : throw new AuthServicesException("Invalid email");
     public int ValidateUserId(int userId) => !(userId <= 0) ? userId : throw new AuthServicesException("Invalid id");
 
-    
-    
-    
+    // public async Task ValidateUserAccountAsync(UserAccount userAccount)
+    // {
+    //     if (await _userManager.IsLockedOutAsync(userAccount))
+    //     {
+    //         await _emailUserAccountServices.NotifyAccountLockedAsync(userAccount);
+    //         throw new AuthenticationBaseException(AuthenticationBaseMessagesException.UserIsLocked);
+    //     }
+
+    //     if (!await _userManager.IsEmailConfirmedAsync(userAccount))
+    //     {
+    //         await _emailUserAccountServices.ResendConfirmEmailAsync(userAccount.Email);
+    //         throw new AuthenticationBaseException(AuthenticationBaseMessagesException.EmailIsNotConfirmed);
+    //     }
+    // }
+
+
     // private protected async Task<bool> ValidateAccountStatusAsync(UserAccount userAccount)
     // {
     //     if (await _authServicesInjection.UsersManager.IsLockedOutAsync(userAccount))

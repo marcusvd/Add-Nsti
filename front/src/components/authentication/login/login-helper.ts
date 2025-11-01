@@ -80,7 +80,7 @@ export class LoginHelper extends BaseForm {
 
     switch (erroCode[0]) {
       case '1.0': {
-        this.resendConfirmEmail(email);
+        // this.resendConfirmEmail(email);
         this.loginErrorMessage = erroCode[1]
         break;
       }
@@ -125,16 +125,16 @@ export class LoginHelper extends BaseForm {
     }
   }
 
-  resendConfirmEmail(email: string) {
-    const resend = new ResendConfirmEmail();
-    resend.email = email;
-    this._loginService?.resendConfirmEmailAsync(resend)?.subscribe({
-      next: (request: ApiResponse<UserTokenDto>) => {
-        console.log(request);
-      }, error: (err: any) => {
-        console.log(err);
-      }
-    });
-  }
+  // resendConfirmEmail(email: string) {
+  //   const resend = new ResendConfirmEmail();
+  //   resend.email = email;
+  //   this._loginService?.resendConfirmEmailAsync(resend)?.subscribe({
+  //     next: (request: ApiResponse<UserTokenDto>) => {
+  //       console.log(request);
+  //     }, error: (err: any) => {
+  //       console.log(err);
+  //     }
+  //   });
+  // }
 
 }

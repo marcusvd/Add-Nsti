@@ -1,7 +1,4 @@
-
 using Microsoft.AspNetCore.Identity;
-
-using UnitOfWork.Persistence.Operations;
 using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.dtos;
 using Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Exceptions;
 using Application.Auth.IdentityTokensServices;
@@ -10,45 +7,79 @@ using Application.Shared.Dtos;
 using Application.EmailUsrAccountServices.Extensions;
 using Application.UsersAccountsServices.Dtos.Extends;
 using Application.EmailServices.Services;
+using Application.Auth.JwtServices;
+using Application.Exceptions;
+using System.Security.Claims;
 
 namespace Application.Auth.UsersAccountsServices.EmailUsrAccountServices.Services;
 
 public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountServices
 {
-    private readonly IUserAccountAuthServices _userAccountAuthServices;
+    // private readonly IUserAccountAuthServices _userAccountAuthServices;
     private readonly UserManager<UserAccount> _userManager;
     private readonly IIdentityTokensServices _identityTokensServices;
     private readonly ISmtpServices _emailService;
+    private readonly IJwtServices _jwtServices;
 
 
     public EmailUserAccountServices(
-           IUserAccountAuthServices userAccountAuthServices,
+           //    IUserAccountAuthServices userAccountAuthServices,
            UserManager<UserAccount> userManager,
            IIdentityTokensServices identityTokensServices,
-           ISmtpServices emailService
+           ISmtpServices emailService,
+           IJwtServices jwtServices
       )
     {
-        _userAccountAuthServices = userAccountAuthServices;
+        // _userAccountAuthServices = userAccountAuthServices;
+        _userManager = userManager;
         _identityTokensServices = identityTokensServices;
         _emailService = emailService;
-        _userManager = userManager;
+        _jwtServices = jwtServices;
     }
 
     public async Task<ApiResponse<IdentityResult>> ConfirmEmailAddressAsync(ConfirmEmailDto dto)
     {
         string email = IsValidEmail(dto.Email);
 
-        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(email);
+        var userAccount = await _userManager.FindByEmailAsync(email);
 
         var result = await _userManager.ConfirmEmailAsync(userAccount, dto.Token);
 
         return ApiResponse<IdentityResult>.Response([$@"{EmailUserAccountMessagesException.confirmEmail} - {userAccount.Email}"], result.Succeeded, "ConfirmEmailAddressAsync", result);
     }
+    public async Task<ApiResponse<UserToken>> FirstEmailConfirmationCheckTokenAsync(ConfirmEmailDto dto)
+    {
+        string email = IsValidEmail(dto.Email);
+
+        var usrTkn = new UserToken()
+        {
+            Id = 0,
+            BusinessId = 0,
+            Authenticated = true,
+            Expiration = DateTime.MinValue,
+            Token = dto.Token,
+            UserName = email,
+            Email = email,
+            Action = "FirstRegister",
+            Roles = ["first"]
+        };
+
+        var userClaims = _jwtServices.ValidateJwtToken(usrTkn.Token);
+
+        if (userClaims != null)
+        {
+            var emailFromClaim = userClaims.FindFirst(ClaimTypes.Email)?.Value;
+            
+        }
+
+
+        return ApiResponse<UserToken>.Response([$@"{EmailUserAccountMessagesException.confirmEmail} - {usrTkn.Email}"], usrTkn.Authenticated, "ManualConfirmEmailAddress", usrTkn);
+    }
     public async Task<ApiResponse<IdentityResult>> ManualConfirmEmailAddress(EmailConfirmManualDto dto)
     {
         string email = IsValidEmail(dto.Email);
 
-        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(email);
+        var userAccount = await _userManager.FindByEmailAsync(email);
 
         userAccount = AssignValueEmailConfirmed(userAccount, dto.EmailConfirmed);
 
@@ -65,7 +96,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     {
         string email = IsValidEmail(dto.OldEmail);
 
-        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(email);
+        var userAccount = await _userManager.FindByEmailAsync(email);
 
         userAccount!.InitiateEmailChange(dto.NewEmail);
 
@@ -81,7 +112,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     {
         int id = ValidateUserId(dto.Id);
 
-        var userAccount = await _userAccountAuthServices.GetUserAccountByUserIdAsync(id);
+        var userAccount = await _userManager.FindByIdAsync(id.ToString());
 
         var result = await _userManager.ChangeEmailAsync(userAccount, dto.Email, dto.Token);
 
@@ -94,7 +125,6 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     }
     private async Task<ApiResponse<IdentityResult>> EmailChangeResponse(UserAccount userAccount, string email)
     {
-
         userAccount.UserName = email;
         userAccount.Email = email;
 
@@ -102,23 +132,36 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
 
         return ApiResponse<IdentityResult>.Response([$@"Error when trying to change user email: {email}"], result.Succeeded, "EmailChangeResponse", result);
     }
-    public async Task<ApiResponse<string>> ResendConfirmEmailAsync(string emailParam)
+    public async Task<ApiResponse<string>> SendConfirmEmailAsync(bool registerResult, UserAccount userAccount)
     {
-        string email = IsValidEmail(emailParam);
+        if (registerResult)
+        {
+            var genToken = _identityTokensServices.GenerateUrlTokenEmailConfirmation(userAccount, JwtSettings.ActionConfirmEmailAddress, JwtSettings.EmailUserAccountController);
 
-        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(email);
+            var dataConfirmEmail = DataConfirmEmail.DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", @$"api/{JwtSettings.EmailUserAccountController}/{JwtSettings.ActionConfirmEmailAddress}", "I.M - Link para confirmação de e-mail"]);
 
-        await _userAccountAuthServices.ValidateUserAccountAsync(userAccount);
+            await _emailService.SendTokensEmailAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
 
-        var genToken = _identityTokensServices.GenerateUrlTokenEmailConfirmation(userAccount, "ConfirmEmailAddress", "auth");
+            bool result = genToken != null && dataConfirmEmail != null;
 
-        var dataConfirmEmail = DataConfirmEmail.DataConfirmEmailMaker(userAccount, [await genToken, "http://localhost:4200/confirm-email", "api/auth/ConfirmEmailAddress", "I.M - Link para confirmação de e-mail"]);
-
-        await _emailService.SendTokensEmailAsync(dataConfirmEmail, dataConfirmEmail.WelcomeMessage());
-
-        return ApiResponse<string>.Response([$@"Error when trying to change user email: {email}"], true, "ResendConfirmEmailAsync", email);
+            return ApiResponse<string>.Response([$@"Error when trying to resend email confirmation: {userAccount.Email}"], result, "Email confirmation was sent successfully sent.", userAccount.Email);
+        }
+        return ApiResponse<string>.Response([$@"Error when trying to send email confirmation: {userAccount.Email}"], true, "SendConfirmEmailAsync", userAccount.Email);
     }
-    public async Task NotifyAccountLockedAsync(UserAccount userAccount)
+    public async Task<ApiResponse<UserToken>> FirstEmailConfirmationAsync(UserToken userToken)
+    {
+        var dataConfirmEmail = DataConfirmEmail.DataConfirmEmailMaker(new UserAccount() { UserProfileId = "", DisplayUserName = "", Email = userToken.Email ?? "invalid@invalid.com.br", }, [userToken.Token ?? "Invalid Token!", "http://localhost:4200/confirm-email", userToken.Email ?? "invalid@invalid.com.br", "I.M - Link para confirmação de e-mail"]);
+
+        var result = (dataConfirmEmail != null) && !string.IsNullOrWhiteSpace(userToken.Email);
+
+        if (!result)
+            throw new EmailUserAccountException(@$"{GlobalErrorsMessagesException.IsObjNull} / FirstEmailConfirmationAsync");
+
+        await _emailService.SendTokensEmailAsync(dataConfirmEmail, dataConfirmEmail.FirstConfirmEmailWelcomeMessage());
+
+        return ApiResponse<UserToken>.Response([$@"Message successfully sent to -> {userToken.Email}"], true, "FirstEmailConfirmationAsync", new UserToken());
+    }
+    private async Task NotifyAccountLockedAsync(UserAccount userAccount)
     {
         try
         {
@@ -135,12 +178,24 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     {
         string emailValidated = IsValidEmail(email);
 
-        var userAccount = await _userAccountAuthServices.GetUserAccountByEmailAsync(emailValidated);
+        var userAccount = await _userManager.FindByEmailAsync(emailValidated);
 
         return await _userManager.IsEmailConfirmedAsync(userAccount);
     }
+    public async Task ValidateUserAccountAsync(UserAccount userAccount)
+    {
+        if (await _userManager.IsLockedOutAsync(userAccount))
+        {
+            await NotifyAccountLockedAsync(userAccount);
+            throw new EmailUserAccountException(EmailUserAccountMessagesException.UserIsLocked);
+        }
 
-
+        if (!await _userManager.IsEmailConfirmedAsync(userAccount))
+        {
+            await SendConfirmEmailAsync(true, userAccount);
+            throw new EmailUserAccountException(EmailUserAccountMessagesException.EmailIsNotConfirmed);
+        }
+    }
 
 
 }
