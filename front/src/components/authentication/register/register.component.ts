@@ -1,7 +1,6 @@
 
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 
 import { environment } from 'environments/environment';
@@ -11,14 +10,10 @@ import { WarningsService } from 'components/warnings/services/warnings.service';
 import { AddressService } from 'shared/components/address/services/address.service';
 import { CpfCnpjComponent } from 'shared/components/administrative/cpf-cnpj/cpf-cnpj.component';
 import { CaptchaComponent } from 'shared/components/captcha/captcha.component';
-import { ContactService } from 'shared/components/contact/services/contact.service';
 import { IsMobileNumberPipe } from 'shared/pipes/is-mobile-number.pipe';
-import { IsUserRegisteredValidator } from '../validators/is-user-registered-validator';
-import { PasswordConfirmationValidator } from '../validators/password-confirmation-validator';
-import { PasswordValidator } from '../validators/password-validator';
+import { Register } from '../dtos/register';
 import { RegisterHelper } from './helper/register-helper';
 import { ImportsRegister } from './imports/imports-register';
-import { Register } from '../dtos/register';
 
 
 @Component({
@@ -40,18 +35,13 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
   @ViewChild('token') reCaptcha!: CaptchaComponent;
 
-  constructor(
-    private _registerService: RegisterService,
-    // private _router: Router,
-    private _warningsService: WarningsService,
-
-  ) { super() }
-
+  _registerService = inject(RegisterService);
+  _warningsService = inject(WarningsService);
+  _actRoute = inject(ActivatedRoute);
 
   loginErrorMessage: string = '';
 
   backend = `${environment._BACK_END_ROOT_URL}/_Register/RegisterAsync`;
-
 
   register(tokenCaptcha: string | undefined) {
 
@@ -65,15 +55,8 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
               this._warningsService.openSnackBar('CADASTRADO!' + '   ' + user.email.toUpperCase() + '.', 'warnings-success');
 
               setTimeout(() => {
-                this._warningsService.openAuthWarnings({
-                  btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
-                  body: "Verifique seu e-mail para confirmar seu registro. Caixa de entrada, Spam ou lixo eletrônico. Obrigado!",
-                }).subscribe(result => {
-                  this.callRouter('login');
-                  // this._router.navigateByUrl('login');
-                })
-
-              }, 5000);
+                this.callRouter('login');
+              }, 3000);
 
             }, error: (err: any) => {
               this.reCaptcha.resetCaptcha();
@@ -86,22 +69,6 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
     }
   }
-
-
-//  get checkStatus() {
-//     if(this.formMain.get('userName')?.valid &&
-//       this.formMain.get('companyName')?.valid &&
-//       this.formMain.get('email')?.valid &&
-//       this.formMain.get('password')?.valid &&
-//       this.formMain.get('cnpj')?.valid &&
-//       this.formMain.get('confirmPassword')?.valid) {
-//       return true;
-//     }
-//     else
-//       return false;
-//   }
-
-
 
   pwdType: string = 'password';
   pwdIcon: string = 'visibility_off';
@@ -127,6 +94,8 @@ export class RegisterComponent extends RegisterHelper implements OnInit {
 
   ngOnInit(): void {
     this.formLoadCnpj();
+    const email = this._actRoute.snapshot.params['email'];
+    this.formMain.get('email')?.setValue(email);
   }
 
 }

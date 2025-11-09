@@ -59,9 +59,9 @@ export class LoginComponent extends LoginHelper implements OnInit {
         this._loginService?.login$(login)?.subscribe({
           next: (request: ApiResponse<UserTokenDto>) => {
             // console.log(login)
-            // console.log(request)
+            console.log(request)
             this.loginCalls(request);
-
+            
           }, error: (err: any) => {
             console.log(err);
             this.loginsErrorHandler(err, login.email);

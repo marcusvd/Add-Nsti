@@ -27,7 +27,7 @@ public class BusinessAuthDto : BusinessBaseDto
             Name = dto.Name,
             BusinessProfileId = dto.BusinessProfileId,
             // UsersAccounts = dto.UsersAccounts.Select(x => (UserAccount)x).ToList(),
-            Companies = dto.Companies.Select(x => (CompanyAuth)x).ToList()
+             Companies = dto.Companies.Select(x => (CompanyAuth)x).ToList()
         };
     }
     public static implicit operator BusinessAuthDto(BusinessAuth db)
@@ -40,7 +40,7 @@ public class BusinessAuthDto : BusinessBaseDto
             Name = db.Name,
             BusinessProfileId = db.BusinessProfileId,
             //UsersAccounts = db.UsersAccounts.Select(x => (UserAccountDto)x).ToList(),
-            Companies = db.Companies.Select(x => (CompanyAuthDto)x).ToList(),
+             Companies = db.Companies.Select(x => (CompanyAuthDto)x).ToList(),
         };
     }
 

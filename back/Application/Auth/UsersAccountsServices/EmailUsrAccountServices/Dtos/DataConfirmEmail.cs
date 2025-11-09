@@ -64,7 +64,9 @@ public class DataConfirmEmail
 
   <p>Estamos felizes por tê-lo conosco. Este e-mail confirma que o endereço utilizado no cadastro está correto e ativo. Para concluir seu registro e começar a usar o sistema, basta clicar no botão abaixo:</p>
 
-  <p><a href='{UrlFront}/{TokenConfirmationUrl}/{UrlBack}' class='button'>Confirmar e-mail</a></p>
+  <p><a href='{UrlFront}/?token={TokenConfirmationUrl}&email={UrlBack}' class='button'>Confirmar e-mail</a></p>
+
+
 
   <p>O I.M foi criado para tornar sua rotina mais eficiente, organizada e segura. A partir de agora, você poderá acompanhar suas ordens de serviço com mais agilidade e controle.</p>
 

@@ -36,7 +36,7 @@ export class SideMenuTopLargeComponent implements OnInit {
 
   userAccountPSDefault: string = `/users/user-account-profile-settings/${this.isAuthenticated.id}`;
   test: string = `/users/select-company-to-start/${this.isAuthenticated.id}`;
-  
+
   firstLetter!: string;
   userName!: string;
   businessId!: number;
@@ -49,6 +49,7 @@ export class SideMenuTopLargeComponent implements OnInit {
   logOut() {
     this._auth.logOut().subscribe(
       (x: ApiResponse<string>) => {
+   
         if (x.success) {
           this._warningsService.openSnackBar('Até mais...', 'warnings-success');
           localStorage.clear();

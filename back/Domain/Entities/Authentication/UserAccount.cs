@@ -18,6 +18,7 @@ public class UserAccount : IdentityUser<int>
     public string? RefreshToken { get; set; }
     public required string DisplayUserName { get; set; }
     public override string Email { get; set; } = string.Empty;
+    public override bool EmailConfirmed { get; set; } = true;
     public DateTime RefreshTokenExpiryTime { get; set; }
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     public ICollection<CompanyUserAccount> CompanyUserAccounts { get; set; } = new List<CompanyUserAccount>();

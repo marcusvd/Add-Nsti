@@ -43,7 +43,7 @@ public class UserAccountAuthServices : UserAccountServicesBase, IUserAccountAuth
     {
         // string email = IsValidEmail(emailParam);
 
-        var userAccount = await _userManager.FindByEmailAsync(emailParam) ?? new UserAccount(){DisplayUserName = "invalid", UserProfileId = "invalid"};
+        var userAccount = await _userManager.FindByEmailAsync(emailParam) ?? new UserAccount() { DisplayUserName = "invalid", UserProfileId = "invalid" };
 
         return ApiResponse<bool>.Response([@$"Usuário não encontrado. {emailParam}"], userAccount != null, "IsUserExistCheckByEmailAsync", userAccount != null);
     }
@@ -60,21 +60,20 @@ public class UserAccountAuthServices : UserAccountServicesBase, IUserAccountAuth
         return await _userManager.FindByEmailAsync(userNameOrEmail) ?? await _userManager.FindByNameAsync(userNameOrEmail) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
     }
     public async Task<UserAccount> GetUserAccountByEmailAsync(string email) => await _userManager.FindByEmailAsync(email) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
-    public async Task<UserAccount> GetUserAccountByUserIdAsync(int id) => await _userManager.FindByIdAsync(id.ToString()) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
-    // public async Task ValidateUserAccountAsync(UserAccount userAccount)
-    // {
-    //     if (await _userManager.IsLockedOutAsync(userAccount))
-    //     {
-    //         await _emailUserAccountServices.NotifyAccountLockedAsync(userAccount);
-    //         throw new UserAccountException(UserAccountMessagesException.UserIsLocked);
-    //     }
+    public async Task<UserAccount> GetUserAccountByUserIdAsync(int id)
+    {
+        var fromDb = await _genericRepo.UsersAccounts.GetByPredicate(
+              x => x.Id == id && x.Deleted == DateTime.MinValue,
+              add => add.Include(x => x.BusinessAuth)
+             .Include(x => x.TimedAccessControl),
+              selector => selector,
+             null
+          );
 
-    //     if (!await _userManager.IsEmailConfirmedAsync(userAccount))
-    //     {
-    //         await _emailUserAccountServices.ResendConfirmEmailAsync(userAccount.Email);
-    //         throw new UserAccountException(UserAccountMessagesException.EmailIsNotConfirmed);
-    //     }
-    // }
+        return fromDb ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
+    }
+    // public async Task<UserAccount> GetUserAccountByUserIdAsync(int id) => await _userManager.FindByIdAsync(id.ToString()) ?? throw new UserAccountException(GlobalErrorsMessagesException.IsObjNull);
+
     public async Task<bool> IsAccountLockedOut(string email)
     {
         string validated = IsValidEmail(email);
@@ -123,9 +122,15 @@ public class UserAccountAuthServices : UserAccountServicesBase, IUserAccountAuth
     private UserAccount AssignValuesManualAccountLockedOut(UserAccount userAccount, bool isAccountLockedOut)
     {
         if (isAccountLockedOut)
-            userAccount.LockoutEnd = DateTime.Now.AddYears(10);
+        {
+            userAccount.LockoutEnd = DateTimeOffset.Now.AddYears(10);
+            userAccount.LockoutEnabled = true;
+        }
         else
-            userAccount.LockoutEnd = DateTime.MinValue;
+        {
+            userAccount.LockoutEnd = DateTimeOffset.MinValue;
+            userAccount.LockoutEnabled = false;
+        }
 
         return userAccount;
     }

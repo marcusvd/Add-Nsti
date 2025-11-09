@@ -82,22 +82,16 @@ public class PasswordServices : PasswordServicesBase, IPasswordServices
         return userAccount;
     }
 
-    public async Task<ApiResponse<IdentityResult>> PasswordSignInAsync(UserAccount userAccount, string password, bool isPersistent = true, bool lockoutOnFailure = true)
-    {
-        var isValid = await _signInManager.PasswordSignInAsync(userAccount, password, isPersistent, lockoutOnFailure);
+    public async Task<SignInResult> PasswordSignInAsync(UserAccount userAccount, string password, bool isPersistent = true, bool lockoutOnFailure = false) =>
+    await _signInManager.PasswordSignInAsync(userAccount, password, isPersistent, lockoutOnFailure);
 
-        if (isValid.Succeeded || isValid.RequiresTwoFactor)
-        {
-            var identityResult = await _userManager.ResetAccessFailedCountAsync(userAccount);
+    public async Task<IdentityResult> ResetAccessFailedCountAsync(UserAccount userAccount) => await _userManager.ResetAccessFailedCountAsync(userAccount);
+    
+    // private async Task<IdentityResult> SetLockoutEndDateAsync(UserAccount userAccount) => await _userManager.SetLockoutEndDateAsync(userAccount, DateTimeOffset.MinValue);
+    
+    public async Task<IdentityResult> AccessFailedAsync(UserAccount userAccount) => await _userManager.AccessFailedAsync(userAccount);
+    public async Task<int> GetAccessFailedCountAsync(UserAccount userAccount) => await _userManager.GetAccessFailedCountAsync(userAccount);
 
-            return ApiResponse<IdentityResult>.Response([""], identityResult.Succeeded, "PasswordSignInAsync", identityResult);
-        }
-        else
-        {
-            var identityResult = await _userManager.AccessFailedAsync(userAccount);
-            return ApiResponse<IdentityResult>.Response([""], identityResult.Succeeded, "PasswordSignInAsync", identityResult);
-        }
-    }
     public async Task<ApiResponse<IdentityResult>> CheckPasswordAsync(UserAccount userAccount, string password)
     {
         var isValid = await _userManager.CheckPasswordAsync(userAccount, password);
@@ -172,7 +166,7 @@ public class PasswordServices : PasswordServicesBase, IPasswordServices
         return userAccount;
     }
 
-  
+
     public async Task<ApiResponse<IdentityResult>> SetStaticPassword(ResetStaticPasswordDto reset)
     {
         string emailValidated = IsValidEmail(reset.Email);
@@ -214,13 +208,13 @@ public class PasswordServices : PasswordServicesBase, IPasswordServices
     public async Task<ApiResponse<bool>> IsPasswordExpiresAsync(int userId)
     {
         int id = ValidateUserId(userId);
-        
+
         var userAccount = await _userAccountAuthServices.GetUserAccountByUserIdAsync(id);
 
         if (userAccount.WillExpire.Year == DateTime.MinValue.Year)
-            return ApiResponse<bool>.Response([""], false, "ResponseSetStaticPassword", false);
+            return ApiResponse<bool>.Response([""], false, "No, the password will expire.", false);
         else
-            return ApiResponse<bool>.Response([""], true, "ResponseSetStaticPassword", true);
+            return ApiResponse<bool>.Response([""], true, "The password will expire.", true);
     }
 }
 

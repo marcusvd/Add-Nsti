@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fbJFa9CtRv0=",
+  "dgSpecHash": "3RxDt6aaCdM=",
   "success": true,
-  "projectFilePath": "D:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj",
+  "projectFilePath": "d:\\Profiles\\Marcus\\Desktop\\Add-Nsti\\back\\Authentication\\Authentication.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\fluentvalidation\\11.2.1\\fluentvalidation.11.2.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.2.2\\fluentvalidation.aspnetcore.11.2.2.nupkg.sha512",

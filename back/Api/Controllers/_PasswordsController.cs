@@ -20,12 +20,14 @@ public class _PasswordsController : ControllerBase
     [HttpPost("MarkPasswordExpireAsync")]
     public async Task<IActionResult> MarkPasswordExpireAsync([FromBody] PasswordWillExpiresDto passwordWillExpires) =>
          Ok(await _ServiceLaucherService.PasswordServices.MarkPasswordExpireAsync(passwordWillExpires));
-    [HttpPost("StaticPasswordDefined")]
+    [HttpPut("StaticPasswordDefined")]
     public async Task<IActionResult> StaticPasswordDefined([FromBody] ResetStaticPasswordDto reset) =>
         Ok(await _ServiceLaucherService.PasswordServices.SetStaticPassword(reset));
-    [HttpPost("IsPasswordExpiresAsync")]
+
+    [HttpGet("IsPasswordExpiresAsync/{userId:min(1)}")]
     public async Task<IActionResult> IsPasswordExpiresAsync(int userId) =>
         Ok(await _ServiceLaucherService.PasswordServices.IsPasswordExpiresAsync(userId));
+        
 
     [HttpPost("ForgotPassword")]
     [AllowAnonymous]

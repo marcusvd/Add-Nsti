@@ -223,7 +223,7 @@ export class EditUserCompanyComponent extends BaseForm implements OnInit {
   ngOnInit(): void {
     const id = this._actRouter.snapshot.params['id'] as number;
     this.userIdRoute = id;
-    const backend = `${environment._BACK_END_ROOT_URL}/useraccounts/GetUserByIdFullAsync`
+    const backend = `${environment._BACK_END_ROOT_URL}/_useraccounts/GetUserByIdFullAsync`
 
     this._registerService.loadById$<UserAuthProfileDto>(backend, id.toString()).subscribe((x: UserAuthProfileDto) => {
       this.formLoad(x);

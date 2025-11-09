@@ -7,6 +7,7 @@ import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
 import { ImportsPasswordExpires } from './imports/imports-password-expires';
 import { PasswordWillExpiresDto } from '../dtos/password-will-expires-dto';
 import { MatDividerModule } from '@angular/material/divider';
+import { ApiResponse } from '../two-factor-enable/dtos/authenticator-setup-response';
 
 @Component({
   selector: 'password-expires',
@@ -35,11 +36,12 @@ export class PasswordExpiresComponent extends BaseForm implements OnInit {
   ngOnInit(): void {
     this._accountService.isPasswordExpires$(this.userAccountId)
       .subscribe({
-        next: (x => {
-          this.passwordWillExpires.willExpires = x;
+        next: ((x:ApiResponse<boolean>) => {
+          // console.log(x)
+          this.passwordWillExpires.willExpires = x.success;
           this.passwordWillExpires.userId = this.userAccountId
           this.formLoad(this.passwordWillExpires);
-          this.willExpiresOnChage(x);
+          this.willExpiresOnChage(x.success);
         })
       })
   }

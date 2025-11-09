@@ -1,4 +1,4 @@
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\bin\Debug\net8.0\Pagination.deps.json
+d:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\bin\Debug\net8.0\Pagination.deps.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\bin\Debug\net8.0\Pagination.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\bin\Debug\net8.0\Pagination.pdb
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.csproj.AssemblyReference.cache
@@ -10,4 +10,4 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\refint\Pagination.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.pdb
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\ref\Pagination.dll
+d:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\ref\Pagination.dll

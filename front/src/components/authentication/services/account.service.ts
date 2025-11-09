@@ -1,7 +1,6 @@
 
 import { Injectable } from '@angular/core';
 
-
 import { WarningsService } from 'components/warnings/services/warnings.service';
 import { environment } from 'environments/environment';
 import { Observable, take } from 'rxjs';
@@ -23,6 +22,7 @@ import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
 import { OnOff2FaCodeViaEmail, ToggleAuthenticatorRequestViewModel, TwoFactorStatusViewModel, TwoFactorToggleDto, VerifyTwoFactorRequest } from '../dtos/t2-factor';
 import { ApiResponse } from '../two-factor-enable/dtos/authenticator-setup-response';
 import { AuthenticatorSetupResponse } from '../two-factor-setup/interfaces/authenticator-setup-response';
+import { UserTokenDto } from '../dtos/user-token-dto';
 
 
 @Injectable({
@@ -35,6 +35,41 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   ) { super() }
 
   result: boolean = false;
+
+  firstEmailConfirmationCheckTokenAsync(confirmEmail: ConfirmEmail) {
+    return this.add$<ConfirmEmail>(confirmEmail, `${environment._BACK_END_ROOT_URL}/_EmailUserAccount/FirstEmailConfirmationCheckTokenAsync`).pipe(take(1)).subscribe({
+      next: (x: any) => {
+        const result = x as ApiResponse<UserTokenDto>;
+
+        localStorage.setItem("userToken", JSON.stringify(result.data));
+
+        console.log(result);
+
+        this.openSnackBar('E-mail Confirmado com sucesso.', 'warnings-success');
+
+        if (result.data.action == "FIRSTREGISTER") {
+          this._router.navigateByUrl(`/registerFull/${confirmEmail.email}`)
+        }
+        else
+          this._router.navigateByUrl("/unknown-route")
+      }, error: (err: any) => {
+
+        this.openSnackBar('Falha ao confirmar e-mail.', 'warnings-error');
+
+        setTimeout(() => {
+
+          this._warningsService.openAuthWarnings({
+            btnLeft: 'Fechar', btnRight: '', title: 'AVISO:',
+            body: 'Falha ao confirmar e-mail.',
+          }).subscribe(result => {
+            console.log(result)
+          })
+
+        }, 5000);
+
+      }
+    })
+  }
 
   confirmEmail(confirmEmail: ConfirmEmail) {
     return this.add$<ConfirmEmail>(confirmEmail, `${environment._BACK_END_ROOT_URL}/_EmailUserAccount/ConfirmEmailAddress`).pipe(take(1)).subscribe({
@@ -241,7 +276,7 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
 
   passwordChange(passwordChange: PasswordChangeDto) {
 
-    return this.add$<PasswordChangeDto>(passwordChange, `${environment._BACK_END_ROOT_URL}/authadm/PasswordChangeAsync`).pipe(take(1)).subscribe({
+    return this.add$<PasswordChangeDto>(passwordChange, `${environment._PASSWORDS_CONTROLLER}/PasswordChangeAsync`).pipe(take(1)).subscribe({
       next: (x) => {
 
         let result: any = x;
@@ -279,61 +314,59 @@ export class AccountService extends BackEndService<UserAccountAuthDto> {
   }
 
   getAccountStatus$(email: string) {
-    return this.loadByName$<AccountStatusDto>(`${environment._BACK_END_ROOT_URL}/authadm/GetAccountStatus`, email)
+    return this.loadByName$<AccountStatusDto>(`${environment._USER_ACCOUNTS_CONTROLLER}/GetAccountStatusAsync`, email)
   }
 
   updateAccountStatusEmailConfirm$(emailConfirmManual: EmailConfirmManualDto) {
-    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualConfirmEmailAddress`, emailConfirmManual)
+    return this.updateV2$<ApiResponse<ResponseIdentiyApiDto>>(`${environment._EMAIL_USERACCOUNT_CONTROLLER}/ManualConfirmEmailAddressAsync`, emailConfirmManual)
   }
 
   updateAccountLockedOutManual$(accountLockedOutManual: AccountLockedOutManualDto) {
-    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/ManualAccountLockedOut`, accountLockedOutManual)
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._USER_ACCOUNTS_CONTROLLER}/ManualAccountLockedOutAsync`, accountLockedOutManual)
   }
 
   markPasswordExpire$(passwordWillExpires: PasswordWillExpiresDto) {
-    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/MarkPasswordExpireAsync`, passwordWillExpires)
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._PASSWORDS_CONTROLLER}/MarkPasswordExpireAsync`, passwordWillExpires)
   }
 
   TwoFactorToggle$(toggleTwoFactor: TwoFactorToggleDto) {
-    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/TwoFactorToggleAsync`, toggleTwoFactor)
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._TWOFACTOR_AUTHENTICATION_CONTROLLER}/TwoFactorToggleAsync`, toggleTwoFactor)
   }
 
   isPasswordExpires$(id: number) {
-    return this.loadById$<boolean>(`${environment._BACK_END_ROOT_URL}/authadm/IsPasswordExpiresAsync`, id.toString())
+    return this.loadById$<ApiResponse<boolean>>(`${environment._PASSWORDS_CONTROLLER}/IsPasswordExpiresAsync`, id.toString())
   }
-
-
 
   staticPasswordDefined$(reset: ResetStaticPasswordDto) {
-    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/authadm/staticPasswordDefined`, reset)
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._PASSWORDS_CONTROLLER}/staticPasswordDefined`, reset)
   }
 
-  timedAccessControlStartEndPostAsync$(timedAccessControlStartEnd: TimedAccessControlStartEndPostDto) {
-    return this.add$<any>(timedAccessControlStartEnd, `${environment._BACK_END_ROOT_URL}/authadm/TimedAccessControlStartEndPostAsync`)
+  timedAccessControlStartEndAsync$(timedAccessControlStartEnd: TimedAccessControlStartEndPostDto) {
+    return this.update$<any>(`${environment._USER_ACCOUNT_TIMED_ACCESS_CONTROLLER}/TimedAccessControlStartEndAsync`, timedAccessControlStartEnd);
   }
 
   getTimedAccessControlAsync$(userId: number) {
-    return this.loadById$<TimedAccessControlDto>(`${environment._BACK_END_ROOT_URL}/authadm/getTimedAccessControlAsync`, userId.toString())
+    return this.loadById$<TimedAccessControlDto>(`${environment._USER_ACCOUNT_TIMED_ACCESS_CONTROLLER}/getTimedAccessControlAsync`, userId.toString())
   }
 
   twoFactorVerifyAsync$(twoFactorCheck: VerifyTwoFactorRequest) {
-    return this.add$<ApiResponse<any>>(twoFactorCheck, `${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/TwoFactorVerifyAsync`);
+    return this.add$<ApiResponse<any>>(twoFactorCheck, `${environment._TWOFACTOR_AUTHENTICATION_CONTROLLER}/TwoFactorVerifyAsync`);
   }
 
   IsEnabledTwoFactorAsync$(id: number) {
-    return this.loadById$<TwoFactorStatusViewModel>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/GetTwoFactorStatus`, id.toString())
+    return this.loadById$<TwoFactorStatusViewModel>(`${environment._TWOFACTOR_AUTHENTICATION_CONTROLLER}/GetTwoFactorStatusAsync`, id.toString())
   }
 
   GetAuthenticatorSetup(): Observable<AuthenticatorSetupResponse> {
-    return this.load$<AuthenticatorSetupResponse>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/GetAuthenticatorSetup`);
+    return this.load$<AuthenticatorSetupResponse>(`${environment._TWOFACTOR_AUTHENTICATION_CONTROLLER}/GetAuthenticatorSetupAsync`);
   }
 
   enableAuthenticator(request: ToggleAuthenticatorRequestViewModel): Observable<ApiResponse<any>> {
-    return this.add$<ApiResponse<any>>(request, `${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/EnableAuthenticator`);
+    return this.add$<ApiResponse<any>>(request, `${environment._TWOFACTOR_AUTHENTICATION_CONTROLLER}/EnableAuthenticatorAsync`);
   }
 
   OnOff2FaCodeViaEmailAsync$(request: OnOff2FaCodeViaEmail): Observable<ResponseIdentiyApiDto> {
-    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._BACK_END_ROOT_URL}/_TwoFactorAuthentication/OnOff2FaCodeViaEmailAsync`, request);
+    return this.updateV2$<ResponseIdentiyApiDto>(`${environment._TWOFACTOR_AUTHENTICATION_CONTROLLER}/OnOff2FaCodeViaEmailAsync`, request);
   }
 
 }

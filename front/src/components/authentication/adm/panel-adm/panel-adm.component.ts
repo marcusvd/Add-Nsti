@@ -57,11 +57,12 @@ export class PanelAdmComponent extends ListPanelControlAdm implements OnInit {
     this.getCompanyAuth(id).subscribe(
 
       (companyAuth: CompanyAuth) => {
-
-        this.startSupply(`${environment._BACK_END_ROOT_URL}/UserAccounts/GetUsersByCompanyIdAsync`, companyAuth?.id ?? 0)
+        // console.log(companyAuth)
+        this.startSupply(`${environment._USER_ACCOUNTS_CONTROLLER}/GetUsersByCompanyIdAsync`, companyAuth?.id ?? 0)
 
         this.getCompanProfile(companyAuth.cnpj).subscribe(
           (companyProfile: CompanyProfile) => {
+
             this.formLoad(companyAuth, companyProfile);
 
             const contact: ContactDto = this.formMain.get('contact')?.value;
@@ -277,9 +278,9 @@ export class PanelAdmComponent extends ListPanelControlAdm implements OnInit {
     return this._companyService.loadById$<CompanyProfile>(`${environment._BACK_END_ROOT_URL}/_Companies/GetCompanyProfileAsync`, cnpj);
   }
 
-  getUsersByCompanyIdAsync(companyAuthId: string) {
-    return this._companyService.loadById$<UserAccountAuthDto[]>(`${environment._BACK_END_ROOT_URL}/_UserAccounts/GetUsersByCompanyIdAsync`, companyAuthId);
-  }
+  // getUsersByCompanyIdAsync(companyAuthId: string) {
+  //   return this._companyService.loadById$<UserAccountAuthDto[]>(`${environment._BACK_END_ROOT_URL}/_UserAccounts/GetUsersByCompanyIdAsync`, companyAuthId);
+  // }
 
 
 }

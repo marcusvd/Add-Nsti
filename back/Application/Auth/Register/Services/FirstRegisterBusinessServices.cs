@@ -75,23 +75,29 @@ public class FirstRegisterBusinessServices : RegisterServicesBase, IFirstRegiste
 
         var registerResult = resultProfile && creationResult.Succeeded;
 
-        try
-        {
-            var emailResult = await _emailUserAccountServices.SendConfirmEmailAsync(registerResult, userAccount);
 
-            if (emailResult.Success)
-            {
-                var subscriberRules = await _rolesServicer.AddSubscriberRules(userAccount.Email);
+        // var emailResult = await _emailUserAccountServices.SendConfirmEmailAsync(registerResult, userAccount);
 
-                await _rolesServicer.UpdateUserRoles(subscriberRules);
-            }
+        var subscriberRules = await _rolesServicer.AddSubscriberRules(userAccount.Email);
+        await _rolesServicer.UpdateUserRoles(subscriberRules);
 
-        }
-        catch (EmailServicesException ex)
-        {
-            // if (ex.Message != null)
-            // await DestroyUserCreatedWithEmailError(userAccount);
-        }
+        // try
+        // {
+        //     var emailResult = await _emailUserAccountServices.SendConfirmEmailAsync(registerResult, userAccount);
+
+        //     if (emailResult.Success)
+        //     {
+        //         var subscriberRules = await _rolesServicer.AddSubscriberRules(userAccount.Email);
+
+        //         await _rolesServicer.UpdateUserRoles(subscriberRules);
+        //     }
+
+        // }
+        // catch (EmailServicesException ex)
+        // {
+        //     // if (ex.Message != null)
+        //     // await DestroyUserCreatedWithEmailError(userAccount);
+        // }
 
         return await _jwtServices.CreateAuthenticationResponseAsync(userAccount);
     }
@@ -188,7 +194,7 @@ public class FirstRegisterBusinessServices : RegisterServicesBase, IFirstRegiste
     public async Task<ApiResponse<UserToken>> FirstEmailConfirmation(string email)
     {
         await ValidateUniqueUserCredentials(email, email);
-        
+
         var userToken = await _jwtServices.FirstRegisterEmailValidation(email);
 
         return await _emailUserAccountServices.FirstEmailConfirmationAsync(userToken);

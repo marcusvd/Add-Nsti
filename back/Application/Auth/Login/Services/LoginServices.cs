@@ -32,7 +32,6 @@ public partial class LoginServices : LoginBase, ILoginServices
     public LoginServices(
                         UserManager<UserAccount> userManager,
                         SignInManager<UserAccount> signInManager,
-                        //   IAuthServicesInjection authServicesInjection,
                         IValidatorsInject validatorsInject,
                         ITimedAccessControlServices timedAccessControlServices,
                         IUserAccountAuthServices userAccountAuthServices,
@@ -62,23 +61,34 @@ public partial class LoginServices : LoginBase, ILoginServices
 
         _validatorsInject.GenericValidators.IsObjNull(userAccount);
 
-        await _emailUserAccountServices.ValidateUserAccountAsync(userAccount);
+       await _emailUserAccountServices.ValidateUserAccountAsync(userAccount);
 
         await GetTimedAccessControlAsync(userAccount.Id);
 
         await WillExpire(userAccount.WillExpire, userAccount.Email);
 
-        var result = await _passwordServices.PasswordSignInAsync(userAccount, user.Password, true, true);
+        var result = await _passwordServices.PasswordSignInAsync(userAccount, user.Password, true, false);
 
-        var IsEnable2FA = await _twoFactorAuthenticationServices.HandleTwoFactorAuthenticationAsync(userAccount);
-
-        if (result.Data!.Succeeded && IsEnable2FA)
+        if (result.RequiresTwoFactor)
+        {
+            await _passwordServices.ResetAccessFailedCountAsync(userAccount);
+            await _twoFactorAuthenticationServices.HandleTwoFactorAuthenticationAsync(userAccount);
             return await ResponseWith2FA(userAccount);
+        }
 
-        if (result.Data!.Succeeded)
+        if (result.Succeeded)
+        {
+            await _passwordServices.ResetAccessFailedCountAsync(userAccount);
             return await ResponseNo2FA(userAccount);
+        }
 
-        return ApiResponse<UserToken>.Response([$"login fail for user: {userAccount.Email}"], new UserToken().Authenticated, "LoginAsync", new UserToken());
+        await _passwordServices.AccessFailedAsync(userAccount);
+
+        int attempts = await _passwordServices.GetAccessFailedCountAsync(userAccount);
+        // return ApiResponse<UserToken>.Response(["", $"login fail for user: {userAccount.Email}"], new UserToken().Authenticated, "LoginAsync", new UserToken());
+
+        // [$""]
+        return ApiResponse<UserToken>.Response([$"login fail for user: {userAccount.Email} - Tentativas restantes antes de bloquear: {3 - attempts}"], new UserToken().Authenticated, "LoginAsync", new UserToken());
     }
 
     private async Task GetTimedAccessControlAsync(int userId)
@@ -97,16 +107,17 @@ public partial class LoginServices : LoginBase, ILoginServices
     private async Task<ApiResponse<UserToken>> ResponseWith2FA(UserAccount userAccount)
     {
         var userToken_2FA = await _jwtServices.CreateTwoFactorResponse(userAccount);
+        await WriteLastLogin(userAccount.Email);
 
         return ApiResponse<UserToken>.Response([""], userToken_2FA.Authenticated, $"Successful login for user: {userAccount.Email}", userToken_2FA);
     }
     private async Task<ApiResponse<UserToken>> ResponseNo2FA(UserAccount userAccount)
     {
         var userToken = await _jwtServices.CreateAuthenticationResponseAsync(userAccount);
+        await WriteLastLogin(userAccount.Email);
+
         return ApiResponse<UserToken>.Response([""], userToken.Authenticated, $"Successful login for user: {userAccount.Email}", userToken);
     }
-
-
 
     public async Task<ApiResponse<string>> LogoutAsync()
     {

@@ -85,12 +85,12 @@ export class TimedAccessControlComponent extends BaseForm implements OnInit {
     if (this.alertSave(this.formMain)) {
       const toUpdate: TimedAccessControlStartEndPostDto = this.formMain.value;
 
-      this._accountService.timedAccessControlStartEndPostAsync$(toUpdate)
+      this._accountService.timedAccessControlStartEndAsync$(toUpdate)
         .subscribe(
           {
             next: ((x: ResponseIdentiyApiDto) => {
 
-              console.log(x)
+              // console.log(x)
               if (x.succeeded) {
                 this.openSnackBar('Intervalo de acesso atualizado.', 'warnings-success');
               }

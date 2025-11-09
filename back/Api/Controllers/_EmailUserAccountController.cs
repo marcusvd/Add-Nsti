@@ -30,7 +30,7 @@ public class _EmailUserAccountController : ControllerBase
     [HttpPost("ConfirmRequestEmailChange")]
     public async Task<IActionResult> ConfirmRequestEmailChange([FromBody] ConfirmEmailChangeDto confirmRequestEmailChange) => Ok(await _ServiceLaucherService.EmailUserAccountServices.ConfirmYourEmailChangeAsync(confirmRequestEmailChange));
 
-    [HttpPut("ManualConfirmEmailAddress")]
-    public async Task<IActionResult> ManualConfirmEmailAddress([FromBody] EmailConfirmManualDto emailConfirmManual) => Ok(await _ServiceLaucherService.EmailUserAccountServices.ManualConfirmEmailAddress(emailConfirmManual));
+    [HttpPut("ManualConfirmEmailAddressAsync")]
+    public async Task<IActionResult> ManualConfirmEmailAddressAsync([FromBody] EmailConfirmManualDto emailConfirmManual) => Ok(await _ServiceLaucherService.EmailUserAccountServices.ManualConfirmEmailAddress(emailConfirmManual));
 
 }

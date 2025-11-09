@@ -94,7 +94,7 @@ public class ServiceLaucherService : IServiceLaucherService
     {
         get
         {
-            return _emailUserAccountServices ??= new EmailUserAccountServices(_userManager, IdentityTokensServices, _emailServices);
+            return _emailUserAccountServices ??= new EmailUserAccountServices(_userManager, IdentityTokensServices, _emailServices, JwtServices);
         }
     }
     private TwoFactorAuthenticationServices? _twoFactorAuthenticationServices;

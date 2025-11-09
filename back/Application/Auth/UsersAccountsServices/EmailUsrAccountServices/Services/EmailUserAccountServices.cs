@@ -55,13 +55,13 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
         {
             Id = 0,
             BusinessId = 0,
-            Authenticated = true,
+            Authenticated = false,
             Expiration = DateTime.MinValue,
             Token = dto.Token,
             UserName = email,
             Email = email,
-            Action = "FirstRegister",
-            Roles = ["first"]
+            Action = "",
+            Roles = [""]
         };
 
         var userClaims = _jwtServices.ValidateJwtToken(usrTkn.Token);
@@ -69,11 +69,22 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
         if (userClaims != null)
         {
             var emailFromClaim = userClaims.FindFirst(ClaimTypes.Email)?.Value;
-            
+
+            if (emailFromClaim.Trim().ToLower() == email.Trim().ToLower())
+            {
+                usrTkn.Action = "FIRSTREGISTER";
+                usrTkn.Authenticated = true;
+                return ApiResponse<UserToken>.Response([$@"{EmailUserAccountMessagesException.confirmEmail} - {usrTkn.Email}"], usrTkn.Authenticated, "FirstEmailConfirmationCheckTokenAsync", usrTkn);
+            }
+            else
+            {
+                return ApiResponse<UserToken>.Response([$@"{EmailUserAccountMessagesException.confirmEmail} - {usrTkn.Email}"], false, "FirstEmailConfirmationCheckTokenAsync", usrTkn);
+            }
+
         }
 
 
-        return ApiResponse<UserToken>.Response([$@"{EmailUserAccountMessagesException.confirmEmail} - {usrTkn.Email}"], usrTkn.Authenticated, "ManualConfirmEmailAddress", usrTkn);
+                return ApiResponse<UserToken>.Response([$@"Falha geralllllzexxxx"], false, "FirstEmailConfirmationCheckTokenAsync", usrTkn);
     }
     public async Task<ApiResponse<IdentityResult>> ManualConfirmEmailAddress(EmailConfirmManualDto dto)
     {
@@ -150,6 +161,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     }
     public async Task<ApiResponse<UserToken>> FirstEmailConfirmationAsync(UserToken userToken)
     {
+
         var dataConfirmEmail = DataConfirmEmail.DataConfirmEmailMaker(new UserAccount() { UserProfileId = "", DisplayUserName = "", Email = userToken.Email ?? "invalid@invalid.com.br", }, [userToken.Token ?? "Invalid Token!", "http://localhost:4200/confirm-email", userToken.Email ?? "invalid@invalid.com.br", "I.M - Link para confirmação de e-mail"]);
 
         var result = (dataConfirmEmail != null) && !string.IsNullOrWhiteSpace(userToken.Email);
@@ -184,7 +196,7 @@ public class EmailUserAccountServices : EmailUserAccountBase, IEmailUserAccountS
     }
     public async Task ValidateUserAccountAsync(UserAccount userAccount)
     {
-        if (await _userManager.IsLockedOutAsync(userAccount))
+        if (await _userManager.IsLockedOutAsync(userAccount) || await _userManager.GetLockoutEndDateAsync(userAccount) > DateTime.Now)
         {
             await NotifyAccountLockedAsync(userAccount);
             throw new EmailUserAccountException(EmailUserAccountMessagesException.UserIsLocked);

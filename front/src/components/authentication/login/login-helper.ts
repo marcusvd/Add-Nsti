@@ -19,6 +19,7 @@ export class LoginHelper extends BaseForm {
 
 
   loginCalls(request: ApiResponse<UserTokenDto>) {
+
     if (request?.success) {
 
       localStorage.setItem("userToken", JSON.stringify(request.data));
@@ -67,7 +68,8 @@ export class LoginHelper extends BaseForm {
     else {
       localStorage?.removeItem("userToken");
       this._warningsService.openSnackBar('Usuário ou senha incorreto.', 'warnings-error');
-      this.loginErrorMessage = this.nTry > 2 ? 'Usuário bloqueado!' : 'Usuário ou senha incorreto. ' + 'total de tentativas 3. TENTATIVAS->' + (this.nTry++);
+      // this.loginErrorMessage = this.nTry > 2 ? 'Usuário bloqueado!' : 'Usuário ou senha incorreto. ' + 'total de tentativas 3. TENTATIVAS->' + (this.nTry++);
+      this.loginErrorMessage = request.errors[0];
     }
   }
 

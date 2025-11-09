@@ -25,8 +25,8 @@ public class _UserAccountsController : ControllerBase
     [HttpGet("GetUserByIdFullAsync/{id:min(1)}")]
     public async Task<IActionResult> GetUserByIdFullAsync(int id) => Ok(await _ServiceLaucherService.UserAccountServices.GetUserByIdFullAsync(id));
 
-    [HttpGet("GetAccountStatus/{email}")]
-    public async Task<IActionResult> GetAccountStatus(string email)
+    [HttpGet("GetAccountStatusAsync/{email}")]
+    public async Task<IActionResult> GetAccountStatusAsync(string email)
     {
         var emailConfirmed = await _ServiceLaucherService.EmailUserAccountServices.IsEmailConfirmedAsync(email);
 
@@ -46,8 +46,8 @@ public class _UserAccountsController : ControllerBase
     [HttpPut("UpdateUserAccountProfileAsync/{id:min(1)}")]
     public async Task<IActionResult> UpdateUserAccountProfileAsync([FromBody] UserProfileDto userAccountUpdate, int id) => Ok(await _ServiceLaucherService.UserAccountProfileServices.UpdateUserAccountProfileAsync(userAccountUpdate, id));
 
-    [HttpPut("ManualAccountLockedOut")]
-    public async Task<IActionResult> ManualAccountLockedOut([FromBody] AccountLockedOutManualDto AccountLockedOutManual) => Ok(await _ServiceLaucherService.UserAccountAuthServices.ManualAccountLockedOut(AccountLockedOutManual));
+    [HttpPut("ManualAccountLockedOutAsync")]
+    public async Task<IActionResult> ManualAccountLockedOutAsync([FromBody] AccountLockedOutManualDto AccountLockedOutManual) => Ok(await _ServiceLaucherService.UserAccountAuthServices.ManualAccountLockedOut(AccountLockedOutManual));
 
 
 }

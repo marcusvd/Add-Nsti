@@ -1,10 +1,10 @@
 using Domain.Entities.Authentication;
-using Application.Shared.Validators;
 using Application.Auth.Dtos;
 using Application.UsersAccountsServices.Dtos.Roles;
 using Application.Auth.UsersAccountsServices.TimedAccessCtrlServices.Dtos;
 using Application.Auth.UsersAccountsServices.Dtos.Extends;
 using Application.BusinessesServices.Dtos.Auth;
+using Domain.Entities.System.Businesses;
 
 namespace Application.UsersAccountsServices.Dtos;
 
@@ -13,7 +13,8 @@ public class UserAccountDto : UserAccountBaseDto
     public int BusinessAuthId { get; set; }
     public required string UserName { get; set; }
     public required string UserProfileId { get; set; }
-    public BusinessAuthDto BusinessAuth { get; set; } = (BusinessAuthDto)GenericValidators.ReplaceNullObj<BusinessAuthDto>();
+    public BusinessAuthDto? BusinessAuth { get; set; }
+    // public BusinessAuthDto BusinessAuth { get; set; } = (BusinessAuthDto)GenericValidators.ReplaceNullObj<BusinessAuthDto>();
     public DateTime LastLogin { get; set; }
     public DateTime Code2FaSendEmail { get; set; }
     public TimedAccessControlDto TimedAccessControl { get; set; } = new TimedAccessControlDto();
@@ -29,44 +30,48 @@ public class UserAccountDto : UserAccountBaseDto
 
     public static implicit operator UserAccount(UserAccountDto dto)
     {
-        return new UserAccount
+        return new()
         {
+            Id = dto.Id,
             UserProfileId = dto.UserProfileId,
             UserName = dto.UserName,
             BusinessAuthId = dto.BusinessAuthId,
-            BusinessAuth = dto.BusinessAuth,
+            BusinessAuth = dto.BusinessAuth ?? new BusinessAuth() { BusinessProfileId = "placeholder", Name = "placeholder" },
             Deleted = dto.Deleted,
             Registered = dto.Registered,
             LastLogin = dto.LastLogin,
             Code2FaSendEmail = dto.Code2FaSendEmail,
-            TimedAccessControl = dto.TimedAccessControl,
+            EmailConfirmed = dto.EmailConfirmed,
+            TimedAccessControl = dto.TimedAccessControl ?? new TimedAccessControl(),
             WillExpire = dto.WillExpire,
             RefreshToken = dto.RefreshToken,
             DisplayUserName = dto.DisplayUserName,
             Email = dto.Email,
             RefreshTokenExpiryTime = dto.RefreshTokenExpiryTime,
-            UserRoles = dto.UserRoles.Select(x => (UserRole)x).ToList(),
+            // UserRoles = dto.UserRoles.Select(x => (UserRole)x).ToList(),
         };
     }
     public static implicit operator UserAccountDto(UserAccount dto)
     {
         return new()
         {
+            Id = dto.Id,
             UserProfileId = dto.UserProfileId,
             UserName = dto.UserName,
             BusinessAuthId = dto.BusinessAuthId,
-            BusinessAuth = dto.BusinessAuth,
+            BusinessAuth = dto.BusinessAuth ?? new BusinessAuth() { BusinessProfileId = "placeholder", Name = "placeholder" },
             Deleted = dto.Deleted,
             Registered = dto.Registered,
             LastLogin = dto.LastLogin,
             Code2FaSendEmail = dto.Code2FaSendEmail,
-            TimedAccessControl = dto.TimedAccessControl,
+            EmailConfirmed = dto.EmailConfirmed,
+            TimedAccessControl = dto.TimedAccessControl ?? new TimedAccessControlDto(),
             WillExpire = dto.WillExpire,
             RefreshToken = dto.RefreshToken,
             DisplayUserName = dto.DisplayUserName,
             Email = dto.Email,
             RefreshTokenExpiryTime = dto.RefreshTokenExpiryTime,
-            UserRoles = dto.UserRoles.Select(x => (UserRoleDto)x).ToList(),
+            // UserRoles = dto.UserRoles.Select(x => (UserRoleDto)x).ToList(),
         };
     }
 
@@ -92,5 +97,5 @@ public static class UserAccountAuthExtensions
 
         return db;
     }
- 
+
 }

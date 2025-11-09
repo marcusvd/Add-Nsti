@@ -10,7 +10,7 @@ import { UserAccountAuthDto } from "../../../../authentication/dtos/user-account
 
 export class ListPanelControlAdm extends BaseList {
 
-  usersAccounts: UserAccountAuthDto[] =[];
+  usersAccounts: UserAccountAuthDto[] = [];
   formMain!: FormGroup;
   entityUserAccounts$!: Observable<UserAccountAuthDto[]>;
   entities$!: Observable<ListUserAccountDto[]>;
@@ -51,7 +51,7 @@ export class ListPanelControlAdm extends BaseList {
 
   onClickIcons(obj: OnClickInterface) {
 
-    console.log(obj.action.split('|')[0])
+    console.log(obj.entityId)
 
     if (obj.action.split('|')[0] == 'edit') {
       this.callRouter(`/users/edit-user/${obj.entityId}`);
@@ -87,7 +87,7 @@ export class ListPanelControlAdm extends BaseList {
 
 
   private supplyItemsGrid = (userAccountList: ListUserAccountDto[], userAccount: UserAccountAuthDto) => {
-
+    console.log(userAccount);
     const items: ListUserAccountDto = new ListUserAccountDto();
 
     Object.assign(items, {
@@ -109,9 +109,9 @@ export class ListPanelControlAdm extends BaseList {
         styleCell: 'width:100%;',
       },
       emailConfirm: {
-        key: userAccount.emailConfirmed ? 'SIM':'NÃO',
-        styleInsideCell: userAccount.emailConfirmed ? ' background-color: rgb(0, 156, 222) !important;color:white; font-weight: bold;': 'background-color: rgb(222, 52, 0) !important;color:white; font-weight: bold;',
-        styleCell:  'width:100%',
+        key: userAccount.emailConfirmed ? 'SIM' : 'NÃO',
+        styleInsideCell: userAccount.emailConfirmed ? ' background-color: rgb(0, 156, 222) !important;color:white; font-weight: bold;' : 'background-color: rgb(222, 52, 0) !important;color:white; font-weight: bold;',
+        styleCell: 'width:100%',
       },
 
     })
@@ -126,15 +126,13 @@ export class ListPanelControlAdm extends BaseList {
     let entities: ListUserAccountDto[] = [];
 
     const usersAccounts: Observable<UserAccountAuthDto[]> = this._listGDataService.loadById$(url, id.toString());
-
-    this.entityUserAccounts$ = usersAccounts;
-
+   
     usersAccounts.pipe(map(x => {
-
+      console.log(x)
       this.usersAccounts = x;
 
-      x.forEach(y =>{
-         this.entities = this.supplyItemsGrid(entities, y)
+      x.forEach(y => {
+        this.entities = this.supplyItemsGrid(entities, y)
       })
 
       this.entities$ = of(this.entities);

@@ -1,6 +1,7 @@
 using Application.Auth.UsersAccountsServices.Dtos.Extends;
 using Application.Businesses.Dtos;
 using Application.Shared.Dtos;
+using Domain.Entities.Shared;
 using Domain.Entities.System.Profiles;
 
 namespace Application.Auth.UsersAccountsServices.Dtos;
@@ -18,10 +19,10 @@ public class UserProfileDto : UserAccountBaseDto
         return new UserProfile
         {
             BusinessProfileId = dto.BusinessProfileId,
-            BusinessProfile = dto.BusinessProfile,
+            BusinessProfile = dto.BusinessProfile ?? new BusinessProfileDto(){BusinessAuthId = "placeholder"},
             UserAccountId = dto.UserAccountId,
-            Address = dto.Address,
-            Contact = dto.Contact,
+            Address = dto.Address ?? new Address(),
+            Contact = dto.Contact ?? new Contact(),
         };
     }
 
@@ -30,10 +31,10 @@ public class UserProfileDto : UserAccountBaseDto
         return new UserProfileDto
         {
             BusinessProfileId = dto.BusinessProfileId,
-            BusinessProfile = dto.BusinessProfile,
+            BusinessProfile = dto.BusinessProfile ?? new BusinessProfileDto(){BusinessAuthId = "placeholder"},
             UserAccountId = dto.UserAccountId,
-            Address = dto.Address,
-            Contact = dto.Contact,
+            Address = dto.Address ?? new AddressDto(),
+            Contact = dto.Contact ?? new ContactDto(),
         };
     }
 

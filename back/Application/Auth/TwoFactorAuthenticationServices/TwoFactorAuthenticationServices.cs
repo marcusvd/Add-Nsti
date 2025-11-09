@@ -79,9 +79,9 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
 
     public async Task<ApiResponse<EnableAuthenticatorResponseDto>> EnableAuthenticatorAsync(ToggleAuthenticatorRequestDto request)
     {
-        var userPrincipalClims = _httpContextAccessor.HttpContext.User;
+        var userPrincipalClaims = _httpContextAccessor.HttpContext.User;
 
-        var user = await _userManager.GetUserAsync(userPrincipalClims);
+        var user = await _userManager.GetUserAsync(userPrincipalClaims);
 
         var verificationCode = CodeHandling(request.Code);
 
@@ -188,7 +188,7 @@ public class TwoFactorAuthenticationServices : AuthenticationBase, ITwoFactorAut
         return ApiResponse<TwoFactorStatusDto>.Response([""], result, "Autenticador habilitado com sucesso", twoFactorStatus);
 
     }
-    public async Task<ApiResponse<AuthenticatorSetupResponseDto>> GetAuthenticatorSetup()
+    public async Task<ApiResponse<AuthenticatorSetupResponseDto>> GetAuthenticatorSetupAsync()
     {
 
         var userPrincipalClims = _httpContextAccessor.HttpContext.User;

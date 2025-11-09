@@ -40,7 +40,7 @@ export class ListControlAdm extends BaseList {
 
   onClickIcons(obj: OnClickInterface) {
 
-    console.log(obj.action.split('|')[0])
+    console.log(obj.entityId)
 
     if (obj.action.split('|')[0] == 'edit') {
       this.callRouter(`users/edit-company/${obj.entityId}`);
@@ -115,7 +115,7 @@ export class ListControlAdm extends BaseList {
 
     business.pipe(map(x => {
       this.business = x;
-console.log(x)
+      // console.log(x)
       x?.companies.forEach(y => {
 
         this.entities = this.supplyItemsGrid(entities, y)

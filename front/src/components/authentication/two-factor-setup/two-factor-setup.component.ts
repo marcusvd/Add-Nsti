@@ -33,8 +33,6 @@ export class TwoFactorSetupComponent extends BaseForm implements AfterViewInit {
 
   constructor(
     private _accountService: AccountService,
-    private _activatedRoute: ActivatedRoute,
-    // private _fb: FormBuilder
   ) {
     super()
   }
@@ -47,7 +45,7 @@ export class TwoFactorSetupComponent extends BaseForm implements AfterViewInit {
     this._accountService.GetAuthenticatorSetup()
       .subscribe({
         next: (data: any) => {
-
+          // console.log(data)
           this.setupData = data.data;
           this.loading = false;
         },

@@ -7,6 +7,8 @@ import { FormBuilder } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { EmailConfirmManualDto } from '../dtos/email-confirm-manual-dto';
 import { AccountLockedOutManualDto } from '../dtos/account-locked-out-manual-dto';
+import { ApiResponse } from '../two-factor-enable/dtos/authenticator-setup-response';
+import { ResponseIdentiyApiDto } from '../dtos/response-identiy-api-dto';
 
 @Component({
   selector: 'account-status',
@@ -127,8 +129,10 @@ export class AccountStatusComponent extends BaseForm implements OnInit, AfterVie
     this._accountService.updateAccountStatusEmailConfirm$(this.emailConfirmManual).subscribe(
       {
 
-        next: (x => {
-          if (x.succeeded) {
+        next: ((x:ApiResponse<ResponseIdentiyApiDto>) => {
+
+          console.log(x)
+          if (x.success) {
             this.startInitial();
             if (change.checked)
               this.openSnackBar('CONFIRMADO!', 'warnings-success');

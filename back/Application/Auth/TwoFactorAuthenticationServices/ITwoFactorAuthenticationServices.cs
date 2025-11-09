@@ -10,7 +10,7 @@ public interface ITwoFactorAuthenticationServices
     Task<ApiResponse<UserToken>> TwoFactorVerifyAsync(VerifyTwoFactorRequestDto request);
     Task<ApiResponse<EnableAuthenticatorResponseDto>> EnableAuthenticatorAsync(ToggleAuthenticatorRequestDto request);
     Task<ApiResponse<TwoFactorStatusDto>> GetTwoFactorStatusAsync(int userId);
-    Task<ApiResponse<AuthenticatorSetupResponseDto>> GetAuthenticatorSetup();
+    Task<ApiResponse<AuthenticatorSetupResponseDto>> GetAuthenticatorSetupAsync();
     Task<IdentityResult> OnOff2FaCodeViaEmailAsync(OnOff2FaCodeViaEmailDto request);
     Task<bool> HandleTwoFactorAuthenticationAsync(UserAccount userAccount);
 }

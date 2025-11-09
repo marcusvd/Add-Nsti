@@ -11,7 +11,6 @@ import { SelectCompanyComponent } from "../select-company/select-company.compone
 
 
 const routes: Routes = [
-
   { path: 'adm-list/:id', component: ListAdmComponent },
   { path: 'add-company/:id', component: AddCompanyComponent },
   { path: 'edit-company/:id', component: PanelAdmComponent },
@@ -19,7 +18,6 @@ const routes: Routes = [
   { path: 'edit-user/:id', component: EditUserCompanyComponent },
   { path: 'user-account-profile-settings/:id', component: UserAccountProfileSettingsComponent },
   { path: 'panel-adm', component: PanelAdmComponent },
-
 ]
 
 @NgModule({

@@ -29,7 +29,7 @@ public class UserAccountServices : IUserAccountServicesBase, IUserAccountService
     {
 
         var userAccount = await _userAccountAuthServices.GetUserAccountByUserIdAsync(id);
-        var userprofile = await _userAccountProfileServices.GetUserProfileByProfileIdAsync(userAccount.UserProfileId);
+        var userprofile = await _userAccountProfileServices.GetUserProfileByProfileIdAsync(userAccount.UserProfileId)  ?? new UserProfileDto(){UserAccountId = "Incompleto"} ;
 
         return MakerUserAccountProfile(userAccount, userprofile);
     }

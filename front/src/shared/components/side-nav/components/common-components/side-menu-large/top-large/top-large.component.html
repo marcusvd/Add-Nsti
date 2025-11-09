@@ -34,13 +34,14 @@
 
     <div class="container--profile-box-settings">
       <a mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon class="container--profile-box-settings-icon">settings</mat-icon>
+        <mat-icon class="cursor-pointer container--profile-box-settings-icon">settings</mat-icon>
       </a>
     </div>
   </div>
-  <mat-menu class="!flex !items-center justify-center !w-[200px] !h-[150px] !bg-color-main !border !border-white"
+  <mat-menu class="!flex !items-center justify-center !w-[200px] !h-[200px] !bg-color-main !border !border-white"
     #menu="matMenu">
-    <div *ngIf="sysadm" class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center" [routerLink]="[route]">
+    <div *ngIf="sysadm" class="ml-4 cursor-pointer grid grid-cols-[33px_50px] gap-2 items-center"
+      [routerLink]="[route]">
       <div>
         <mat-icon class="!w-[30px] !h-[30px] text-[30px] text-white">group_add</mat-icon>
       </div>
@@ -85,36 +86,5 @@
       </div>
 
     </div>
-
-    <!-- <mat-icon (click)="'logOut()'">keyboard_arrow_right</mat-icon> -->
-
-
-    <!-- <div>
-                <img src="../../../../../../assets/nsti-menor.jpg" alt="logo nsti aqui">
-            </div>
-
-            <div>
-                <span>
-              {{'Login' | titlecase}}
-              {{userName ?? 'Login' | titlecase}}
-            </span>
-            </div>
-            <mat-divider></mat-divider>
-            <div [routerLink]="['/side-nav/user-profile']">
-                <div>
-                    <mat-icon fontSet="material-icons-two-tone">account_circle</mat-icon>
-                </div>
-                <div>
-                    <span>Perfil</span>
-                    <small>Informações</small>
-                </div>
-                <div>
-                    <mat-icon>keyboard_arrow_right</mat-icon>
-                </div>
-            </div>
-            <mat-divider></mat-divider>
-
-            <mat-divider></mat-divider> -->
-
   </mat-menu>
 </div>

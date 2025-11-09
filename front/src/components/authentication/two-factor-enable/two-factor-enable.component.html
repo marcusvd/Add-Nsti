@@ -1,20 +1,23 @@
 <mat-card class="border-card-categories-divide-comp">
   <div class="p-4 w-full grid-cols-1 gap-4">
     <div>
-        <h3 class="title-categories-divide-comp">Ativar Autenticador</h3>
-      </div>
+      <h3 class="title-categories-divide-comp">Ativar Autenticador</h3>
+    </div>
     <mat-card-content>
-      <form  [formGroup]="formMain" (ngSubmit)="action()">
+      <form [formGroup]="formMain" (ngSubmit)="action()">
         <mat-label>Código do autenticador</mat-label>
-        <mat-form-field  appearance="outline" class="w-full flex justify-center">
-          <input style="text-align: center;" mask="000-000" matInput formControlName="code" maxlength="7" autocomplete="one-time-code">
+        <mat-form-field appearance="outline" class="w-full flex justify-center">
+          <input style="text-align: center;" mask="000-000" matInput formControlName="code" maxlength="7"
+            autocomplete="one-time-code">
           <mat-error *ngIf="formMain.get('code')?.invalid">Insira um código de 6 dígitos</mat-error>
         </mat-form-field>
 
         <div *ngIf="setupData">
-          <div  class="pb-4 grid justify-center">
+          <div class="pb-4 grid justify-center">
             <!-- [isDisabled]="loading || formMain.invalid" -->
-            <btn-g mat-dialog-close [btnType]="btnType" [name]="setupData.isTwoFactorEnabled ? 'Desabilitar' : 'Habilitar'" [icon]="lockIcon"  (btn)="action()"></btn-g>
+            <btn-g mat-dialog-close [btnType]="btnType"
+              [name]="setupData.isTwoFactorEnabled ? 'Desabilitar' : 'Habilitar'" [icon]="lockIcon"
+              (btn)="action()"></btn-g>
           </div>
         </div>
       </form>
@@ -22,18 +25,19 @@
       <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
 
       <mat-error *ngIf="error">{{ error }}</mat-error>
+      <!-- <h3>{{this.error}}</h3> -->
 
-      <div *ngIf="response">
-        <h3>2FA ativado com sucesso!</h3>
-        <p><strong>Códigos de recuperação:</strong></p>
-
-        <!-- <div *ngFor="let code of response.data.recoveryCodes">
-          {{ code }}
-        </div> -->
-        <mat-list>
-          <mat-list-item *ngFor="let code of response.data.recoveryCodes">{{ code }}</mat-list-item>
-        </mat-list>
+      <div class="flex justify-center text-green-600" *ngIf="this.success.length > 0;">
+        <h3>{{this.success}}</h3>
       </div>
+      <!-- <div *ngIf="hasErrorEnableDisable2FA >= 1">
+        <h3>{{this.error}}</h3> -->
+
+        <!-- <p><strong>Códigos de recuperação:</strong></p>
+        <mat-list>
+          <mat-list-item *ngFor="let code of response?.data?.recoveryCodes">{{ code }}</mat-list-item>
+        </mat-list> -->
+      <!-- </div> -->
     </mat-card-content>
   </div>
 </mat-card>

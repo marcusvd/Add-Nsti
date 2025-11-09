@@ -24,18 +24,18 @@ public class _TwoFactorAuthenticationController : ControllerBase
         return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.TwoFactorVerifyAsync(request));
     }
 
-    [HttpPost("EnableAuthenticator")]
+    [HttpPost("EnableAuthenticatorAsync")]
     [Authorize]
-    public async Task<IActionResult> EnableAuthenticator([FromBody] ToggleAuthenticatorRequestDto request)
+    public async Task<IActionResult> EnableAuthenticatorAsync([FromBody] ToggleAuthenticatorRequestDto request)
     {
         return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.EnableAuthenticatorAsync(request));
     }
 
-    [HttpGet("GetAuthenticatorSetup")]
+    [HttpGet("GetAuthenticatorSetupAsync")]
     [Authorize]
     public async Task<IActionResult> GetAuthenticatorSetup()
     {
-        return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.GetAuthenticatorSetup());
+        return Ok(await _serviceLaucherService.TwoFactorAuthenticationServices.GetAuthenticatorSetupAsync());
     }
 
     [HttpPut("OnOff2FaCodeViaEmailAsync")]

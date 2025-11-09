@@ -88,7 +88,7 @@ namespace Authentication.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "db34d3c6-f777-436e-a21e-f618fa207f8d",
+                            ConcurrencyStamp = "12921bdd-3e5a-4936-9ce7-f8dd119e43d5",
                             DisplayRole = "Acesso Total",
                             Name = "HOLDER",
                             NormalizedName = "HOLDER"
@@ -96,7 +96,7 @@ namespace Authentication.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "a2af29ee-affb-4780-a3dd-07ffd5aceb4a",
+                            ConcurrencyStamp = "f87a9489-f7f2-42b6-aa41-65d6f9269c13",
                             DisplayRole = "Administrador",
                             Name = "SYSADMIN",
                             NormalizedName = "SYSADMIN"
@@ -104,7 +104,7 @@ namespace Authentication.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "c175e600-d790-46aa-b150-f7cf6eff5c8f",
+                            ConcurrencyStamp = "f92a51e2-9eab-40ce-a5e0-a2d1e4017f58",
                             DisplayRole = "Usuário",
                             Name = "USERS",
                             NormalizedName = "USERS"

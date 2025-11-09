@@ -1,4 +1,4 @@
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\bin\Debug\net8.0\Domain.deps.json
+d:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\bin\Debug\net8.0\Domain.deps.json
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\bin\Debug\net8.0\Domain.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\bin\Debug\net8.0\Domain.pdb
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\obj\Debug\net8.0\Domain.csproj.AssemblyReference.cache
@@ -10,4 +10,4 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\obj\Debug\net8.0\Domain.sourceli
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\obj\Debug\net8.0\Domain.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\obj\Debug\net8.0\refint\Domain.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\obj\Debug\net8.0\Domain.pdb
-D:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\obj\Debug\net8.0\ref\Domain.dll
+d:\Profiles\Marcus\Desktop\Add-Nsti\back\Domain\obj\Debug\net8.0\ref\Domain.dll

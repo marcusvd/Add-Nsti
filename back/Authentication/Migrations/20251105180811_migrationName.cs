@@ -104,6 +104,7 @@ namespace Authentication.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -111,7 +112,6 @@ namespace Authentication.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     PasswordHash = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SecurityStamp = table.Column<string>(type: "longtext", nullable: true)
@@ -324,9 +324,9 @@ namespace Authentication.Migrations
                 columns: new[] { "Id", "CompanyAuthId", "ConcurrencyStamp", "DisplayRole", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "db34d3c6-f777-436e-a21e-f618fa207f8d", "Acesso Total", "HOLDER", "HOLDER" },
-                    { 2, null, "a2af29ee-affb-4780-a3dd-07ffd5aceb4a", "Administrador", "SYSADMIN", "SYSADMIN" },
-                    { 3, null, "c175e600-d790-46aa-b150-f7cf6eff5c8f", "Usuário", "USERS", "USERS" }
+                    { 1, null, "12921bdd-3e5a-4936-9ce7-f8dd119e43d5", "Acesso Total", "HOLDER", "HOLDER" },
+                    { 2, null, "f87a9489-f7f2-42b6-aa41-65d6f9269c13", "Administrador", "SYSADMIN", "SYSADMIN" },
+                    { 3, null, "f92a51e2-9eab-40ce-a5e0-a2d1e4017f58", "Usuário", "USERS", "USERS" }
                 });
 
             migrationBuilder.CreateIndex(

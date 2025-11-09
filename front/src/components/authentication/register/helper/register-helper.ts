@@ -68,8 +68,6 @@ export class RegisterHelper extends BaseForm {
     }
 
     this.setFormFieldValue(this.formMain, 'email', this.resetFormEmailNoLoss);
-
-    //console.log(isCpfValid);
   }
 
   private keepEmailFieldForm(form: FormGroup) {
@@ -108,7 +106,6 @@ export class RegisterHelper extends BaseForm {
     else
       this.contact.get('landline')?.setValue(isMobile.phoneNum);
   }
-
 
   formLoadCnpj(register?: Register) {
     return this.formMain = this._fb.group({
