@@ -1,6 +1,0 @@
-@ImApi_HostAddress = http://localhost:5156
-
-GET {{ImApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

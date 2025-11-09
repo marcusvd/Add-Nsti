@@ -11,3 +11,16 @@ D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\refint\Pagination.dll
 D:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.pdb
 d:\Profiles\Marcus\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\ref\Pagination.dll
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\bin\Debug\net8.0\Pagination.deps.json
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\bin\Debug\net8.0\Pagination.dll
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\bin\Debug\net8.0\Pagination.pdb
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.csproj.AssemblyReference.cache
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.AssemblyInfoInputs.cache
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.AssemblyInfo.cs
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.csproj.CoreCompileInputs.cache
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.sourcelink.json
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.dll
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\refint\Pagination.dll
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\Pagination.pdb
+C:\Users\adm02\Desktop\Add-Nsti\back\Pagination\obj\Debug\net8.0\ref\Pagination.dll

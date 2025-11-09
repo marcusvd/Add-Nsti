@@ -324,9 +324,9 @@ namespace Authentication.Migrations
                 columns: new[] { "Id", "CompanyAuthId", "ConcurrencyStamp", "DisplayRole", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, null, "12921bdd-3e5a-4936-9ce7-f8dd119e43d5", "Acesso Total", "HOLDER", "HOLDER" },
-                    { 2, null, "f87a9489-f7f2-42b6-aa41-65d6f9269c13", "Administrador", "SYSADMIN", "SYSADMIN" },
-                    { 3, null, "f92a51e2-9eab-40ce-a5e0-a2d1e4017f58", "Usuário", "USERS", "USERS" }
+                    { 1, null, "67fbd127-ed82-48c4-84f4-86585a235838", "Acesso Total", "HOLDER", "HOLDER" },
+                    { 2, null, "6ca5296c-516d-4228-ac9b-24c96a66340f", "Administrador", "SYSADMIN", "SYSADMIN" },
+                    { 3, null, "29618f7f-410a-46c8-a397-ea21f0717694", "Usuário", "USERS", "USERS" }
                 });
 
             migrationBuilder.CreateIndex(

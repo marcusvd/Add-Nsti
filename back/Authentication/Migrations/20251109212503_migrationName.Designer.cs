@@ -12,7 +12,7 @@ using Repository.Data.Context.Auth;
 namespace Authentication.Migrations
 {
     [DbContext(typeof(IdImDbContext))]
-    [Migration("20251105180811_migrationName")]
+    [Migration("20251109212503_migrationName")]
     partial class migrationName
     {
         /// <inheritdoc />
@@ -91,7 +91,7 @@ namespace Authentication.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "12921bdd-3e5a-4936-9ce7-f8dd119e43d5",
+                            ConcurrencyStamp = "67fbd127-ed82-48c4-84f4-86585a235838",
                             DisplayRole = "Acesso Total",
                             Name = "HOLDER",
                             NormalizedName = "HOLDER"
@@ -99,7 +99,7 @@ namespace Authentication.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f87a9489-f7f2-42b6-aa41-65d6f9269c13",
+                            ConcurrencyStamp = "6ca5296c-516d-4228-ac9b-24c96a66340f",
                             DisplayRole = "Administrador",
                             Name = "SYSADMIN",
                             NormalizedName = "SYSADMIN"
@@ -107,7 +107,7 @@ namespace Authentication.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "f92a51e2-9eab-40ce-a5e0-a2d1e4017f58",
+                            ConcurrencyStamp = "29618f7f-410a-46c8-a397-ea21f0717694",
                             DisplayRole = "Usuário",
                             Name = "USERS",
                             NormalizedName = "USERS"
